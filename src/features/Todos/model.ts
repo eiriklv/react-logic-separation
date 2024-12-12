@@ -30,6 +30,7 @@ export interface Todo {
   text: string;
 }
 
+// Model interface
 export interface TodosModel {
   // State
   todos: Todo[];
