@@ -1,6 +1,10 @@
 import React from "react";
-import { useTodos, useAddTodo, useIsSaving, useIsInitialized } from "./hooks";
-import { TodoItem } from "./components/TodoItem";
+import {
+  useElapsedSeconds,
+  useIsRunning,
+  useStartTimer,
+  useStopTimer,
+} from "./hooks";
 
 /**
  * The context can be used to inject any kind of
@@ -19,21 +23,19 @@ import { TodoItem } from "./components/TodoItem";
  * The interfaces of the components also become much simpler.
  */
 
-export interface TodosContextInterface {
-  useTodos: typeof useTodos;
-  useAddTodo: typeof useAddTodo;
-  useIsSaving: typeof useIsSaving;
-  useIsInitialized: typeof useIsInitialized;
-  TodoItem: typeof TodoItem;
+export interface TimerContextInterface {
+  useElapsedSeconds: typeof useElapsedSeconds;
+  useIsRunning: typeof useIsRunning;
+  useStartTimer: typeof useStartTimer;
+  useStopTimer: typeof useStopTimer;
 }
 
-export const defaultValue: TodosContextInterface = {
-  useTodos,
-  useAddTodo,
-  useIsSaving,
-  useIsInitialized,
-  TodoItem,
+export const defaultValue: TimerContextInterface = {
+  useElapsedSeconds,
+  useIsRunning,
+  useStartTimer,
+  useStopTimer,
 };
 
-export const TodosContext =
-  React.createContext<TodosContextInterface>(defaultValue);
+export const TimerContext =
+  React.createContext<TimerContextInterface>(defaultValue);
