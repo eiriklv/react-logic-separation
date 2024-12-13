@@ -25,11 +25,6 @@ const injections = {
 // Types and interfaces
 export type Injections = typeof injections;
 
-export interface Todo {
-  id: string;
-  text: string;
-}
-
 // Model interface
 export interface TodosModel {
   // State
@@ -51,6 +46,11 @@ export interface TodosModel {
   
   // Effects
   autoSaveTodosOnChange: EffectOn<TodosModel, TodosModel, Injections>;
+}
+
+export interface Todo {
+  id: string;
+  text: string;
 }
 
 // Model implementation
