@@ -8,14 +8,6 @@ import {
   Thunk,
 } from "easy-peasy";
 
-// Dependencies to be injected
-const injections = {
-  
-};
-
-// Types and interfaces
-export type Injections = typeof injections;
-
 // Model interface
 export interface TimerModel {
   // State
@@ -28,11 +20,11 @@ export interface TimerModel {
   incrementedElapsedSeconds: Action<TimerModel>;
   
   // Commands
-  startTimer: Thunk<TimerModel, undefined, Injections>
-  stopTimer: Thunk<TimerModel, undefined, Injections>;
+  startTimer: Thunk<TimerModel>
+  stopTimer: Thunk<TimerModel>;
 
   // Effects
-  incrementTimerWhileRunning: EffectOn<TimerModel, TimerModel, Injections>;
+  incrementTimerWhileRunning: EffectOn<TimerModel, TimerModel>;
 }
 
 // Model implementation
@@ -75,4 +67,4 @@ export const model: TimerModel = {
 };
 
 // Model store instance (with dependencies injected)
-export const store = createStore(model, { injections });
+export const store = createStore(model);

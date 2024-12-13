@@ -52,6 +52,9 @@ describe("incrementTimerWhileRunning (effect)", () => {
     store.getActions().startTimer();
 
     // assert
+    expect(store.getState().elapsedSeconds).toEqual(0);
+
+    // assert
     expect(actionTracker.actions).toEqual([
       {
         type: "@thunk.startTimer(start)",
@@ -83,6 +86,9 @@ describe("incrementTimerWhileRunning (effect)", () => {
 
     // Wait for two+ seconds so that the timer can increment twice
     await sleep(2500);
+
+    // assert
+    expect(store.getState().elapsedSeconds).toEqual(2)
 
     // assert
     expect(actionTracker.actions).toEqual([
@@ -128,6 +134,9 @@ describe("incrementTimerWhileRunning (effect)", () => {
 
     // Wait for 1+ second to ensure that the timer does not continue
     await sleep(1500);
+
+    // assert
+    expect(store.getState().elapsedSeconds).toEqual(2)
 
     // assert
     expect(actionTracker.actions).toEqual([
