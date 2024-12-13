@@ -1,8 +1,8 @@
 import { createTypedHooks } from "easy-peasy";
-import { store, TimerModel } from "./model";
+import { TimerModel } from "./model";
 import { useCallback } from "react";
 
-const { useStoreState } = createTypedHooks<TimerModel>();
+const { useStoreState, useStoreActions } = createTypedHooks<TimerModel>();
 
 /**
  * The main purpose of this file is to
@@ -13,7 +13,7 @@ const { useStoreState } = createTypedHooks<TimerModel>();
  * interfaces - taking care not to expose
  * implementation details of the business
  * logic itself or libraries used
- * 
+ *
  * It can also be used for 3rd party library hooks,
  * so that you avoid coupling your component directly.
  * Instead you can provide a nice interface and map
@@ -29,11 +29,11 @@ export const useIsRunning = () => {
 };
 
 export const useStartTimer = () => {
-  const { startTimer } = store.getActions();
+  const { startTimer } = useStoreActions((actions) => actions);
   return useCallback(() => startTimer(), [startTimer]);
 };
 
 export const useStopTimer = () => {
-  const { stopTimer } = store.getActions();
+  const { stopTimer } = useStoreActions((actions) => actions);
   return useCallback(() => stopTimer(), [stopTimer]);
 };

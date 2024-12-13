@@ -1,8 +1,8 @@
 import { createTypedHooks } from "easy-peasy";
-import { store, TodosModel } from "./model";
+import { TodosModel } from "./model";
 import { useCallback } from "react";
 
-const { useStoreState } = createTypedHooks<TodosModel>();
+const { useStoreState, useStoreActions } = createTypedHooks<TodosModel>();
 
 /**
  * The main purpose of this file is to
@@ -13,7 +13,7 @@ const { useStoreState } = createTypedHooks<TodosModel>();
  * interfaces - taking care not to expose
  * implementation details of the business
  * logic itself or libraries used
- * 
+ *
  * It can also be used for 3rd party library hooks,
  * so that you avoid coupling your component directly.
  * Instead you can provide a nice interface and map
@@ -37,6 +37,6 @@ export const useTodosCount = () => {
 };
 
 export const useAddTodo = () => {
-  const { addTodo } = store.getActions();
+  const { addTodo } = useStoreActions((actions) => actions);
   return useCallback((text: string) => addTodo(text), [addTodo]);
 };
