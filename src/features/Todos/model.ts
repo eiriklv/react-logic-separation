@@ -53,13 +53,27 @@ export interface Todo {
 
 // Model implementation
 export const model: TodosModel = {
+  // State
   todos: [],
   isSaving: false,
   isInitialized: false,
+
+  // Computed values
+  todosCount: computed((state) => state.todos.length),
+
+  // Events
   initializedTodos: action((state, payload) => {
     state.todos = payload;
     state.isInitialized = true;
   }),
+  addedTodo: action((state, payload) => {
+    state.todos.push(payload);
+  }),
+  toggledSaveState: action((state, payload) => {
+    state.isSaving = payload;
+  }),
+
+  // Commands
   initializeTodos: thunk(async (actions, _payload, { injections }) => {
     // Get dependencies
     const { todosService } = injections;
@@ -69,10 +83,6 @@ export const model: TodosModel = {
 
     // Trigger event
     actions.initializedTodos(todos);
-  }),
-  todosCount: computed((state) => state.todos.length),
-  addedTodo: action((state, payload) => {
-    state.todos.push(payload);
   }),
   addTodo: thunk(async (actions, payload, { injections }) => {
     // Get dependencies
@@ -89,9 +99,8 @@ export const model: TodosModel = {
     // Trigger event
     actions.addedTodo(newTodo);
   }),
-  toggledSaveState: action((state, payload) => {
-    state.isSaving = payload;
-  }),
+
+  // Effects
   autoSaveTodosOnChange: effectOn(
     [(state) => state.todos, (state) => state.isInitialized],
     (actions, change, { injections }) => {
