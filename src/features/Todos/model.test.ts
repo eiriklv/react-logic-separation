@@ -112,7 +112,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
     expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
   });
 
-  it("should trigger if changes happen after list is initialized", async () => {
+  it("should only trigger save after specified wait/debounce time", async () => {
     // arrange
     const mockInjections: Injections = {
       generateId: vi.fn(() => "abc"),
@@ -120,7 +120,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
         saveTodos: vi.fn(),
         fetchTodos: vi.fn(),
       },
-      waitTimeBeforeSave: 1000,
+      waitTimeBeforeSave: 100,
     };
 
     const store = createStore(model, {
@@ -133,10 +133,24 @@ describe("autoSaveTodosOnChange (effect)", () => {
     });
 
     // act
-    store.getActions().addedTodo({ id: "abc", text: "Write docs" });
+    await store.getActions().addTodo("Write docs");
+    await store.getActions().addTodo("Write tests");
+    await store.getActions().addTodo("Paint house");
 
     // assert
     expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+
+    // act
+    await sleep(mockInjections.waitTimeBeforeSave / 2);
+
+    // assert
+    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+
+    // act
+    await sleep(mockInjections.waitTimeBeforeSave / 2);
+
+    // assert
+    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(1);
 
     // act
     await sleep(mockInjections.waitTimeBeforeSave);
