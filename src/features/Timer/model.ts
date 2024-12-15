@@ -73,5 +73,5 @@ export const model: TimerModel = {
   ),
 };
 
-// Model store instance (with dependencies injected)
+// Model store instance
 export const store = createStore(model);
