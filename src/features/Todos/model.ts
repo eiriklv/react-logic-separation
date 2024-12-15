@@ -10,8 +10,6 @@ import {
   Computed,
 } from "easy-peasy";
 
-import debounce from 'debounce'
-
 import * as todosService from "./services";
 import { generateId } from "./utils";
 
@@ -31,19 +29,19 @@ export interface TodosModel {
   todos: Todo[];
   isSaving: boolean;
   isInitialized: boolean;
-  
+
   // Computed values
   todosCount: Computed<TodosModel, number>;
-  
+
   // Events
   initializedTodos: Action<TodosModel, Todo[]>;
   addedTodo: Action<TodosModel, Todo>;
   toggledSaveState: Action<TodosModel, boolean>;
-  
+
   // Commands
-  initializeTodos: Thunk<TodosModel, undefined, Injections>
+  initializeTodos: Thunk<TodosModel, undefined, Injections>;
   addTodo: Thunk<TodosModel, string, Injections>;
-  
+
   // Effects
   autoSaveTodosOnChange: EffectOn<TodosModel, TodosModel, Injections>;
 }
@@ -105,25 +103,19 @@ export const model: TodosModel = {
 
       // Validation (only auto-save after the data has been initialized/loaded)
       if (!isInitialized) {
-        return () => {}
+        return () => {};
       }
 
       // Create a function for updating the save state + run the service effect
-      const saveTodos = async (todos: Todo[]) => {
+      const saveTimeout = setTimeout(async () => {
         actions.toggledSaveState(true);
         await todosService.saveTodos(todos);
         actions.toggledSaveState(false);
-      }
-
-      // Create debounced version of the save function
-      const debouncedSaveTodos = debounce(saveTodos, waitTimeBeforeSave);
-
-      // Start the debounce countdown
-      debouncedSaveTodos(todos);
+      }, waitTimeBeforeSave);
 
       // Return handle for cancelling debounced save
       return () => {
-        debouncedSaveTodos.clear()
+        clearTimeout(saveTimeout);
         actions.toggledSaveState(false);
       };
     }
