@@ -14,7 +14,8 @@ export function Timer() {
 
   return (
     <div>
-      <h3>Timer {isRunning ? "(running)" : "(stopped)"}</h3>
+      <h3>Timer</h3>
+      <h4>Status: {isRunning ? "running" : "stopped"}</h4>
       <div>{elapsedSeconds}</div>
       <button onClick={startTimer}>Start</button>
       <button onClick={stopTimer}>Stop</button>

@@ -44,13 +44,18 @@ export function Todos() {
 
   return (
     <div>
-      <h3>Todos {isSaving && "(saving...)"}</h3>
-      <input
-        type="text"
-        value={todoInputText}
-        onChange={handleTodoInputTextChange}
-        onKeyDown={handleTodoInputKeyDown}
-      />
+      <h3>Todos</h3>
+      <h4>{isSaving && "(saving...)"}</h4>
+      <label>
+        Todo
+        <input
+          name="todo"
+          type="text"
+          value={todoInputText}
+          onChange={handleTodoInputTextChange}
+          onKeyDown={handleTodoInputKeyDown}
+        />
+      </label>
       <ul>{todoElements}</ul>
     </div>
   );

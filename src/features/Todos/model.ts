@@ -10,7 +10,7 @@ import {
   Computed,
 } from "easy-peasy";
 
-import * as todosService from "./services";
+import * as todosService from "./services/todos.service";
 import { generateId } from "./utils";
 
 // Dependencies to be injected

@@ -1,4 +1,3 @@
-import { describe, it, expect } from "vitest";
 import { model } from "./model";
 import { createStore } from "easy-peasy";
 import { sleep } from "./utils";
