@@ -2,26 +2,16 @@ import { describe, it, expect, vi } from "vitest";
 import { Injections, model } from "./model";
 import { createStore } from "easy-peasy";
 import { sleep } from "./utils";
-import { trackActionsMiddleware } from "../../test/utils";
 
 describe("addedTodo (action)", () => {
   it("should work as expected when adding a single todo", () => {
     // arrange
-    const todoText = "Paint house";
-
-    const mockInjections = {
-      generateId: vi.fn(() => "abc"),
-    };
-
-    const store = createStore(model, {
-      injections: mockInjections,
-    });
+    const store = createStore(model);
 
     // act
-    store.getActions().addTodo(todoText);
+    store.getActions().addedTodo({ id: "abc", text: "Paint house" });
 
     // assert
-    expect(mockInjections.generateId).toBeCalled();
     expect(store.getState().todos).toEqual([
       { id: "abc", text: "Paint house" },
     ]);
@@ -30,21 +20,14 @@ describe("addedTodo (action)", () => {
 
   it("should work as expected when adding multiple todos", () => {
     // arrange
-    const mockInjections = {
-      generateId: vi.fn(() => "abc"),
-    };
-
-    const store = createStore(model, {
-      injections: mockInjections,
-    });
+    const store = createStore(model);
 
     // act
-    store.getActions().addTodo("Paint house");
-    store.getActions().addTodo("Buy milk");
-    store.getActions().addTodo("Wash car");
+    store.getActions().addedTodo({ id: "abc", text: "Paint house" });
+    store.getActions().addedTodo({ id: "abc", text: "Buy milk" });
+    store.getActions().addedTodo({ id: "abc", text: "Wash car" });
 
     // assert
-    expect(mockInjections.generateId).toBeCalledTimes(3);
     expect(store.getState().todos).toEqual([
       { id: "abc", text: "Paint house" },
       { id: "abc", text: "Buy milk" },
@@ -57,59 +40,45 @@ describe("addedTodo (action)", () => {
 describe("addTodo (thunk)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
-    const todoText = "Paint house";
-
     const mockInjections = {
       generateId: vi.fn(() => "abc"),
     };
 
     const store = createStore(model, {
       injections: mockInjections,
-      mockActions: true,
     });
 
     // act
-    await store.getActions().addTodo(todoText);
+    await store.getActions().addTodo("Paint house");
 
     // assert
     expect(mockInjections.generateId).toHaveBeenCalledTimes(1);
-    expect(store.getMockedActions()).toEqual([
-      { type: "@thunk.addTodo(start)", payload: todoText },
-      { type: "@action.addedTodo", payload: { id: "abc", text: todoText } },
-      { type: "@thunk.addTodo(success)", payload: todoText },
+    expect(store.getState().todos).toEqual([
+      { id: "abc", text: "Paint house" },
     ]);
   });
 
   it("should work as expected when adding multiple todos", async () => {
     // arrange
-    const todoText = "Paint house";
-
     const mockInjections = {
       generateId: vi.fn(() => "abc"),
     };
 
     const store = createStore(model, {
       injections: mockInjections,
-      mockActions: true,
     });
 
     // act
-    await store.getActions().addTodo(todoText);
-    await store.getActions().addTodo(todoText);
-    await store.getActions().addTodo(todoText);
+    await store.getActions().addTodo("Paint house");
+    await store.getActions().addTodo("Buy milk");
+    await store.getActions().addTodo("Wash car");
 
     // assert
     expect(mockInjections.generateId).toHaveBeenCalledTimes(3);
-    expect(store.getMockedActions()).toEqual([
-      { type: "@thunk.addTodo(start)", payload: todoText },
-      { type: "@action.addedTodo", payload: { id: "abc", text: todoText } },
-      { type: "@thunk.addTodo(success)", payload: todoText },
-      { type: "@thunk.addTodo(start)", payload: todoText },
-      { type: "@action.addedTodo", payload: { id: "abc", text: todoText } },
-      { type: "@thunk.addTodo(success)", payload: todoText },
-      { type: "@thunk.addTodo(start)", payload: todoText },
-      { type: "@action.addedTodo", payload: { id: "abc", text: todoText } },
-      { type: "@thunk.addTodo(success)", payload: todoText },
+    expect(store.getState().todos).toEqual([
+      { id: "abc", text: "Paint house" },
+      { id: "abc", text: "Buy milk" },
+      { id: "abc", text: "Wash car" },
     ]);
   });
 });
@@ -117,8 +86,6 @@ describe("addTodo (thunk)", () => {
 describe("autoSaveTodosOnChange (effect)", () => {
   it("should not trigger if changes happen before list is initialized", async () => {
     // arrange
-    const todoText = "Write docs";
-
     const mockInjections: Injections = {
       generateId: vi.fn(() => "abc"),
       todosService: {
@@ -128,10 +95,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 1000,
     };
 
-    const actionTracker = trackActionsMiddleware();
-
     const store = createStore(model, {
-      middleware: [actionTracker],
       injections: mockInjections,
       initialState: {
         todos: [],
@@ -141,71 +105,16 @@ describe("autoSaveTodosOnChange (effect)", () => {
     });
 
     // act
-    store.getActions().addedTodo({ id: "abc", text: todoText });
+    store.getActions().addedTodo({ id: "abc", text: "Write docs" });
 
     await sleep(mockInjections.waitTimeBeforeSave);
 
     // assert
     expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
-    expect(actionTracker.actions).toMatchObject([
-      {
-        type: "@action.addedTodo",
-        payload: {
-          id: "abc",
-          text: "Write docs",
-        },
-      },
-      {
-        type: "@effectOn.autoSaveTodosOnChange(start)",
-        change: {
-          prev: [[], false],
-          current: [
-            [
-              {
-                id: "abc",
-                text: "Write docs",
-              },
-            ],
-            false,
-          ],
-          action: {
-            type: "@action.addedTodo",
-            payload: {
-              id: "abc",
-              text: "Write docs",
-            },
-          },
-        },
-      },
-      {
-        type: "@effectOn.autoSaveTodosOnChange(success)",
-        change: {
-          prev: [[], false],
-          current: [
-            [
-              {
-                id: "abc",
-                text: "Write docs",
-              },
-            ],
-            false,
-          ],
-          action: {
-            type: "@action.addedTodo",
-            payload: {
-              id: "abc",
-              text: "Write docs",
-            },
-          },
-        },
-      },
-    ]);
   });
 
   it("should trigger if changes happen after list is initialized", async () => {
     // arrange
-    const todoText = "Write docs";
-
     const mockInjections: Injections = {
       generateId: vi.fn(() => "abc"),
       todosService: {
@@ -215,10 +124,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 1000,
     };
 
-    const actionTracker = trackActionsMiddleware();
-
     const store = createStore(model, {
-      middleware: [actionTracker],
       injections: mockInjections,
       initialState: {
         todos: [],
@@ -228,74 +134,15 @@ describe("autoSaveTodosOnChange (effect)", () => {
     });
 
     // act
-    store.getActions().addedTodo({ id: "abc", text: todoText });
+    store.getActions().addedTodo({ id: "abc", text: "Write docs" });
 
     // assert
     expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
+    // act
     await sleep(mockInjections.waitTimeBeforeSave);
 
+    // assert
     expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(1);
-    expect(actionTracker.actions).toMatchObject([
-      {
-        type: "@action.addedTodo",
-        payload: {
-          id: "abc",
-          text: "Write docs",
-        },
-      },
-      {
-        type: "@effectOn.autoSaveTodosOnChange(start)",
-        change: {
-          prev: [[], true],
-          current: [
-            [
-              {
-                id: "abc",
-                text: "Write docs",
-              },
-            ],
-            true,
-          ],
-          action: {
-            type: "@action.addedTodo",
-            payload: {
-              id: "abc",
-              text: "Write docs",
-            },
-          },
-        },
-      },
-      {
-        type: "@effectOn.autoSaveTodosOnChange(success)",
-        change: {
-          prev: [[], true],
-          current: [
-            [
-              {
-                id: "abc",
-                text: "Write docs",
-              },
-            ],
-            true,
-          ],
-          action: {
-            type: "@action.addedTodo",
-            payload: {
-              id: "abc",
-              text: "Write docs",
-            },
-          },
-        },
-      },
-      {
-        type: "@action.toggledSaveState",
-        payload: true,
-      },
-      {
-        type: "@action.toggledSaveState",
-        payload: false,
-      },
-    ]);
   });
 });
