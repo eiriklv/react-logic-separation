@@ -115,7 +115,7 @@ export const model: TodosModel = {
         return () => {};
       }
 
-      // Create a function for updating the save state + run the service effect
+      // Set a timeout/debounce for running the save effect
       const saveTimeout = setTimeout(async () => {
         actions.toggledSaveState(true);
         await todosService.saveTodos(todos);
