@@ -44,8 +44,7 @@ export function Todos() {
 
   return (
     <div>
-      <h3>Todos</h3>
-      <h4>{isSaving && "(saving...)"}</h4>
+      <h3>Todos <span>{isSaving && "(saving...)"}</span></h3>
       <label>
         Todo
         <input
