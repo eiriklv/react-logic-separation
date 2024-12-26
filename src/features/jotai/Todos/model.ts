@@ -2,7 +2,7 @@ import { atom, createStore } from "jotai";
 import { atomEffect } from "jotai-effect";
 
 import * as todosService from "./services/todos.service";
-import { generateId, noop } from "./utils";
+import { generateId } from "./utils";
 
 // Dependencies to be injected
 const injections = {
