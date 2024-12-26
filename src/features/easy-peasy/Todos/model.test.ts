@@ -89,22 +89,17 @@ describe("autoSaveTodosOnChange (effect)", () => {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
-        fetchTodos: vi.fn(),
+        fetchTodos: vi.fn(async () => []),
       },
       waitTimeBeforeSave: 1000,
     };
 
     const store = createStore(model, {
       injections: mockInjections,
-      initialState: {
-        todos: [],
-        isInitialized: false,
-        isSaving: false,
-      },
     });
 
     // act
-    store.getActions().addedTodo({ id: "abc", text: "Write docs" });
+    await store.getActions().addTodo("Write docs");
 
     await sleep(mockInjections.waitTimeBeforeSave);
 
@@ -118,21 +113,17 @@ describe("autoSaveTodosOnChange (effect)", () => {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
-        fetchTodos: vi.fn(),
+        fetchTodos: vi.fn(async () => []),
       },
       waitTimeBeforeSave: 100,
     };
 
     const store = createStore(model, {
       injections: mockInjections,
-      initialState: {
-        todos: [],
-        isInitialized: true,
-        isSaving: false,
-      },
     });
 
     // act
+    await store.getActions().initializeTodos();
     await store.getActions().addTodo("Write docs");
     await store.getActions().addTodo("Write tests");
     await store.getActions().addTodo("Paint house");
