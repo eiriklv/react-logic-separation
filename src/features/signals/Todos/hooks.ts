@@ -1,4 +1,16 @@
-import { useSignal, useStore } from "./signal-hooks";
+import { Signal } from "@preact/signals-core";
+import { useSyncExternalStore } from "react";
+import { store } from "./model";
+
+/**
+ * Custom hook for connecting signals to React
+ */
+const useSignal = <T>(signal: Signal<T>) => {
+  return useSyncExternalStore(
+    signal.subscribe.bind(signal),
+    signal.peek.bind(signal)
+  );
+};
 
 /**
  * The main purpose of this file is to
@@ -17,26 +29,21 @@ import { useSignal, useStore } from "./signal-hooks";
  */
 
 export const useIsInitialized = () => {
-  const store = useStore();
   return useSignal(store.isInitialized);
 };
 
 export const useIsSaving = () => {
-  const store = useStore();
   return useSignal(store.isSaving);
 };
 
 export const useTodos = () => {
-  const store = useStore();
   return useSignal(store.todos);
 };
 
 export const useTodosCount = () => {
-  const store = useStore();
   return useSignal(store.todosCount);
 };
 
 export const useAddTodo = () => {
-  const { addTodo } = useStore();
-  return addTodo;
+  return store.addTodo;
 };
