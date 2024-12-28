@@ -1,77 +1,51 @@
-import {
-  createStore,
-  action,
-  Action,
-  effectOn,
-  EffectOn,
-  thunk,
-  Thunk,
-} from "easy-peasy";
+import { effect, signal } from "@preact/signals-core";
 
-// Model interface
-export interface TimerModel {
+// Model
+export class TimerModel {
   // State
-  elapsedSeconds: number;
-  isRunning: boolean;
+  elapsedSeconds = signal<number>(0);
+  isRunning = signal<boolean>(false);
 
   // Events
-  startedTimer: Action<TimerModel>;
-  stoppedTimer: Action<TimerModel>;
-  incrementedElapsedSeconds: Action<TimerModel>;
+  startedTimer = () => {
+    this.isRunning.value = true;
+  };
+  stoppedTimer = () => {
+    this.isRunning.value = false;
+  };
+  incrementElapsedSeconds = () => {
+    this.elapsedSeconds.value = this.elapsedSeconds.value + 1;
+  };
 
   // Commands
-  startTimer: Thunk<TimerModel>;
-  stopTimer: Thunk<TimerModel>;
+  startTimer = async () => {
+    this.startedTimer();
+  };
+  stopTimer = async () => {
+    this.stoppedTimer();
+  };
 
   // Effects
-  incrementTimerWhileRunning: EffectOn<TimerModel, TimerModel>;
+  incrementTimerWhileRunning = effect(() => {
+    // Get dependencies that triggered the effect
+    const isRunningValue = this.isRunning.value;
+
+    if (!isRunningValue) {
+      return () => {};
+    }
+
+    const interval = setInterval(() => {
+      this.incrementElapsedSeconds();
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  });
 }
 
-// Model implementation
-export const model: TimerModel = {
-  // State
-  elapsedSeconds: 0,
-  isRunning: false,
+export function createStore() {
+  return new TimerModel();
+}
 
-  // Events
-  startedTimer: action((state) => {
-    state.isRunning = true;
-  }),
-  stoppedTimer: action((state) => {
-    state.isRunning = false;
-  }),
-  incrementedElapsedSeconds: action((state) => {
-    state.elapsedSeconds++;
-  }),
-
-  // Commands
-  startTimer: thunk(async (actions) => {
-    actions.startedTimer();
-  }),
-  stopTimer: thunk(async (actions) => {
-    actions.stoppedTimer();
-  }),
-
-  // Effects
-  incrementTimerWhileRunning: effectOn(
-    [(state) => state.isRunning],
-    (actions, change) => {
-      const [isRunning] = change.current;
-
-      if (!isRunning) {
-        return () => {};
-      }
-
-      const interval = setInterval(() => {
-        actions.incrementedElapsedSeconds();
-      }, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  ),
-};
-
-// Model store instance
-export const store = createStore(model);
+export const store = createStore();

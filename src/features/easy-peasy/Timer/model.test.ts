@@ -34,7 +34,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     const store = createStore(model, {});
 
     // Start the timer
-    store.getActions().startTimer();
+    await store.getActions().startTimer();
 
     // assert
     expect(store.getState().elapsedSeconds).toEqual(0);
@@ -46,7 +46,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     expect(store.getState().elapsedSeconds).toEqual(2);
 
     // Stop the timer
-    store.getActions().stopTimer();
+    await store.getActions().stopTimer();
 
     // Wait for 1+ second to ensure that the timer does not continue
     await sleep(1500);

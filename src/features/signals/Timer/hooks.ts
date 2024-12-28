@@ -1,8 +1,16 @@
-import { createTypedHooks } from "easy-peasy";
-import { TimerModel } from "./model";
-import { useCallback } from "react";
+import { Signal } from "@preact/signals-core";
+import { useSyncExternalStore } from "react";
+import { store } from "./model";
 
-const { useStoreState, useStoreActions } = createTypedHooks<TimerModel>();
+/**
+ * Custom hook for connecting signals to React
+ */
+const useSignal = <T>(signal: Signal<T>) => {
+  return useSyncExternalStore(
+    signal.subscribe.bind(signal),
+    signal.peek.bind(signal)
+  );
+};
 
 /**
  * The main purpose of this file is to
@@ -21,19 +29,17 @@ const { useStoreState, useStoreActions } = createTypedHooks<TimerModel>();
  */
 
 export const useElapsedSeconds = () => {
-  return useStoreState((state) => state.elapsedSeconds);
+  return useSignal(store.elapsedSeconds);
 };
 
 export const useIsRunning = () => {
-  return useStoreState((state) => state.isRunning);
+  return useSignal(store.isRunning);
 };
 
 export const useStartTimer = () => {
-  const { startTimer } = useStoreActions((actions) => actions);
-  return useCallback(() => startTimer(), [startTimer]);
+  return store.startTimer;
 };
 
 export const useStopTimer = () => {
-  const { stopTimer } = useStoreActions((actions) => actions);
-  return useCallback(() => stopTimer(), [stopTimer]);
+  return store.stopTimer;
 };
