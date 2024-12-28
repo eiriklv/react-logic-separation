@@ -20,11 +20,11 @@ export interface Todo {
 
 export class TodosModel {
   constructor(dependencies: Injections = defaultDependencies) {
-    this.injections.value = dependencies;
+    this.injections = dependencies;
   }
 
   // Dependencies
-  injections = signal<Injections>(defaultDependencies);
+  injections: Injections = defaultDependencies;
 
   // State
   todos = signal<Todo[]>([]);
@@ -51,7 +51,7 @@ export class TodosModel {
   // Commands
   initializeTodos = async () => {
     // Get dependencies
-    const { todosService } = this.injections.value;
+    const { todosService } = this.injections;
 
     // Run side effect
     const todos = await todosService.fetchTodos();
@@ -61,7 +61,7 @@ export class TodosModel {
   };
   addTodo = async (payload: string) => {
     // Get dependencies
-    const { generateId } = this.injections.value;
+    const { generateId } = this.injections;
 
     // TODO: Do validation of input if applicable
 
@@ -78,7 +78,7 @@ export class TodosModel {
   // Effects
   autoSaveTodosOnChange = effect(() => {
     // Get dependencies
-    const { todosService, waitTimeBeforeSave } = this.injections.value;
+    const { todosService, waitTimeBeforeSave } = this.injections;
 
     // Get the changed values that triggered the effect
     const todosValue = this.todos.value;
