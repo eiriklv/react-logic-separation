@@ -1,6 +1,5 @@
 import { createTypedHooks } from "easy-peasy";
 import { TodosModel } from "./model";
-import { useCallback } from "react";
 
 const { useStoreState, useStoreActions } = createTypedHooks<TodosModel>();
 
@@ -37,6 +36,5 @@ export const useTodosCount = () => {
 };
 
 export const useAddTodo = () => {
-  const { addTodo } = useStoreActions((actions) => actions);
-  return useCallback((text: string) => addTodo(text), [addTodo]);
+  return useStoreActions((actions) => actions).addTodo;
 };

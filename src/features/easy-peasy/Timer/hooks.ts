@@ -1,6 +1,5 @@
 import { createTypedHooks } from "easy-peasy";
 import { TimerModel } from "./model";
-import { useCallback } from "react";
 
 const { useStoreState, useStoreActions } = createTypedHooks<TimerModel>();
 
@@ -29,11 +28,9 @@ export const useIsRunning = () => {
 };
 
 export const useStartTimer = () => {
-  const { startTimer } = useStoreActions((actions) => actions);
-  return useCallback(() => startTimer(), [startTimer]);
+  return useStoreActions((actions) => actions).startTimer;
 };
 
 export const useStopTimer = () => {
-  const { stopTimer } = useStoreActions((actions) => actions);
-  return useCallback(() => stopTimer(), [stopTimer]);
+  return useStoreActions((actions) => actions).stopTimer;
 };
