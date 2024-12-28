@@ -11,7 +11,7 @@ const defaultDependencies = {
 };
 
 // Types and interfaces
-export type Injections = typeof defaultDependencies;
+export type Dependencies = typeof defaultDependencies;
 
 export interface Todo {
   id: string;
@@ -19,12 +19,12 @@ export interface Todo {
 }
 
 export class TodosModel {
-  constructor(dependencies: Injections = defaultDependencies) {
+  constructor(dependencies: Dependencies = defaultDependencies) {
     this.injections = dependencies;
   }
 
   // Dependencies
-  injections: Injections = defaultDependencies;
+  injections: Dependencies = defaultDependencies;
 
   // State
   todos = signal<Todo[]>([]);
@@ -81,18 +81,18 @@ export class TodosModel {
     const { todosService, waitTimeBeforeSave } = this.injections;
 
     // Get the changed values that triggered the effect
-    const todosValue = this.todos.value;
-    const isInitializedValue = this.isInitialized.value;
+    const todos = this.todos.value;
+    const isInitialized = this.isInitialized.value;
 
     // Validation (only auto-save after the data has been initialized/loaded)
-    if (!isInitializedValue) {
+    if (!isInitialized) {
       return () => {};
     }
 
     // Set a timeout/debounce for running the save effect
     const saveTimeout = setTimeout(async () => {
       this.toggledSaveState(true);
-      await todosService.saveTodos(todosValue);
+      await todosService.saveTodos(todos);
       this.toggledSaveState(false);
     }, waitTimeBeforeSave);
 

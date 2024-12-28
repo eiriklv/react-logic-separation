@@ -30,9 +30,9 @@ export class TimerModel {
 
   // Effects
   incrementTimerWhileRunning = atomEffect((get, set) => {
-    const isRunningValue = get(this.isRunning);
+    const isRunning = get(this.isRunning);
 
-    if (!isRunningValue) {
+    if (!isRunning) {
       return () => {};
     }
 

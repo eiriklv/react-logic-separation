@@ -28,9 +28,9 @@ export class TimerModel {
   // Effects
   incrementTimerWhileRunning = effect(() => {
     // Get dependencies that triggered the effect
-    const isRunningValue = this.isRunning.value;
+    const isRunning = this.isRunning.value;
 
-    if (!isRunningValue) {
+    if (!isRunning) {
       return () => {};
     }
 

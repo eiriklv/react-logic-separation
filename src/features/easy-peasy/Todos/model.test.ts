@@ -1,4 +1,4 @@
-import { Injections, model } from "./model";
+import { Dependencies, model } from "./model";
 import { createStore } from "easy-peasy";
 import { sleep } from "./utils";
 
@@ -39,19 +39,19 @@ describe("addedTodo (action)", () => {
 describe("addTodo (thunk)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
-    const mockInjections = {
+    const mockDependencies = {
       generateId: vi.fn(() => "abc"),
     };
 
     const store = createStore(model, {
-      injections: mockInjections,
+      injections: mockDependencies,
     });
 
     // act
     await store.getActions().addTodo("Paint house");
 
     // assert
-    expect(mockInjections.generateId).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.generateId).toHaveBeenCalledTimes(1);
     expect(store.getState().todos).toEqual([
       { id: "abc", text: "Paint house" },
     ]);
@@ -59,12 +59,12 @@ describe("addTodo (thunk)", () => {
 
   it("should work as expected when adding multiple todos", async () => {
     // arrange
-    const mockInjections = {
+    const mockDependencies = {
       generateId: vi.fn(() => "abc"),
     };
 
     const store = createStore(model, {
-      injections: mockInjections,
+      injections: mockDependencies,
     });
 
     // act
@@ -73,7 +73,7 @@ describe("addTodo (thunk)", () => {
     await store.getActions().addTodo("Wash car");
 
     // assert
-    expect(mockInjections.generateId).toHaveBeenCalledTimes(3);
+    expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
     expect(store.getState().todos).toEqual([
       { id: "abc", text: "Paint house" },
       { id: "abc", text: "Buy milk" },
@@ -85,7 +85,7 @@ describe("addTodo (thunk)", () => {
 describe("autoSaveTodosOnChange (effect)", () => {
   it("should not trigger if changes happen before list is initialized", async () => {
     // arrange
-    const mockInjections: Injections = {
+    const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
@@ -95,21 +95,21 @@ describe("autoSaveTodosOnChange (effect)", () => {
     };
 
     const store = createStore(model, {
-      injections: mockInjections,
+      injections: mockDependencies,
     });
 
     // act
     await store.getActions().addTodo("Write docs");
 
-    await sleep(mockInjections.waitTimeBeforeSave);
+    await sleep(mockDependencies.waitTimeBeforeSave);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
     // arrange
-    const mockInjections: Injections = {
+    const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
@@ -119,7 +119,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
     };
 
     const store = createStore(model, {
-      injections: mockInjections,
+      injections: mockDependencies,
     });
 
     // act
@@ -129,24 +129,24 @@ describe("autoSaveTodosOnChange (effect)", () => {
     await store.getActions().addTodo("Paint house");
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await sleep(mockInjections.waitTimeBeforeSave / 2);
+    await sleep(mockDependencies.waitTimeBeforeSave / 2);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await sleep(mockInjections.waitTimeBeforeSave / 2);
+    await sleep(mockDependencies.waitTimeBeforeSave / 2);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
 
     // act
-    await sleep(mockInjections.waitTimeBeforeSave);
+    await sleep(mockDependencies.waitTimeBeforeSave);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
   });
 });

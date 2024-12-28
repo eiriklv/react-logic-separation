@@ -1,4 +1,4 @@
-import { Injections, TodosModel } from "./model";
+import { Dependencies, TodosModel } from "./model";
 import { sleep } from "./utils";
 
 describe("addedTodo (action)", () => {
@@ -36,7 +36,7 @@ describe("addedTodo (action)", () => {
 describe("addTodo (thunk)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
-    const mockInjections: Injections = {
+    const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         fetchTodos: vi.fn(),
@@ -45,19 +45,19 @@ describe("addTodo (thunk)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const model = new TodosModel(mockInjections);
+    const model = new TodosModel(mockDependencies);
 
     // act
     await model.addTodo("Paint house");
 
     // assert
-    expect(mockInjections.generateId).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.generateId).toHaveBeenCalledTimes(1);
     expect(model.todos.value).toEqual([{ id: "abc", text: "Paint house" }]);
   });
 
   it("should work as expected when adding multiple todos", async () => {
     // arrange
-    const mockInjections: Injections = {
+    const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         fetchTodos: vi.fn(),
@@ -66,7 +66,7 @@ describe("addTodo (thunk)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const model = new TodosModel(mockInjections);
+    const model = new TodosModel(mockDependencies);
 
     // act
     await model.addTodo("Paint house");
@@ -74,7 +74,7 @@ describe("addTodo (thunk)", () => {
     await model.addTodo("Wash car");
 
     // assert
-    expect(mockInjections.generateId).toHaveBeenCalledTimes(3);
+    expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
     expect(model.todos.value).toEqual([
       { id: "abc", text: "Paint house" },
       { id: "abc", text: "Buy milk" },
@@ -86,7 +86,7 @@ describe("addTodo (thunk)", () => {
 describe("autoSaveTodosOnChange (effect)", () => {
   it("should not trigger if changes happen before list is initialized", async () => {
     // arrange
-    const mockInjections: Injections = {
+    const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
@@ -95,20 +95,20 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 1000,
     };
 
-    const model = new TodosModel(mockInjections);
+    const model = new TodosModel(mockDependencies);
 
     // act
     await model.addTodo("Write docs");
 
-    await sleep(mockInjections.waitTimeBeforeSave);
+    await sleep(mockDependencies.waitTimeBeforeSave);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
     // arrange
-    const mockInjections: Injections = {
+    const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
@@ -117,7 +117,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const model = new TodosModel(mockInjections);
+    const model = new TodosModel(mockDependencies);
 
     // act
     await model.initializeTodos();
@@ -126,24 +126,24 @@ describe("autoSaveTodosOnChange (effect)", () => {
     await model.addTodo("Paint house");
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await sleep(mockInjections.waitTimeBeforeSave / 2);
+    await sleep(mockDependencies.waitTimeBeforeSave / 2);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await sleep(mockInjections.waitTimeBeforeSave / 2);
+    await sleep(mockDependencies.waitTimeBeforeSave / 2);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
 
     // act
-    await sleep(mockInjections.waitTimeBeforeSave);
+    await sleep(mockDependencies.waitTimeBeforeSave);
 
     // assert
-    expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
   });
 });

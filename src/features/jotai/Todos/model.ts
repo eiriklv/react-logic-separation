@@ -1,4 +1,4 @@
-import { atom, createStore, getDefaultStore } from "jotai";
+import { atom, getDefaultStore } from "jotai";
 import { atomEffect } from "jotai-effect";
 
 import * as todosService from "./services/todos.service";
@@ -12,7 +12,7 @@ const defaultDependencies = {
 };
 
 // Types and interfaces
-export type Injections = typeof defaultDependencies;
+export type Dependencies = typeof defaultDependencies;
 
 export interface Todo {
   id: string;
@@ -20,12 +20,12 @@ export interface Todo {
 }
 
 export class TodosModel {
-  constructor(dependencies: Injections = defaultDependencies) {
+  constructor(dependencies: Dependencies = defaultDependencies) {
     this.injections = dependencies;
   }
 
   // Dependencies
-  injections: Injections = defaultDependencies;
+  injections: Dependencies = defaultDependencies;
 
   // State
   todos = atom<Todo[]>([]);

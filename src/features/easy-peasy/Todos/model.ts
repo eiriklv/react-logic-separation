@@ -14,14 +14,14 @@ import * as todosService from "./services/todos.service";
 import { generateId } from "./utils";
 
 // Dependencies to be injected
-const injections = {
+const defaultDependencies = {
   todosService,
   generateId,
   waitTimeBeforeSave: 1000,
 };
 
 // Types and interfaces
-export type Injections = typeof injections;
+export type Dependencies = typeof defaultDependencies;
 
 // Model interface
 export interface TodosModel {
@@ -39,11 +39,11 @@ export interface TodosModel {
   toggledSaveState: Action<TodosModel, boolean>;
 
   // Commands
-  initializeTodos: Thunk<TodosModel, undefined, Injections>;
-  addTodo: Thunk<TodosModel, string, Injections>;
+  initializeTodos: Thunk<TodosModel, undefined, Dependencies>;
+  addTodo: Thunk<TodosModel, string, Dependencies>;
 
   // Effects
-  autoSaveTodosOnChange: EffectOn<TodosModel, TodosModel, Injections>;
+  autoSaveTodosOnChange: EffectOn<TodosModel, TodosModel, Dependencies>;
 }
 
 export interface Todo {
@@ -132,4 +132,4 @@ export const model: TodosModel = {
 };
 
 // Model store instance (with dependencies injected)
-export const store = createStore(model, { injections });
+export const store = createStore(model, { injections: defaultDependencies });
