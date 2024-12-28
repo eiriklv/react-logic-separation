@@ -1,57 +1,67 @@
-import { model } from "./model";
-import { createStore } from "easy-peasy";
-import { sleep } from "./utils";
+import { createStore } from "jotai";
+import { noop, sleep } from "./utils";
+import {
+  elapsedSecondsAtom,
+  incrementTimerWhileRunningAtom,
+  isRunningAtom,
+  startedTimerAtom,
+  startTimerAtom,
+  stopTimerAtom,
+} from "./model";
 
 describe("startedTimer (action)", () => {
   it("should work as expected when starting timer", () => {
     // arrange
-    const store = createStore(model);
+    const store = createStore();
 
     // act
-    store.getActions().startedTimer();
+    store.set(startedTimerAtom);
 
     // assert
-    expect(store.getState().isRunning).toEqual(true);
+    expect(store.get(isRunningAtom)).toEqual(true);
   });
 });
 
 describe("startTimer (thunk)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
-    const store = createStore(model);
+    const store = createStore();
 
     // act
-    await store.getActions().startTimer();
+    await store.set(startTimerAtom);
 
     // assert
-    expect(store.getState().isRunning).toEqual(true);
+    expect(store.get(isRunningAtom)).toEqual(true);
   });
 });
 
 describe("incrementTimerWhileRunning (effect)", () => {
   it("should only increment the timer while running", async () => {
     // arrange
-    const store = createStore(model, {});
+    const store = createStore();
+
+    // mount effects
+    store.sub(incrementTimerWhileRunningAtom, noop);
 
     // Start the timer
-    await store.getActions().startTimer();
+    await store.set(startTimerAtom);
 
     // assert
-    expect(store.getState().elapsedSeconds).toEqual(0);
+    expect(store.get(elapsedSecondsAtom)).toEqual(0);
 
     // Wait for two+ seconds so that the timer can increment twice
     await sleep(2500);
 
     // assert
-    expect(store.getState().elapsedSeconds).toEqual(2);
+    expect(store.get(elapsedSecondsAtom)).toEqual(2);
 
     // Stop the timer
-    await store.getActions().stopTimer();
+    await store.set(stopTimerAtom);
 
     // Wait for 1+ second to ensure that the timer does not continue
     await sleep(1500);
 
     // assert
-    expect(store.getState().elapsedSeconds).toEqual(2);
+    expect(store.get(elapsedSecondsAtom)).toEqual(2);
   });
 });

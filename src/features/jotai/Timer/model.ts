@@ -1,77 +1,57 @@
-import {
-  createStore,
-  action,
-  Action,
-  effectOn,
-  EffectOn,
-  thunk,
-  Thunk,
-} from "easy-peasy";
+import { atom, createStore } from "jotai";
+import { atomEffect } from "jotai-effect";
 
-// Model interface
-export interface TimerModel {
-  // State
-  elapsedSeconds: number;
-  isRunning: boolean;
+// State
+export const elapsedSecondsAtom = atom<number>(0);
+export const isRunningAtom = atom<boolean>(false);
 
-  // Events
-  startedTimer: Action<TimerModel>;
-  stoppedTimer: Action<TimerModel>;
-  incrementedElapsedSeconds: Action<TimerModel>;
+// Events
+export const startedTimerAtom = atom<null, [], void>(null, (_get, set) => {
+  set(isRunningAtom, true);
+});
 
-  // Commands
-  startTimer: Thunk<TimerModel>;
-  stopTimer: Thunk<TimerModel>;
+export const stoppedTimerAtom = atom<null, [], void>(null, (_get, set) => {
+  set(isRunningAtom, false);
+});
 
-  // Effects
-  incrementTimerWhileRunning: EffectOn<TimerModel, TimerModel>;
-}
+export const incrementedElapsedSecondsAtom = atom<null, [], void>(
+  null,
+  (_get, set) => {
+    set(elapsedSecondsAtom, (value) => value + 1);
+  }
+);
 
-// Model implementation
-export const model: TimerModel = {
-  // State
-  elapsedSeconds: 0,
-  isRunning: false,
+// Commands
+export const startTimerAtom = atom<null, [], Promise<void>>(
+  null,
+  async (_get, set) => {
+    set(startedTimerAtom);
+  }
+);
 
-  // Events
-  startedTimer: action((state) => {
-    state.isRunning = true;
-  }),
-  stoppedTimer: action((state) => {
-    state.isRunning = false;
-  }),
-  incrementedElapsedSeconds: action((state) => {
-    state.elapsedSeconds++;
-  }),
+export const stopTimerAtom = atom<null, [], Promise<void>>(
+  null,
+  async (_get, set) => {
+    set(stoppedTimerAtom);
+  }
+);
 
-  // Commands
-  startTimer: thunk(async (actions) => {
-    actions.startedTimer();
-  }),
-  stopTimer: thunk(async (actions) => {
-    actions.stoppedTimer();
-  }),
+// Effects
+export const incrementTimerWhileRunningAtom = atomEffect((get, set) => {
+  const isRunning = get(isRunningAtom);
 
-  // Effects
-  incrementTimerWhileRunning: effectOn(
-    [(state) => state.isRunning],
-    (actions, change) => {
-      const [isRunning] = change.current;
+  if (!isRunning) {
+    return () => {};
+  }
 
-      if (!isRunning) {
-        return () => {};
-      }
+  const interval = setInterval(() => {
+    set(incrementedElapsedSecondsAtom);
+  }, 1000);
 
-      const interval = setInterval(() => {
-        actions.incrementedElapsedSeconds();
-      }, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  ),
-};
+  return () => {
+    clearInterval(interval);
+  };
+});
 
 // Model store instance
-export const store = createStore(model);
+export const store = createStore();

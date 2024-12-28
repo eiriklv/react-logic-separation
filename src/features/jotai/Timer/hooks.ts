@@ -1,8 +1,10 @@
-import { createTypedHooks } from "easy-peasy";
-import { TimerModel } from "./model";
-import { useCallback } from "react";
-
-const { useStoreState, useStoreActions } = createTypedHooks<TimerModel>();
+import {
+  elapsedSecondsAtom,
+  isRunningAtom,
+  startTimerAtom,
+  stopTimerAtom,
+} from "./model";
+import { useAtomValue, useSetAtom } from "jotai";
 
 /**
  * The main purpose of this file is to
@@ -21,19 +23,17 @@ const { useStoreState, useStoreActions } = createTypedHooks<TimerModel>();
  */
 
 export const useElapsedSeconds = () => {
-  return useStoreState((state) => state.elapsedSeconds);
+  return useAtomValue(elapsedSecondsAtom);
 };
 
 export const useIsRunning = () => {
-  return useStoreState((state) => state.isRunning);
+  return useAtomValue(isRunningAtom);
 };
 
 export const useStartTimer = () => {
-  const { startTimer } = useStoreActions((actions) => actions);
-  return useCallback(() => startTimer(), [startTimer]);
+  return useSetAtom(startTimerAtom);
 };
 
 export const useStopTimer = () => {
-  const { stopTimer } = useStoreActions((actions) => actions);
-  return useCallback(() => stopTimer(), [stopTimer]);
+  return useSetAtom(stopTimerAtom);
 };
