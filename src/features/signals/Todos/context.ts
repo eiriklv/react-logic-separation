@@ -1,5 +1,11 @@
 import React from "react";
-import { useTodos, useAddTodo, useIsSaving, useIsInitialized } from "./hooks";
+import {
+  useTodos,
+  useAddTodo,
+  useIsSaving,
+  useIsInitialized,
+  useTodosCount,
+} from "./hooks";
 import { TodoItem } from "./components/TodoItem";
 
 /**
@@ -21,6 +27,7 @@ import { TodoItem } from "./components/TodoItem";
 
 export interface TodosContextInterface {
   useTodos: typeof useTodos;
+  useTodosCount: typeof useTodosCount;
   useAddTodo: typeof useAddTodo;
   useIsSaving: typeof useIsSaving;
   useIsInitialized: typeof useIsInitialized;
@@ -29,6 +36,7 @@ export interface TodosContextInterface {
 
 export const defaultValue: TodosContextInterface = {
   useTodos,
+  useTodosCount,
   useAddTodo,
   useIsSaving,
   useIsInitialized,

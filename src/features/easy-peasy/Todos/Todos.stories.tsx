@@ -26,7 +26,8 @@ export const UninitializedList: Story = {
   parameters: {
     dependencies: {
       useTodos: () => [],
-      useAddTodo: () => () => {},
+      useTodosCount: () => 0,
+      useAddTodo: () => async () => {},
       useIsInitialized: () => false,
       useIsSaving: () => false,
       TodoItem: ({ todo }) => <li>{todo.text}</li>,
@@ -39,7 +40,8 @@ export const EmptyList: Story = {
   parameters: {
     dependencies: {
       useTodos: () => [],
-      useAddTodo: () => () => {},
+      useTodosCount: () => 0,
+      useAddTodo: () => async () => {},
       useIsInitialized: () => true,
       useIsSaving: () => false,
       TodoItem: ({ todo }) => <li>{todo.text}</li>,
@@ -55,7 +57,8 @@ export const ListWithItems: Story = {
         { id: "1", text: "Buy milk" },
         { id: "2", text: "Paint house" },
       ],
-      useAddTodo: () => () => {},
+      useTodosCount: () => 2,
+      useAddTodo: () => async () => {},
       useIsInitialized: () => true,
       useIsSaving: () => false,
       TodoItem: ({ todo }) => <li>{todo.text}</li>,
@@ -71,7 +74,8 @@ export const SavingTodos: Story = {
         { id: "1", text: "Buy milk" },
         { id: "2", text: "Paint house" },
       ],
-      useAddTodo: () => () => {},
+      useTodosCount: () => 2,
+      useAddTodo: () => async () => {},
       useIsInitialized: () => true,
       useIsSaving: () => true,
       TodoItem: ({ todo }) => <li>{todo.text}</li>,

@@ -3,13 +3,20 @@ import { TodosContext } from "./context";
 
 export function Todos() {
   // Get injected dependencies from context
-  const { useTodos, useAddTodo, useIsSaving, useIsInitialized, TodoItem } =
-    useContext(TodosContext);
+  const {
+    useTodos,
+    useTodosCount,
+    useAddTodo,
+    useIsSaving,
+    useIsInitialized,
+    TodoItem,
+  } = useContext(TodosContext);
 
   // Use injected dependencies (domain state/actions, components, etc)
   const isInitialized = useIsInitialized();
   const isSaving = useIsSaving();
   const todos = useTodos();
+  const todosCount = useTodosCount();
   const addTodo = useAddTodo();
 
   // Create local view state for form/input
@@ -44,7 +51,10 @@ export function Todos() {
 
   return (
     <div>
-      <h3>Todos <span>{isSaving && "(saving...)"}</span></h3>
+      <h3>
+        Todos <span>{isSaving && "(saving...)"}</span>
+      </h3>
+      <h4>Things to do: {todosCount}</h4>
       <label>
         Todo
         <input

@@ -11,6 +11,7 @@ describe("Todos Component", () => {
       useIsInitialized: () => true,
       useIsSaving: () => false,
       useTodos: () => [],
+      useTodosCount: () => 0,
       TodoItem: () => <></>,
     };
 
@@ -33,6 +34,7 @@ describe("Todos Component", () => {
       useIsInitialized: () => true,
       useIsSaving: () => false,
       useTodos: () => [],
+      useTodosCount: () => 0,
       TodoItem: () => <></>,
     };
 
