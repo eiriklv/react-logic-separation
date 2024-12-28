@@ -1,11 +1,5 @@
 import { useAtomValue, useSetAtom } from "jotai";
-import {
-  addTodoAtom,
-  isInitializedAtom,
-  isSavingAtom,
-  todosAtom,
-  todosCountAtom,
-} from "./model";
+import { model } from "./model";
 
 /**
  * The main purpose of this file is to
@@ -24,21 +18,21 @@ import {
  */
 
 export const useIsInitialized = () => {
-  return useAtomValue(isInitializedAtom);
+  return useAtomValue(model.isInitialized);
 };
 
 export const useIsSaving = () => {
-  return useAtomValue(isSavingAtom);
+  return useAtomValue(model.isSaving);
 };
 
 export const useTodos = () => {
-  return useAtomValue(todosAtom);
+  return useAtomValue(model.todos);
 };
 
 export const useTodosCount = () => {
-  return useAtomValue(todosCountAtom);
+  return useAtomValue(model.todosCount);
 };
 
 export const useAddTodo = () => {
-  return useSetAtom(addTodoAtom);
+  return useSetAtom(model.addTodo);
 };

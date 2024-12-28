@@ -1,18 +1,13 @@
-import { autoSaveTodosOnChangeAtom, initializeTodosAtom, store } from "./model";
+import { model, store } from "./model";
 import { Todos } from "./Todos";
 import { noop } from "./utils";
-import { Provider as StoreProvider } from "jotai";
 
 // Mount effects
-store.sub(autoSaveTodosOnChangeAtom, noop);
+store.sub(model.autoSaveTodosOnChange, noop);
 
 // Trigger init of the store
-store.set(initializeTodosAtom);
+store.set(model.initializeTodos);
 
 export function TodosFeature() {
-  return (
-    <StoreProvider store={store}>
-      <Todos />
-    </StoreProvider>
-  );
+  return <Todos />;
 }

@@ -44,8 +44,5 @@ export class TimerModel {
   });
 }
 
-export function createStore() {
-  return new TimerModel();
-}
-
-export const store = createStore();
+// Model instance
+export const model = new TimerModel();

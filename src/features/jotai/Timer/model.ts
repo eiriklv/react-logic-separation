@@ -1,57 +1,53 @@
-import { atom, createStore } from "jotai";
+import { atom, getDefaultStore } from "jotai";
 import { atomEffect } from "jotai-effect";
 
-// State
-export const elapsedSecondsAtom = atom<number>(0);
-export const isRunningAtom = atom<boolean>(false);
+export class TimerModel {
+  // State
+  elapsedSeconds = atom<number>(0);
+  isRunning = atom<boolean>(false);
 
-// Events
-export const startedTimerAtom = atom<null, [], void>(null, (_get, set) => {
-  set(isRunningAtom, true);
-});
+  // Events
+  startedTimer = atom<null, [], void>(null, (_get, set) => {
+    set(this.isRunning, true);
+  });
 
-export const stoppedTimerAtom = atom<null, [], void>(null, (_get, set) => {
-  set(isRunningAtom, false);
-});
+  stoppedTimer = atom<null, [], void>(null, (_get, set) => {
+    set(this.isRunning, false);
+  });
 
-export const incrementedElapsedSecondsAtom = atom<null, [], void>(
-  null,
-  (_get, set) => {
-    set(elapsedSecondsAtom, (value) => value + 1);
-  }
-);
+  incrementedElapsedSeconds = atom<null, [], void>(null, (_get, set) => {
+    set(this.elapsedSeconds, (value) => value + 1);
+  });
 
-// Commands
-export const startTimerAtom = atom<null, [], Promise<void>>(
-  null,
-  async (_get, set) => {
-    set(startedTimerAtom);
-  }
-);
+  // Commands
+  startTimer = atom<null, [], Promise<void>>(null, async (_get, set) => {
+    set(this.startedTimer);
+  });
 
-export const stopTimerAtom = atom<null, [], Promise<void>>(
-  null,
-  async (_get, set) => {
-    set(stoppedTimerAtom);
-  }
-);
+  stopTimer = atom<null, [], Promise<void>>(null, async (_get, set) => {
+    set(this.stoppedTimer);
+  });
 
-// Effects
-export const incrementTimerWhileRunningAtom = atomEffect((get, set) => {
-  const isRunning = get(isRunningAtom);
+  // Effects
+  incrementTimerWhileRunning = atomEffect((get, set) => {
+    const isRunningValue = get(this.isRunning);
 
-  if (!isRunning) {
-    return () => {};
-  }
+    if (!isRunningValue) {
+      return () => {};
+    }
 
-  const interval = setInterval(() => {
-    set(incrementedElapsedSecondsAtom);
-  }, 1000);
+    const interval = setInterval(() => {
+      set(this.incrementedElapsedSeconds);
+    }, 1000);
 
-  return () => {
-    clearInterval(interval);
-  };
-});
+    return () => {
+      clearInterval(interval);
+    };
+  });
+}
 
-// Model store instance
-export const store = createStore();
+// Model instance
+export const model = new TimerModel();
+
+// Store instance
+export const store = getDefaultStore();

@@ -104,8 +104,5 @@ export class TodosModel {
   });
 }
 
-export function createStore({ injections }: { injections?: Injections } = {}) {
-  return new TodosModel(injections);
-}
-
-export const store = createStore();
+// Model instance
+export const model = new TodosModel(defaultDependencies);

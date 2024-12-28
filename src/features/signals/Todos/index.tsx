@@ -1,8 +1,8 @@
-import { store } from "./model";
+import { model } from "./model";
 import { Todos } from "./Todos";
 
 // Trigger init of the store
-store.initializeTodos();
+model.initializeTodos();
 
 export function TodosFeature() {
   return <Todos />;

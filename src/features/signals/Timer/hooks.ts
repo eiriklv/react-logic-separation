@@ -1,6 +1,6 @@
 import { Signal } from "@preact/signals-core";
 import { useSyncExternalStore } from "react";
-import { store } from "./model";
+import { model } from "./model";
 
 /**
  * Custom hook for connecting signals to React
@@ -29,17 +29,17 @@ const useSignal = <T>(signal: Signal<T>) => {
  */
 
 export const useElapsedSeconds = () => {
-  return useSignal(store.elapsedSeconds);
+  return useSignal(model.elapsedSeconds);
 };
 
 export const useIsRunning = () => {
-  return useSignal(store.isRunning);
+  return useSignal(model.isRunning);
 };
 
 export const useStartTimer = () => {
-  return store.startTimer;
+  return model.startTimer;
 };
 
 export const useStopTimer = () => {
-  return store.stopTimer;
+  return model.stopTimer;
 };

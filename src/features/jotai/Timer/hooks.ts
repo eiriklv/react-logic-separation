@@ -1,9 +1,4 @@
-import {
-  elapsedSecondsAtom,
-  isRunningAtom,
-  startTimerAtom,
-  stopTimerAtom,
-} from "./model";
+import { model } from "./model";
 import { useAtomValue, useSetAtom } from "jotai";
 
 /**
@@ -23,17 +18,17 @@ import { useAtomValue, useSetAtom } from "jotai";
  */
 
 export const useElapsedSeconds = () => {
-  return useAtomValue(elapsedSecondsAtom);
+  return useAtomValue(model.elapsedSeconds);
 };
 
 export const useIsRunning = () => {
-  return useAtomValue(isRunningAtom);
+  return useAtomValue(model.isRunning);
 };
 
 export const useStartTimer = () => {
-  return useSetAtom(startTimerAtom);
+  return useSetAtom(model.startTimer);
 };
 
 export const useStopTimer = () => {
-  return useSetAtom(stopTimerAtom);
+  return useSetAtom(model.stopTimer);
 };

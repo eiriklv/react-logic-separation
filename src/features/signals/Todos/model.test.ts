@@ -1,35 +1,35 @@
-import { createStore, Injections } from "./model";
+import { Injections, TodosModel } from "./model";
 import { sleep } from "./utils";
 
 describe("addedTodo (action)", () => {
   it("should work as expected when adding a single todo", () => {
     // arrange
-    const store = createStore();
+    const model = new TodosModel();
 
     // act
-    store.addedTodo({ id: "abc", text: "Paint house" });
+    model.addedTodo({ id: "abc", text: "Paint house" });
 
     // assert
-    expect(store.todos.value).toEqual([{ id: "abc", text: "Paint house" }]);
-    expect(store.todosCount.value).toEqual(1);
+    expect(model.todos.value).toEqual([{ id: "abc", text: "Paint house" }]);
+    expect(model.todosCount.value).toEqual(1);
   });
 
   it("should work as expected when adding multiple todos", () => {
     // arrange
-    const store = createStore();
+    const model = new TodosModel();
 
     // act
-    store.addedTodo({ id: "abc", text: "Paint house" });
-    store.addedTodo({ id: "abc", text: "Buy milk" });
-    store.addedTodo({ id: "abc", text: "Wash car" });
+    model.addedTodo({ id: "abc", text: "Paint house" });
+    model.addedTodo({ id: "abc", text: "Buy milk" });
+    model.addedTodo({ id: "abc", text: "Wash car" });
 
     // assert
-    expect(store.todos.value).toEqual([
+    expect(model.todos.value).toEqual([
       { id: "abc", text: "Paint house" },
       { id: "abc", text: "Buy milk" },
       { id: "abc", text: "Wash car" },
     ]);
-    expect(store.todosCount.value).toEqual(3);
+    expect(model.todosCount.value).toEqual(3);
   });
 });
 
@@ -45,14 +45,14 @@ describe("addTodo (thunk)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const store = createStore({ injections: mockInjections });
+    const model = new TodosModel(mockInjections);
 
     // act
-    await store.addTodo("Paint house");
+    await model.addTodo("Paint house");
 
     // assert
     expect(mockInjections.generateId).toHaveBeenCalledTimes(1);
-    expect(store.todos.value).toEqual([{ id: "abc", text: "Paint house" }]);
+    expect(model.todos.value).toEqual([{ id: "abc", text: "Paint house" }]);
   });
 
   it("should work as expected when adding multiple todos", async () => {
@@ -66,16 +66,16 @@ describe("addTodo (thunk)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const store = createStore({ injections: mockInjections });
+    const model = new TodosModel(mockInjections);
 
     // act
-    await store.addTodo("Paint house");
-    await store.addTodo("Buy milk");
-    await store.addTodo("Wash car");
+    await model.addTodo("Paint house");
+    await model.addTodo("Buy milk");
+    await model.addTodo("Wash car");
 
     // assert
     expect(mockInjections.generateId).toHaveBeenCalledTimes(3);
-    expect(store.todos.value).toEqual([
+    expect(model.todos.value).toEqual([
       { id: "abc", text: "Paint house" },
       { id: "abc", text: "Buy milk" },
       { id: "abc", text: "Wash car" },
@@ -95,10 +95,10 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 1000,
     };
 
-    const store = createStore({ injections: mockInjections });
+    const model = new TodosModel(mockInjections);
 
     // act
-    await store.addTodo("Write docs");
+    await model.addTodo("Write docs");
 
     await sleep(mockInjections.waitTimeBeforeSave);
 
@@ -117,13 +117,13 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const store = createStore({ injections: mockInjections });
+    const model = new TodosModel(mockInjections);
 
     // act
-    await store.initializeTodos();
-    await store.addTodo("Write docs");
-    await store.addTodo("Write tests");
-    await store.addTodo("Paint house");
+    await model.initializeTodos();
+    await model.addTodo("Write docs");
+    await model.addTodo("Write tests");
+    await model.addTodo("Paint house");
 
     // assert
     expect(mockInjections.todosService.saveTodos).toHaveBeenCalledTimes(0);

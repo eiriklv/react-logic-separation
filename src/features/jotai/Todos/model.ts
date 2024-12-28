@@ -1,119 +1,116 @@
-import { atom, createStore } from "jotai";
+import { atom, createStore, getDefaultStore } from "jotai";
 import { atomEffect } from "jotai-effect";
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "./utils";
 
 // Dependencies to be injected
-const injections = {
+const defaultDependencies = {
   todosService,
   generateId,
   waitTimeBeforeSave: 1000,
 };
 
 // Types and interfaces
-export type Injections = typeof injections;
+export type Injections = typeof defaultDependencies;
 
 export interface Todo {
   id: string;
   text: string;
 }
 
-// Dependencies
-export const injectionsAtom = atom(injections);
-
-// State
-export const todosAtom = atom<Todo[]>([]);
-export const isSavingAtom = atom<boolean>(false);
-export const isInitializedAtom = atom<boolean>(false);
-
-// Computed values
-export const todosCountAtom = atom<number>((get) => get(todosAtom).length);
-
-// Events
-export const initializedTodosAtom = atom<null, [Todo[]], void>(
-  null,
-  (_get, set, payload) => {
-    set(todosAtom, payload);
-    set(isInitializedAtom, true);
+export class TodosModel {
+  constructor(dependencies: Injections = defaultDependencies) {
+    this.injections = dependencies;
   }
-);
 
-export const addedTodoAtom = atom<null, [Todo], void>(
-  null,
-  (_get, set, payload) => {
-    set(todosAtom, (todos) => [...todos, payload]);
-  }
-);
+  // Dependencies
+  injections: Injections = defaultDependencies;
 
-export const toggledSaveStateAtom = atom<null, [boolean], void>(
-  null,
-  (_get, set, payload) => {
-    set(isSavingAtom, payload);
-  }
-);
+  // State
+  todos = atom<Todo[]>([]);
+  isSaving = atom<boolean>(false);
+  isInitialized = atom<boolean>(false);
 
-// Commands
-export const initializeTodosAtom = atom<null, [], Promise<void>>(
-  null,
-  async (get, set) => {
+  // Computed values
+  todosCount = atom<number>((get) => get(this.todos).length);
+
+  // Events
+  initializedTodos = atom<null, [Todo[]], void>(null, (_get, set, payload) => {
+    set(this.todos, payload);
+    set(this.isInitialized, true);
+  });
+
+  addedTodo = atom<null, [Todo], void>(null, (_get, set, payload) => {
+    set(this.todos, (todos) => [...todos, payload]);
+  });
+
+  toggledSaveState = atom<null, [boolean], void>(null, (_get, set, payload) => {
+    set(this.isSaving, payload);
+  });
+
+  // Commands
+  initializeTodos = atom<null, [], Promise<void>>(null, async (_get, set) => {
     // Get dependencies
-    const { todosService } = get(injectionsAtom);
+    const { todosService } = this.injections;
 
     // Run side effect
     const todos = await todosService.fetchTodos();
 
     // Trigger event
-    set(initializedTodosAtom, todos);
-  }
-);
+    set(this.initializedTodos, todos);
+  });
 
-export const addTodoAtom = atom<null, [string], Promise<void>>(
-  null,
-  async (get, set, payload) => {
+  addTodo = atom<null, [string], Promise<void>>(
+    null,
+    async (_get, set, payload) => {
+      // Get dependencies
+      const { generateId } = this.injections;
+
+      // TODO: Do validation of input if applicable
+
+      // Generate new instance of todo
+      const newTodo = {
+        id: generateId(),
+        text: payload,
+      };
+
+      // Trigger event
+      set(this.addedTodo, newTodo);
+    }
+  );
+
+  // Effects
+  autoSaveTodosOnChange = atomEffect((get, set) => {
     // Get dependencies
-    const { generateId } = get(injectionsAtom);
+    const { todosService, waitTimeBeforeSave } = this.injections;
 
-    // TODO: Do validation of input if applicable
+    // Get the changed values that triggered the effect
+    const todos = get(this.todos);
+    const isInitialized = get(this.isInitialized);
 
-    // Generate new instance of todo
-    const newTodo = {
-      id: generateId(),
-      text: payload,
+    // Validation (only auto-save after the data has been initialized/loaded)
+    if (!isInitialized) {
+      return () => {};
+    }
+
+    // Set a timeout/debounce for running the save effect
+    const saveTimeout = setTimeout(async () => {
+      set(this.toggledSaveState, true);
+      await todosService.saveTodos(todos);
+      set(this.toggledSaveState, false);
+    }, waitTimeBeforeSave);
+
+    // Return handle for cancelling debounced save
+    return () => {
+      clearTimeout(saveTimeout);
+      set(this.toggledSaveState, false);
     };
+  });
+}
 
-    // Trigger event
-    set(addedTodoAtom, newTodo);
-  }
-);
+// Model instance
+export const model = new TodosModel();
 
-// Effects
-export const autoSaveTodosOnChangeAtom = atomEffect((get, set) => {
-  // Get dependencies
-  const { todosService, waitTimeBeforeSave } = get(injectionsAtom);
-
-  // Get the changed values that triggered the effect
-  const todos = get(todosAtom);
-  const isInitialized = get(isInitializedAtom);
-
-  // Validation (only auto-save after the data has been initialized/loaded)
-  if (!isInitialized) {
-    return () => {};
-  }
-
-  // Set a timeout/debounce for running the save effect
-  const saveTimeout = setTimeout(async () => {
-    set(toggledSaveStateAtom, true);
-    await todosService.saveTodos(todos);
-    set(toggledSaveStateAtom, false);
-  }, waitTimeBeforeSave);
-
-  // Return handle for cancelling debounced save
-  return () => {
-    clearTimeout(saveTimeout);
-    set(toggledSaveStateAtom, false);
-  };
-});
-
-// Model store instance (with dependencies injected)
-export const store = createStore();
+// Store instance
+export const store = getDefaultStore();
