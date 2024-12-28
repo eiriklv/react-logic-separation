@@ -1,6 +1,7 @@
 import { TimerFeature as TimerEasyPeasy } from "./features/easy-peasy/Timer";
 import { TodosFeature as TodosEasyPeasy } from "./features/easy-peasy/Todos";
 import { TodosFeature as TodosJotai } from "./features/jotai/Todos";
+import { TodosFeature as TodosSignals } from "./features/signals/Todos";
 import "./App.css";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       <TimerEasyPeasy />
       <TodosEasyPeasy />
       <TodosJotai />
+      <TodosSignals />
     </>
   );
 }
