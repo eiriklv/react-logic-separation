@@ -11,7 +11,7 @@ import {
  * dependency, but mainly hooks and components/containers.
  *
  * The main purpose is to facilitate testing
- * and storybooking without havaing to make complex mocks
+ * and storybooking without having to make complex mocks
  * - and to keep the components as simple as possible.
  *
  * Can be used for integrating 3rd party libraries and
