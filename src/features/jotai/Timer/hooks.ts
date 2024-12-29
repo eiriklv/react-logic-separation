@@ -6,7 +6,7 @@ import { useAtomValue, useSetAtom } from "jotai";
  * bridge the business logic and the React view
  *
  * Access to business logic is facilitated
- * by proving custom hooks with appropriate
+ * by providing custom hooks with appropriate
  * interfaces - taking care not to expose
  * implementation details of the business
  * logic itself or libraries used
