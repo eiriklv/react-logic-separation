@@ -26,9 +26,9 @@ export const useIsRunning = () => {
 };
 
 export const useStartTimer = () => {
-  return useSetAtom(model.startTimer);
+  return model.startTimer;
 };
 
 export const useStopTimer = () => {
-  return useSetAtom(model.stopTimer);
+  return model.stopTimer;
 };

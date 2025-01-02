@@ -1,15 +1,15 @@
 import { createStore } from "jotai";
-import { noop, sleep } from "./utils";
+import { sleep } from "./utils";
 import { TimerModel } from "./model";
 
 describe("startedTimer (action)", () => {
   it("should work as expected when starting timer", () => {
     // arrange
-    const model = new TimerModel();
     const store = createStore();
+    const model = new TimerModel(store);
 
     // act
-    store.set(model.startedTimer);
+    model.startedTimer();
 
     // assert
     expect(store.get(model.isRunning)).toEqual(true);
@@ -19,11 +19,11 @@ describe("startedTimer (action)", () => {
 describe("startTimer (thunk)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
-    const model = new TimerModel();
     const store = createStore();
+    const model = new TimerModel(store);
 
     // act
-    await store.set(model.startTimer);
+    await model.startTimer();
 
     // assert
     expect(store.get(model.isRunning)).toEqual(true);
@@ -33,14 +33,11 @@ describe("startTimer (thunk)", () => {
 describe("incrementTimerWhileRunning (effect)", () => {
   it("should only increment the timer while running", async () => {
     // arrange
-    const model = new TimerModel();
     const store = createStore();
-
-    // mount effects
-    store.sub(model.incrementTimerWhileRunning, noop);
+    const model = new TimerModel(store);
 
     // Start the timer
-    await store.set(model.startTimer);
+    await model.startTimer();
 
     // assert
     expect(store.get(model.elapsedSeconds)).toEqual(0);
@@ -52,7 +49,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     expect(store.get(model.elapsedSeconds)).toEqual(2);
 
     // Stop the timer
-    await store.set(model.stopTimer);
+    await model.stopTimer();
 
     // Wait for 1+ second to ensure that the timer does not continue
     await sleep(1500);

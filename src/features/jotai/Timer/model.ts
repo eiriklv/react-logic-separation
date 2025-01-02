@@ -1,35 +1,48 @@
 import { atom, getDefaultStore } from "jotai";
 import { atomEffect } from "jotai-effect";
+import { noop } from "./utils";
+
+// Store instance (required by jotai to be able to to anything to atoms)
+export const defaultStore = getDefaultStore();
 
 export class TimerModel {
+  constructor(store: typeof defaultStore) {
+    // initialize store
+    this.store = store;
+
+    // attach effects (does not happen automatically for jotai...)
+    this.store.sub(this.incrementTimerWhileRunning, noop);
+  }
+
+  // Store
+  store: typeof defaultStore;
+
   // State
   elapsedSeconds = atom<number>(0);
   isRunning = atom<boolean>(false);
 
   // Events
-  startedTimer = atom<null, [], void>(null, (_get, set) => {
-    set(this.isRunning, true);
-  });
-
-  stoppedTimer = atom<null, [], void>(null, (_get, set) => {
-    set(this.isRunning, false);
-  });
-
-  incrementedElapsedSeconds = atom<null, [], void>(null, (_get, set) => {
-    set(this.elapsedSeconds, (value) => value + 1);
-  });
+  startedTimer = () => {
+    this.store.set(this.isRunning, true);
+  }
+  stoppedTimer = () => {
+    this.store.set(this.isRunning, false);
+  };
+  incrementedElapsedSeconds = () => {
+    this.store.set(this.elapsedSeconds, (value) => value + 1);
+  };
 
   // Commands
-  startTimer = atom<null, [], Promise<void>>(null, async (_get, set) => {
-    set(this.startedTimer);
-  });
+  startTimer = async () => {
+    this.startedTimer();
+  };
 
-  stopTimer = atom<null, [], Promise<void>>(null, async (_get, set) => {
-    set(this.stoppedTimer);
-  });
+  stopTimer = async () => {
+    this.stoppedTimer();
+  };
 
   // Effects
-  incrementTimerWhileRunning = atomEffect((get, set) => {
+  incrementTimerWhileRunning = atomEffect((get) => {
     const isRunning = get(this.isRunning);
 
     if (!isRunning) {
@@ -37,7 +50,7 @@ export class TimerModel {
     }
 
     const interval = setInterval(() => {
-      set(this.incrementedElapsedSeconds);
+      this.incrementedElapsedSeconds();
     }, 1000);
 
     return () => {
@@ -47,7 +60,4 @@ export class TimerModel {
 }
 
 // Model instance
-export const model = new TimerModel();
-
-// Store instance
-export const store = getDefaultStore();
+export const model = new TimerModel(defaultStore);
