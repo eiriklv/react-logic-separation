@@ -1,4 +1,4 @@
-import { Todo } from "../types";
+import { Todo } from "../model";
 import { sleep } from "../utils";
 
 const todos: Todo[] = [
