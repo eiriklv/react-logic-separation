@@ -5,7 +5,7 @@ import { model } from "./model";
 /**
  * Custom hook for connecting signals to React
  */
-const useSignal = <T>(signal: Signal<T>) => {
+const useSignalValue = <T>(signal: Signal<T>) => {
   return useSyncExternalStore(
     signal.subscribe.bind(signal),
     signal.peek.bind(signal)
@@ -29,19 +29,19 @@ const useSignal = <T>(signal: Signal<T>) => {
  */
 
 export const useIsInitialized = () => {
-  return useSignal(model.isInitialized);
+  return useSignalValue(model.isInitialized);
 };
 
 export const useIsSaving = () => {
-  return useSignal(model.isSaving);
+  return useSignalValue(model.isSaving);
 };
 
 export const useTodos = () => {
-  return useSignal(model.todos);
+  return useSignalValue(model.todos);
 };
 
 export const useTodosCount = () => {
-  return useSignal(model.todosCount);
+  return useSignalValue(model.todosCount);
 };
 
 export const useAddTodo = () => {
