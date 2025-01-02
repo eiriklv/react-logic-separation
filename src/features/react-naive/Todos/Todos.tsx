@@ -69,6 +69,8 @@ export function Todos() {
     };
   }, [isInitialized, todos]);
 
+  // We have to use another effect to
+  // perform the initialization of the todos
   useEffect(() => {
     initializeTodos();
   }, [initializeTodos]);

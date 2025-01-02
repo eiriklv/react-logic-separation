@@ -69,16 +69,13 @@ export const useTodosModel = () => {
     };
   }, [isInitialized, todos]);
 
-  useEffect(() => {
-    initializeTodos();
-  }, [initializeTodos]);
-
   // Public model interface
   return {
     isInitialized,
     isSaving,
     todos,
     todosCount,
-    addTodo
+    addTodo,
+    initializeTodos,
   };
 };

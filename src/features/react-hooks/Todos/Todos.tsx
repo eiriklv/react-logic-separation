@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TodoItem } from "./components/TodoItem";
 import { useTodosModel } from "./hooks";
 
@@ -9,8 +9,15 @@ export function Todos() {
     isSaving,
     todos,
     todosCount,
-    addTodo
+    addTodo,
+    initializeTodos,
   } = useTodosModel();
+
+  // Since a hook cannot be consumed outside of React we have
+  // perform any initialization inside the component itself
+  useEffect(() => {
+    initializeTodos();
+  }, [initializeTodos]);
 
   // Create local view state for form/input
   const [todoInputText, setTodoInputText] = useState("");
