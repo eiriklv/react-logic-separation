@@ -1,7 +1,7 @@
 import { Dependencies, model } from "./model";
 import { createStore } from "easy-peasy";
 
-describe("addedTodo (action)", () => {
+describe("addedTodo (event)", () => {
   it("should work as expected when adding a single todo", () => {
     // arrange
     const store = createStore(model);
@@ -35,7 +35,7 @@ describe("addedTodo (action)", () => {
   });
 });
 
-describe("addTodo (thunk)", () => {
+describe("addTodo (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
     const mockDependencies = {

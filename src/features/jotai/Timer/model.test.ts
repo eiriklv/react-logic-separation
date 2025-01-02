@@ -1,7 +1,7 @@
 import { createStore } from "jotai";
 import { TimerModel } from "./model";
 
-describe("startedTimer (action)", () => {
+describe("startedTimer (event)", () => {
   it("should work as expected when starting timer", () => {
     // arrange
     const store = createStore();
@@ -15,7 +15,7 @@ describe("startedTimer (action)", () => {
   });
 });
 
-describe("startTimer (thunk)", () => {
+describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
     const store = createStore();

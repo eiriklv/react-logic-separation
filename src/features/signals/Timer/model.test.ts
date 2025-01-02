@@ -1,6 +1,6 @@
 import { TimerModel } from "./model";
 
-describe("startedTimer (action)", () => {
+describe("startedTimer (event)", () => {
   it("should work as expected when starting timer", () => {
     // arrange
     const model = new TimerModel();
@@ -13,7 +13,7 @@ describe("startedTimer (action)", () => {
   });
 });
 
-describe("startTimer (thunk)", () => {
+describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
     const model = new TimerModel();

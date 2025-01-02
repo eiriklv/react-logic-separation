@@ -1,7 +1,7 @@
 import { model } from "./model";
 import { createStore } from "easy-peasy";
 
-describe("startedTimer (action)", () => {
+describe("startedTimer (event)", () => {
   it("should work as expected when starting timer", () => {
     // arrange
     const store = createStore(model);
@@ -14,7 +14,7 @@ describe("startedTimer (action)", () => {
   });
 });
 
-describe("startTimer (thunk)", () => {
+describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
     const store = createStore(model);

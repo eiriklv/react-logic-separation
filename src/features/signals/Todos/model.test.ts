@@ -1,6 +1,6 @@
 import { Dependencies, TodosModel } from "./model";
 
-describe("addedTodo (action)", () => {
+describe("addedTodo (event)", () => {
   it("should work as expected when adding a single todo", () => {
     // arrange
     const model = new TodosModel();
@@ -32,7 +32,7 @@ describe("addedTodo (action)", () => {
   });
 });
 
-describe("addTodo (thunk)", () => {
+describe("addTodo (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
     const mockDependencies: Dependencies = {
