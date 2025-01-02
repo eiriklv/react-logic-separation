@@ -1,5 +1,5 @@
 import { signal } from "@preact/signals-core";
-import { relay } from "./signals";
+import { relay } from "../../../lib/signals";
 
 // Model
 export class TimerModel {
