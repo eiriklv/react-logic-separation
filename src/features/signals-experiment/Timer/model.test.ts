@@ -1,5 +1,4 @@
 import { TimerModel } from "./model";
-import { sleep } from "./utils";
 
 describe("startedTimer (action)", () => {
   it("should work as expected when starting timer", () => {
@@ -28,6 +27,10 @@ describe("startTimer (thunk)", () => {
 });
 
 describe("incrementTimerWhileRunning (effect)", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
   it("should only increment the timer while running", async () => {
     // arrange
     const model = new TimerModel();
@@ -39,7 +42,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     expect(model.elapsedSeconds.value).toEqual(0);
 
     // Wait for two+ seconds so that the timer can increment twice
-    await sleep(2500);
+    await vi.advanceTimersByTimeAsync(2000);
 
     // assert
     expect(model.elapsedSeconds.value).toEqual(2);
@@ -47,8 +50,8 @@ describe("incrementTimerWhileRunning (effect)", () => {
     // Stop the timer
     await model.stopTimer();
 
-    // Wait for 1+ second to ensure that the timer does not continue
-    await sleep(1500);
+    // Wait for two+ second to ensure that the timer does not continue
+    await vi.advanceTimersByTimeAsync(2000);
 
     // assert
     expect(model.elapsedSeconds.value).toEqual(2);

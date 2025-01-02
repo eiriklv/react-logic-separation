@@ -1,5 +1,4 @@
 import { createStore } from "jotai";
-import { sleep } from "./utils";
 import { TimerModel } from "./model";
 
 describe("startedTimer (action)", () => {
@@ -31,6 +30,10 @@ describe("startTimer (thunk)", () => {
 });
 
 describe("incrementTimerWhileRunning (effect)", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
   it("should only increment the timer while running", async () => {
     // arrange
     const store = createStore();
@@ -43,7 +46,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     expect(store.get(model.elapsedSeconds)).toEqual(0);
 
     // Wait for two+ seconds so that the timer can increment twice
-    await sleep(2500);
+    await vi.advanceTimersByTimeAsync(2000);
 
     // assert
     expect(store.get(model.elapsedSeconds)).toEqual(2);
@@ -51,8 +54,8 @@ describe("incrementTimerWhileRunning (effect)", () => {
     // Stop the timer
     await model.stopTimer();
 
-    // Wait for 1+ second to ensure that the timer does not continue
-    await sleep(1500);
+    // Wait for two+ second to ensure that the timer does not continue
+    await vi.advanceTimersByTimeAsync(2000);
 
     // assert
     expect(store.get(model.elapsedSeconds)).toEqual(2);

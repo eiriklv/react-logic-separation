@@ -1,5 +1,4 @@
 import { Dependencies, TodosModel } from "./model";
-import { sleep } from "./utils";
 
 describe("addedTodo (action)", () => {
   it("should work as expected when adding a single todo", () => {
@@ -84,6 +83,10 @@ describe("addTodo (thunk)", () => {
 });
 
 describe("autoSaveTodosOnChange (effect)", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
   it("should not trigger if changes happen before list is initialized", async () => {
     // arrange
     const mockDependencies: Dependencies = {
@@ -100,7 +103,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
     // act
     await model.addTodo("Write docs");
 
-    await sleep(mockDependencies.waitTimeBeforeSave);
+    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
@@ -129,19 +132,19 @@ describe("autoSaveTodosOnChange (effect)", () => {
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await sleep(mockDependencies.waitTimeBeforeSave / 2);
+    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await sleep(mockDependencies.waitTimeBeforeSave / 2);
+    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
 
     // act
-    await sleep(mockDependencies.waitTimeBeforeSave);
+    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
