@@ -92,7 +92,7 @@ export class TodosModel {
   };
 
   // Effects
-  autoSaveTodosOnChange = atomEffect((get, set) => {
+  autoSaveTodosOnChange = atomEffect((get) => {
     // Get dependencies
     const { todosService, waitTimeBeforeSave } = this.injections;
 
