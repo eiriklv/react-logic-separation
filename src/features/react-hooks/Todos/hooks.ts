@@ -69,6 +69,8 @@ export const useTodosModel = () => {
     };
   }, [isInitialized, todos]);
 
+  // Since a hook cannot be consumed outside of React we have
+  // to initialize it inside the model (or in the consumer)
   useEffect(() => {
     initializeTodos();
   }, [initializeTodos]);
