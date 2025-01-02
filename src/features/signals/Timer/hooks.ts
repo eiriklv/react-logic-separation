@@ -5,7 +5,7 @@ import { model } from "./model";
 /**
  * Custom hook for connecting signals to React
  */
-const useSignal = <T>(signal: Signal<T>) => {
+const useSignalValue = <T>(signal: Signal<T>) => {
   return useSyncExternalStore(
     signal.subscribe.bind(signal),
     signal.peek.bind(signal)
@@ -29,11 +29,11 @@ const useSignal = <T>(signal: Signal<T>) => {
  */
 
 export const useElapsedSeconds = () => {
-  return useSignal(model.elapsedSeconds);
+  return useSignalValue(model.elapsedSeconds);
 };
 
 export const useIsRunning = () => {
-  return useSignal(model.isRunning);
+  return useSignalValue(model.isRunning);
 };
 
 export const useStartTimer = () => {
