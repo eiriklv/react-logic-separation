@@ -105,4 +105,4 @@ export class TodosModel {
 }
 
 // Model instance
-export const model = new TodosModel(defaultDependencies);
+export const model = new TodosModel();
