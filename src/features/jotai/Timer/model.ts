@@ -14,7 +14,7 @@ export class TimerModel {
     this.store.sub(this.incrementTimerWhileRunning, noop);
   }
 
-  // Store
+  // Store (required by jotai to be able to interact with atoms)
   store: typeof defaultStore = defaultStore;
 
   // State
