@@ -35,11 +35,11 @@ export class TodosModel {
     this.store.sub(this.autoSaveTodosOnChange, noop);
   }
 
-  // Store
-  store: typeof defaultStore = defaultStore;
-
   // Dependencies
   injections: Dependencies = defaultDependencies;
+
+  // Store
+  store: typeof defaultStore = defaultStore;
 
   // State
   todos = atom<Todo[]>([]);
