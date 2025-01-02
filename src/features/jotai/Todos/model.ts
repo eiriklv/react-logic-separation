@@ -11,8 +11,8 @@ const defaultDependencies = {
   waitTimeBeforeSave: 1000,
 };
 
-// Store instance
-export const defaultStore = getDefaultStore();
+// Jotai store instance
+const defaultStore = getDefaultStore();
 
 // Types and interfaces
 export type Dependencies = typeof defaultDependencies;

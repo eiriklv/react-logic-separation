@@ -34,5 +34,5 @@ export const useTodosCount = () => {
 };
 
 export const useAddTodo = () => {
-  return useSetAtom(model.addTodo);
+  return model.addTodo;
 };
