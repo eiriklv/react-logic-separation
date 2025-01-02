@@ -6,7 +6,7 @@ export class TimerModel {
   // State
   isRunning = signal<boolean>(false);
 
-  // Relays
+  // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
   elapsedSeconds = relay<number>(0, (set, get) => {
     const isRunning = this.isRunning.value;
 
