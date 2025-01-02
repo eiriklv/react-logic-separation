@@ -5,6 +5,12 @@
   text-align: center;
   display: flex;
   gap: 50px;
+  flex-direction: column;
+}
+
+.feature-group {
+  display: flex;
+  gap: 50px;
 }
 
 .logo {
