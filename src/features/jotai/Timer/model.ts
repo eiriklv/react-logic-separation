@@ -6,7 +6,7 @@ import { noop } from "./utils";
 export const defaultStore = getDefaultStore();
 
 export class TimerModel {
-  constructor(store: typeof defaultStore) {
+  constructor(store: typeof defaultStore = defaultStore) {
     // initialize store
     this.store = store;
 
@@ -15,7 +15,7 @@ export class TimerModel {
   }
 
   // Store
-  store: typeof defaultStore;
+  store: typeof defaultStore = defaultStore;
 
   // State
   elapsedSeconds = atom<number>(0);
@@ -60,4 +60,4 @@ export class TimerModel {
 }
 
 // Model instance
-export const model = new TimerModel(defaultStore);
+export const model = new TimerModel();

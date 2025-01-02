@@ -1,15 +1,15 @@
 import { createStore } from "jotai";
 import { Dependencies, TodosModel } from "./model";
-import { noop, sleep } from "./utils";
+import { sleep } from "./utils";
 
 describe("addedTodo (action)", () => {
   it("should work as expected when adding a single todo", () => {
     // arrange
-    const model = new TodosModel();
     const store = createStore();
+    const model = new TodosModel(undefined, store);
 
     // act
-    store.set(model.addedTodo, { id: "abc", text: "Paint house" });
+    model.addedTodo({ id: "abc", text: "Paint house" });
 
     // assert
     expect(store.get(model.todos)).toEqual([
@@ -20,13 +20,13 @@ describe("addedTodo (action)", () => {
 
   it("should work as expected when adding multiple todos", () => {
     // arrange
-    const model = new TodosModel();
     const store = createStore();
+    const model = new TodosModel(undefined, store);
 
     // act
-    store.set(model.addedTodo, { id: "abc", text: "Paint house" });
-    store.set(model.addedTodo, { id: "abc", text: "Buy milk" });
-    store.set(model.addedTodo, { id: "abc", text: "Wash car" });
+    model.addedTodo({ id: "abc", text: "Paint house" });
+    model.addedTodo({ id: "abc", text: "Buy milk" });
+    model.addedTodo({ id: "abc", text: "Wash car" });
 
     // assert
     expect(store.get(model.todos)).toEqual([
@@ -50,11 +50,11 @@ describe("addTodo (thunk)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const model = new TodosModel(mockDependencies);
     const store = createStore();
+    const model = new TodosModel(mockDependencies, store);
 
     // act
-    await store.set(model.addTodo, "Paint house");
+    await model.addTodo("Paint house");
 
     // assert
     expect(mockDependencies.generateId).toHaveBeenCalledTimes(1);
@@ -74,13 +74,13 @@ describe("addTodo (thunk)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const model = new TodosModel(mockDependencies);
     const store = createStore();
+    const model = new TodosModel(mockDependencies, store);
 
     // act
-    await store.set(model.addTodo, "Paint house");
-    await store.set(model.addTodo, "Buy milk");
-    await store.set(model.addTodo, "Wash car");
+    await model.addTodo("Paint house");
+    await model.addTodo("Buy milk");
+    await model.addTodo("Wash car");
 
     // assert
     expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
@@ -104,14 +104,11 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 1000,
     };
 
-    const model = new TodosModel(mockDependencies);
     const store = createStore();
-
-    // mount effects
-    store.sub(model.autoSaveTodosOnChange, noop);
+    const model = new TodosModel(mockDependencies, store);
 
     // act
-    store.set(model.addedTodo, { id: "abc", text: "Write docs" });
+    await model.addTodo("Write docs");
 
     await sleep(mockDependencies.waitTimeBeforeSave);
 
@@ -130,17 +127,14 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 100,
     };
 
-    const model = new TodosModel(mockDependencies);
     const store = createStore();
-
-    // mount effects
-    store.sub(model.autoSaveTodosOnChange, noop);
+    const model = new TodosModel(mockDependencies, store);
 
     // act
-    await store.set(model.initializeTodos);
-    await store.set(model.addTodo, "Write docs");
-    await store.set(model.addTodo, "Write tests");
-    await store.set(model.addTodo, "Paint house");
+    await model.initializeTodos();
+    await model.addTodo("Write docs");
+    await model.addTodo("Write tests");
+    await model.addTodo("Paint house");
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
