@@ -16,7 +16,7 @@ export function Todos() {
   } = useTodosModel();
 
   // Since a hook cannot be consumed outside of React we have
-  // perform any initialization inside the component itself
+  // perform any initialization inside the component tree itself
   useEffect(() => {
     initializeTodos();
   }, [initializeTodos]);
