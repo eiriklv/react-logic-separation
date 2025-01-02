@@ -51,7 +51,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     await model.stopTimer();
 
     // Wait for two+ second to ensure that the timer does not continue
-    await vi.advanceTimersByTimeAsync(200);
+    await vi.advanceTimersByTimeAsync(2000);
 
     // assert
     expect(model.elapsedSeconds.value).toEqual(2);
