@@ -2,7 +2,7 @@ import { computed, effect, signal, Signal } from "@preact/signals-core";
 
 export function relay<T>(
   initialState: T,
-  setup: (set: (newValue: T) => void, get: () => T) => () => void
+  setup: (set: (newValue: T) => void, get: () => T) => (() => void) | void
 ): Signal<T> {
   const stateSignal = signal(initialState);
   const get = () => stateSignal.peek();
@@ -27,6 +27,32 @@ export function debounced<T>(inputSignal: Signal<T>, debounceTimeInMs: number) {
   const readOnlyDebouncedSignal = computed(() => debouncedSignal.value);
 
   return readOnlyDebouncedSignal;
+}
+
+export function previous<T>(inputSignal: Signal<T>) {
+  const previousSignal = relay(inputSignal.value, (set) => {
+    const currentValue = inputSignal.value;
+
+    return () => {
+      set(currentValue);
+    }
+  });
+
+  const readOnlyPreviousSignal = computed(() => previousSignal.value);
+
+  return readOnlyPreviousSignal;
+}
+
+export function reaction() {
+  // TODO
+}
+
+export function derived() {
+  // TODO
+}
+
+export function resource() {
+  // TODO
 }
 
 export function query() {
