@@ -1,5 +1,6 @@
 import { computed, effect, signal, Signal } from "@preact/signals-core";
 
+// NOTE: Inspired by https://www.pzuraq.com/blog/on-signal-relays
 export function relay<T>(
   initialState: T,
   setup: (set: (newValue: T) => void, get: () => T) => (() => void) | void
@@ -43,15 +44,15 @@ export function previous<T>(inputSignal: Signal<T>) {
   return readOnlyPreviousSignal;
 }
 
+export function resource() {
+  // TODO
+}
+
 export function reaction() {
   // TODO
 }
 
 export function derived() {
-  // TODO
-}
-
-export function resource() {
   // TODO
 }
 
