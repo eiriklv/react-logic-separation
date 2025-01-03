@@ -142,7 +142,7 @@ describe("debounced", () => {
       vi.useFakeTimers();
     });
 
-    it("should not update value before debounce time", () => {
+    it("should update value only at debounce time", () => {
       // arrange
       const debounceTime = 1000;
       const mySignal = signal(1);
@@ -165,5 +165,65 @@ describe("debounced", () => {
       // assert
       expect(mySignal.value).toEqual(2);
       expect(myDebouncedSignal.value).toEqual(2);
+    });
+
+    it("should debounce on consecutive changes within debounce time", () => {
+      // arrange
+      const debounceTime = 1000;
+      const mySignal = signal(1);
+      const myDebouncedSignal = debounced(mySignal, debounceTime);
+  
+      // assert
+      expect(mySignal.value).toEqual(1);
+      expect(myDebouncedSignal.value).toEqual(1);
+  
+      // act
+      mySignal.value = 2;
+  
+      // assert
+      expect(mySignal.value).toEqual(2);
+      expect(myDebouncedSignal.value).toEqual(1);
+  
+      // act
+      vi.advanceTimersByTime(debounceTime - 1);
+  
+      // assert
+      expect(mySignal.value).toEqual(2);
+      expect(myDebouncedSignal.value).toEqual(1);
+
+      // act
+      mySignal.value = 3;
+
+      // assert
+      expect(mySignal.value).toEqual(3);
+      expect(myDebouncedSignal.value).toEqual(1);
+
+      // act
+      vi.advanceTimersByTime(debounceTime - 1);
+  
+      // assert
+      expect(mySignal.value).toEqual(3);
+      expect(myDebouncedSignal.value).toEqual(1);
+
+      // act
+      mySignal.value = 4;
+
+      // assert
+      expect(mySignal.value).toEqual(4);
+      expect(myDebouncedSignal.value).toEqual(1);
+
+      // act
+      vi.advanceTimersByTime(debounceTime - 1);
+  
+      // assert
+      expect(mySignal.value).toEqual(4);
+      expect(myDebouncedSignal.value).toEqual(1);
+
+      // act
+      vi.advanceTimersByTime(debounceTime);
+
+      // assert
+      expect(mySignal.value).toEqual(4);
+      expect(myDebouncedSignal.value).toEqual(4);
     });
   });
