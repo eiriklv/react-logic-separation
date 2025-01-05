@@ -21,27 +21,27 @@ export interface Todo {
 
 export class TodosModel {
   constructor(dependencies: Dependencies = defaultDependencies) {
-    this._injections = dependencies;
+    this.injections = dependencies;
   }
 
   // Dependencies
-  private _injections: Dependencies = defaultDependencies;
+  injections: Dependencies = defaultDependencies;
 
   // State
-  private _todos = signal<Todo[]>([]);
-  private _isInitialized = signal<boolean>(false);
+  todos = signal<Todo[]>([]);
+  isInitialized = signal<boolean>(false);
 
-  // Computed
-  private _todosCount = computed(() => this._todos.value.length);
+  // Computed values
+  todosCount = computed<number>(() => this.todos.value.length);
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  private _isSaving = relay(false, (set) => {
+  isSaving = relay(false, (set) => {
     // Get dependencies
-    const { todosService, waitTimeBeforeSave } = this._injections;
+    const { todosService, waitTimeBeforeSave } = this.injections;
 
     // Get the changed values that triggered the effect
-    const todos = this._todos.value;
-    const isInitialized = this._isInitialized.value;
+    const todos = this.todos.value;
+    const isInitialized = this.isInitialized.value;
 
     // Validation (only auto-save after the data has been initialized/loaded)
     if (!isInitialized) {
@@ -60,29 +60,23 @@ export class TodosModel {
       clearTimeout(saveTimeout);
       set(false);
     };
-  });
-
-  // Computed values
-  readonly todos = computed(() => this._todos.value);
-  readonly todosCount = computed(() => this._todosCount.value);
-  readonly isInitialized = computed(() => this._isInitialized.value);
-  readonly isSaving = computed(() => this._isSaving.value);
+  })
 
   // Events
   initializedTodos = (payload: Todo[]) => {
     batch(() => {
-      this._todos.value = payload;
-      this._isInitialized.value = true;
+      this.todos.value = payload;
+      this.isInitialized.value = true;
     });
   };
   addedTodo = (payload: Todo) => {
-    this._todos.value = [...this._todos.value, payload];
+    this.todos.value = [...this.todos.value, payload];
   };
 
   // Commands
   initializeTodos = async () => {
     // Get dependencies
-    const { todosService } = this._injections;
+    const { todosService } = this.injections;
 
     // Run side effect
     const todos = await todosService.fetchTodos();
@@ -92,7 +86,7 @@ export class TodosModel {
   };
   addTodo = async (payload: string) => {
     // Get dependencies
-    const { generateId } = this._injections;
+    const { generateId } = this.injections;
 
     // Input validation
     if (!payload) {

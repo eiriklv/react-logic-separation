@@ -1,14 +1,14 @@
-import { computed, signal } from "@preact/signals-core";
+import { signal } from "@preact/signals-core";
 import { relay } from "../../../lib/signals";
 
 // Model
 export class TimerModel {
   // State
-  private _isRunning = signal<boolean>(false);
+  isRunning = signal<boolean>(false);
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  private _elapsedSeconds = relay<number>(0, (set, get) => {
-    const isRunning = this._isRunning.value;
+  elapsedSeconds = relay<number>(0, (set, get) => {
+    const isRunning = this.isRunning.value;
 
     if (!isRunning) {
       return () => {};
@@ -23,22 +23,18 @@ export class TimerModel {
     };
   });
 
-  // Read-only state (for public consumption)
-  readonly isRunning = computed(() => this._isRunning.value);
-  readonly elapsedSeconds = computed(() => this._elapsedSeconds.value);
-
-  // Events (the only way to change the state of signals)
+  // Events
   startedTimer = () => {
-    this._isRunning.value = true;
+    this.isRunning.value = true;
   };
   stoppedTimer = () => {
-    this._isRunning.value = false;
+    this.isRunning.value = false;
   };
   resettedTimer = () => {
-    this._elapsedSeconds.value = 0;
+    this.elapsedSeconds.value = 0;
   };
 
-  // Commands (public interface)
+  // Commands
   startTimer = async () => {
     this.startedTimer();
   };

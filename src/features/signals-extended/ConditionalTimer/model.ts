@@ -4,18 +4,18 @@ import { relay } from "../../../lib/signals";
 // Model
 export class ConditionalTimerModel {
   // State
-  private _isOkay = signal<boolean>(false);
-  private _isSafe = signal<boolean>(false);
-  private _isCool = signal<boolean>(false);
+  isOkay = signal<boolean>(false);
+  isSafe = signal<boolean>(false);
+  isCool = signal<boolean>(false);
 
   // Computed
-  private _isRunning = computed(
-    () => this._isOkay.value && this._isSafe.value && this._isCool.value
+  isRunning = computed(
+    () => this.isOkay.value && this.isSafe.value && this.isCool.value
   );
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  private _elapsedSeconds = relay<number>(0, (set, get) => {
-    const isRunning = this._isRunning.value;
+  elapsedSeconds = relay<number>(0, (set, get) => {
+    const isRunning = this.isRunning.value;
 
     if (!isRunning) {
       return () => {};
@@ -30,25 +30,18 @@ export class ConditionalTimerModel {
     };
   });
 
-  // Read-only signals (public for consumption)
-  readonly isOkay = computed(() => this._isOkay.value);
-  readonly isSafe = computed(() => this._isSafe.value);
-  readonly isCool = computed(() => this._isCool.value);
-  readonly isRunning = computed(() => this._isRunning.value);
-  readonly elapsedSeconds = computed(() => this._elapsedSeconds.value);
-
   // Events (public for testing)
   toggledOkay = () => {
-    this._isOkay.value = !this._isOkay.value;
+    this.isOkay.value = !this.isOkay.value;
   };
   toggledSafe = () => {
-    this._isSafe.value = !this._isSafe.value;
+    this.isSafe.value = !this.isSafe.value;
   };
   toggledCool = () => {
-    this._isCool.value = !this._isCool.value;
+    this.isCool.value = !this.isCool.value;
   };
   resettedTimer = () => {
-    this._elapsedSeconds.value = 0;
+    this.elapsedSeconds.value = 0;
   };
 
   // Commands (public for consumption)
