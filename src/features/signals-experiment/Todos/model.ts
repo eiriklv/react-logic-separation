@@ -1,8 +1,8 @@
 import { signal, computed, batch } from "@preact/signals-core";
 
 import * as todosService from "./services/todos.service";
-import { generateId } from "./utils";
 import { relay } from "../../../lib/signals";
+import { generateId } from "../../../lib/utils";
 
 // Dependencies to be injected
 const defaultDependencies = {

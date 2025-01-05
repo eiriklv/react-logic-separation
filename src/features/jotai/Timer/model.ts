@@ -1,6 +1,6 @@
 import { atom, getDefaultStore } from "jotai";
 import { atomEffect } from "jotai-effect";
-import { noop } from "./utils";
+import { noop } from "../../../lib/utils";
 
 // Store instance (required by jotai to be able to to anything to atoms)
 export const defaultStore = getDefaultStore();

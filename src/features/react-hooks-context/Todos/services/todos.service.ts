@@ -1,5 +1,5 @@
+import { sleep } from "../../../../lib/utils";
 import { Todo } from "../types";
-import { sleep } from "../utils";
 
 const todos: Todo[] = [
   { id: "1", text: "Buy milk" },

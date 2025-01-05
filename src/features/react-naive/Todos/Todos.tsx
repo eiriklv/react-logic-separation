@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Todo } from "./types";
 import * as todosService from "./services/todos.service";
-import { generateId } from "./utils";
 import { TodoItem } from "./components/TodoItem";
+import { generateId } from "../../../lib/utils";
 
 const waitTimeBeforeSave = 1000;
 

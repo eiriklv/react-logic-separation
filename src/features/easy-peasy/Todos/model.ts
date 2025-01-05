@@ -11,7 +11,7 @@ import {
 } from "easy-peasy";
 
 import * as todosService from "./services/todos.service";
-import { generateId } from "./utils";
+import { generateId } from "../../../lib/utils";
 
 // Dependencies to be injected
 const defaultDependencies = {

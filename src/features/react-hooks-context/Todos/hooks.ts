@@ -1,5 +1,5 @@
+import { generateId } from "../../../lib/utils";
 import * as todosService from "./services/todos.service";
-import { generateId } from "./utils";
 
 import { Todo } from "./types";
 import { useCallback, useEffect, useState } from "react";
