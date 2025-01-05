@@ -28,7 +28,7 @@ export function ConditionalTimer() {
 
   return (
     <div>
-      <pre>signals-extended</pre>
+      <pre>signals</pre>
       <h3>Conditional Timer</h3>
       <h4>Status: {isRunning ? "running" : "stopped"}</h4>
       <div>{elapsedSeconds}</div>

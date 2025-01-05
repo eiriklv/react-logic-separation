@@ -4,6 +4,12 @@ import { TimerFeature as TimerReactHooksContext } from "./features/react-hooks-c
 import { TimerFeature as TimerEasyPeasy } from "./features/easy-peasy/Timer";
 import { TimerFeature as TimerJotai } from "./features/jotai/Timer";
 import { TimerFeature as TimerSignals } from "./features/signals/Timer";
+import { ConditionalTimerFeature as ConditionalTimerReactNaive } from "./features/react-naive/ConditionalTimer";
+import { ConditionalTimerFeature as ConditionalTimerReactHooks } from "./features/react-hooks/ConditionalTimer";
+import { ConditionalTimerFeature as ConditionalTimerReactHooksContext } from "./features/react-hooks-context/ConditionalTimer";
+import { ConditionalTimerFeature as ConditionalTimerEasyPeasy } from "./features/easy-peasy/ConditionalTimer";
+import { ConditionalTimerFeature as ConditionalTimerJotai } from "./features/jotai/ConditionalTimer";
+import { ConditionalTimerFeature as ConditionalTimerSignals } from "./features/signals/ConditionalTimer";
 import { TodosFeature as TodosReactNaive } from "./features/react-naive/Todos";
 import { TodosFeature as TodosReactHooks } from "./features/react-hooks/Todos";
 import { TodosFeature as TodosReactHooksContext } from "./features/react-hooks-context/Todos";
@@ -22,6 +28,14 @@ function App() {
         <TimerEasyPeasy />
         <TimerJotai />
         <TimerSignals />
+      </div>
+      <div className="feature-group">
+        <ConditionalTimerReactNaive />
+        <ConditionalTimerReactHooks />
+        <ConditionalTimerReactHooksContext />
+        <ConditionalTimerEasyPeasy />
+        <ConditionalTimerJotai />
+        <ConditionalTimerSignals />
       </div>
       <div className="feature-group">
         <TodosReactNaive />

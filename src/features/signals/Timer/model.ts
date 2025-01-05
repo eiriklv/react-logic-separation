@@ -13,7 +13,7 @@ export class TimerModel {
   stoppedTimer = () => {
     this.isRunning.value = false;
   };
-  incrementElapsedSeconds = () => {
+  incrementedElapsedSeconds = () => {
     this.elapsedSeconds.value = this.elapsedSeconds.value + 1;
   };
 
@@ -35,7 +35,7 @@ export class TimerModel {
     }
 
     const interval = setInterval(() => {
-      this.incrementElapsedSeconds();
+      this.incrementedElapsedSeconds();
     }, 1000);
 
     return () => {

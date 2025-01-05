@@ -29,11 +29,11 @@ export const useIsRunning = () => {
 };
 
 export const useStartTimer = () => {
-  const { startTimer} = useStoreActions((actions) => actions);
+  const { startTimer } = useStoreActions((actions) => actions);
   return useCallback(async () => startTimer(), [startTimer]);
 };
 
 export const useStopTimer = () => {
-  const { stopTimer} = useStoreActions((actions) => actions);
+  const { stopTimer } = useStoreActions((actions) => actions);
   return useCallback(async () => stopTimer(), [stopTimer]);
 };

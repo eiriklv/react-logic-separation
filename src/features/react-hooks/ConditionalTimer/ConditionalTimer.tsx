@@ -1,34 +1,21 @@
-import { useContext } from "react";
-import { ConditionalTimerContext } from "./context";
+import { useConditionalTimerModel } from "./hooks";
 
 export function ConditionalTimer() {
-  // Get injected dependencies from context
   const {
-    useElapsedSeconds,
-    useIsOkay,
-    useIsSafe,
-    useIsCool,
-    useIsRunning,
-    useToggleOkay,
-    useToggleSafe,
-    useToggleCool,
-    useResetTimer,
-  } = useContext(ConditionalTimerContext);
-
-  // Use injected dependencies (domain state/actions, components, etc)
-  const elapsedSeconds = useElapsedSeconds();
-  const isOkay = useIsOkay();
-  const isSafe = useIsSafe();
-  const isCool = useIsCool();
-  const isRunning = useIsRunning();
-  const toggleOkay = useToggleOkay();
-  const toggleSafe = useToggleSafe();
-  const toggleCool = useToggleCool();
-  const resetTimer = useResetTimer();
+    elapsedSeconds,
+    isOkay,
+    isSafe,
+    isCool,
+    isRunning,
+    toggleOkay,
+    toggleSafe,
+    toggleCool,
+    resetTimer
+  } = useConditionalTimerModel();
 
   return (
     <div>
-      <pre>signals-extended</pre>
+      <pre>react-hooks</pre>
       <h3>Conditional Timer</h3>
       <h4>Status: {isRunning ? "running" : "stopped"}</h4>
       <div>{elapsedSeconds}</div>

@@ -12,7 +12,7 @@ export const useTimerModel = () => {
   const stoppedTimer = () => {
     setIsRunning(false);
   }
-  const incrementElapsedSeconds = () => {
+  const incrementedElapsedSeconds = () => {
     setElapsedSeconds((value) => value + 1);
   }
 
@@ -31,7 +31,7 @@ export const useTimerModel = () => {
     }
 
     const interval = setInterval(() => {
-      incrementElapsedSeconds();
+      incrementedElapsedSeconds();
     }, 1000);
 
     return () => {
