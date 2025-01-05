@@ -82,12 +82,12 @@ describe("addTodo (command)", () => {
   });
 });
 
-describe("autoSaveTodosOnChange (effect)", () => {
+describe("isSaving (relay)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
 
-  it("should not trigger if changes happen before list is initialized", async () => {
+  it("should not trigger save if changes happen before list is initialized", async () => {
     // arrange
     const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
@@ -106,11 +106,12 @@ describe("autoSaveTodosOnChange (effect)", () => {
     await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
 
     // assert
+    expect(model.isSaving.value).toEqual(false);
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
-    // arrange
+    // mock up the dependencies for the model
     const mockDependencies: Dependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
@@ -120,33 +121,42 @@ describe("autoSaveTodosOnChange (effect)", () => {
       waitTimeBeforeSave: 100,
     };
 
+    // create an instance of the model
     const model = new TodosModel(mockDependencies);
 
-    // act
+    // initialize the list of todos
     await model.initializeTodos();
+
+    // add some todos to the list
     await model.addTodo("Write docs");
     await model.addTodo("Write tests");
     await model.addTodo("Paint house");
 
-    // assert
+    // saving should not happen immediately
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
+    // wait to right before the debounce time runs out
+    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave - 1);
 
-    // assert
+    // it should not save before the debounce period
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
+    // proceed to the tick where the debounce time has run out
+    vi.advanceTimersToNextTimer();
 
-    // assert
+    // check that the save state is correct when the save has been initiated
+    await vi.waitFor(() => expect(model.isSaving.value).toEqual(true));
+
+    // check that the save function has been called
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
 
-    // act
+    // check that the save state is reverted back after saving is done
+    await vi.waitFor(() => expect(model.isSaving.value).toEqual(false));
+
+    // wait some more
     await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
 
-    // assert
+    // check that the saving is not performed multiple times
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
   });
 });
