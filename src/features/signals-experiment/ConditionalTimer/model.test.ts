@@ -1,27 +1,5 @@
 import { ConditionalTimerModel } from "./model";
 
-describe("toggledOkay (event)", () => {
-  it("should work as expected when toggling okay", () => {
-    // arrange
-    const model = new ConditionalTimerModel();
-
-    // assert
-    expect(model.isOkay.value).toEqual(false);
-
-    // act
-    model.toggledOkay();
-
-    // assert
-    expect(model.isOkay.value).toEqual(true);
-
-    // act
-    model.toggledOkay();
-
-    // assert
-    expect(model.isOkay.value).toEqual(false);
-  });
-});
-
 describe("toggle okay, safe and cool (commands)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange

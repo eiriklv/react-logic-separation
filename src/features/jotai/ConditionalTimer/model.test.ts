@@ -1,29 +1,6 @@
 import { createStore } from "jotai";
 import { ConditionalTimerModel } from "./model";
 
-describe("toggledOkay (event)", () => {
-  it("should work as expected when toggling okay", () => {
-    // arrange
-    const store = createStore();
-    const model = new ConditionalTimerModel(store);
-
-    // assert
-    expect(store.get(model.isOkay)).toEqual(false);
-
-    // act
-    model.toggledOkay();
-
-    // assert
-    expect(store.get(model.isOkay)).toEqual(true);
-
-    // act
-    model.toggledOkay();
-
-    // assert
-    expect(store.get(model.isOkay)).toEqual(false);
-  });
-});
-
 describe("toggle okay, safe and cool (commands)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange

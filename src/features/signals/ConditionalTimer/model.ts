@@ -30,7 +30,7 @@ export class ConditionalTimerModel {
     };
   });
 
-  // Events (public for testing)
+  // Events
   toggledOkay = () => {
     this.isOkay.value = !this.isOkay.value;
   };
@@ -47,7 +47,7 @@ export class ConditionalTimerModel {
     this.elapsedSeconds.value = this.elapsedSeconds.value + 1;
   };
 
-  // Commands (public for consumption)
+  // Commands
   toggleOkay = async () => {
     this.toggledOkay();
   };

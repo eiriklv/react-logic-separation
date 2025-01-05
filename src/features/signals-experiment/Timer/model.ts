@@ -23,30 +23,30 @@ export class TimerModel {
     };
   });
 
-  // Read-only state (for public consumption)
-  readonly isRunning = computed(() => this._isRunning.value);
-  readonly elapsedSeconds = computed(() => this._elapsedSeconds.value);
-
   // Events (the only way to change the state of signals)
-  startedTimer = () => {
+  private _startedTimer = () => {
     this._isRunning.value = true;
   };
-  stoppedTimer = () => {
+  private _stoppedTimer = () => {
     this._isRunning.value = false;
   };
-  resettedTimer = () => {
+  private _resettedTimer = () => {
     this._elapsedSeconds.value = 0;
   };
 
-  // Commands (public interface)
+  // Read-only state (public for consumption)
+  readonly isRunning = computed(() => this._isRunning.value);
+  readonly elapsedSeconds = computed(() => this._elapsedSeconds.value);
+
+  // Commands (public for consumption)
   startTimer = async () => {
-    this.startedTimer();
+    this._startedTimer();
   };
   stopTimer = async () => {
-    this.stoppedTimer();
+    this._stoppedTimer();
   };
   resetTimer = async () => {
-    this.resettedTimer();
+    this._resettedTimer();
   };
 }
 

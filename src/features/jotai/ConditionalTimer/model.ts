@@ -46,7 +46,7 @@ export class ConditionalTimerModel {
     };
   });
 
-  // Events (public for testing)
+  // Events
   toggledOkay = () => {
     this.store.set(this.isOkay, (value) => !value);
   };

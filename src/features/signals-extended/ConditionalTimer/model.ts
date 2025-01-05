@@ -30,7 +30,7 @@ export class ConditionalTimerModel {
     };
   });
 
-  // Events (public for testing)
+  // Events
   toggledOkay = () => {
     this.isOkay.value = !this.isOkay.value;
   };

@@ -62,24 +62,24 @@ export class TodosModel {
     };
   });
 
-  // Computed values
-  readonly todos = computed(() => this._todos.value);
-  readonly todosCount = computed(() => this._todosCount.value);
-  readonly isInitialized = computed(() => this._isInitialized.value);
-  readonly isSaving = computed(() => this._isSaving.value);
-
   // Events
-  initializedTodos = (payload: Todo[]) => {
+  private _initializedTodos = (payload: Todo[]) => {
     batch(() => {
       this._todos.value = payload;
       this._isInitialized.value = true;
     });
   };
-  addedTodo = (payload: Todo) => {
+  private _addedTodo = (payload: Todo) => {
     this._todos.value = [...this._todos.value, payload];
   };
 
-  // Commands
+  // Read-only signals (public for consumption)
+  readonly todos = computed(() => this._todos.value);
+  readonly todosCount = computed(() => this._todosCount.value);
+  readonly isInitialized = computed(() => this._isInitialized.value);
+  readonly isSaving = computed(() => this._isSaving.value);
+
+  // Commands (public for consumption)
   initializeTodos = async () => {
     // Get dependencies
     const { todosService } = this._injections;
@@ -88,7 +88,7 @@ export class TodosModel {
     const todos = await todosService.fetchTodos();
 
     // Trigger event
-    this.initializedTodos(todos);
+    this._initializedTodos(todos);
   };
   addTodo = async (payload: string) => {
     // Get dependencies
@@ -106,7 +106,7 @@ export class TodosModel {
     };
 
     // Trigger event
-    this.addedTodo(newTodo);
+    this._addedTodo(newTodo);
   };
 }
 

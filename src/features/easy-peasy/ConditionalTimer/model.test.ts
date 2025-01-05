@@ -1,28 +1,6 @@
 import { createStore } from "easy-peasy";
 import { model } from "./model";
 
-describe("toggledOkay (event)", () => {
-  it("should work as expected when toggling okay", () => {
-    // arrange
-    const store = createStore(model);
-
-    // assert
-    expect(store.getState().isOkay).toEqual(false);
-
-    // act
-    store.getActions().toggledOkay();
-
-    // assert
-    expect(store.getState().isOkay).toEqual(true);
-
-    // act
-    store.getActions().toggledOkay();
-
-    // assert
-    expect(store.getState().isOkay).toEqual(false);
-  });
-});
-
 describe("toggle okay, safe and cool (commands)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange

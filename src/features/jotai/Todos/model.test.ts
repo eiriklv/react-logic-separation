@@ -1,42 +1,6 @@
 import { createStore } from "jotai";
 import { Dependencies, TodosModel } from "./model";
 
-describe("addedTodo (event)", () => {
-  it("should work as expected when adding a single todo", () => {
-    // arrange
-    const store = createStore();
-    const model = new TodosModel(undefined, store);
-
-    // act
-    model.addedTodo({ id: "abc", text: "Paint house" });
-
-    // assert
-    expect(store.get(model.todos)).toEqual([
-      { id: "abc", text: "Paint house" },
-    ]);
-    expect(store.get(model.todosCount)).toEqual(1);
-  });
-
-  it("should work as expected when adding multiple todos", () => {
-    // arrange
-    const store = createStore();
-    const model = new TodosModel(undefined, store);
-
-    // act
-    model.addedTodo({ id: "abc", text: "Paint house" });
-    model.addedTodo({ id: "abc", text: "Buy milk" });
-    model.addedTodo({ id: "abc", text: "Wash car" });
-
-    // assert
-    expect(store.get(model.todos)).toEqual([
-      { id: "abc", text: "Paint house" },
-      { id: "abc", text: "Buy milk" },
-      { id: "abc", text: "Wash car" },
-    ]);
-    expect(store.get(model.todosCount)).toEqual(3);
-  });
-});
-
 describe("addTodo (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange

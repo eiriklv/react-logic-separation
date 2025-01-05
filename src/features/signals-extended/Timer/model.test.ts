@@ -1,18 +1,5 @@
 import { TimerModel } from "./model";
 
-describe("startedTimer (event)", () => {
-  it("should work as expected when starting timer", () => {
-    // arrange
-    const model = new TimerModel();
-
-    // act
-    model.startedTimer();
-
-    // assert
-    expect(model.isRunning.value).toEqual(true);
-  });
-});
-
 describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange

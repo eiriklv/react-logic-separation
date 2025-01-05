@@ -1,20 +1,6 @@
 import { createStore } from "jotai";
 import { TimerModel } from "./model";
 
-describe("startedTimer (event)", () => {
-  it("should work as expected when starting timer", () => {
-    // arrange
-    const store = createStore();
-    const model = new TimerModel(store);
-
-    // act
-    model.startedTimer();
-
-    // assert
-    expect(store.get(model.isRunning)).toEqual(true);
-  });
-});
-
 describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange

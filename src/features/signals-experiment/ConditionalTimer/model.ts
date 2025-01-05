@@ -30,6 +30,20 @@ export class ConditionalTimerModel {
     };
   });
 
+  // Events
+  private _toggledOkay = () => {
+    this._isOkay.value = !this._isOkay.value;
+  };
+  private _toggledSafe = () => {
+    this._isSafe.value = !this._isSafe.value;
+  };
+  private _toggledCool = () => {
+    this._isCool.value = !this._isCool.value;
+  };
+  private _resettedTimer = () => {
+    this._elapsedSeconds.value = 0;
+  };
+
   // Read-only signals (public for consumption)
   readonly isOkay = computed(() => this._isOkay.value);
   readonly isSafe = computed(() => this._isSafe.value);
@@ -37,32 +51,18 @@ export class ConditionalTimerModel {
   readonly isRunning = computed(() => this._isRunning.value);
   readonly elapsedSeconds = computed(() => this._elapsedSeconds.value);
 
-  // Events (public for testing)
-  toggledOkay = () => {
-    this._isOkay.value = !this._isOkay.value;
-  };
-  toggledSafe = () => {
-    this._isSafe.value = !this._isSafe.value;
-  };
-  toggledCool = () => {
-    this._isCool.value = !this._isCool.value;
-  };
-  resettedTimer = () => {
-    this._elapsedSeconds.value = 0;
-  };
-
   // Commands (public for consumption)
   toggleOkay = async () => {
-    this.toggledOkay();
+    this._toggledOkay();
   };
   toggleSafe = async () => {
-    this.toggledSafe();
+    this._toggledSafe();
   };
   toggleCool = async () => {
-    this.toggledCool();
+    this._toggledCool();
   };
   resetTimer = async () => {
-    this.resettedTimer();
+    this._resettedTimer();
   };
 }
 

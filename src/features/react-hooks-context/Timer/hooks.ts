@@ -43,8 +43,6 @@ export const useTimerModel = () => {
   return {
     elapsedSeconds,
     isRunning,
-    startedTimer,
-    stoppedTimer,
     startTimer,
     stopTimer
   };

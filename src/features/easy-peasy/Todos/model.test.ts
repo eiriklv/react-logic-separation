@@ -1,40 +1,6 @@
 import { Dependencies, model } from "./model";
 import { createStore } from "easy-peasy";
 
-describe("addedTodo (event)", () => {
-  it("should work as expected when adding a single todo", () => {
-    // arrange
-    const store = createStore(model);
-
-    // act
-    store.getActions().addedTodo({ id: "abc", text: "Paint house" });
-
-    // assert
-    expect(store.getState().todos).toEqual([
-      { id: "abc", text: "Paint house" },
-    ]);
-    expect(store.getState().todosCount).toEqual(1);
-  });
-
-  it("should work as expected when adding multiple todos", () => {
-    // arrange
-    const store = createStore(model);
-
-    // act
-    store.getActions().addedTodo({ id: "abc", text: "Paint house" });
-    store.getActions().addedTodo({ id: "abc", text: "Buy milk" });
-    store.getActions().addedTodo({ id: "abc", text: "Wash car" });
-
-    // assert
-    expect(store.getState().todos).toEqual([
-      { id: "abc", text: "Paint house" },
-      { id: "abc", text: "Buy milk" },
-      { id: "abc", text: "Wash car" },
-    ]);
-    expect(store.getState().todosCount).toEqual(3);
-  });
-});
-
 describe("addTodo (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange

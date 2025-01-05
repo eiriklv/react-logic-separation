@@ -1,19 +1,6 @@
 import { renderHook, act } from '@testing-library/react'
 import { useTimerModel } from './hooks'
 
-describe("startedTimer (event)", () => {
-  it("should work as expected when starting timer", () => {
-    // arrange
-    const { result } = renderHook(useTimerModel);
-
-    // act
-    act(() => result.current.startedTimer());
-
-    // assert
-    expect(result.current.isRunning).toEqual(true);
-  });
-});
-
 describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
@@ -43,7 +30,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     expect(result.current.elapsedSeconds).toEqual(0);
 
     // Wait for two+ seconds so that the timer can increment twice
-    await vi.advanceTimersByTimeAsync(2000);
+    await act(() => vi.advanceTimersByTimeAsync(2000));
 
     // assert
     expect(result.current.elapsedSeconds).toEqual(2);
@@ -52,7 +39,7 @@ describe("incrementTimerWhileRunning (effect)", () => {
     await act(() => result.current.stopTimer());
 
     // Wait for two+ second to ensure that the timer does not continue
-    await vi.advanceTimersByTimeAsync(2000);
+    await act(() => vi.advanceTimersByTimeAsync(2000));
 
     // assert
     expect(result.current.elapsedSeconds).toEqual(2);

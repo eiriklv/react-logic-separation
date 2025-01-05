@@ -1,19 +1,6 @@
 import { model } from "./model";
 import { createStore } from "easy-peasy";
 
-describe("startedTimer (event)", () => {
-  it("should work as expected when starting timer", () => {
-    // arrange
-    const store = createStore(model);
-
-    // act
-    store.getActions().startedTimer();
-
-    // assert
-    expect(store.getState().isRunning).toEqual(true);
-  });
-});
-
 describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange

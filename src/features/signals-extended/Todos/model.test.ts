@@ -1,37 +1,5 @@
 import { Dependencies, TodosModel } from "./model";
 
-describe("addedTodo (event)", () => {
-  it("should work as expected when adding a single todo", () => {
-    // arrange
-    const model = new TodosModel();
-
-    // act
-    model.addedTodo({ id: "abc", text: "Paint house" });
-
-    // assert
-    expect(model.todos.value).toEqual([{ id: "abc", text: "Paint house" }]);
-    expect(model.todosCount.value).toEqual(1);
-  });
-
-  it("should work as expected when adding multiple todos", () => {
-    // arrange
-    const model = new TodosModel();
-
-    // act
-    model.addedTodo({ id: "abc", text: "Paint house" });
-    model.addedTodo({ id: "abc", text: "Buy milk" });
-    model.addedTodo({ id: "abc", text: "Wash car" });
-
-    // assert
-    expect(model.todos.value).toEqual([
-      { id: "abc", text: "Paint house" },
-      { id: "abc", text: "Buy milk" },
-      { id: "abc", text: "Wash car" },
-    ]);
-    expect(model.todosCount.value).toEqual(3);
-  });
-});
-
 describe("addTodo (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
