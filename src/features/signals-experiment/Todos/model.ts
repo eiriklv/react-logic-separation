@@ -1,7 +1,8 @@
-import { signal, computed, effect, batch } from "@preact/signals-core";
+import { signal, computed, batch } from "@preact/signals-core";
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "./utils";
+import { relay } from "../../../lib/signals";
 
 // Dependencies to be injected
 const defaultDependencies = {
@@ -28,11 +29,38 @@ export class TodosModel {
 
   // State
   todos = signal<Todo[]>([]);
-  isSaving = signal<boolean>(false);
   isInitialized = signal<boolean>(false);
 
   // Computed values
   todosCount = computed<number>(() => this.todos.value.length);
+
+  // Relays
+  isSaving = relay(false, (set) => {
+    // Get dependencies
+    const { todosService, waitTimeBeforeSave } = this.injections;
+
+    // Get the changed values that triggered the effect
+    const todos = this.todos.value;
+    const isInitialized = this.isInitialized.value;
+
+    // Validation (only auto-save after the data has been initialized/loaded)
+    if (!isInitialized) {
+      return () => {};
+    }
+
+    // Set a timeout/debounce for running the save effect
+    const saveTimeout = setTimeout(async () => {
+      set(true);
+      await todosService.saveTodos(todos);
+      set(false);
+    }, waitTimeBeforeSave);
+
+    // Return handle for cancelling debounced save
+    return () => {
+      clearTimeout(saveTimeout);
+      set(false);
+    };
+  })
 
   // Events
   initializedTodos = (payload: Todo[]) => {
@@ -43,9 +71,6 @@ export class TodosModel {
   };
   addedTodo = (payload: Todo) => {
     this.todos.value = [...this.todos.value, payload];
-  };
-  toggledSaveState = (payload: boolean) => {
-    this.isSaving.value = payload;
   };
 
   // Commands
@@ -74,34 +99,6 @@ export class TodosModel {
     // Trigger event
     this.addedTodo(newTodo);
   };
-
-  // Effects
-  autoSaveTodosOnChange = effect(() => {
-    // Get dependencies
-    const { todosService, waitTimeBeforeSave } = this.injections;
-
-    // Get the changed values that triggered the effect
-    const todos = this.todos.value;
-    const isInitialized = this.isInitialized.value;
-
-    // Validation (only auto-save after the data has been initialized/loaded)
-    if (!isInitialized) {
-      return () => {};
-    }
-
-    // Set a timeout/debounce for running the save effect
-    const saveTimeout = setTimeout(async () => {
-      this.toggledSaveState(true);
-      await todosService.saveTodos(todos);
-      this.toggledSaveState(false);
-    }, waitTimeBeforeSave);
-
-    // Return handle for cancelling debounced save
-    return () => {
-      clearTimeout(saveTimeout);
-      this.toggledSaveState(false);
-    };
-  });
 }
 
 // Model instance
