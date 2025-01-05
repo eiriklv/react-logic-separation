@@ -34,7 +34,7 @@ export class TodosModel {
   // Computed values
   todosCount = computed<number>(() => this.todos.value.length);
 
-  // Relays
+  // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
   isSaving = relay(false, (set) => {
     // Get dependencies
     const { todosService, waitTimeBeforeSave } = this.injections;
