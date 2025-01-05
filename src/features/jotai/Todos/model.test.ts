@@ -89,6 +89,28 @@ describe("addTodo (command)", () => {
       { id: "abc", text: "Wash car" },
     ]);
   });
+
+  it("should fail validation when adding empty todo", async () => {
+    // arrange
+    const mockDependencies: Dependencies = {
+      generateId: vi.fn(() => "abc"),
+      todosService: {
+        fetchTodos: vi.fn(),
+        saveTodos: vi.fn(),
+      },
+      waitTimeBeforeSave: 100,
+    };
+
+    const store = createStore();
+    const model = new TodosModel(mockDependencies, store);
+
+    // act
+    await model.addTodo("");
+
+    // assert
+    expect(mockDependencies.generateId).toHaveBeenCalledTimes(0);
+    expect(store.get(model.todos)).toEqual([]);
+  });
 });
 
 describe("autoSaveTodosOnChange (effect)", () => {

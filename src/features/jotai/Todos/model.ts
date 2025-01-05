@@ -79,7 +79,10 @@ export class TodosModel {
     // Get dependencies
     const { generateId } = this.injections;
 
-    // TODO: Do validation of input if applicable
+    // Input validation
+    if (!payload) {
+      return;
+    }
 
     // Generate new instance of todo
     const newTodo = {
