@@ -87,7 +87,7 @@ describe("elapsedSeconds (relay)", () => {
     // arrange
     const model = new ConditionalTimerModel();
 
-    // Start the timer
+    // Start the timer by toggling all the necessary conditions on
     await model.toggleOkay();
     await model.toggleSafe();
     await model.toggleCool();
@@ -101,11 +101,11 @@ describe("elapsedSeconds (relay)", () => {
     // assert
     expect(model.elapsedSeconds.value).toEqual(2);
 
-    // Stop the timer by toggling at least one of the switches to false
+    // Stop the timer by toggling at least one of the conditions off
     await model.toggleOkay();
 
-    // Wait for two+ second to ensure that the timer does not continue
-    await vi.advanceTimersByTimeAsync(2000);
+    // Wait for a long time to ensure that the timer does not continue
+    await vi.advanceTimersByTimeAsync(10000);
 
     // assert
     expect(model.elapsedSeconds.value).toEqual(2);
