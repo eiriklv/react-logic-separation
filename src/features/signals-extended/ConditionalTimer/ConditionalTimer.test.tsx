@@ -29,6 +29,9 @@ describe("ConditionalTimer Component", () => {
 
     // assert
     expect(screen.getByText("Conditional Timer")).toBeInTheDocument();
+
+    // assert
+    expect(screen.getByText("10")).toBeInTheDocument();
   });
 
   it("Calls the correct handlers for toggling all the condition of the timer", async () => {

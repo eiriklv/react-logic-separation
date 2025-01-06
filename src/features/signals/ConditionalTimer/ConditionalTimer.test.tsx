@@ -28,6 +28,9 @@ describe("ConditionalTimer Component", () => {
     );
 
     // assert
+    expect(screen.getByText("10")).toBeInTheDocument();
+
+    // assert
     expect(screen.getByText("Conditional Timer")).toBeInTheDocument();
   });
 
