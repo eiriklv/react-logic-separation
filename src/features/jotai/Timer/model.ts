@@ -46,7 +46,7 @@ export class TimerModel {
     const isRunning = get(this.isRunning);
 
     if (!isRunning) {
-      return () => {};
+      return;
     }
 
     const interval = setInterval(() => {

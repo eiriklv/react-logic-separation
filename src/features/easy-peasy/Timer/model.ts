@@ -59,7 +59,7 @@ export const model: TimerModel = {
       const [isRunning] = change.current;
 
       if (!isRunning) {
-        return () => {};
+        return;
       }
 
       const interval = setInterval(() => {

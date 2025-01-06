@@ -78,7 +78,7 @@ export const model: ConditionalTimerModel = {
       const [isRunning] = change.current;
 
       if (!isRunning) {
-        return () => {};
+        return;
       }
   
       const interval = setInterval(() => {

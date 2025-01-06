@@ -34,7 +34,7 @@ export class ConditionalTimerModel {
     const isRunning = get(this.isRunning);
 
     if (!isRunning) {
-      return () => {};
+      return;
     }
 
     const interval = setInterval(() => {

@@ -1,5 +1,5 @@
 import { model } from "./model";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 
 /**
  * The main purpose of this file is to

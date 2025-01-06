@@ -52,7 +52,7 @@ export function Todos() {
   useEffect(() => {
     // Validation (only auto-save after the data has been initialized/loaded)
     if (!isInitialized) {
-      return () => {};
+      return;
     }
 
     // Set a timeout/debounce for running the save effect

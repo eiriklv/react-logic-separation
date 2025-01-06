@@ -47,7 +47,7 @@ export const useConditionalTimerModel = () => {
   // Effects
   useEffect(() => {
     if (!isRunning) {
-      return () => {};
+      return;
     }
 
     const interval = setInterval(() => {

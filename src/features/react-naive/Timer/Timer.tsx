@@ -27,7 +27,7 @@ export function Timer() {
   // Effects
   useEffect(() => {
     if (!isRunning) {
-      return () => {};
+      return;
     }
 
     const interval = setInterval(() => {
