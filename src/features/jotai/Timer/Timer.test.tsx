@@ -20,6 +20,9 @@ describe("Timer Component", () => {
     );
 
     // assert
+    expect(screen.getByText("10")).toBeInTheDocument();
+
+    // assert
     expect(screen.getByText("Timer")).toBeInTheDocument();
   });
 
