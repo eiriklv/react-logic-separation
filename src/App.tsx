@@ -4,6 +4,7 @@ import { TimerFeature as TimerReactHooksContext } from "./features/react-hooks-c
 import { TimerFeature as TimerEasyPeasy } from "./features/easy-peasy/Timer";
 import { TimerFeature as TimerJotai } from "./features/jotai/Timer";
 import { TimerFeature as TimerSignals } from "./features/signals/Timer";
+import { TimerFeature as TimerPulseNaive } from "./features/pulse-naive/Timer";
 import { TimerFeature as TimerPulse } from "./features/pulse/Timer";
 import { ConditionalTimerFeature as ConditionalTimerReactNaive } from "./features/react-naive/ConditionalTimer";
 import { ConditionalTimerFeature as ConditionalTimerReactHooks } from "./features/react-hooks/ConditionalTimer";
@@ -29,6 +30,7 @@ function App() {
         <TimerEasyPeasy />
         <TimerJotai />
         <TimerSignals />
+        <TimerPulseNaive />
         <TimerPulse />
       </div>
       <div className="feature-group">
