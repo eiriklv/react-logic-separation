@@ -37,7 +37,7 @@ describe("elapsedSeconds (relay)", () => {
     // Stop the timer
     await model.stopTimer();
 
-    // Wait for two+ second to ensure that the timer does not continue
+    // Wait for two+ seconds to ensure that the timer does not continue
     await vi.advanceTimersByTimeAsync(2000);
 
     // assert
