@@ -36,7 +36,10 @@ export const useTodosModel = () => {
     initializedTodos(todos);
   }, []);
   const addTodo = useCallback(async (payload: string) => {
-    // TODO: Do validation of input if applicable
+    // Input validation
+    if (!payload) {
+      return;
+    }
 
     // Generate new instance of todo
     const newTodo = {

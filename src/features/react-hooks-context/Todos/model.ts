@@ -1,12 +1,13 @@
-import { generateId } from "../../../lib/utils";
-import * as todosService from "./services/todos.service";
+import { TodosModelContext } from "./model.context";
 
 import { Todo } from "./types";
-import { useCallback, useEffect, useMemo, useState } from "react";
-
-const waitTimeBeforeSave = 1000;
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 export const useTodosModel = () => {
+  // Dependencies
+  const { todosService, generateId, waitTimeBeforeSave } =
+    useContext(TodosModelContext);
+
   // State
   const [isInitialized, setIsInitialized] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -34,19 +35,25 @@ export const useTodosModel = () => {
 
     // Trigger event
     initializedTodos(todos);
-  }, []);
-  const addTodo = useCallback(async (payload: string) => {
-    // TODO: Do validation of input if applicable
+  }, [todosService]);
+  const addTodo = useCallback(
+    async (payload: string) => {
+      // Input validation
+      if (!payload) {
+        return;
+      }
 
-    // Generate new instance of todo
-    const newTodo = {
-      id: generateId(),
-      text: payload,
-    };
+      // Generate new instance of todo
+      const newTodo = {
+        id: generateId(),
+        text: payload,
+      };
 
-    // Trigger event
-    addedTodo(newTodo);
-  }, []);
+      // Trigger event
+      addedTodo(newTodo);
+    },
+    [generateId]
+  );
 
   // Effects
   useEffect(() => {
@@ -67,7 +74,7 @@ export const useTodosModel = () => {
       clearTimeout(saveTimeout);
       toggledSaveState(false);
     };
-  }, [isInitialized, todos]);
+  }, [isInitialized, todos, todosService, waitTimeBeforeSave]);
 
   // Public model interface
   return {
