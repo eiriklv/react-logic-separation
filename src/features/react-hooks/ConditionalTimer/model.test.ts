@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react'
-import { useConditionalTimerModel } from "./hooks";
+import { useConditionalTimerModel } from "./model";
 
 describe("toggle okay, safe and cool (commands)", () => {
   it("should work as expected when starting timer", async () => {

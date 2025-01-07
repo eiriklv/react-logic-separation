@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Timer } from "./Timer";
-import { TimerContext, TimerContextInterface } from "./context";
+import { TimerContext, TimerContextInterface } from "./Timer.context";
 
 describe("Timer Component", () => {
   it("Renders correctly", () => {

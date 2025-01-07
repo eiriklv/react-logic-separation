@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { TodosContext } from "./context";
+import { TodosContext } from "./Todos.context";
 
 export function Todos() {
   // Get injected dependencies from context

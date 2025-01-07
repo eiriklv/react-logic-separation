@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import {
   ConditionalTimerContextInterface,
   ConditionalTimerContext,
-} from "./context";
+} from "./ConditionalTimer.context";
 import { ConditionalTimer } from "./ConditionalTimer";
 
 const meta = {

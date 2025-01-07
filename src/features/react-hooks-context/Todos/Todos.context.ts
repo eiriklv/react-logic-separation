@@ -1,5 +1,5 @@
 import React from "react";
-import { useTodosModel } from "./hooks";
+import { useTodosModel } from "./model";
 import { TodoItem } from "./components/TodoItem";
 
 /**

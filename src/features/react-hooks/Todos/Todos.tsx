@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { TodoItem } from "./components/TodoItem";
-import { useTodosModel } from "./hooks";
+import { useTodosModel } from "./model";
 
 export function Todos() {
   // Use the todos model (state and commands)

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Todos } from "./Todos";
-import { TodosContext, TodosContextInterface } from "./context";
+import { TodosContext, TodosContextInterface } from "./Todos.context";
 
 describe("Todos Component", () => {
   it("Renders correctly", () => {

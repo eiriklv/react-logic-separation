@@ -4,7 +4,7 @@ import { ConditionalTimer } from "./ConditionalTimer";
 import {
   ConditionalTimerContext,
   ConditionalTimerContextInterface,
-} from "./context";
+} from "./ConditionalTimer.context";
 
 describe("ConditionalTimer Component", () => {
   it("Renders correctly", () => {

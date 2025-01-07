@@ -1,5 +1,5 @@
 import React from "react";
-import { useConditionalTimerModel } from "./hooks";
+import { useConditionalTimerModel } from "./model";
 
 /**
  * The context can be used to inject any kind of

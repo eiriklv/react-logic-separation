@@ -62,10 +62,10 @@ export function Timer(): ContainerElement {
     .addChildren(
       text("pulse-naive"),
       heading("Timer", 3).id(TITLE_HEADING_ID),
-      heading(() => "Status: " + (isRunning() ? "running" : "stopped"), 4).id(
+      heading(() => `Status: ${isRunning() ? "running" : "stopped"}`, 4).id(
         RUN_STATUS_ID
       ),
-      text(() => String(elapsedSeconds())).id(TIME_DISPLAY_ID),
+      text(() => `${elapsedSeconds()}`).id(TIME_DISPLAY_ID),
       horizontalFlex().addChildren(
         button()
           .id(START_BUTTON_ID)

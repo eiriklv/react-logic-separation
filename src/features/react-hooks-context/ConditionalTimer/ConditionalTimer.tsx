@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ConditionalTimerContext } from "./context";
+import { ConditionalTimerContext } from "./ConditionalTimer.context";
 
 export function ConditionalTimer() {
   const { useConditionalTimerModel } = useContext(ConditionalTimerContext);

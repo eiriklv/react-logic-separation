@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { TimerContextInterface, TimerContext } from "./context";
+import { TimerContextInterface, TimerContext } from "./Timer.context";
 import { Timer } from "./Timer";
 
 const meta = {

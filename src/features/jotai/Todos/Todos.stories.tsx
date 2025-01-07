@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { TodosContextInterface, TodosContext } from "./context";
+import { TodosContextInterface, TodosContext } from "./Todos.context";
 import { Todos } from "./Todos";
 
 const meta = {

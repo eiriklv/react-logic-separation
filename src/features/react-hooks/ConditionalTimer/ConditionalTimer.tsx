@@ -1,4 +1,4 @@
-import { useConditionalTimerModel } from "./hooks";
+import { useConditionalTimerModel } from "./model";
 
 export function ConditionalTimer() {
   const {

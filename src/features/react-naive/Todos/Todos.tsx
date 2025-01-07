@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Todo } from "./types";
 import * as todosService from "./services/todos.service";
 import { TodoItem } from "./components/TodoItem";
@@ -13,7 +13,7 @@ export function Todos() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   // Computed
-  const todosCount = todos.length;
+  const todosCount = useMemo(() => todos.length, [todos]);
 
   // Events
   const initializedTodos = (payload: Todo[]) => {

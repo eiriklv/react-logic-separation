@@ -1,5 +1,5 @@
 import React from "react";
-import { useTimerModel } from "./hooks";
+import { useTimerModel } from "./model";
 
 /**
  * The context can be used to inject any kind of

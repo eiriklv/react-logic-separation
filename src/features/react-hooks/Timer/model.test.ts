@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react'
-import { useTimerModel } from './hooks'
+import { useTimerModel } from './model'
 
 describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {

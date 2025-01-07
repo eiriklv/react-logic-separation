@@ -1,4 +1,4 @@
-import { useTimerModel } from "./hooks";
+import { useTimerModel } from "./model";
 
 export function Timer() {
   const { elapsedSeconds, isRunning, startTimer, stopTimer } = useTimerModel();

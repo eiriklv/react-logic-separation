@@ -2,7 +2,7 @@ import { generateId } from "../../../lib/utils";
 import * as todosService from "./services/todos.service";
 
 import { Todo } from "./types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const waitTimeBeforeSave = 1000;
 
@@ -13,7 +13,7 @@ export const useTodosModel = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   // Computed
-  const todosCount = todos.length;
+  const todosCount = useMemo(() => todos.length, [todos]);
 
   // Events
   const initializedTodos = (payload: Todo[]) => {
