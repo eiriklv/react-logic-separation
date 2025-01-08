@@ -4,7 +4,7 @@ import { useConditionalTimerModel } from "./model";
 describe("toggle okay, safe and cool (commands)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
-    const { result } = renderHook(useConditionalTimerModel);
+    const { result } = renderHook(() => useConditionalTimerModel());
 
     // act
     await act(() => result.current.toggleOkay());
@@ -33,7 +33,7 @@ describe("reset timer (command)", () => {
 
   it("should work as expected when resetting timer", async () => {
     // arrange
-    const { result } = renderHook(useConditionalTimerModel);
+    const { result } = renderHook(() => useConditionalTimerModel());
 
     // Start the timer
     await act(() => result.current.toggleOkay());
@@ -70,7 +70,7 @@ describe("Timer auto-increment (effect)", () => {
 
   it("should only increment the elapsed seconds while running", async () => {
     // arrange
-    const { result } = renderHook(useConditionalTimerModel);
+    const { result } = renderHook(() => useConditionalTimerModel());
 
     // Start the timer by toggling all the necessary conditions on
     await act(() => result.current.toggleOkay());

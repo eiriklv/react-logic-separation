@@ -4,7 +4,7 @@ import { useTimerModel } from './model'
 describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
     // arrange
-    const { result } = renderHook(useTimerModel);
+    const { result } = renderHook(() => useTimerModel());
 
     // act
     await act(() => result.current.startTimer());
@@ -21,7 +21,7 @@ describe("Timer auto-increments (effect)", () => {
 
   it("should only increment the timer while running", async () => {
     // arrange
-    const { result } = renderHook(useTimerModel);
+    const { result } = renderHook(() => useTimerModel());
 
     // Start the timer
     await act(() => result.current.startTimer());
