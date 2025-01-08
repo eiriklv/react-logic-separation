@@ -7,7 +7,6 @@ import {
   stringInput,
   dynamic,
   ContainerElement,
-  BaseElement,
 } from "@cognite/pulse";
 import { TodoItem } from "./components/TodoItem";
 import { model, TodosModel } from "./model";
