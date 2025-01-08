@@ -1,7 +1,10 @@
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { TodosModelContext } from "./model.context";
 
-import { Todo } from "./types";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+export interface Todo {
+  id: string;
+  text: string;
+}
 
 export const useTodosModel = () => {
   // Dependencies

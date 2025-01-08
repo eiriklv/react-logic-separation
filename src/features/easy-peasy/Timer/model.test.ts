@@ -14,7 +14,7 @@ describe("startTimer (command)", () => {
   });
 });
 
-describe("incrementTimerWhileRunning (effect)", () => {
+describe("Timer auto-increment (effect)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   })

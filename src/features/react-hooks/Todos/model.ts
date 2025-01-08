@@ -1,10 +1,13 @@
 import { generateId } from "../../../lib/utils";
 import * as todosService from "./services/todos.service";
-
-import { Todo } from "./types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const waitTimeBeforeSave = 1000;
+
+export interface Todo {
+  id: string;
+  text: string;
+}
 
 export const useTodosModel = () => {
   // State

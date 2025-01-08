@@ -3,7 +3,7 @@ import { useTodosModel } from "./model";
 import { TodosModelContext, TodosModelContextInterface } from "./model.context";
 import React from "react";
 
-describe("addTodo (command)", () => {
+describe("Add todos (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
     const mockDependencies: TodosModelContextInterface = {
@@ -13,7 +13,7 @@ describe("addTodo (command)", () => {
         fetchTodos: vi.fn(),
       },
       waitTimeBeforeSave: 100,
-    }
+    };
 
     const wrapper: React.FC<{
       children?: React.ReactNode;
@@ -23,7 +23,7 @@ describe("addTodo (command)", () => {
       </TodosModelContext.Provider>
     );
 
-    const { result } = renderHook(useTodosModel, { wrapper });
+    const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
     await act(() => result.current.addTodo("Paint house"));
@@ -42,7 +42,7 @@ describe("addTodo (command)", () => {
         fetchTodos: vi.fn(),
       },
       waitTimeBeforeSave: 100,
-    }
+    };
 
     const wrapper: React.FC<{
       children?: React.ReactNode;
@@ -52,7 +52,7 @@ describe("addTodo (command)", () => {
       </TodosModelContext.Provider>
     );
 
-    const { result } = renderHook(useTodosModel, { wrapper });
+    const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
     await act(() => result.current.addTodo("Paint house"));
@@ -77,7 +77,7 @@ describe("addTodo (command)", () => {
         fetchTodos: vi.fn(),
       },
       waitTimeBeforeSave: 100,
-    }
+    };
 
     const wrapper: React.FC<{
       children?: React.ReactNode;
@@ -87,7 +87,7 @@ describe("addTodo (command)", () => {
       </TodosModelContext.Provider>
     );
 
-    const { result } = renderHook(useTodosModel, { wrapper });
+    const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
     await act(() => result.current.addTodo(""));
@@ -98,7 +98,7 @@ describe("addTodo (command)", () => {
   });
 });
 
-describe("autoSaveTodosOnChange (effect)", () => {
+describe("Todos auto-save (effect)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -112,7 +112,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
         fetchTodos: vi.fn(),
       },
       waitTimeBeforeSave: 100,
-    }
+    };
 
     const wrapper: React.FC<{
       children?: React.ReactNode;
@@ -122,12 +122,14 @@ describe("autoSaveTodosOnChange (effect)", () => {
       </TodosModelContext.Provider>
     );
 
-    const { result } = renderHook(useTodosModel, { wrapper });
+    const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
     await act(() => result.current.addTodo("Write docs"));
 
-    await act(() => vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave));
+    await act(() =>
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave)
+    );
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
@@ -142,7 +144,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
         fetchTodos: vi.fn(async () => []),
       },
       waitTimeBeforeSave: 100,
-    }
+    };
 
     const wrapper: React.FC<{
       children?: React.ReactNode;
@@ -152,34 +154,40 @@ describe("autoSaveTodosOnChange (effect)", () => {
       </TodosModelContext.Provider>
     );
 
-    const { result } = renderHook(useTodosModel, { wrapper });
+    const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
+    await act(() => result.current.initializeTodos());
+
     await act(() => result.current.addTodo("Write docs"));
     await act(() => result.current.addTodo("Write tests"));
-    await act(() => result.current.initializeTodos());
     await act(() => result.current.addTodo("Paint house"));
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await act(() => vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2));
+    await act(() =>
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2)
+    );
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
     // act
-    await act(() => vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2));
+    await act(() =>
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2)
+    );
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
 
     // act
-    await act(() => vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave));
+    await act(() =>
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave)
+    );
 
     // assert
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
   });
 });
-

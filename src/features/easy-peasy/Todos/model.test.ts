@@ -1,7 +1,7 @@
 import { Dependencies, model } from "./model";
 import { createStore } from "easy-peasy";
 
-describe("addTodo (command)", () => {
+describe("Add todos (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
     const mockDependencies = {
@@ -65,7 +65,7 @@ describe("addTodo (command)", () => {
   });
 });
 
-describe("autoSaveTodosOnChange (effect)", () => {
+describe("Todos auto-save (effect)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -111,6 +111,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
 
     // act
     await store.getActions().initializeTodos();
+    
     await store.getActions().addTodo("Write docs");
     await store.getActions().addTodo("Write tests");
     await store.getActions().addTodo("Paint house");

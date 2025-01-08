@@ -1,7 +1,7 @@
 import { createStore } from "jotai";
 import { Dependencies, TodosModel } from "./model";
 
-describe("addTodo (command)", () => {
+describe("Add todos (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
     const mockDependencies: Dependencies = {
@@ -77,7 +77,7 @@ describe("addTodo (command)", () => {
   });
 });
 
-describe("autoSaveTodosOnChange (effect)", () => {
+describe("Todos auto-save (effect)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -121,6 +121,7 @@ describe("autoSaveTodosOnChange (effect)", () => {
 
     // act
     await model.initializeTodos();
+
     await model.addTodo("Write docs");
     await model.addTodo("Write tests");
     await model.addTodo("Paint house");

@@ -63,7 +63,7 @@ describe("reset timer (command)", () => {
   });
 });
 
-describe("elapsedSeconds + incrementTimerWhileRunning", () => {
+describe("Timer auto-increment (effect)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });

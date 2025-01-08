@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Todo } from "./types";
 import * as todosService from "./services/todos.service";
 import { TodoItem } from "./components/TodoItem";
 import { generateId } from "../../../lib/utils";
+import { Todo } from "./types";
 
 const waitTimeBeforeSave = 1000;
 
@@ -36,7 +36,10 @@ export function Todos() {
     initializedTodos(todos);
   }, []);
   const addTodo = useCallback(async (payload: string) => {
-    // TODO: Do validation of input if applicable
+    // Validation
+    if (!payload) {
+      return;
+    }
 
     // Generate new instance of todo
     const newTodo = {
