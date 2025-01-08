@@ -15,10 +15,10 @@ describe("ConditionalTimer Component", () => {
       useIsSafe: () => false,
       useIsCool: () => false,
       useIsRunning: () => false,
-      useToggleOkay: () => async () => {},
-      useToggleSafe: () => async () => {},
-      useToggleCool: () => async () => {},
-      useResetTimer: () => async () => {},
+      useToggleOkay: () => vi.fn(),
+      useToggleSafe: () => vi.fn(),
+      useToggleCool: () => vi.fn(),
+      useResetTimer: () => vi.fn(),
     };
 
     render(

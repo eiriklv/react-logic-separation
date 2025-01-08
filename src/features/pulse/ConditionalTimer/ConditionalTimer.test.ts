@@ -1,9 +1,4 @@
-import {
-  BaseInput,
-  ButtonElement,
-  signal,
-  TextElement,
-} from "@cognite/pulse";
+import { BaseInput, ButtonElement, signal, TextElement } from "@cognite/pulse";
 import {
   ConditionalTimer,
   COOL_CHECKBOX_ID,
@@ -47,11 +42,6 @@ describe("ConditionalTimer Component", () => {
 
   it("Calls the correct handlers for toggling all the condition of the timer", async () => {
     // arrange
-    const toggleOkay = vi.fn();
-    const toggleSafe = vi.fn();
-    const toggleCool = vi.fn();
-    const resetTimer = vi.fn();
-
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const timerModelMock: ConditionalTimerModel = {
@@ -60,10 +50,10 @@ describe("ConditionalTimer Component", () => {
       isSafe: signal(false),
       isCool: signal(false),
       isRunning: signal(false),
-      toggleOkay,
-      toggleSafe,
-      toggleCool,
-      resetTimer,
+      toggleOkay: vi.fn(),
+      toggleSafe: vi.fn(),
+      toggleCool: vi.fn(),
+      resetTimer: vi.fn(),
     };
 
     const container = ConditionalTimer(timerModelMock);
@@ -74,7 +64,7 @@ describe("ConditionalTimer Component", () => {
       .onValueChange(true);
 
     // assert
-    expect(toggleOkay).toHaveBeenCalledTimes(1);
+    expect(timerModelMock.toggleOkay).toHaveBeenCalledTimes(1);
 
     // act
     container
@@ -82,7 +72,7 @@ describe("ConditionalTimer Component", () => {
       .onValueChange(true);
 
     // assert
-    expect(toggleSafe).toHaveBeenCalledTimes(1);
+    expect(timerModelMock.toggleSafe).toHaveBeenCalledTimes(1);
 
     // act
     container
@@ -90,12 +80,12 @@ describe("ConditionalTimer Component", () => {
       .onValueChange(true);
 
     // assert
-    expect(toggleCool).toHaveBeenCalledTimes(1);
+    expect(timerModelMock.toggleCool).toHaveBeenCalledTimes(1);
 
     // act
     container.getDescendantById(ButtonElement, RESET_BUTTON_ID).onApply();
 
     // assert
-    expect(resetTimer).toHaveBeenCalledTimes(1);
+    expect(timerModelMock.resetTimer).toHaveBeenCalledTimes(1);
   });
 });

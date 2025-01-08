@@ -8,8 +8,8 @@ describe("Todos Component", () => {
     // arrange
     const dependencies: TodosContextInterface = {
       useTodosModel: () => ({
-        addTodo: async () => {},
-        initializeTodos: async () => {},
+        addTodo: vi.fn(),
+        initializeTodos: vi.fn(),
         isInitialized: true,
         isSaving: false,
         todos: [],
@@ -35,7 +35,7 @@ describe("Todos Component", () => {
     const dependencies: TodosContextInterface = {
       useTodosModel: () => ({
         addTodo,
-        initializeTodos: async () => {},
+        initializeTodos: vi.fn(),
         isInitialized: true,
         isSaving: false,
         todos: [],

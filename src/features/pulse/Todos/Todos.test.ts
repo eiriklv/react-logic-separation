@@ -8,8 +8,8 @@ describe("Todos Component", () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const todosModelMock: TodosModel = {
-      addTodo: async () => {},
-      initializeTodos: async () => {},
+      addTodo: vi.fn(),
+      initializeTodos: vi.fn(),
       isInitialized: signal(true),
       isSaving: signal(false),
       todos: arraySignal([]),
@@ -26,13 +26,11 @@ describe("Todos Component", () => {
 
   it("Calls the correct handler when adding a todo", async () => {
     // arrange
-    const addTodo = vi.fn();
-
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const todosModelMock: TodosModel = {
-      addTodo: async () => {},
-      initializeTodos: async () => {},
+      addTodo: vi.fn(),
+      initializeTodos: vi.fn(),
       isInitialized: signal(true),
       isSaving: signal(false),
       todos: arraySignal([]),
@@ -42,10 +40,12 @@ describe("Todos Component", () => {
     const container = Todos(todosModelMock);
 
     // act
-    container.getDescendantById(StringInput, TODO_INPUT_ID).value("Paint house");
+    container
+      .getDescendantById(StringInput, TODO_INPUT_ID)
+      .value("Paint house");
     container.getDescendantById(StringInput, TODO_INPUT_ID).onApply();
 
     // assert
-    expect(addTodo).toHaveBeenCalledWith("Paint house");
+    expect(todosModelMock.addTodo).toHaveBeenCalledWith("Paint house");
   });
 });

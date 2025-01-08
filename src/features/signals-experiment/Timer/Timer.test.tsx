@@ -9,8 +9,8 @@ describe("Timer Component", () => {
     const dependencies: TimerContextInterface = {
       useElapsedSeconds: () => 10,
       useIsRunning: () => false,
-      useStartTimer: () => async () => {},
-      useStopTimer: () => async () => {},
+      useStartTimer: () => vi.fn(),
+      useStopTimer: () => vi.fn(),
     };
 
     render(

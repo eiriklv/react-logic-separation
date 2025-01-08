@@ -7,7 +7,7 @@ describe("Todos Component", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: TodosContextInterface = {
-      useAddTodo: () => async () => {},
+      useAddTodo: () => vi.fn(),
       useIsInitialized: () => true,
       useIsSaving: () => false,
       useTodos: () => [],

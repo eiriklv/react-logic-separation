@@ -10,8 +10,8 @@ describe("Timer Component", () => {
       useTimerModel: () => ({
         elapsedSeconds: 10,
         isRunning: false,
-        startTimer: async () => {},
-        stopTimer: async () => {},
+        startTimer: vi.fn(),
+        stopTimer: vi.fn(),
       })
     };
 
