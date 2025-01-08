@@ -81,36 +81,40 @@ export function ConditionalTimer(): ContainerElement {
   return verticalFlex()
     .alignItems("center")
     .addChildren(
-      text("pulse-naive"),
+      text("pulse"),
       heading("Conditional Timer", 3).id(TITLE_HEADING_ID),
       heading(() => `Status: ${isRunning() ? "running" : "stopped"}`, 4).id(
         RUN_STATUS_ID
       ),
       text(() => `${elapsedSeconds()}`).id(TIME_DISPLAY_ID),
-      horizontalFlex().addChildren(
-        button()
-          .id(RESET_BUTTON_ID)
-          .label("Reset")
-          .type("primary")
-          .setOnApply(resetTimer),
-        boolInput()
-          .id(OKAY_CHECKBOX_ID)
-          .label("Okay")
-          .isCheckbox(true)
-          .value(() => isOkay())
-          .setOnValueChange(toggleOkay),
-        boolInput()
-          .id(SAFE_CHECKBOX_ID)
-          .label("Safe")
-          .isCheckbox(true)
-          .value(() => isSafe())
-          .setOnValueChange(toggleSafe),
-        boolInput()
-          .id(COOL_CHECKBOX_ID)
-          .label("Cool")
-          .isCheckbox(true)
-          .value(() => isCool())
-          .setOnValueChange(toggleCool),
-      )
+      verticalFlex()
+        .alignItems("center")
+        .addChildren(
+          button()
+            .id(RESET_BUTTON_ID)
+            .label("Reset")
+            .type("primary")
+            .setOnApply(resetTimer),
+          horizontalFlex().addChildren(
+            boolInput()
+              .id(OKAY_CHECKBOX_ID)
+              .label("Okay")
+              .isCheckbox(true)
+              .value(() => isOkay())
+              .setOnValueChange(toggleOkay),
+            boolInput()
+              .id(SAFE_CHECKBOX_ID)
+              .label("Safe")
+              .isCheckbox(true)
+              .value(() => isSafe())
+              .setOnValueChange(toggleSafe),
+            boolInput()
+              .id(COOL_CHECKBOX_ID)
+              .label("Cool")
+              .isCheckbox(true)
+              .value(() => isCool())
+              .setOnValueChange(toggleCool)
+          )
+        )
     );
 }

@@ -6,6 +6,7 @@ import {
   text,
   verticalFlex,
   boolInput,
+  divider,
 } from "@cognite/pulse";
 import { ConditionalTimerModel, model } from "./model";
 
@@ -41,30 +42,34 @@ export function ConditionalTimer(
         RUN_STATUS_ID
       ),
       text(() => `${elapsedSeconds()}`).id(TIME_DISPLAY_ID),
-      horizontalFlex().addChildren(
-        button()
-          .id(RESET_BUTTON_ID)
-          .label("Reset")
-          .type("primary")
-          .setOnApply(resetTimer),
-        boolInput()
-          .id(OKAY_CHECKBOX_ID)
-          .label("Okay")
-          .isCheckbox(true)
-          .value(() => isOkay())
-          .setOnValueChange(toggleOkay),
-        boolInput()
-          .id(SAFE_CHECKBOX_ID)
-          .label("Safe")
-          .isCheckbox(true)
-          .value(() => isSafe())
-          .setOnValueChange(toggleSafe),
-        boolInput()
-          .id(COOL_CHECKBOX_ID)
-          .label("Cool")
-          .isCheckbox(true)
-          .value(() => isCool())
-          .setOnValueChange(toggleCool)
-      )
+      verticalFlex()
+        .alignItems("center")
+        .addChildren(
+          button()
+            .id(RESET_BUTTON_ID)
+            .label("Reset")
+            .type("primary")
+            .setOnApply(resetTimer),
+          horizontalFlex().addChildren(
+            boolInput()
+              .id(OKAY_CHECKBOX_ID)
+              .label("Okay")
+              .isCheckbox(true)
+              .value(() => isOkay())
+              .setOnValueChange(toggleOkay),
+            boolInput()
+              .id(SAFE_CHECKBOX_ID)
+              .label("Safe")
+              .isCheckbox(true)
+              .value(() => isSafe())
+              .setOnValueChange(toggleSafe),
+            boolInput()
+              .id(COOL_CHECKBOX_ID)
+              .label("Cool")
+              .isCheckbox(true)
+              .value(() => isCool())
+              .setOnValueChange(toggleCool)
+          )
+        )
     );
 }
