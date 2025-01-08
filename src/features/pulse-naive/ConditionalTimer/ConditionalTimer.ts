@@ -81,7 +81,7 @@ export function ConditionalTimer(): ContainerElement {
   return verticalFlex()
     .alignItems("center")
     .addChildren(
-      text("pulse"),
+      text("pulse-naive"),
       heading("Conditional Timer", 3).id(TITLE_HEADING_ID),
       heading(() => `Status: ${isRunning() ? "running" : "stopped"}`, 4).id(
         RUN_STATUS_ID

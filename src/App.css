@@ -1,16 +1,23 @@
 #root {
+  height: 100vh;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
   display: flex;
   gap: 50px;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .feature-group {
   display: flex;
   gap: 50px;
-  justify-content: space-between;
+  justify-content: space-around;
+}
+
+.library-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .logo {

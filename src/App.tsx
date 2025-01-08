@@ -27,34 +27,44 @@ import "./App.css";
 function App() {
   return (
     <>
-      <div className="feature-group">
+      <div className="library-group">
         <TimerReactNaive />
-        <TimerReactHooks />
-        <TimerReactHooksContext />
-        <TimerEasyPeasy />
-        <TimerJotai />
-        <TimerSignals />
-        <TimerPulseNaive />
-        <TimerPulse />
-      </div>
-      <div className="feature-group">
         <ConditionalTimerReactNaive />
-        <ConditionalTimerReactHooks />
-        <ConditionalTimerReactHooksContext />
-        <ConditionalTimerEasyPeasy />
-        <ConditionalTimerJotai />
-        <ConditionalTimerSignals />
-        <ConditionalTimerPulseNaive />
-        <ConditionalTimerPulse />
-      </div>
-      <div className="feature-group">
         <TodosReactNaive />
+      </div>
+      <div className="library-group">
+        <TimerReactHooks />
+        <ConditionalTimerReactHooks />
         <TodosReactHooks />
+      </div>
+      <div className="library-group">
+        <TimerReactHooksContext />
+        <ConditionalTimerReactHooksContext />
         <TodosReactHooksContext />
+      </div>
+      <div className="library-group">
+        <TimerEasyPeasy />
+        <ConditionalTimerEasyPeasy />
         <TodosEasyPeasy />
+      </div>
+      <div className="library-group">
+        <TimerJotai />
+        <ConditionalTimerJotai />
         <TodosJotai />
+      </div>
+      <div className="library-group">
+        <TimerSignals />
+        <ConditionalTimerSignals />
         <TodosSignals />
+      </div>
+      <div className="library-group">
+        <TimerPulseNaive />
+        <ConditionalTimerPulseNaive />
         <TodosPulseNaive />
+      </div>
+      <div className="library-group">
+        <TimerPulse />
+        <ConditionalTimerPulse />
         <TodosPulse />
       </div>
     </>
