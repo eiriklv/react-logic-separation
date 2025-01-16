@@ -59,5 +59,5 @@ export class ConditionalTimerModel {
   };
 }
 
-// Model instance
+// Model singleton
 export const model = new ConditionalTimerModel();

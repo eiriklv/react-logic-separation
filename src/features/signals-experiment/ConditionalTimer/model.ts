@@ -45,26 +45,36 @@ export class ConditionalTimerModel {
   };
 
   // Read-only signals (public for consumption)
-  readonly isOkay = computed(() => this._isOkay.value);
-  readonly isSafe = computed(() => this._isSafe.value);
-  readonly isCool = computed(() => this._isCool.value);
-  readonly isRunning = computed(() => this._isRunning.value);
-  readonly elapsedSeconds = computed(() => this._elapsedSeconds.value);
+  public get isOkay() {
+    return computed(() => this._isOkay.value);
+  }
+  public get isSafe() {
+    return computed(() => this._isSafe.value);
+  }
+  public get isCool() {
+    return computed(() => this._isCool.value);
+  }
+  public get isRunning() {
+    return computed(() => this._isRunning.value);
+  }
+  public get elapsedSeconds() {
+    return computed(() => this._elapsedSeconds.value);
+  }
 
   // Commands (public for consumption)
-  toggleOkay = async () => {
+  public toggleOkay = async () => {
     this._toggledOkay();
   };
-  toggleSafe = async () => {
+  public toggleSafe = async () => {
     this._toggledSafe();
   };
-  toggleCool = async () => {
+  public toggleCool = async () => {
     this._toggledCool();
   };
-  resetTimer = async () => {
+  public resetTimer = async () => {
     this._resettedTimer();
   };
 }
 
-// Model instance
+// Model singleton
 export const model = new ConditionalTimerModel();

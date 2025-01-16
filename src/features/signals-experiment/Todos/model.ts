@@ -74,13 +74,21 @@ export class TodosModel {
   };
 
   // Read-only signals (public for consumption)
-  readonly todos = computed(() => this._todos.value);
-  readonly todosCount = computed(() => this._todosCount.value);
-  readonly isInitialized = computed(() => this._isInitialized.value);
-  readonly isSaving = computed(() => this._isSaving.value);
+  public get todos() {
+    return computed(() => this._todos.value);
+  }
+  public get todosCount() {
+    return computed(() => this._todosCount.value);
+  }
+  public get isInitialized() {
+    return computed(() => this._isInitialized.value);
+  }
+  public get isSaving() {
+    return computed(() => this._isSaving.value);
+  }
 
   // Commands (public for consumption)
-  initializeTodos = async () => {
+  public initializeTodos = async () => {
     // Get dependencies
     const { todosService } = this._injections;
 
@@ -90,7 +98,7 @@ export class TodosModel {
     // Trigger event
     this._initializedTodos(todos);
   };
-  addTodo = async (payload: string) => {
+  public addTodo = async (payload: string) => {
     // Get dependencies
     const { generateId } = this._injections;
 
@@ -110,5 +118,5 @@ export class TodosModel {
   };
 }
 
-// Model instance
+// Model singleton
 export const model = new TodosModel();

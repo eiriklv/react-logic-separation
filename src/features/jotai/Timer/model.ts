@@ -59,5 +59,5 @@ export class TimerModel {
   });
 }
 
-// Model instance
+// Model singleton
 export const model = new TimerModel();

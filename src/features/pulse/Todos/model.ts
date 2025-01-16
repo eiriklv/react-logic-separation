@@ -105,5 +105,5 @@ export class TodosModel {
   });
 }
 
-// Model instance
+// Model singleton
 export const model = new TodosModel();

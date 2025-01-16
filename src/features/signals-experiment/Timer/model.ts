@@ -35,20 +35,24 @@ export class TimerModel {
   };
 
   // Read-only state (public for consumption)
-  readonly isRunning = computed(() => this._isRunning.value);
-  readonly elapsedSeconds = computed(() => this._elapsedSeconds.value);
+  public get isRunning() {
+    return computed(() => this._isRunning.value);
+  }
+  public get elapsedSeconds() {
+    return computed(() => this._elapsedSeconds.value);
+  }
 
   // Commands (public for consumption)
-  startTimer = async () => {
+  public startTimer = async () => {
     this._startedTimer();
   };
-  stopTimer = async () => {
+  public stopTimer = async () => {
     this._stoppedTimer();
   };
-  resetTimer = async () => {
+  public resetTimer = async () => {
     this._resettedTimer();
   };
 }
 
-// Model instance
+// Model singleton
 export const model = new TimerModel();
