@@ -20,46 +20,88 @@ export interface Todo {
 
 export class TodosModel {
   constructor(dependencies: Dependencies = defaultDependencies) {
-    this.injections = dependencies;
+    this._injections = dependencies;
   }
 
   // Dependencies
-  injections: Dependencies = defaultDependencies;
+  private _injections: Dependencies = defaultDependencies;
 
   // State
-  todos = arraySignal<Todo>([]);
-  isSaving = signal<boolean>(false);
-  isInitialized = signal<boolean>(false);
+  private _todos = arraySignal<Todo>([]);
+  private _isSaving = signal<boolean>(false);
+  private _isInitialized = signal<boolean>(false);
 
   // Computed values
-  todosCount = computed<number>(() => this.todos().length);
+  private _todosCount = computed<number>(() => this._todos().length);
 
   // Events
-  initializedTodos = (payload: Todo[]) => {
-    this.todos(payload);
-    this.isInitialized(true);
+  private _initializedTodos = (payload: Todo[]) => {
+    this._todos(payload);
+    this._isInitialized(true);
   };
-  addedTodo = (payload: Todo) => {
-    this.todos([...this.todos(), payload]);
+  private _addedTodo = (payload: Todo) => {
+    this._todos([...this._todos(), payload]);
   };
-  toggledSaveState = (payload: boolean) => {
-    this.isSaving(payload);
+  private _toggledSaveState = (payload: boolean) => {
+    this._isSaving(payload);
   };
 
-  // Commands
-  initializeTodos = async () => {
+  // Effects
+  private _disposeAutoSaveTodosOnChange = effect(() => {
     // Get dependencies
-    const { todosService } = this.injections;
+    const { todosService, waitTimeBeforeSave } = this._injections;
+
+    // Get the changed values that triggered the effect
+    const todos = this._todos().slice();
+    const isInitialized = this._isInitialized();
+
+    // Validation (only auto-save after the data has been initialized/loaded)
+    if (!isInitialized) {
+      return;
+    }
+
+    // Set a timeout/debounce for running the save effect
+    const saveTimeout = setTimeout(async () => {
+      this._toggledSaveState(true);
+      await todosService.saveTodos(todos);
+      this._toggledSaveState(false);
+    }, waitTimeBeforeSave);
+
+    // Return handle for cancelling debounced save
+    return () => {
+      clearTimeout(saveTimeout);
+      this._toggledSaveState(false);
+    };
+  });
+
+  // Readonly signals (public for consumption)
+  public get todos() {
+    return computed(() => this._todos());
+  }
+  public get isSaving() {
+    return computed(() => this._isSaving());
+  }
+  public get isInitialized() {
+    return computed(() => this._isInitialized());
+  }
+  public get todosCount() {
+    return computed(() => this._todosCount());
+  }
+
+  // Commands
+  public initializeTodos = async () => {
+    // Get dependencies
+    const { todosService } = this._injections;
 
     // Run side effect
     const todos = await todosService.fetchTodos();
 
     // Trigger event
-    this.initializedTodos(todos);
+    this._initializedTodos(todos);
   };
-  addTodo = async (payload: string) => {
+  public addTodo = async (payload: string) => {
     // Get dependencies
-    const { generateId } = this.injections;
+    const { generateId } = this._injections;
 
     // Input validation
     if (!payload) {
@@ -73,36 +115,13 @@ export class TodosModel {
     };
 
     // Trigger event
-    this.addedTodo(newTodo);
+    this._addedTodo(newTodo);
   };
 
-  // Effects
-  autoSaveTodosOnChange = effect(() => {
-    // Get dependencies
-    const { todosService, waitTimeBeforeSave } = this.injections;
-
-    // Get the changed values that triggered the effect
-    const todos = this.todos().slice();
-    const isInitialized = this.isInitialized();
-
-    // Validation (only auto-save after the data has been initialized/loaded)
-    if (!isInitialized) {
-      return;
-    }
-
-    // Set a timeout/debounce for running the save effect
-    const saveTimeout = setTimeout(async () => {
-      this.toggledSaveState(true);
-      await todosService.saveTodos(todos);
-      this.toggledSaveState(false);
-    }, waitTimeBeforeSave);
-
-    // Return handle for cancelling debounced save
-    return () => {
-      clearTimeout(saveTimeout);
-      this.toggledSaveState(false);
-    };
-  });
+  // Disposal
+  public dispose() {
+    this._disposeAutoSaveTodosOnChange();
+  }
 }
 
 // Model singleton
