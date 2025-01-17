@@ -40,7 +40,7 @@ export class TodosModel {
     this._isInitialized(true);
   };
   private _addedTodo = (payload: Todo) => {
-    this._todos([...this._todos(), payload]);
+    this._todos.push(payload);
   };
   private _toggledSaveState = (payload: boolean) => {
     this._isSaving(payload);

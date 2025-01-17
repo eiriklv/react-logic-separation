@@ -6,7 +6,6 @@ import {
   text,
   verticalFlex,
   boolInput,
-  divider,
 } from "@cognite/pulse";
 import { ConditionalTimerModel, model } from "./model";
 

@@ -1,4 +1,4 @@
-import { BaseInput, ButtonElement, signal, TextElement } from "@cognite/pulse";
+import { BaseInput, ButtonElement, HeadingElement, signal, TextElement } from "@cognite/pulse";
 import {
   ConditionalTimer,
   COOL_CHECKBOX_ID,
@@ -13,14 +13,12 @@ import { ConditionalTimerModel } from "./model";
 describe("ConditionalTimer Component", () => {
   it("Renders correctly", () => {
     // arrange
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     const timerModelMock: ConditionalTimerModel = {
-      elapsedSeconds: signal(10),
-      isOkay: signal(false),
-      isSafe: signal(false),
-      isCool: signal(false),
-      isRunning: signal(false),
+      elapsedSeconds: () => 10,
+      isOkay: () => false,
+      isSafe: () => false,
+      isCool: () => false,
+      isRunning: () => false,
       toggleOkay: vi.fn(),
       toggleSafe: vi.fn(),
       toggleCool: vi.fn(),
@@ -31,25 +29,23 @@ describe("ConditionalTimer Component", () => {
 
     // assert
     expect(
-      container.getDescendantById(TextElement, TITLE_HEADING_ID).label()
+      container.getElementById(HeadingElement, TITLE_HEADING_ID).label()
     ).toEqual("Conditional Timer");
 
     // assert
     expect(
-      container.getDescendantById(TextElement, TIME_DISPLAY_ID).label()
+      container.getElementById(TextElement, TIME_DISPLAY_ID).label()
     ).toEqual("10");
   });
 
   it("Calls the correct handlers for toggling all the condition of the timer", async () => {
     // arrange
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     const timerModelMock: ConditionalTimerModel = {
-      elapsedSeconds: signal(10),
-      isOkay: signal(false),
-      isSafe: signal(false),
-      isCool: signal(false),
-      isRunning: signal(false),
+      elapsedSeconds: () => 10,
+      isOkay: () => false,
+      isSafe: () => false,
+      isCool: () => false,
+      isRunning: () => false,
       toggleOkay: vi.fn(),
       toggleSafe: vi.fn(),
       toggleCool: vi.fn(),
@@ -60,7 +56,7 @@ describe("ConditionalTimer Component", () => {
 
     // act
     container
-      .getDescendantById(BaseInput, OKAY_CHECKBOX_ID)
+      .getElementById(BaseInput, OKAY_CHECKBOX_ID)
       .onValueChange(true);
 
     // assert
@@ -68,7 +64,7 @@ describe("ConditionalTimer Component", () => {
 
     // act
     container
-      .getDescendantById(BaseInput, SAFE_CHECKBOX_ID)
+      .getElementById(BaseInput, SAFE_CHECKBOX_ID)
       .onValueChange(true);
 
     // assert
@@ -76,14 +72,14 @@ describe("ConditionalTimer Component", () => {
 
     // act
     container
-      .getDescendantById(BaseInput, COOL_CHECKBOX_ID)
+      .getElementById(BaseInput, COOL_CHECKBOX_ID)
       .onValueChange(true);
 
     // assert
     expect(timerModelMock.toggleCool).toHaveBeenCalledTimes(1);
 
     // act
-    container.getDescendantById(ButtonElement, RESET_BUTTON_ID).onApply();
+    container.getElementById(ButtonElement, RESET_BUTTON_ID).onApply();
 
     // assert
     expect(timerModelMock.resetTimer).toHaveBeenCalledTimes(1);

@@ -1,4 +1,4 @@
-import { ButtonElement, signal, TextElement } from "@cognite/pulse";
+import { ButtonElement, HeadingElement, signal, TextElement } from "@cognite/pulse";
 import {
   START_BUTTON_ID,
   STOP_BUTTON_ID,
@@ -11,11 +11,9 @@ import { TimerModel } from "./model";
 describe("Timer Component", () => {
   it("Renders correctly", () => {
     // arrange
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     const timerModelMock: TimerModel = {
-      elapsedSeconds: signal(10),
-      isRunning: signal(false),
+      elapsedSeconds: () => 10,
+      isRunning: () => false,
       startTimer: vi.fn(),
       stopTimer: vi.fn(),
     };
@@ -24,19 +22,17 @@ describe("Timer Component", () => {
 
     // assert
     expect(
-      container.getDescendantById(TextElement, TIME_DISPLAY_ID).label()
+      container.getElementById(TextElement, TIME_DISPLAY_ID).label()
     ).toEqual("10");
 
     // assert
     expect(
-      container.getDescendantById(TextElement, TITLE_HEADING_ID).label()
+      container.getElementById(HeadingElement, TITLE_HEADING_ID).label()
     ).toEqual("Timer");
   });
 
   it("Calls the correct handlers for start and stop", async () => {
     // arrange
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     const timerModelMock: TimerModel = {
       elapsedSeconds: signal(10),
       isRunning: signal(false),
@@ -47,13 +43,13 @@ describe("Timer Component", () => {
     const container = Timer(timerModelMock);
 
     // act
-    container.getDescendantById(ButtonElement, START_BUTTON_ID).onApply();
+    container.getElementById(ButtonElement, START_BUTTON_ID).onApply();
 
     // assert
     expect(timerModelMock.startTimer).toHaveBeenCalledTimes(1);
 
     // act
-    container.getDescendantById(ButtonElement, STOP_BUTTON_ID).onApply();
+    container.getElementById(ButtonElement, STOP_BUTTON_ID).onApply();
 
     // assert
     expect(timerModelMock.startTimer).toHaveBeenCalledTimes(1);

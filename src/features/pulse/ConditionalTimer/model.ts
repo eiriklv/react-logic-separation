@@ -3,26 +3,26 @@ import { computed, effect, signal } from "@cognite/pulse";
 // Model
 export class ConditionalTimerModel {
   // State
-  isOkay = signal<boolean>(false);
-  isSafe = signal<boolean>(false);
-  isCool = signal<boolean>(false);
-  elapsedSeconds = signal<number>(0);
+  private _isOkay = signal<boolean>(false);
+  private _isSafe = signal<boolean>(false);
+  private _isCool = signal<boolean>(false);
+  private _elapsedSeconds = signal<number>(0);
 
   // Computed
-  isRunning = computed(
-    () => this.isOkay() && this.isSafe() && this.isCool()
+  private _isRunning = computed(
+    () => this._isOkay() && this._isSafe() && this._isCool()
   );
 
   // Effects
-  incrementTimerWhileRunning = effect(() => {
-    const isRunning = this.isRunning();
+  private _disposeIncrementTimerWhileRunning = effect(() => {
+    const isRunning = this._isRunning();
 
     if (!isRunning) {
       return;
     }
 
     const interval = setInterval(() => {
-      this.incrementedElapsedSeconds();
+      this._incrementedElapsedSeconds();
     }, 1000);
 
     return () => {
@@ -31,35 +31,57 @@ export class ConditionalTimerModel {
   });
 
   // Events
-  toggledOkay = () => {
-    this.isOkay(!this.isOkay());
+  private _toggledOkay = () => {
+    this._isOkay(!this._isOkay());
   };
-  toggledSafe = () => {
-    this.isSafe(!this.isSafe());
+  private _toggledSafe = () => {
+    this._isSafe(!this._isSafe());
   };
-  toggledCool = () => {
-    this.isCool(!this.isCool());
+  private _toggledCool = () => {
+    this._isCool(!this._isCool());
   };
-  resettedTimer = () => {
-    this.elapsedSeconds(0);
+  private _resettedTimer = () => {
+    this._elapsedSeconds(0);
   };
-  incrementedElapsedSeconds = () => {
-    this.elapsedSeconds(this.elapsedSeconds() + 1);
+  private _incrementedElapsedSeconds = () => {
+    this._elapsedSeconds(this._elapsedSeconds() + 1);
   };
 
+  // Readonly signals
+  public get isOkay() {
+    return computed(() => this._isOkay());
+  }
+  public get isSafe() {
+    return computed(() => this._isSafe());
+  }
+  public get isCool() {
+    return computed(() => this._isCool());
+  }
+  public get elapsedSeconds() {
+    return computed(() => this._elapsedSeconds());
+  }
+  public get isRunning() {
+    return computed(() => this._isRunning());
+  }
+
   // Commands
-  toggleOkay = async () => {
-    this.toggledOkay();
+  public toggleOkay = async () => {
+    this._toggledOkay();
   };
-  toggleSafe = async () => {
-    this.toggledSafe();
+  public toggleSafe = async () => {
+    this._toggledSafe();
   };
-  toggleCool = async () => {
-    this.toggledCool();
+  public toggleCool = async () => {
+    this._toggledCool();
   };
-  resetTimer = async () => {
-    this.resettedTimer();
+  public resetTimer = async () => {
+    this._resettedTimer();
   };
+
+  // Disposal
+  public dispose() {
+    this._disposeIncrementTimerWhileRunning();
+  }
 }
 
 // Model singleton

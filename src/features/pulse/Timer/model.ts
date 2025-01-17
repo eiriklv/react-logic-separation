@@ -1,33 +1,33 @@
-import { effect, signal } from "@cognite/pulse";
+import { effect, signal, computed } from "@cognite/pulse";
 
 // Model
 export class TimerModel {
   // State
-  elapsedSeconds = signal<number>(0);
-  isRunning = signal<boolean>(false);
+  private _elapsedSeconds = signal<number>(0);
+  private _isRunning = signal<boolean>(false);
 
   // Events
-  startedTimer = () => {
-    this.isRunning(true);
+  private _startedTimer = () => {
+    this._isRunning(true);
   };
-  stoppedTimer = () => {
-    this.isRunning(false);
+  private _stoppedTimer = () => {
+    this._isRunning(false);
   };
-  incrementedElapsedSeconds = () => {
-    this.elapsedSeconds(this.elapsedSeconds() + 1);
+  private _incrementedElapsedSeconds = () => {
+    this._elapsedSeconds(this._elapsedSeconds() + 1);
   };
 
   // Effects
-  incrementTimerWhileRunning = effect(() => {
+  private _disposeIncrementTimerWhileRunning = effect(() => {
     // Get dependencies that triggered the effect
-    const isRunning = this.isRunning();
+    const isRunning = this._isRunning();
 
     if (!isRunning) {
       return;
     }
 
     const interval = setInterval(() => {
-      this.incrementedElapsedSeconds();
+      this._incrementedElapsedSeconds();
     }, 1000);
 
     return () => {
@@ -35,13 +35,26 @@ export class TimerModel {
     };
   });
 
+  // Readonly signals
+  public get elapsedSeconds() {
+    return computed(() => this._elapsedSeconds());
+  }
+  public get isRunning() {
+    return computed(() => this._isRunning());
+  }
+
   // Commands
-  startTimer = async () => {
-    this.startedTimer();
+  public startTimer = async () => {
+    this._startedTimer();
   };
-  stopTimer = async () => {
-    this.stoppedTimer();
+  public stopTimer = async () => {
+    this._stoppedTimer();
   };
+
+  // Disposal
+  public dispose() {
+    this._disposeIncrementTimerWhileRunning();
+  }
 }
 
 // Model singleton
