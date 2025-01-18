@@ -2,15 +2,16 @@ import {
   heading,
   signal,
   text,
-  verticalFlex,
   container,
   stringInput,
-  dynamic,
   ContainerElement,
   getContext,
+  toCollection,
+  list,
 } from "@cognite/pulse";
 import { todosContext } from "./Todos.context";
 
+export const LOADING_INDICATOR_ID = "loading-indicator";
 export const TITLE_HEADING_ID = "title-heading";
 export const SAVING_STATUS_ID = "saving-status";
 export const TODO_INPUT_ID = "todo-input";
@@ -46,30 +47,31 @@ export function Todos(): ContainerElement {
     todoInputText("");
   };
 
-  return container().addChild(
-    dynamic().element(() => {
-      if (!isInitialized()) {
-        return text("Loading...");
-      }
+  // Make a ui collection from the todos
+  const todoListItems = toCollection(todos, (todo) => TodoItem({ todo }));
 
-      const todoElements = todos().map((todo) => TodoItem({ todo }));
+  // Add the collection to list
+  const todoListElement = list().addChildren(todoListItems);
 
-      return verticalFlex()
-        .alignItems("center")
-        .addChildren(
-          text("pulse"),
-          heading(() => `Todos ${isSaving() ? "(saving...)" : ""}`, 3).id(
-            TITLE_HEADING_ID
-          ),
-          heading(() => `Things to do: ${todosCount()}`, 4).id(TODOS_COUNT_ID),
-          stringInput()
-            .id(TODO_INPUT_ID)
-            .label("Todo")
-            .value(() => todoInputText())
-            .setOnValueChange(handleTodoInputTextChange)
-            .setOnApply(handleTodoInputEnter),
-          container().addChildren(...todoElements)
-        );
-    })
+  return container().addChildren(
+    container()
+      .addChild(text("Loading...").id(LOADING_INDICATOR_ID))
+      .isVisible(() => !isInitialized()),
+    container()
+      .addChildren(
+        text("pulse"),
+        heading(() => `Todos${isSaving() ? " (saving...)" : ""}`, 3).id(
+          TITLE_HEADING_ID
+        ),
+        heading(() => `Things to do: ${todosCount()}`, 4).id(TODOS_COUNT_ID),
+        stringInput()
+          .id(TODO_INPUT_ID)
+          .label("Todo")
+          .value(() => todoInputText())
+          .setOnValueChange(handleTodoInputTextChange)
+          .setOnApply(handleTodoInputEnter),
+        todoListElement
+      )
+      .isVisible(() => isInitialized())
   );
 }

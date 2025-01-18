@@ -76,7 +76,7 @@ export class TodosModel {
 
   // Readonly signals (public for consumption)
   public get todos() {
-    return computed(() => this._todos());
+    return this._todos;
   }
   public get isSaving() {
     return computed(() => this._isSaving());
