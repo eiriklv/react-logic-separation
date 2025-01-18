@@ -1,4 +1,4 @@
-import { HeadingElement, setContext, StringInput } from "@cognite/pulse";
+import { HeadingElement, setContext, StringInput, text } from "@cognite/pulse";
 import { TITLE_HEADING_ID, TODO_INPUT_ID, Todos } from "./Todos";
 import { TodosModel } from "./model";
 import { todosContext } from "./Todos.context";
@@ -16,7 +16,8 @@ describe("Todos Component", () => {
     };
 
     setContext(todosContext, {
-      todosModel: todosModelMock
+      todosModel: todosModelMock as TodosModel,
+      TodoItem: () => text("TodoItem"),
     });
 
     const container = Todos();
@@ -39,7 +40,8 @@ describe("Todos Component", () => {
     };
 
     setContext(todosContext, {
-      todosModel: todosModelMock
+      todosModel: todosModelMock as TodosModel,
+      TodoItem: () => text("TodoItem"),
     });
 
     const container = Todos();
