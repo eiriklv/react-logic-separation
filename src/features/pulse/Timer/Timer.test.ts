@@ -1,4 +1,10 @@
-import { ButtonElement, HeadingElement, signal, TextElement } from "@cognite/pulse";
+import {
+  ButtonElement,
+  HeadingElement,
+  setContext,
+  signal,
+  TextElement,
+} from "@cognite/pulse";
 import {
   START_BUTTON_ID,
   STOP_BUTTON_ID,
@@ -7,18 +13,23 @@ import {
   TITLE_HEADING_ID,
 } from "./Timer";
 import { TimerModel } from "./model";
+import { timerContext } from "./Timer.context";
 
 describe("Timer Component", () => {
   it("Renders correctly", () => {
     // arrange
-    const timerModelMock: TimerModel = {
+    const timerModelMock: Partial<TimerModel> = {
       elapsedSeconds: () => 10,
       isRunning: () => false,
       startTimer: vi.fn(),
       stopTimer: vi.fn(),
     };
 
-    const container = Timer(timerModelMock);
+    setContext(timerContext, {
+      timerModel: timerModelMock,
+    });
+
+    const container = Timer();
 
     // assert
     expect(
@@ -33,14 +44,18 @@ describe("Timer Component", () => {
 
   it("Calls the correct handlers for start and stop", async () => {
     // arrange
-    const timerModelMock: TimerModel = {
+    const timerModelMock: Partial<TimerModel> = {
       elapsedSeconds: signal(10),
       isRunning: signal(false),
       startTimer: vi.fn(),
       stopTimer: vi.fn(),
     };
 
-    const container = Timer(timerModelMock);
+    setContext(timerContext, {
+      timerModel: timerModelMock,
+    });
+
+    const container = Timer();
 
     // act
     container.getElementById(ButtonElement, START_BUTTON_ID).onApply();

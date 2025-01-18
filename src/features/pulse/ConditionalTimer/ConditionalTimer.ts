@@ -6,8 +6,9 @@ import {
   text,
   verticalFlex,
   boolInput,
+  getContext,
 } from "@cognite/pulse";
-import { ConditionalTimerModel, model } from "./model";
+import { conditionalTimerContext } from "./ConditionalTimer.context";
 
 export const TITLE_HEADING_ID = "title-heading";
 export const OKAY_CHECKBOX_ID = "okay-checkbox";
@@ -17,9 +18,9 @@ export const RESET_BUTTON_ID = "reset-button";
 export const TIME_DISPLAY_ID = "time-display";
 export const RUN_STATUS_ID = "run-status";
 
-export function ConditionalTimer(
-  conditionalTimerModel: ConditionalTimerModel = model
-): ContainerElement {
+export function ConditionalTimer(): ContainerElement {
+  const { conditionalTimerModel } = getContext(conditionalTimerContext);
+
   const {
     isRunning,
     elapsedSeconds,

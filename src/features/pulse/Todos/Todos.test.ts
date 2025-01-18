@@ -1,11 +1,12 @@
-import { StringInput, TextElement } from "@cognite/pulse";
+import { HeadingElement, setContext, StringInput } from "@cognite/pulse";
 import { TITLE_HEADING_ID, TODO_INPUT_ID, Todos } from "./Todos";
 import { TodosModel } from "./model";
+import { todosContext } from "./Todos.context";
 
 describe("Todos Component", () => {
   it("Renders correctly", () => {
     // arrange
-    const todosModelMock: TodosModel = {
+    const todosModelMock: Partial<TodosModel> = {
       addTodo: vi.fn(),
       initializeTodos: vi.fn(),
       isInitialized: () => true,
@@ -14,17 +15,21 @@ describe("Todos Component", () => {
       todosCount: () => 0,
     };
 
-    const container = Todos(todosModelMock);
+    setContext(todosContext, {
+      todosModel: todosModelMock
+    });
+
+    const container = Todos();
 
     // assert
     expect(
-      container.getElementById(TextElement, TITLE_HEADING_ID).label()
+      container.getElementById(HeadingElement, TITLE_HEADING_ID).label()
     ).toEqual("Todos");
   });
 
   it("Calls the correct handler when adding a todo", async () => {
     // arrange
-    const todosModelMock: TodosModel = {
+    const todosModelMock: Partial<TodosModel> = {
       addTodo: vi.fn(),
       initializeTodos: vi.fn(),
       isInitialized: () => true,
@@ -33,12 +38,14 @@ describe("Todos Component", () => {
       todosCount: () => 0,
     };
 
-    const container = Todos(todosModelMock);
+    setContext(todosContext, {
+      todosModel: todosModelMock
+    });
+
+    const container = Todos();
 
     // act
-    container
-      .getElementById(StringInput, TODO_INPUT_ID)
-      .value("Paint house");
+    container.getElementById(StringInput, TODO_INPUT_ID).value("Paint house");
     container.getElementById(StringInput, TODO_INPUT_ID).onApply();
 
     // assert

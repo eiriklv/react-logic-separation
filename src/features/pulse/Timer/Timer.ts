@@ -1,12 +1,13 @@
 import {
   ContainerElement,
   button,
+  getContext,
   heading,
   horizontalFlex,
   text,
   verticalFlex,
 } from "@cognite/pulse";
-import { model, TimerModel } from "./model";
+import { timerContext } from "./Timer.context";
 
 export const TITLE_HEADING_ID = "title-heading";
 export const START_BUTTON_ID = "start-button";
@@ -14,7 +15,8 @@ export const STOP_BUTTON_ID = "stop-button";
 export const TIME_DISPLAY_ID = "time-display";
 export const RUN_STATUS_ID = "run-status";
 
-export function Timer(timerModel: TimerModel = model): ContainerElement {
+export function Timer(): ContainerElement {
+  const { timerModel } = getContext(timerContext);
   const { isRunning, elapsedSeconds, startTimer, stopTimer } = timerModel;
 
   return verticalFlex()

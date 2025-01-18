@@ -7,16 +7,19 @@ import {
   stringInput,
   dynamic,
   ContainerElement,
+  getContext,
 } from "@cognite/pulse";
 import { TodoItem } from "./components/TodoItem";
-import { model, TodosModel } from "./model";
+import { todosContext } from "./Todos.context";
 
 export const TITLE_HEADING_ID = "title-heading";
 export const SAVING_STATUS_ID = "saving-status";
 export const TODO_INPUT_ID = "todo-input";
 export const TODOS_COUNT_ID = "todos-count";
 
-export function Todos(todosModel: TodosModel = model): ContainerElement {
+export function Todos(): ContainerElement {
+  const { todosModel } = getContext(todosContext);
+
   const {
     addTodo,
     initializeTodos,

@@ -1,4 +1,10 @@
-import { BaseInput, ButtonElement, HeadingElement, signal, TextElement } from "@cognite/pulse";
+import {
+  BaseInput,
+  ButtonElement,
+  HeadingElement,
+  setContext,
+  TextElement,
+} from "@cognite/pulse";
 import {
   ConditionalTimer,
   COOL_CHECKBOX_ID,
@@ -9,11 +15,12 @@ import {
   TITLE_HEADING_ID,
 } from "./ConditionalTimer";
 import { ConditionalTimerModel } from "./model";
+import { conditionalTimerContext } from "./ConditionalTimer.context";
 
 describe("ConditionalTimer Component", () => {
   it("Renders correctly", () => {
     // arrange
-    const timerModelMock: ConditionalTimerModel = {
+    const conditionalTimerModelMock: Partial<ConditionalTimerModel> = {
       elapsedSeconds: () => 10,
       isOkay: () => false,
       isSafe: () => false,
@@ -25,7 +32,11 @@ describe("ConditionalTimer Component", () => {
       resetTimer: vi.fn(),
     };
 
-    const container = ConditionalTimer(timerModelMock);
+    setContext(conditionalTimerContext, {
+      conditionalTimerModel: conditionalTimerModelMock,
+    });
+
+    const container = ConditionalTimer();
 
     // assert
     expect(
@@ -40,7 +51,8 @@ describe("ConditionalTimer Component", () => {
 
   it("Calls the correct handlers for toggling all the condition of the timer", async () => {
     // arrange
-    const timerModelMock: ConditionalTimerModel = {
+
+    const conditionalTimerModelMock: Partial<ConditionalTimerModel> = {
       elapsedSeconds: () => 10,
       isOkay: () => false,
       isSafe: () => false,
@@ -52,36 +64,34 @@ describe("ConditionalTimer Component", () => {
       resetTimer: vi.fn(),
     };
 
-    const container = ConditionalTimer(timerModelMock);
+    setContext(conditionalTimerContext, {
+      conditionalTimerModel: conditionalTimerModelMock,
+    });
+
+    const container = ConditionalTimer();
 
     // act
-    container
-      .getElementById(BaseInput, OKAY_CHECKBOX_ID)
-      .onValueChange(true);
+    container.getElementById(BaseInput, OKAY_CHECKBOX_ID).onValueChange(true);
 
     // assert
-    expect(timerModelMock.toggleOkay).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.toggleOkay).toHaveBeenCalledTimes(1);
 
     // act
-    container
-      .getElementById(BaseInput, SAFE_CHECKBOX_ID)
-      .onValueChange(true);
+    container.getElementById(BaseInput, SAFE_CHECKBOX_ID).onValueChange(true);
 
     // assert
-    expect(timerModelMock.toggleSafe).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.toggleSafe).toHaveBeenCalledTimes(1);
 
     // act
-    container
-      .getElementById(BaseInput, COOL_CHECKBOX_ID)
-      .onValueChange(true);
+    container.getElementById(BaseInput, COOL_CHECKBOX_ID).onValueChange(true);
 
     // assert
-    expect(timerModelMock.toggleCool).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.toggleCool).toHaveBeenCalledTimes(1);
 
     // act
     container.getElementById(ButtonElement, RESET_BUTTON_ID).onApply();
 
     // assert
-    expect(timerModelMock.resetTimer).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.resetTimer).toHaveBeenCalledTimes(1);
   });
 });
