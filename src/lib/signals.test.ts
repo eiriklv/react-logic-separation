@@ -1,15 +1,134 @@
-import { signal } from "@preact/signals-core";
-import { debounced, previous, relay } from "./signals";
+import { computed, effect, signal } from "@preact/signals-core";
+import {
+  arrayEffect,
+  debounced,
+  mapSignalArray,
+  previous,
+  relay,
+} from "./signals";
+
+describe("mapSignalArray", () => {
+  it("should work", () => {
+    const ids = signal(["a", "b", "c"]);
+    const effectInitialized = vi.fn();
+    const effectDisposed = vi.fn();
+
+    const disposalFns = mapSignalArray(ids, (id) => {
+      return effect(() => {
+        effectInitialized(id);
+
+        return () => {
+          effectDisposed(id);
+        };
+      });
+    });
+
+    expect(effectDisposed).toBeCalledTimes(0);
+    expect(effectInitialized).toBeCalledTimes(3);
+    expect(effectInitialized).toBeCalledWith("a");
+    expect(effectInitialized).toBeCalledWith("b");
+    expect(effectInitialized).toBeCalledWith("c");
+
+    ids.value = ["a", "b", "d"];
+
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectDisposed).toBeCalledWith("c");
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectInitialized).toBeCalledWith("d");
+
+    ids.value = ["a", "b", "d"];
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = ["a", "b", "d"];
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = ["a", "b", "d", "e"];
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectInitialized).toBeCalledWith("e");
+
+    disposalFns.value.forEach((dispose) => dispose());
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledWith("a");
+    expect(effectDisposed).toBeCalledWith("b");
+    expect(effectDisposed).toBeCalledWith("d");
+    expect(effectDisposed).toBeCalledWith("e");
+  });
+});
+
+describe("arrayEffect", () => {
+  it("should work", () => {
+    const ids = signal(["a", "b", "c"]);
+
+    const upperCasedIds = computed(() => {
+      const idsValue = ids.value;
+      return idsValue.map((id) => id.toUpperCase());
+    });
+
+    expect(upperCasedIds.value).toEqual(["A", "B", "C"]);
+  });
+
+  it("should also work", () => {
+    const ids = signal(["a", "b", "c"]);
+    const effectInitialized = vi.fn();
+    const effectDisposed = vi.fn();
+
+    const disposeArrayEffect = arrayEffect(ids, (id) => {
+      effectInitialized(id);
+
+      return () => {
+        effectDisposed(id);
+      };
+    });
+
+    expect(effectDisposed).toBeCalledTimes(0);
+    expect(effectInitialized).toBeCalledTimes(3);
+    expect(effectInitialized).toBeCalledWith("a");
+    expect(effectInitialized).toBeCalledWith("b");
+    expect(effectInitialized).toBeCalledWith("c");
+
+    ids.value = ["a", "b", "d"];
+
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectDisposed).toBeCalledWith("c");
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectInitialized).toBeCalledWith("d");
+
+    ids.value = ["a", "b", "d"];
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = ["a", "b", "d"];
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = ["a", "b", "d", "e"];
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectInitialized).toBeCalledWith("e");
+
+    disposeArrayEffect();
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledWith("a");
+    expect(effectDisposed).toBeCalledWith("b");
+    expect(effectDisposed).toBeCalledWith("d");
+    expect(effectDisposed).toBeCalledWith("e");
+  });
+});
 
 describe("relay", () => {
   beforeEach(() => {
     vi.useFakeTimers();
-  })
+  });
 
   it("should initialize correctly", () => {
     // arrange
     const timeoutInMs = 1000;
-    
+
     const myRelaySignal = relay(0, (set) => {
       setTimeout(() => {
         set(10);
@@ -29,7 +148,7 @@ describe("relay", () => {
   it("should continue to update correctly", () => {
     // arrange
     const intervalInMs = 1000;
-    
+
     const myRelaySignal = relay(0, (set, get) => {
       setInterval(() => {
         set(get() + 1);
@@ -62,18 +181,18 @@ describe("relay", () => {
     // arrange
     const intervalInMs = 1000;
     const mySignal = signal(0);
-    
+
     const myRelaySignal = relay(0, (set, get) => {
       const signalValue = mySignal.value;
       set(signalValue);
-      
+
       const relayInterval = setInterval(() => {
         set(get() + 1);
       }, intervalInMs);
 
       return () => {
         clearInterval(relayInterval);
-      }
+      };
     });
 
     // assert
@@ -138,92 +257,92 @@ describe("previous", () => {
 });
 
 describe("debounced", () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-    });
-
-    it("should update value only at debounce time", () => {
-      // arrange
-      const debounceTime = 1000;
-      const mySignal = signal(1);
-      const myDebouncedSignal = debounced(mySignal, debounceTime);
-  
-      // assert
-      expect(mySignal.value).toEqual(1);
-      expect(myDebouncedSignal.value).toEqual(1);
-  
-      // act
-      mySignal.value = 2;
-  
-      // assert
-      expect(mySignal.value).toEqual(2);
-      expect(myDebouncedSignal.value).toEqual(1);
-  
-      // act
-      vi.advanceTimersByTime(debounceTime);
-  
-      // assert
-      expect(mySignal.value).toEqual(2);
-      expect(myDebouncedSignal.value).toEqual(2);
-    });
-
-    it("should debounce on consecutive changes within debounce time", () => {
-      // arrange
-      const debounceTime = 1000;
-      const mySignal = signal(1);
-      const myDebouncedSignal = debounced(mySignal, debounceTime);
-  
-      // assert
-      expect(mySignal.value).toEqual(1);
-      expect(myDebouncedSignal.value).toEqual(1);
-  
-      // act
-      mySignal.value = 2;
-  
-      // assert
-      expect(mySignal.value).toEqual(2);
-      expect(myDebouncedSignal.value).toEqual(1);
-  
-      // act
-      vi.advanceTimersByTime(debounceTime - 1);
-  
-      // assert
-      expect(mySignal.value).toEqual(2);
-      expect(myDebouncedSignal.value).toEqual(1);
-
-      // act
-      mySignal.value = 3;
-
-      // assert
-      expect(mySignal.value).toEqual(3);
-      expect(myDebouncedSignal.value).toEqual(1);
-
-      // act
-      vi.advanceTimersByTime(debounceTime - 1);
-  
-      // assert
-      expect(mySignal.value).toEqual(3);
-      expect(myDebouncedSignal.value).toEqual(1);
-
-      // act
-      mySignal.value = 4;
-
-      // assert
-      expect(mySignal.value).toEqual(4);
-      expect(myDebouncedSignal.value).toEqual(1);
-
-      // act
-      vi.advanceTimersByTime(debounceTime - 1);
-  
-      // assert
-      expect(mySignal.value).toEqual(4);
-      expect(myDebouncedSignal.value).toEqual(1);
-
-      // act
-      vi.advanceTimersByTime(debounceTime);
-
-      // assert
-      expect(mySignal.value).toEqual(4);
-      expect(myDebouncedSignal.value).toEqual(4);
-    });
+  beforeEach(() => {
+    vi.useFakeTimers();
   });
+
+  it("should update value only at debounce time", () => {
+    // arrange
+    const debounceTime = 1000;
+    const mySignal = signal(1);
+    const myDebouncedSignal = debounced(mySignal, debounceTime);
+
+    // assert
+    expect(mySignal.value).toEqual(1);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    mySignal.value = 2;
+
+    // assert
+    expect(mySignal.value).toEqual(2);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    vi.advanceTimersByTime(debounceTime);
+
+    // assert
+    expect(mySignal.value).toEqual(2);
+    expect(myDebouncedSignal.value).toEqual(2);
+  });
+
+  it("should debounce on consecutive changes within debounce time", () => {
+    // arrange
+    const debounceTime = 1000;
+    const mySignal = signal(1);
+    const myDebouncedSignal = debounced(mySignal, debounceTime);
+
+    // assert
+    expect(mySignal.value).toEqual(1);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    mySignal.value = 2;
+
+    // assert
+    expect(mySignal.value).toEqual(2);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    vi.advanceTimersByTime(debounceTime - 1);
+
+    // assert
+    expect(mySignal.value).toEqual(2);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    mySignal.value = 3;
+
+    // assert
+    expect(mySignal.value).toEqual(3);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    vi.advanceTimersByTime(debounceTime - 1);
+
+    // assert
+    expect(mySignal.value).toEqual(3);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    mySignal.value = 4;
+
+    // assert
+    expect(mySignal.value).toEqual(4);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    vi.advanceTimersByTime(debounceTime - 1);
+
+    // assert
+    expect(mySignal.value).toEqual(4);
+    expect(myDebouncedSignal.value).toEqual(1);
+
+    // act
+    vi.advanceTimersByTime(debounceTime);
+
+    // assert
+    expect(mySignal.value).toEqual(4);
+    expect(myDebouncedSignal.value).toEqual(4);
+  });
+});
