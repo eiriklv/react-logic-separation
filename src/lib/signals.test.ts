@@ -57,6 +57,34 @@ describe("mapSignalArray", () => {
     expect(effectDisposed).toBeCalledWith("d");
     expect(effectDisposed).toBeCalledWith("e");
   });
+
+  it("should only call map function once per new element", () => {
+    const ids = signal(["a", "b", "c"]);
+
+    const mapUserId = vi.fn((id) => {
+      return `user-${id}`;
+    });
+
+    const mappedUserIds = mapSignalArray(ids, mapUserId);
+
+    expect(mapUserId).toBeCalledTimes(3);
+    expect(mappedUserIds.value).toEqual(["user-a", "user-b", "user-c"]);
+
+    ids.value = ["a", "b", "d"];
+
+    expect(mapUserId).toBeCalledTimes(4);
+    expect(mappedUserIds.value).toEqual(["user-a", "user-b", "user-d"]);
+
+    ids.value = ["a", "b", "d", "e"];
+
+    expect(mapUserId).toBeCalledTimes(5);
+    expect(mappedUserIds.value).toEqual([
+      "user-a",
+      "user-b",
+      "user-d",
+      "user-e",
+    ]);
+  });
 });
 
 describe("arrayEffect", () => {
