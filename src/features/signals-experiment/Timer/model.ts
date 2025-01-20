@@ -1,4 +1,4 @@
-import { computed, signal } from "@preact/signals-core";
+import { ReadonlySignal, signal } from "@preact/signals-core";
 import { relay } from "../../../lib/signals";
 
 // Model
@@ -35,11 +35,11 @@ export class TimerModel {
   };
 
   // Read-only state (public for consumption)
-  public get isRunning() {
-    return computed(() => this._isRunning.value);
+  public get isRunning(): ReadonlySignal<boolean> {
+    return this._isRunning;
   }
-  public get elapsedSeconds() {
-    return computed(() => this._elapsedSeconds.value);
+  public get elapsedSeconds(): ReadonlySignal<number> {
+    return this._elapsedSeconds;
   }
 
   // Commands (public for consumption)

@@ -1,4 +1,4 @@
-import { signal, computed, effect, arraySignal } from "@cognite/pulse";
+import { signal, computed, effect, arraySignal, ReadonlySignal } from "@cognite/pulse";
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "../../../lib/utils";
@@ -78,14 +78,14 @@ export class TodosModel {
   public get todos() {
     return this._todos;
   }
-  public get isSaving() {
-    return computed(() => this._isSaving());
+  public get isSaving(): ReadonlySignal<boolean> {
+    return this._isSaving;
   }
-  public get isInitialized() {
-    return computed(() => this._isInitialized());
+  public get isInitialized(): ReadonlySignal<boolean> {
+    return this._isInitialized;
   }
-  public get todosCount() {
-    return computed(() => this._todosCount());
+  public get todosCount(): ReadonlySignal<number> {
+    return this._todosCount;
   }
 
   // Commands

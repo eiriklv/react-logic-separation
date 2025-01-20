@@ -1,4 +1,4 @@
-import { signal, computed, batch } from "@preact/signals-core";
+import { signal, computed, batch, ReadonlySignal } from "@preact/signals-core";
 
 import * as todosService from "./services/todos.service";
 import { relay } from "../../../lib/signals";
@@ -74,17 +74,17 @@ export class TodosModel {
   };
 
   // Read-only signals (public for consumption)
-  public get todos() {
-    return computed(() => this._todos.value);
+  public get todos(): ReadonlySignal<Todo[]> {
+    return this._todos;
   }
-  public get todosCount() {
-    return computed(() => this._todosCount.value);
+  public get isInitialized(): ReadonlySignal<boolean> {
+    return this._isInitialized;
   }
-  public get isInitialized() {
-    return computed(() => this._isInitialized.value);
+  public get isSaving(): ReadonlySignal<boolean> {
+    return this._isSaving;
   }
-  public get isSaving() {
-    return computed(() => this._isSaving.value);
+  public get todosCount(): ReadonlySignal<number> {
+    return this._todosCount;
   }
 
   // Commands (public for consumption)
