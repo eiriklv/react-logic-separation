@@ -1,4 +1,4 @@
-import { signal, computed, effect, batch } from "@preact/signals-core";
+import { signal, computed, effect, batch, ReadonlySignal } from "@preact/signals-core";
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "../../../lib/utils";
@@ -77,17 +77,17 @@ export class TodosModel {
   });
 
   // Readonly signals
-  public get todos() {
-    return computed(() => this._todos.value);
+  public get todos(): ReadonlySignal<Todo[]> {
+    return this._todos;
   }
-  public get isSaving() {
-    return computed(() => this._isSaving.value);
+  public get isSaving(): ReadonlySignal<boolean> {
+    return this._isSaving;
   }
-  public get isInitialized() {
-    return computed(() => this._isInitialized.value);
+  public get isInitialized(): ReadonlySignal<boolean> {
+    return this._isInitialized;
   }
-  public get todosCount() {
-    return computed(() => this._todosCount.value);
+  public get todosCount(): ReadonlySignal<number> {
+    return this._todosCount;
   }
 
   // Commands

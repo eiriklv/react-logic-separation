@@ -1,4 +1,4 @@
-import { computed, effect, signal } from "@preact/signals-core";
+import { effect, ReadonlySignal, signal } from "@preact/signals-core";
 
 // Model
 export class TimerModel {
@@ -36,11 +36,11 @@ export class TimerModel {
   });
 
   // Readonly signals
-  public get elapsedSeconds() {
-    return computed(() => this._elapsedSeconds.value);
+  public get elapsedSeconds(): ReadonlySignal<number> {
+    return this._elapsedSeconds;
   }
-  public get isRunning() {
-    return computed(() => this._isRunning.value);
+  public get isRunning(): ReadonlySignal<boolean> {
+    return this._isRunning;
   }
 
   // Commands

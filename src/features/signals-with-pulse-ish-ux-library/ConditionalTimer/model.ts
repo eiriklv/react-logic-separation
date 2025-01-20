@@ -1,4 +1,4 @@
-import { computed, effect, signal } from "@preact/signals-core";
+import { computed, effect, ReadonlySignal, signal } from "@preact/signals-core";
 
 // Model
 export class ConditionalTimerModel {
@@ -48,20 +48,20 @@ export class ConditionalTimerModel {
   };
 
   // Readonly signals
-  public get isOkay() {
-    return computed(() => this._isOkay.value);
+  public get isOkay(): ReadonlySignal<boolean> {
+    return this._isOkay;
   }
-  public get isSafe() {
-    return computed(() => this._isSafe.value);
+  public get isSafe(): ReadonlySignal<boolean> {
+    return this._isSafe;
   }
-  public get isCool() {
-    return computed(() => this._isCool.value);
+  public get isCool(): ReadonlySignal<boolean> {
+    return this._isCool;
   }
-  public get elapsedSeconds() {
-    return computed(() => this._elapsedSeconds.value);
+  public get elapsedSeconds(): ReadonlySignal<number> {
+    return this._elapsedSeconds;
   }
   public get isRunning() {
-    return computed(() => this._isRunning.value);
+    return this._isRunning;
   }
 
   // Commands
