@@ -85,6 +85,7 @@ describe("Todos Component", () => {
 
     // act
     container.getElementById(StringInput, TODO_INPUT_ID).value("Paint house");
+    container.getElementById(StringInput, TODO_INPUT_ID).onValueChange("Paint house");
     container.getElementById(StringInput, TODO_INPUT_ID).onApply();
 
     // assert
