@@ -3,7 +3,8 @@ import * as arrayDiff from "fast-array-diff";
 
 export function mapSignalArray<T, U>(
   currentInput: Signal<T[]>,
-  setupFn: (item: T) => U
+  setupFn: (item: T) => U,
+  compareFn?: (a: T, b: T) => boolean,
 ): Signal<U[]> {
   // Make a noop
   const noop: () => U = (() => {}) as () => U;
@@ -21,7 +22,7 @@ export function mapSignalArray<T, U>(
     const previousInputValue = previousInput.peek();
 
     // get a diff patch of the changes
-    const diffPatch = arrayDiff.getPatch(previousInputValue, currentInputValue);
+    const diffPatch = arrayDiff.getPatch(previousInputValue, currentInputValue, compareFn);
 
     // figure our which of the effect to dispose
     diffPatch

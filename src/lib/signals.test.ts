@@ -7,8 +7,10 @@ import {
   relay,
 } from "./signals";
 
+import { isEqual } from "lodash";
+
 describe("mapSignalArray", () => {
-  it("should work", () => {
+  it("should work for primitives", () => {
     const ids = signal(["a", "b", "c"]);
     const effectInitialized = vi.fn();
     const effectDisposed = vi.fn();
@@ -84,6 +86,110 @@ describe("mapSignalArray", () => {
       "user-d",
       "user-e",
     ]);
+  });
+
+  it("should work for objects when using (default) referential equality for comparison", () => {
+    const ids = signal([{ id: "a" }, { id: "b" }, { id: "c" }]);
+    const effectInitialized = vi.fn();
+    const effectDisposed = vi.fn();
+
+    const disposalFns = mapSignalArray(ids, ({ id }) => {
+      return effect(() => {
+        effectInitialized(id);
+
+        return () => {
+          effectDisposed(id);
+        };
+      });
+    });
+
+    expect(effectDisposed).toBeCalledTimes(0);
+    expect(effectInitialized).toBeCalledTimes(3);
+    expect(effectInitialized).toBeCalledWith("a");
+    expect(effectInitialized).toBeCalledWith("b");
+    expect(effectInitialized).toBeCalledWith("c");
+
+    ids.value = [ids.value[0], ids.value[1], { id: "d" }];
+
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectDisposed).toBeCalledWith("c");
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectInitialized).toBeCalledWith("d");
+
+    ids.value = ids.value.slice();
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = ids.value.slice();
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = [...ids.value.slice(), { id: "e" }];
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectInitialized).toBeCalledWith("e");
+
+    disposalFns.value.forEach((dispose) => dispose());
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledWith("a");
+    expect(effectDisposed).toBeCalledWith("b");
+    expect(effectDisposed).toBeCalledWith("d");
+    expect(effectDisposed).toBeCalledWith("e");
+  });
+
+  it("should work for objects when using custom (deep-equal) comparison", () => {
+    const ids = signal([{ id: "a" }, { id: "b" }, { id: "c" }]);
+    const effectInitialized = vi.fn();
+    const effectDisposed = vi.fn();
+
+    const disposalFns = mapSignalArray(
+      ids,
+      ({ id }) => {
+        return effect(() => {
+          effectInitialized(id);
+
+          return () => {
+            effectDisposed(id);
+          };
+        });
+      },
+      isEqual
+    );
+
+    expect(effectDisposed).toBeCalledTimes(0);
+    expect(effectInitialized).toBeCalledTimes(3);
+    expect(effectInitialized).toBeCalledWith("a");
+    expect(effectInitialized).toBeCalledWith("b");
+    expect(effectInitialized).toBeCalledWith("c");
+
+    ids.value = [{ id: "a" }, { id: "b" }, { id: "d" }];
+
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectDisposed).toBeCalledWith("c");
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectInitialized).toBeCalledWith("d");
+
+    ids.value = [{ id: "a" }, { id: "b" }, { id: "d" }];
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = [{ id: "a" }, { id: "b" }, { id: "d" }];
+    expect(effectInitialized).toBeCalledTimes(4);
+    expect(effectDisposed).toBeCalledTimes(1);
+
+    ids.value = [{ id: "a" }, { id: "b" }, { id: "d" }, { id: "e" }];
+    expect(effectDisposed).toBeCalledTimes(1);
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectInitialized).toBeCalledWith("e");
+
+    disposalFns.value.forEach((dispose) => dispose());
+    expect(effectInitialized).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledTimes(5);
+    expect(effectDisposed).toBeCalledWith("a");
+    expect(effectDisposed).toBeCalledWith("b");
+    expect(effectDisposed).toBeCalledWith("d");
+    expect(effectDisposed).toBeCalledWith("e");
   });
 });
 
