@@ -20,9 +20,9 @@ import { generateId } from "../../../lib/utils";
  */
 
 export interface TodosModelContextInterface {
-  todosService: typeof todosService,
-  generateId: typeof generateId,
-  waitTimeBeforeSave: number,
+  todosService: typeof todosService;
+  generateId: typeof generateId;
+  waitTimeBeforeSave: number;
 }
 
 export const defaultValue: TodosModelContextInterface = {

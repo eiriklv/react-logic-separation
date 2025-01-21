@@ -1,47 +1,60 @@
-import { effect, signal } from "@preact/signals-core";
+import { effect, ReadonlySignal, signal } from "@preact/signals-core";
 
 // Model
 export class TimerModel {
   // State
-  elapsedSeconds = signal<number>(0);
-  isRunning = signal<boolean>(false);
+  private _elapsedSeconds = signal<number>(0);
+  private _isRunning = signal<boolean>(false);
 
   // Events
-  startedTimer = () => {
-    this.isRunning.value = true;
+  private _startedTimer = () => {
+    this._isRunning.value = true;
   };
-  stoppedTimer = () => {
-    this.isRunning.value = false;
+  private _stoppedTimer = () => {
+    this._isRunning.value = false;
   };
-  incrementedElapsedSeconds = () => {
-    this.elapsedSeconds.value = this.elapsedSeconds.value + 1;
-  };
-
-  // Commands
-  startTimer = async () => {
-    this.startedTimer();
-  };
-  stopTimer = async () => {
-    this.stoppedTimer();
+  private _incrementedElapsedSeconds = () => {
+    this._elapsedSeconds.value = this._elapsedSeconds.value + 1;
   };
 
   // Effects
-  incrementTimerWhileRunning = effect(() => {
+  private _disposeIncrementTimerWhileRunning = effect(() => {
     // Get dependencies that triggered the effect
-    const isRunning = this.isRunning.value;
+    const isRunning = this._isRunning.value;
 
     if (!isRunning) {
       return;
     }
 
     const interval = setInterval(() => {
-      this.incrementedElapsedSeconds();
+      this._incrementedElapsedSeconds();
     }, 1000);
 
     return () => {
       clearInterval(interval);
     };
   });
+
+  // Readonly signals
+  public get elapsedSeconds(): ReadonlySignal<number> {
+    return this._elapsedSeconds;
+  }
+  public get isRunning(): ReadonlySignal<boolean> {
+    return this._isRunning;
+  }
+
+  // Commands
+  public startTimer = async () => {
+    this._startedTimer();
+  };
+  public stopTimer = async () => {
+    this._stoppedTimer();
+  };
+
+  // Disposal
+  public dispose() {
+    this._disposeIncrementTimerWhileRunning();
+  }
 }
 
 // Model singleton

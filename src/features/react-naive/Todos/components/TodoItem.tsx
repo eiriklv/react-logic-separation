@@ -1,9 +1,9 @@
-import { Todo } from "../types"
+import { Todo } from "../types";
 
 type Props = {
-  todo: Todo
-}
+  todo: Todo;
+};
 
 export function TodoItem({ todo }: Props) {
-  return <li>{todo.text}</li>
+  return <li>{todo.text}</li>;
 }

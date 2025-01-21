@@ -10,7 +10,7 @@ export class ConditionalTimerModel {
 
   // Computed
   isRunning = computed(
-    () => this.isOkay.value && this.isSafe.value && this.isCool.value
+    () => this.isOkay.value && this.isSafe.value && this.isCool.value,
   );
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)

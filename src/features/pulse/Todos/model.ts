@@ -1,4 +1,10 @@
-import { signal, computed, effect, arraySignal, ReadonlySignal } from "@cognite/pulse";
+import {
+  signal,
+  computed,
+  effect,
+  arraySignal,
+  ReadonlySignal,
+} from "@cognite/pulse";
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "../../../lib/utils";

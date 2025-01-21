@@ -111,7 +111,7 @@ describe("Todos auto-save (effect)", () => {
 
     // act
     await store.getActions().initializeTodos();
-    
+
     await store.getActions().addTodo("Write docs");
     await store.getActions().addTodo("Write tests");
     await store.getActions().addTodo("Paint house");

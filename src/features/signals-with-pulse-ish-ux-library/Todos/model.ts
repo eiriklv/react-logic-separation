@@ -1,4 +1,10 @@
-import { signal, computed, effect, batch, ReadonlySignal } from "@preact/signals-core";
+import {
+  signal,
+  computed,
+  effect,
+  batch,
+  ReadonlySignal,
+} from "@preact/signals-core";
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "../../../lib/utils";

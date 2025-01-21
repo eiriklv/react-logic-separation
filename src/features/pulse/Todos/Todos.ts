@@ -61,7 +61,7 @@ export function Todos(): ContainerElement {
       .addChildren(
         text("pulse"),
         heading(() => `Todos${isSaving() ? " (saving...)" : ""}`, 3).id(
-          TITLE_HEADING_ID
+          TITLE_HEADING_ID,
         ),
         heading(() => `Things to do: ${todosCount()}`, 4).id(TODOS_COUNT_ID),
         stringInput()
@@ -70,8 +70,8 @@ export function Todos(): ContainerElement {
           .value(() => todoInputText())
           .setOnValueChange(handleTodoInputTextChange)
           .setOnApply(handleTodoInputEnter),
-        todoListElement
+        todoListElement,
       )
-      .isVisible(() => isInitialized())
+      .isVisible(() => isInitialized()),
   );
 }

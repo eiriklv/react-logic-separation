@@ -58,7 +58,7 @@ export const TenRunningTimer: Story = {
         isRunning: true,
         startTimer: async () => {},
         stopTimer: async () => {},
-      })
+      }),
     } satisfies TimerContextInterface,
   },
 };

@@ -10,7 +10,7 @@ export function ConditionalTimer() {
   // Computed
   const isRunning = useMemo(
     () => isOkay && isSafe && isCool,
-    [isCool, isOkay, isSafe]
+    [isCool, isOkay, isSafe],
   );
 
   // Events

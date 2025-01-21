@@ -39,7 +39,7 @@ export function ConditionalTimer(): ContainerElement {
 
   // Computed
   const isRunning = computed(
-    () => isOkayInput.value() && isSafeInput.value() && isCoolInput.value()
+    () => isOkayInput.value() && isSafeInput.value() && isCoolInput.value(),
   );
 
   // Events
@@ -79,7 +79,7 @@ export function ConditionalTimer(): ContainerElement {
       text("pulse-naive-uncontrolled"),
       heading("Conditional Timer", 3).id(TITLE_HEADING_ID),
       heading(() => `Status: ${isRunning() ? "running" : "stopped"}`, 4).id(
-        RUN_STATUS_ID
+        RUN_STATUS_ID,
       ),
       text(() => `${elapsedSeconds()}`).id(TIME_DISPLAY_ID),
       verticalFlex()
@@ -90,7 +90,7 @@ export function ConditionalTimer(): ContainerElement {
             .label("Reset")
             .type("primary")
             .setOnApply(resetTimer),
-          horizontalFlex().addChildren(isOkayInput, isSafeInput, isCoolInput)
-        )
+          horizontalFlex().addChildren(isOkayInput, isSafeInput, isCoolInput),
+        ),
     );
 }

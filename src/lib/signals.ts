@@ -22,7 +22,11 @@ export function mapSignalArray<T, U>(
     const previousInputValue = previousInput.peek();
 
     // get a diff patch of the changes
-    const diffPatch = arrayDiff.getPatch(previousInputValue, currentInputValue, compareFn);
+    const diffPatch = arrayDiff.getPatch(
+      previousInputValue,
+      currentInputValue,
+      compareFn,
+    );
 
     // figure our which of the effect to dispose
     diffPatch
@@ -50,7 +54,7 @@ export function mapSignalArray<T, U>(
 
 export function arrayEffect<T>(
   currentInput: Signal<T[]>,
-  effectFn: (item: T) => (() => void) | void
+  effectFn: (item: T) => (() => void) | void,
 ) {
   // keep reference to previous value of array for diffing
   const previousInput = previous(currentInput, []);
@@ -98,7 +102,7 @@ export function arrayEffect<T>(
 // NOTE: Inspired by https://www.pzuraq.com/blog/on-signal-relays
 export function relay<T>(
   initialState: T,
-  setup: (set: (newValue: T) => void, get: () => T) => (() => void) | void
+  setup: (set: (newValue: T) => void, get: () => T) => (() => void) | void,
 ): Signal<T> {
   const stateSignal = signal(initialState);
   const get = () => stateSignal.peek();
@@ -127,7 +131,7 @@ export function debounced<T>(inputSignal: Signal<T>, debounceTimeInMs: number) {
 
 export function previous<T>(
   inputSignal: Signal<T>,
-  initialValue: T = inputSignal.value
+  initialValue: T = inputSignal.value,
 ) {
   const previousSignal = relay(initialValue, (set) => {
     const currentValue = inputSignal.value;

@@ -10,7 +10,7 @@ export class ConditionalTimerModel {
 
   // Computed
   private _isRunning = computed(
-    () => this._isOkay.value && this._isSafe.value && this._isCool.value
+    () => this._isOkay.value && this._isSafe.value && this._isCool.value,
   );
 
   // Effects

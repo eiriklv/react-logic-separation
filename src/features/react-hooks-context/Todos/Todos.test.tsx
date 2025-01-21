@@ -21,7 +21,7 @@ describe("Todos Component", () => {
     render(
       <TodosContext.Provider value={dependencies}>
         <Todos />
-      </TodosContext.Provider>
+      </TodosContext.Provider>,
     );
 
     // assert
@@ -47,7 +47,7 @@ describe("Todos Component", () => {
     render(
       <TodosContext.Provider value={dependencies}>
         <Todos />
-      </TodosContext.Provider>
+      </TodosContext.Provider>,
     );
 
     // act

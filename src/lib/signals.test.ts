@@ -154,7 +154,7 @@ describe("mapSignalArray", () => {
           };
         });
       },
-      isEqual
+      isEqual,
     );
 
     expect(effectDisposed).toBeCalledTimes(0);

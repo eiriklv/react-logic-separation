@@ -4,18 +4,19 @@ import {
   heading,
   signal,
   text,
-  verticalFlex,
   container,
   BaseElement,
   arraySignal,
   stringInput,
-  dynamic,
+  list,
+  toCollection,
 } from "@cognite/pulse";
 import * as todosService from "./services/todos.service";
 import { Todo } from "./types";
 import { generateId } from "../../../lib/utils";
 import { TodoItem } from "./components/TodoItem";
 
+export const LOADING_INDICATOR_ID = "loading-indicator";
 export const TITLE_HEADING_ID = "title-heading";
 export const SAVING_STATUS_ID = "saving-status";
 export const TODO_INPUT_ID = "todo-input";
@@ -110,30 +111,31 @@ export function Todos(): BaseElement {
     todoInputText("");
   };
 
-  return dynamic().element(() => {
-    if (!isInitialized()) {
-      return text("Loading...");
-    }
+  // Make a ui collection from the todos
+  const todoListItems = toCollection(todos, (todo) => TodoItem({ todo }));
 
-    const todoElements = todos().map((todo) => TodoItem({ todo }));
+  // Add the collection to list
+  const todoListElement = list().addChildren(todoListItems);
 
-    return verticalFlex()
-      .alignItems("center")
+  return container().addChildren(
+    container()
+      .addChild(text("Loading...").id(LOADING_INDICATOR_ID))
+      .isVisible(() => !isInitialized()),
+    container()
       .addChildren(
-        text("pulse-naive"),
-        heading(() => `Todos ${isSaving() ? "(saving...)" : ""}`, 3).id(
-          TITLE_HEADING_ID
+        text("pulse"),
+        heading(() => `Todos${isSaving() ? " (saving...)" : ""}`, 3).id(
+          TITLE_HEADING_ID,
         ),
-        heading(() => `Things to do: ${todosCount()}`, 4).id(
-          TODOS_COUNT_ID
-        ),
+        heading(() => `Things to do: ${todosCount()}`, 4).id(TODOS_COUNT_ID),
         stringInput()
           .id(TODO_INPUT_ID)
           .label("Todo")
           .value(() => todoInputText())
           .setOnValueChange(handleTodoInputTextChange)
           .setOnApply(handleTodoInputEnter),
-        container().addChildren(...todoElements)
-      );
-  });
+        todoListElement,
+      )
+      .isVisible(() => isInitialized()),
+  );
 }

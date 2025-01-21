@@ -8,13 +8,13 @@ export const useTimerModel = () => {
   // Events
   const startedTimer = () => {
     setIsRunning(true);
-  }
+  };
   const stoppedTimer = () => {
     setIsRunning(false);
-  }
+  };
   const incrementedElapsedSeconds = () => {
     setElapsedSeconds((value) => value + 1);
-  }
+  };
 
   // Commands
   const startTimer = async () => {
@@ -22,7 +22,7 @@ export const useTimerModel = () => {
   };
   const stopTimer = async () => {
     stoppedTimer();
-  }
+  };
 
   // Effects
   useEffect(() => {
@@ -44,6 +44,6 @@ export const useTimerModel = () => {
     elapsedSeconds,
     isRunning,
     startTimer,
-    stopTimer
+    stopTimer,
   };
-}
+};

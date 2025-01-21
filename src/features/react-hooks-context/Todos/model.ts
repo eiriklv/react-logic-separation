@@ -55,7 +55,7 @@ export const useTodosModel = () => {
       // Trigger event
       addedTodo(newTodo);
     },
-    [generateId]
+    [generateId],
   );
 
   // Effects

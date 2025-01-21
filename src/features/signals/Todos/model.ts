@@ -1,4 +1,10 @@
-import { signal, computed, effect, batch } from "@preact/signals-core";
+import {
+  signal,
+  computed,
+  effect,
+  batch,
+  ReadonlySignal,
+} from "@preact/signals-core";
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "../../../lib/utils";
@@ -20,42 +26,42 @@ export interface Todo {
 
 export class TodosModel {
   constructor(dependencies: Dependencies = defaultDependencies) {
-    this.injections = dependencies;
+    this._injections = dependencies;
   }
 
   // Dependencies
-  injections: Dependencies = defaultDependencies;
+  private _injections: Dependencies = defaultDependencies;
 
   // State
-  todos = signal<Todo[]>([]);
-  isSaving = signal<boolean>(false);
-  isInitialized = signal<boolean>(false);
+  private _todos = signal<Todo[]>([]);
+  private _isSaving = signal<boolean>(false);
+  private _isInitialized = signal<boolean>(false);
 
   // Computed values
-  todosCount = computed<number>(() => this.todos.value.length);
+  private _todosCount = computed<number>(() => this._todos.value.length);
 
   // Events
-  initializedTodos = (payload: Todo[]) => {
+  private _initializedTodos = (payload: Todo[]) => {
     batch(() => {
-      this.todos.value = payload;
-      this.isInitialized.value = true;
+      this._todos.value = payload;
+      this._isInitialized.value = true;
     });
   };
-  addedTodo = (payload: Todo) => {
-    this.todos.value = [...this.todos.value, payload];
+  private _addedTodo = (payload: Todo) => {
+    this._todos.value = [...this._todos.value, payload];
   };
-  toggledSaveState = (payload: boolean) => {
-    this.isSaving.value = payload;
+  private _toggledSaveState = (payload: boolean) => {
+    this._isSaving.value = payload;
   };
 
   // Effects
-  disposeAutoSaveTodosOnChange = effect(() => {
+  private _disposeAutoSaveTodosOnChange = effect(() => {
     // Get dependencies
-    const { todosService, waitTimeBeforeSave } = this.injections;
+    const { todosService, waitTimeBeforeSave } = this._injections;
 
     // Get the changed values that triggered the effect
-    const todos = this.todos.value;
-    const isInitialized = this.isInitialized.value;
+    const todos = this._todos.value;
+    const isInitialized = this._isInitialized.value;
 
     // Validation (only auto-save after the data has been initialized/loaded)
     if (!isInitialized) {
@@ -64,32 +70,46 @@ export class TodosModel {
 
     // Set a timeout/debounce for running the save effect
     const saveTimeout = setTimeout(async () => {
-      this.toggledSaveState(true);
+      this._toggledSaveState(true);
       await todosService.saveTodos(todos);
-      this.toggledSaveState(false);
+      this._toggledSaveState(false);
     }, waitTimeBeforeSave);
 
     // Return handle for cancelling debounced save
     return () => {
       clearTimeout(saveTimeout);
-      this.toggledSaveState(false);
+      this._toggledSaveState(false);
     };
   });
 
+  // Readonly signals (public for consumption)
+  public get todos(): ReadonlySignal<Todo[]> {
+    return this._todos;
+  }
+  public get isSaving(): ReadonlySignal<boolean> {
+    return this._isSaving;
+  }
+  public get isInitialized(): ReadonlySignal<boolean> {
+    return this._isInitialized;
+  }
+  public get todosCount(): ReadonlySignal<number> {
+    return this._todosCount;
+  }
+
   // Commands
-  initializeTodos = async () => {
+  public initializeTodos = async () => {
     // Get dependencies
-    const { todosService } = this.injections;
+    const { todosService } = this._injections;
 
     // Run side effect
     const todos = await todosService.fetchTodos();
 
     // Trigger event
-    this.initializedTodos(todos);
+    this._initializedTodos(todos);
   };
-  addTodo = async (payload: string) => {
+  public addTodo = async (payload: string) => {
     // Get dependencies
-    const { generateId } = this.injections;
+    const { generateId } = this._injections;
 
     // Input validation
     if (!payload) {
@@ -103,11 +123,11 @@ export class TodosModel {
     };
 
     // Trigger event
-    this.addedTodo(newTodo);
+    this._addedTodo(newTodo);
   };
 
-  dispose() {
-    this.disposeAutoSaveTodosOnChange();
+  public dispose() {
+    this._disposeAutoSaveTodosOnChange();
   }
 }
 

@@ -83,5 +83,5 @@ export const useTodosModel = () => {
     todosCount,
     addTodo,
     initializeTodos,
-  }
+  };
 };

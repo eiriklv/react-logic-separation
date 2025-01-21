@@ -8,13 +8,13 @@ export function Timer() {
   // Events
   const startedTimer = () => {
     setIsRunning(true);
-  }
+  };
   const stoppedTimer = () => {
     setIsRunning(false);
-  }
+  };
   const incrementedElapsedSeconds = () => {
     setElapsedSeconds((value) => value + 1);
-  }
+  };
 
   // Commands
   const startTimer = async () => {
@@ -22,7 +22,7 @@ export function Timer() {
   };
   const stopTimer = async () => {
     stoppedTimer();
-  }
+  };
 
   // Effects
   useEffect(() => {

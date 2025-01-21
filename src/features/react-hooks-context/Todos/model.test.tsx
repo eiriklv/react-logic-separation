@@ -128,7 +128,7 @@ describe("Todos auto-save (effect)", () => {
     await act(() => result.current.addTodo("Write docs"));
 
     await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave)
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave),
     );
 
     // assert
@@ -168,7 +168,7 @@ describe("Todos auto-save (effect)", () => {
 
     // act
     await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2)
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2),
     );
 
     // assert
@@ -176,7 +176,7 @@ describe("Todos auto-save (effect)", () => {
 
     // act
     await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2)
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2),
     );
 
     // assert
@@ -184,7 +184,7 @@ describe("Todos auto-save (effect)", () => {
 
     // act
     await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave)
+      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave),
     );
 
     // assert

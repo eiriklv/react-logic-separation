@@ -5,7 +5,7 @@ export async function sleep(timeInMs: number) {
 }
 
 export function generateId() {
-  return uuid.v4()
+  return uuid.v4();
 }
 
 export function noop() {}

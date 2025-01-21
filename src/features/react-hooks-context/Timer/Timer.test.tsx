@@ -12,13 +12,13 @@ describe("Timer Component", () => {
         isRunning: false,
         startTimer: vi.fn(),
         stopTimer: vi.fn(),
-      })
+      }),
     };
 
     render(
       <TimerContext.Provider value={dependencies}>
         <Timer />
-      </TimerContext.Provider>
+      </TimerContext.Provider>,
     );
 
     // assert
@@ -39,13 +39,13 @@ describe("Timer Component", () => {
         isRunning: false,
         startTimer,
         stopTimer,
-      })
+      }),
     };
 
     render(
       <TimerContext.Provider value={dependencies}>
         <Timer />
-      </TimerContext.Provider>
+      </TimerContext.Provider>,
     );
 
     // act

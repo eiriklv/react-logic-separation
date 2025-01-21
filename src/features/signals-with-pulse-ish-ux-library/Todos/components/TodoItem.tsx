@@ -1,9 +1,9 @@
-import { Todo } from "../model"
+import { Todo } from "../model";
 
 type Props = {
-  todo: Todo
-}
+  todo: Todo;
+};
 
 export function TodoItem({ todo }: Props) {
-  return <Text>{todo.text}</Text>
+  return <Text>{todo.text}</Text>;
 }

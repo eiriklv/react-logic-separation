@@ -8,7 +8,7 @@ import { model } from "./model";
 const useSignalValue = <T>(signal: Signal<T>) => {
   return useSyncExternalStore(
     signal.subscribe.bind(signal),
-    signal.peek.bind(signal)
+    signal.peek.bind(signal),
   );
 };
 

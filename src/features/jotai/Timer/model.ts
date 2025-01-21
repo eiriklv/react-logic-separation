@@ -24,7 +24,7 @@ export class TimerModel {
   // Events
   startedTimer = () => {
     this.store.set(this.isRunning, true);
-  }
+  };
   stoppedTimer = () => {
     this.store.set(this.isRunning, false);
   };

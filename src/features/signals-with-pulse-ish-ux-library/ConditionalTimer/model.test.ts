@@ -10,7 +10,7 @@ describe("toggle okay, safe and cool (commands)", () => {
 
     // assert
     expect(model.isRunning.value).toEqual(false);
- 
+
     // act
     await model.toggleSafe();
 

@@ -12,7 +12,7 @@ describe("toggle okay, safe and cool (commands)", () => {
 
     // assert
     expect(store.get(model.isRunning)).toEqual(false);
- 
+
     // act
     await model.toggleSafe();
 

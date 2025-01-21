@@ -19,7 +19,7 @@ export function Timer(): ContainerElement {
   // State
   const elapsedSeconds = signal<number>(0);
   const isRunning = signal<boolean>(false);
-  
+
   // Events
   const startedTimer = () => {
     isRunning(true);
@@ -63,7 +63,7 @@ export function Timer(): ContainerElement {
       text("pulse-naive-uncontrolled"),
       heading("Timer", 3).id(TITLE_HEADING_ID),
       heading(() => `Status: ${isRunning() ? "running" : "stopped"}`, 4).id(
-        RUN_STATUS_ID
+        RUN_STATUS_ID,
       ),
       text(() => `${elapsedSeconds()}`).id(TIME_DISPLAY_ID),
       horizontalFlex().addChildren(
@@ -76,7 +76,7 @@ export function Timer(): ContainerElement {
           .id(STOP_BUTTON_ID)
           .label("Stop")
           .type("primary")
-          .setOnApply(stopTimer)
-      )
+          .setOnApply(stopTimer),
+      ),
     );
 }

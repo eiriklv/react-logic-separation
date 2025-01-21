@@ -84,7 +84,7 @@ export function ConditionalTimer(): ContainerElement {
       text("pulse-naive"),
       heading("Conditional Timer", 3).id(TITLE_HEADING_ID),
       heading(() => `Status: ${isRunning() ? "running" : "stopped"}`, 4).id(
-        RUN_STATUS_ID
+        RUN_STATUS_ID,
       ),
       text(() => `${elapsedSeconds()}`).id(TIME_DISPLAY_ID),
       verticalFlex()
@@ -113,8 +113,8 @@ export function ConditionalTimer(): ContainerElement {
               .label("Cool")
               .isCheckbox(true)
               .value(() => isCool())
-              .setOnValueChange(toggleCool)
-          )
-        )
+              .setOnValueChange(toggleCool),
+          ),
+        ),
     );
 }

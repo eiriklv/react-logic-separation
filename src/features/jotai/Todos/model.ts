@@ -25,7 +25,7 @@ export interface Todo {
 export class TodosModel {
   constructor(
     dependencies: Dependencies = defaultDependencies,
-    store = defaultStore
+    store = defaultStore,
   ) {
     // deal with injected dependencies
     this.injections = dependencies;

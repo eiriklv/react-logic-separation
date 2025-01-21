@@ -1,4 +1,4 @@
-import { computed, effect, signal } from "@cognite/pulse";
+import { computed, effect, ReadonlySignal, signal } from "@cognite/pulse";
 
 // Model
 export class ConditionalTimerModel {
@@ -10,7 +10,7 @@ export class ConditionalTimerModel {
 
   // Computed
   private _isRunning = computed(
-    () => this._isOkay() && this._isSafe() && this._isCool()
+    () => this._isOkay() && this._isSafe() && this._isCool(),
   );
 
   // Effects
@@ -48,20 +48,20 @@ export class ConditionalTimerModel {
   };
 
   // Readonly signals
-  public get isOkay() {
-    return computed(() => this._isOkay());
+  public get isOkay(): ReadonlySignal<boolean> {
+    return this._isOkay;
   }
-  public get isSafe() {
-    return computed(() => this._isSafe());
+  public get isSafe(): ReadonlySignal<boolean> {
+    return this._isSafe;
   }
-  public get isCool() {
-    return computed(() => this._isCool());
+  public get isCool(): ReadonlySignal<boolean> {
+    return this._isCool;
   }
-  public get elapsedSeconds() {
-    return computed(() => this._elapsedSeconds());
+  public get elapsedSeconds(): ReadonlySignal<number> {
+    return this._elapsedSeconds;
   }
-  public get isRunning() {
-    return computed(() => this._isRunning());
+  public get isRunning(): ReadonlySignal<boolean> {
+    return this._isRunning;
   }
 
   // Commands

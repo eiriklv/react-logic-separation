@@ -21,7 +21,7 @@ export function Todos() {
     setIsInitialized(true);
   };
   const addedTodo = (payload: Todo) => {
-    setTodos((todos) => [...todos, payload])
+    setTodos((todos) => [...todos, payload]);
   };
   const toggledSaveState = (payload: boolean) => {
     setIsSaving(payload);
@@ -86,7 +86,7 @@ export function Todos() {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setTodoInputText(event.target.value);
     },
-    []
+    [],
   );
 
   // Create local view event handler for form
@@ -97,7 +97,7 @@ export function Todos() {
         setTodoInputText("");
       }
     },
-    [addTodo, todoInputText]
+    [addTodo, todoInputText],
   );
 
   if (!isInitialized) {

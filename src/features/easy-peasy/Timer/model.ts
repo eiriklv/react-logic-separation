@@ -69,7 +69,7 @@ export const model: TimerModel = {
       return () => {
         clearInterval(interval);
       };
-    }
+    },
   ),
 };
 

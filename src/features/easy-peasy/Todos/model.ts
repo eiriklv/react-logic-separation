@@ -130,7 +130,7 @@ export const model: TodosModel = {
         clearTimeout(saveTimeout);
         actions.toggledSaveState(false);
       };
-    }
+    },
   ),
 };
 

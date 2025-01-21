@@ -36,7 +36,7 @@ describe("Todos Component", () => {
 
     // assert
     expect(
-      container.getElementById(TextElement, LOADING_INDICATOR_ID).label()
+      container.getElementById(TextElement, LOADING_INDICATOR_ID).label(),
     ).toEqual("Loading...");
   });
 
@@ -60,7 +60,7 @@ describe("Todos Component", () => {
 
     // assert
     expect(
-      container.getElementById(HeadingElement, TITLE_HEADING_ID).label()
+      container.getElementById(HeadingElement, TITLE_HEADING_ID).label(),
     ).toEqual("Todos");
   });
 
@@ -84,7 +84,9 @@ describe("Todos Component", () => {
 
     // act
     container.getElementById(StringInput, TODO_INPUT_ID).value("Paint house");
-    container.getElementById(StringInput, TODO_INPUT_ID).onValueChange("Paint house");
+    container
+      .getElementById(StringInput, TODO_INPUT_ID)
+      .onValueChange("Paint house");
     container.getElementById(StringInput, TODO_INPUT_ID).onApply();
 
     // assert

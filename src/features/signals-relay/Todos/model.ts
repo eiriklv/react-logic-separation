@@ -60,7 +60,7 @@ export class TodosModel {
       clearTimeout(saveTimeout);
       set(false);
     };
-  })
+  });
 
   // Events
   initializedTodos = (payload: Todo[]) => {

@@ -12,7 +12,7 @@ export function ConditionalTimer() {
     toggleOkay,
     toggleSafe,
     toggleCool,
-    resetTimer
+    resetTimer,
   } = useConditionalTimerModel();
 
   return (

@@ -26,7 +26,7 @@ describe("ConditionalTimer Component", () => {
     render(
       <ConditionalTimerContext.Provider value={dependencies}>
         <ConditionalTimer />
-      </ConditionalTimerContext.Provider>
+      </ConditionalTimerContext.Provider>,
     );
 
     // assert
@@ -60,7 +60,7 @@ describe("ConditionalTimer Component", () => {
     render(
       <ConditionalTimerContext.Provider value={dependencies}>
         <ConditionalTimer />
-      </ConditionalTimerContext.Provider>
+      </ConditionalTimerContext.Provider>,
     );
 
     // act

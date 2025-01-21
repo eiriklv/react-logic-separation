@@ -16,7 +16,7 @@ describe("Timer Component", () => {
     render(
       <TimerContext.Provider value={dependencies}>
         <Timer />
-      </TimerContext.Provider>
+      </TimerContext.Provider>,
     );
 
     // assert
@@ -41,7 +41,7 @@ describe("Timer Component", () => {
     render(
       <TimerContext.Provider value={dependencies}>
         <Timer />
-      </TimerContext.Provider>
+      </TimerContext.Provider>,
     );
 
     // act

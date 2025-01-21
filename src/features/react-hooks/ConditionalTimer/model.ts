@@ -10,7 +10,7 @@ export const useConditionalTimerModel = () => {
   // Computed
   const isRunning = useMemo(
     () => isOkay && isSafe && isCool,
-    [isCool, isOkay, isSafe]
+    [isCool, isOkay, isSafe],
   );
 
   // Events
@@ -69,6 +69,6 @@ export const useConditionalTimerModel = () => {
     toggleOkay,
     toggleSafe,
     toggleCool,
-    resetTimer
+    resetTimer,
   };
-}
+};

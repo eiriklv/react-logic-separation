@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react'
+import { renderHook, act } from "@testing-library/react";
 import { useConditionalTimerModel } from "./model";
 
 describe("toggle okay, safe and cool (commands)", () => {
@@ -11,7 +11,7 @@ describe("toggle okay, safe and cool (commands)", () => {
 
     // assert
     expect(result.current.isRunning).toEqual(false);
- 
+
     // act
     await act(() => result.current.toggleSafe());
 

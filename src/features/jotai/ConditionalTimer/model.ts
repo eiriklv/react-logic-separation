@@ -26,7 +26,7 @@ export class ConditionalTimerModel {
 
   // Computed
   isRunning = atom(
-    (get) => get(this.isOkay) && get(this.isSafe) && get(this.isCool)
+    (get) => get(this.isOkay) && get(this.isSafe) && get(this.isCool),
   );
 
   // Effects

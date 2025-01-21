@@ -40,12 +40,12 @@ describe("ConditionalTimer Component", () => {
 
     // assert
     expect(
-      container.getElementById(HeadingElement, TITLE_HEADING_ID).label()
+      container.getElementById(HeadingElement, TITLE_HEADING_ID).label(),
     ).toEqual("Conditional Timer");
 
     // assert
     expect(
-      container.getElementById(TextElement, TIME_DISPLAY_ID).label()
+      container.getElementById(TextElement, TIME_DISPLAY_ID).label(),
     ).toEqual("10");
   });
 

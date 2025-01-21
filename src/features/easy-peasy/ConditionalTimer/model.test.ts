@@ -11,7 +11,7 @@ describe("toggle okay, safe and cool (commands)", () => {
 
     // assert
     expect(store.getState().isRunning).toEqual(false);
- 
+
     // act
     await store.getActions().toggleSafe();
 

@@ -44,9 +44,7 @@ export function Todos() {
   return (
     <VerticalFlex>
       <Text>signals</Text>
-      <Heading size={3}>
-        Todos {isSaving && "(saving...)"}
-      </Heading>
+      <Heading size={3}>Todos {isSaving && "(saving...)"}</Heading>
       <Heading size={4}>Things to do: {todosCount}</Heading>
       <StringInput
         value={todoInputText}

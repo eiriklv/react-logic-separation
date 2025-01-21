@@ -6,8 +6,5 @@ type Props = {
 };
 
 export function TodoItem({ todo }: Props): BaseElement {
-  return container().addChildren(
-    text(todo.text).id(todo.id),
-    divider(),
-  );
+  return container().addChildren(text(todo.text).id(todo.id), divider());
 }

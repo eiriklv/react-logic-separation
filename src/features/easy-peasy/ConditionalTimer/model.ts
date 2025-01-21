@@ -50,9 +50,7 @@ export const model: ConditionalTimerModel = {
   elapsedSeconds: 0,
 
   // Computed
-  isRunning: computed(
-    (state) => state.isOkay && state.isSafe && state.isCool
-  ),
+  isRunning: computed((state) => state.isOkay && state.isSafe && state.isCool),
 
   // Events
   toggledOkay: action((state) => {
@@ -68,7 +66,7 @@ export const model: ConditionalTimerModel = {
     state.elapsedSeconds = 0;
   }),
   incrementedElapsedSeconds: action((state) => {
-    state.elapsedSeconds++
+    state.elapsedSeconds++;
   }),
 
   // Effects
@@ -80,15 +78,15 @@ export const model: ConditionalTimerModel = {
       if (!isRunning) {
         return;
       }
-  
+
       const interval = setInterval(() => {
         actions.incrementedElapsedSeconds();
       }, 1000);
-  
+
       return () => {
         clearInterval(interval);
       };
-    }
+    },
   ),
 
   // Commands (public for consumption)
@@ -104,7 +102,7 @@ export const model: ConditionalTimerModel = {
   resetTimer: thunk(async (actions) => {
     actions.resettedTimer();
   }),
-}
+};
 
 // Model store instance
 export const store = createStore(model);
