@@ -2,7 +2,6 @@ import {
   arraySignal,
   HeadingElement,
   setContext,
-  sleep,
   StringInput,
   text,
   TextElement,
