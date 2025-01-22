@@ -138,12 +138,11 @@ describe("mutation", () => {
         return 50;
       },
       onSuccess: () => {
-        console.log("success");
         getQueryClient().invalidateQueries({ queryKey });
       },
     }));
 
-    myMutation.mutate.value({});
+    myMutation.mutate({});
 
     expect(myMutation.isSuccess.value).toBe(false);
     expect(myMutation.isPending.value).toBe(true);

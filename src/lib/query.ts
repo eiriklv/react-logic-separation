@@ -1,5 +1,6 @@
 import { batch, computed, effect, Signal, signal } from "@preact/signals-core";
 import {
+  MutateOptions,
   MutationObserver,
   QueryClient,
   QueryObserver,
@@ -99,8 +100,6 @@ export function mutation<T, U>(getMutationConfig: () => MutationConfig<T, U>) {
   const isPending: Signal<boolean> = signal(false);
   const error: Signal<unknown> = signal(null);
 
-  const mutate = computed(() => mutationObserver.value.mutate);
-
   effect(() => {
     const disposeMutationSubscription = mutationObserver.value.subscribe(
       (result) => {
@@ -117,6 +116,13 @@ export function mutation<T, U>(getMutationConfig: () => MutationConfig<T, U>) {
       disposeMutationSubscription();
     };
   });
+
+  const mutate = (
+    variables: U,
+    options?: MutateOptions<T, Error, U, unknown> | undefined,
+  ) => {
+    mutationObserver.value.mutate(variables, options);
+  };
 
   return { mutate, data, isSuccess, isPending, error };
 }
