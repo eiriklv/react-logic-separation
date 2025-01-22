@@ -198,8 +198,8 @@ type QueryConfig<T> = {
  * (does not do any caching, but emulates a simple query interface)
  */
 export function query<T>(getQueryConfig: () => QueryConfig<T>) {
-  const queryConfig = getQueryConfig();
-  return derived(() => queryConfig.queryFn());
+  const queryConfig = computed(() => getQueryConfig());
+  return derived(() => queryConfig.value.queryFn());
 }
 
 export function resource() {

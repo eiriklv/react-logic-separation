@@ -582,10 +582,11 @@ describe("query", () => {
   });
 
   it("should update according to dependencies", async () => {
-    const mySignal = signal(10);
+    const mySignal1 = signal("a");
+    const mySignal2 = signal(10);
     const myQuery = query(() => ({
-      queryKey: ["abc"],
-      queryFn: async () => mySignal.value,
+      queryKey: [`abc-${mySignal1.value}`],
+      queryFn: async () => mySignal2.value,
     }));
 
     expect(myQuery.isLoading.value).toBe(true);
@@ -598,7 +599,19 @@ describe("query", () => {
     expect(myQuery.data.value).toEqual(10);
     expect(myQuery.error.value).toEqual(undefined);
 
-    mySignal.value = 20;
+    mySignal2.value = 20;
+
+    expect(myQuery.isLoading.value).toBe(true);
+    expect(myQuery.data.value).toEqual(undefined);
+    expect(myQuery.error.value).toEqual(undefined);
+
+    await vi.advanceTimersToNextTimerAsync();
+
+    expect(myQuery.isLoading.value).toBe(false);
+    expect(myQuery.data.value).toEqual(20);
+    expect(myQuery.error.value).toEqual(undefined);
+
+    mySignal1.value = "b";
 
     expect(myQuery.isLoading.value).toBe(true);
     expect(myQuery.data.value).toEqual(undefined);
