@@ -198,6 +198,20 @@ export function query<T>(getQueryConfig: () => QueryConfig<T>) {
   return derived(() => queryConfig.value.queryFn());
 }
 
+/**
+ * NOTE: This is fake for now
+ * (does not do any cache invalidation, but emulates a simple mutation interface)
+ */
+export type MutationConfig<T> = {
+  queryKey: string[];
+  mutationFn: () => Promise<T>;
+};
+
+export function mutation<T>(getMutationConfig: () => MutationConfig<T>) {
+  const mutationConfig = computed(() => getMutationConfig());
+  return derived(() => mutationConfig.value.mutationFn());
+}
+
 export function resource() {
   // TODO
 }
