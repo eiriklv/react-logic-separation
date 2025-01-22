@@ -65,6 +65,7 @@ describe("query", () => {
     expect(myQuery.data.value).toEqual(10);
     expect(myQuery.error.value).toEqual(null);
 
+    // This changes the query function
     mySignal2.value = 20;
 
     expect(myQuery.isLoading.value).toBe(false);
@@ -79,6 +80,7 @@ describe("query", () => {
     expect(myQuery.data.value).toEqual(20);
     expect(myQuery.error.value).toEqual(null);
 
+    // This changes the cache key
     mySignal1.value = "b";
 
     expect(myQuery.isLoading.value).toBe(true);
