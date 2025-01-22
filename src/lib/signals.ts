@@ -154,7 +154,7 @@ export function reaction() {
   // TODO
 }
 
-export function derived<T>(delegate: () => Promise<T>) {
+export function derived<T>(getPromise: () => Promise<T>) {
   const data = signal<T | undefined>(undefined);
   const isLoading = signal<boolean>(true);
   const error = signal<unknown>(undefined);
@@ -163,7 +163,7 @@ export function derived<T>(delegate: () => Promise<T>) {
     let isCancelled = false;
 
     // Get the promise (this is where we create the dependency on whatever is in the delegate)
-    const promise = delegate();
+    const promise = getPromise();
 
     promise
       .then((result) => {
@@ -194,6 +194,16 @@ export function derived<T>(delegate: () => Promise<T>) {
   return { data, isLoading, error };
 }
 
-export function query() {
-  // TODO
+type QueryConfig<T> = {
+  queryKey: string[];
+  queryFn: () => Promise<T>;
+};
+
+/**
+ * NOTE: This is fake for now
+ * (does not do any caching, but emulates a simple query interface)
+ */
+export function query<T>(getQueryConfig: () => QueryConfig<T>) {
+  const queryConfig = getQueryConfig();
+  return derived(() => queryConfig.queryFn());
 }

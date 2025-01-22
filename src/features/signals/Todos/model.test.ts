@@ -71,7 +71,7 @@ describe("Add todos (command)", () => {
   });
 });
 
-describe.only("Todos auto-save (effect)", () => {
+describe("Todos auto-save (effect)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
