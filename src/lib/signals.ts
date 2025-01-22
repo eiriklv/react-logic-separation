@@ -146,14 +146,6 @@ export function previous<T>(
   return readOnlyPreviousSignal;
 }
 
-export function resource() {
-  // TODO
-}
-
-export function reaction() {
-  // TODO
-}
-
 export function derived<T>(getPromise: () => Promise<T>) {
   const data = signal<T | undefined>(undefined);
   const isLoading = signal<boolean>(true);
@@ -208,4 +200,12 @@ type QueryConfig<T> = {
 export function query<T>(getQueryConfig: () => QueryConfig<T>) {
   const queryConfig = getQueryConfig();
   return derived(() => queryConfig.queryFn());
+}
+
+export function resource() {
+  // TODO
+}
+
+export function reaction() {
+  // TODO
 }
