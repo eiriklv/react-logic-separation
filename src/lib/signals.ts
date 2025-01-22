@@ -188,15 +188,15 @@ export function derived<T>(getPromise: () => Promise<T>) {
   return { data, isLoading, error };
 }
 
-type QueryConfig<T> = {
-  queryKey: string[];
-  queryFn: () => Promise<T>;
-};
-
 /**
  * NOTE: This is fake for now
  * (does not do any caching, but emulates a simple query interface)
  */
+export type QueryConfig<T> = {
+  queryKey: string[];
+  queryFn: () => Promise<T>;
+};
+
 export function query<T>(getQueryConfig: () => QueryConfig<T>) {
   const queryConfig = computed(() => getQueryConfig());
   return derived(() => queryConfig.value.queryFn());
