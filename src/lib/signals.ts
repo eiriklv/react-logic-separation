@@ -149,7 +149,7 @@ export function previous<T>(
 export function derived<T>(getPromise: () => Promise<T>) {
   const data = signal<T | undefined>(undefined);
   const isLoading = signal<boolean>(true);
-  const error = signal<unknown>(undefined);
+  const error = signal<unknown>(null);
 
   effect(() => {
     let isCancelled = false;
@@ -163,7 +163,7 @@ export function derived<T>(getPromise: () => Promise<T>) {
           return;
         }
         isLoading.value = false;
-        error.value = undefined;
+        error.value = null;
         data.value = result;
       })
       .catch((error) => {
@@ -182,34 +182,6 @@ export function derived<T>(getPromise: () => Promise<T>) {
   });
 
   return { data, isLoading, error };
-}
-
-/**
- * NOTE: This is fake for now
- * (does not do any caching, but emulates a simple query interface)
- */
-export type QueryConfig<T> = {
-  queryKey: string[];
-  queryFn: () => Promise<T>;
-};
-
-export function query<T>(getQueryConfig: () => QueryConfig<T>) {
-  const queryConfig = computed(() => getQueryConfig());
-  return derived(() => queryConfig.value.queryFn());
-}
-
-/**
- * NOTE: This is fake for now
- * (does not do any cache invalidation, but emulates a simple mutation interface)
- */
-export type MutationConfig<T> = {
-  queryKey: string[];
-  mutationFn: () => Promise<T>;
-};
-
-export function mutation<T>(getMutationConfig: () => MutationConfig<T>) {
-  const mutationConfig = computed(() => getMutationConfig());
-  return derived(() => mutationConfig.value.mutationFn());
 }
 
 export function resource() {
