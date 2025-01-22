@@ -531,7 +531,7 @@ describe("derived", () => {
     mySignal.value = 20;
 
     expect(myDerived.isLoading.value).toBe(true);
-    expect(myDerived.data.value).toEqual(10);
+    expect(myDerived.data.value).toEqual(undefined);
     expect(myDerived.error.value).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();

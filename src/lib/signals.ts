@@ -162,22 +162,24 @@ export function derived<T>(getPromise: () => Promise<T>) {
         if (isCancelled) {
           return;
         }
+        data.value = result;
         isLoading.value = false;
         error.value = null;
-        data.value = result;
       })
       .catch((error) => {
         if (isCancelled) {
           return;
         }
+        data.value = undefined;
         isLoading.value = false;
         error.value = error;
-        data.value = undefined;
       });
 
     return () => {
       isCancelled = true;
+      data.value = undefined;
       isLoading.value = true;
+      error.value = null;
     };
   });
 
