@@ -532,7 +532,7 @@ describe("derived", () => {
     mySignal.value = 20;
 
     expect(myDerived.isLoading.value).toBe(true);
-    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.data.value).toEqual(10);
     expect(myDerived.error.value).toEqual(undefined);
 
     await vi.advanceTimersToNextTimerAsync();
@@ -602,7 +602,7 @@ describe("query", () => {
     mySignal2.value = 20;
 
     expect(myQuery.isLoading.value).toBe(true);
-    expect(myQuery.data.value).toEqual(undefined);
+    expect(myQuery.data.value).toEqual(10);
     expect(myQuery.error.value).toEqual(undefined);
 
     await vi.advanceTimersToNextTimerAsync();
@@ -614,7 +614,7 @@ describe("query", () => {
     mySignal1.value = "b";
 
     expect(myQuery.isLoading.value).toBe(true);
-    expect(myQuery.data.value).toEqual(undefined);
+    expect(myQuery.data.value).toEqual(20);
     expect(myQuery.error.value).toEqual(undefined);
 
     await vi.advanceTimersToNextTimerAsync();

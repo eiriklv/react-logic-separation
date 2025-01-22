@@ -178,10 +178,6 @@ export function derived<T>(getPromise: () => Promise<T>) {
     return () => {
       isCancelled = true;
       isLoading.value = true;
-
-      // NOTE: Might not want to do this
-      error.value = undefined;
-      data.value = undefined;
     };
   });
 
