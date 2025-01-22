@@ -2,6 +2,7 @@ import { computed, effect, signal } from "@preact/signals-core";
 import {
   arrayEffect,
   debounced,
+  derived,
   mapSignalArray,
   previous,
   relay,
@@ -478,5 +479,65 @@ describe("debounced", () => {
     // assert
     expect(mySignal.value).toEqual(4);
     expect(myDebouncedSignal.value).toEqual(4);
+  });
+});
+
+describe("derived", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  it("should initialize and resolve correctly (promise)", async () => {
+    const myDerived = derived(() => Promise.resolve(10));
+
+    expect(myDerived.isLoading.value).toBe(true);
+    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.error.value).toEqual(undefined);
+
+    await vi.advanceTimersToNextTimerAsync();
+
+    expect(myDerived.isLoading.value).toBe(false);
+    expect(myDerived.data.value).toEqual(10);
+    expect(myDerived.error.value).toEqual(undefined);
+  });
+
+  it("should initialize and resolve correctly (async)", async () => {
+    const myDerived = derived(async () => 10);
+
+    expect(myDerived.isLoading.value).toBe(true);
+    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.error.value).toEqual(undefined);
+
+    await vi.advanceTimersToNextTimerAsync();
+
+    expect(myDerived.isLoading.value).toBe(false);
+    expect(myDerived.data.value).toEqual(10);
+    expect(myDerived.error.value).toEqual(undefined);
+  });
+
+  it("should update according to dependencies", async () => {
+    const mySignal = signal(10);
+    const myDerived = derived(() => Promise.resolve(mySignal.value));
+
+    expect(myDerived.isLoading.value).toBe(true);
+    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.error.value).toEqual(undefined);
+
+    await vi.advanceTimersToNextTimerAsync();
+
+    expect(myDerived.isLoading.value).toBe(false);
+    expect(myDerived.data.value).toEqual(10);
+    expect(myDerived.error.value).toEqual(undefined);
+
+    mySignal.value = 20;
+
+    expect(myDerived.isLoading.value).toBe(true);
+    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.error.value).toEqual(undefined);
+
+    await vi.advanceTimersToNextTimerAsync();
+
+    expect(myDerived.isLoading.value).toBe(false);
+    expect(myDerived.data.value).toEqual(20);
+    expect(myDerived.error.value).toEqual(undefined);
   });
 });

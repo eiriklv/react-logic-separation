@@ -154,8 +154,44 @@ export function reaction() {
   // TODO
 }
 
-export function derived() {
-  // TODO
+export function derived<T>(delegate: () => Promise<T>) {
+  const data = signal<T | undefined>(undefined);
+  const isLoading = signal<boolean>(true);
+  const error = signal<unknown>(undefined);
+
+  effect(() => {
+    let isCancelled = false;
+
+    // Get the promise (this is where we create the dependency on whatever is in the delegate)
+    const promise = delegate();
+
+    promise
+      .then((result) => {
+        if (isCancelled) {
+          return;
+        }
+        isLoading.value = false;
+        error.value = undefined;
+        data.value = result;
+      })
+      .catch((error) => {
+        if (isCancelled) {
+          return;
+        }
+        isLoading.value = false;
+        error.value = error;
+        data.value = undefined;
+      });
+
+    return () => {
+      isCancelled = true;
+      isLoading.value = true;
+      error.value = undefined;
+      data.value = undefined;
+    };
+  });
+
+  return { data, isLoading, error };
 }
 
 export function query() {
