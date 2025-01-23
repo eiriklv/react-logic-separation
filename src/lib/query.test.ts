@@ -132,7 +132,7 @@ describe("mutation", () => {
     expect(myQuery.data.value).toEqual(10);
     expect(myQuery.error.value).toEqual(null);
 
-    const myMutation = mutation(() => ({
+    const myMutation = mutation<number, void>(() => ({
       mutationFn: async () => {
         await sleep(100);
         return 50;
@@ -142,7 +142,7 @@ describe("mutation", () => {
       },
     }));
 
-    myMutation.mutate({});
+    const resultPromise = myMutation.mutate();
 
     expect(myMutation.isSuccess.value).toBe(false);
     expect(myMutation.isPending.value).toBe(true);
@@ -162,6 +162,9 @@ describe("mutation", () => {
     expect(myMutation.isPending.value).toBe(false);
     expect(myMutation.data.value).toEqual(50);
     expect(myMutation.error.value).toEqual(null);
+
+    const result = await resultPromise;
+    expect(result).toEqual(50);
 
     expect(myQuery.isFetching.value).toBe(true);
     expect(myQuery.isSuccess.value).toBe(true);

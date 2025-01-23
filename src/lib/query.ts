@@ -121,7 +121,7 @@ export function mutation<T, U>(getMutationConfig: () => MutationConfig<T, U>) {
     variables: U,
     options?: MutateOptions<T, Error, U, unknown> | undefined,
   ) => {
-    mutationObserver.value.mutate(variables, options);
+    return mutationObserver.value.mutate(variables, options);
   };
 
   return { mutate, data, isSuccess, isPending, error };
