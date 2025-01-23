@@ -2,27 +2,11 @@ import { batch, computed, effect, Signal, signal } from "@preact/signals-core";
 import {
   MutateOptions,
   MutationObserver,
+  MutationObserverOptions,
   QueryClient,
   QueryObserver,
+  QueryObserverOptions,
 } from "@tanstack/query-core";
-
-/**
- * Simplified query config type
- */
-export type QueryConfig<T> = {
-  queryKey: string[];
-  queryFn: () => Promise<T>;
-};
-
-/**
- * Simplified mutation config type
- */
-export type MutationConfig<T, U> = {
-  queryKey?: string[];
-  mutationFn: (variables: U) => Promise<T>;
-  onSuccess?: () => void;
-  onError?: () => void;
-};
 
 /**
  * Create default query client
@@ -51,13 +35,17 @@ export const getQueryClient = () => activeQueryClient.value;
 /**
  * NOTE: This is a simplified version of the tanstack-query query interface
  */
-export function query<T>(getQueryConfig: () => QueryConfig<T>) {
+export function query<T>(getQueryConfig: () => QueryObserverOptions<T>) {
   const queryClient = computed(() => getQueryClient());
   const queryConfig = computed(() => getQueryConfig());
   const queryObserver = computed(
     () => new QueryObserver(queryClient.value, queryConfig.value),
   );
 
+  /**
+   * NOTE: At the moment we only expose a subset of the query results,
+   * but this can be extended to include everything (as signals when applicable)
+   */
   const data: Signal<T | undefined> = signal(undefined);
   const isLoading: Signal<boolean> = signal(false);
   const isPending: Signal<boolean> = signal(false);
@@ -88,13 +76,19 @@ export function query<T>(getQueryConfig: () => QueryConfig<T>) {
 /**
  * NOTE: This is a simplified version of the tanstack-query mutation interface
  */
-export function mutation<T, U>(getMutationConfig: () => MutationConfig<T, U>) {
+export function mutation<T, U, V, X>(
+  getMutationConfig: () => MutationObserverOptions<T, U, V, X>,
+) {
   const queryClient = computed(() => getQueryClient());
   const mutationConfig = computed(() => getMutationConfig());
   const mutationObserver = computed(
     () => new MutationObserver(queryClient.value, mutationConfig.value),
   );
 
+  /**
+   * NOTE: At the moment we only expose a subset of the query results,
+   * but this can be extended to include everything (as signals when applicable)
+   */
   const data: Signal<T | undefined> = signal(undefined);
   const isSuccess: Signal<boolean> = signal(false);
   const isPending: Signal<boolean> = signal(false);
@@ -117,10 +111,7 @@ export function mutation<T, U>(getMutationConfig: () => MutationConfig<T, U>) {
     };
   });
 
-  const mutate = (
-    variables: U,
-    options?: MutateOptions<T, Error, U, unknown> | undefined,
-  ) => {
+  const mutate = (variables: V, options?: MutateOptions<T, U, V, X>) => {
     return mutationObserver.value.mutate(variables, options);
   };
 

@@ -132,7 +132,7 @@ describe("mutation", () => {
     expect(myQuery.data.value).toEqual(10);
     expect(myQuery.error.value).toEqual(null);
 
-    const myMutation = mutation<number, void>(() => ({
+    const myMutation = mutation<number, void, void, void>(() => ({
       mutationFn: async () => {
         await sleep(100);
         return 50;
