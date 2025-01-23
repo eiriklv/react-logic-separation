@@ -1,4 +1,4 @@
-import { BaseElement, container, divider, text } from "@cognite/pulse";
+import { BaseElement, text } from "@cognite/pulse";
 import { Todo } from "../types";
 
 type Props = {
@@ -6,5 +6,5 @@ type Props = {
 };
 
 export function TodoItem({ todo }: Props): BaseElement {
-  return container().addChildren(text(todo.text).id(todo.id), divider());
+  return text(todo.text).id(todo.id);
 }
