@@ -1,6 +1,30 @@
 import { signal } from "@preact/signals-core";
-import { query, getQueryClient, mutation } from "./query";
+import { query, getQueryClient, mutation, setQueryClient } from "./query";
 import { sleep } from "./utils";
+import { QueryClient } from "@tanstack/query-core";
+
+describe("setQueryClient", () => {
+  beforeEach(() => {
+    getQueryClient().getQueryCache().clear();
+    getQueryClient().getMutationCache().clear();
+  });
+
+  it("should set the client correctly", () => {
+    const newClient: QueryClient = new QueryClient();
+    const newClientMount = vi.spyOn(newClient, "mount").mockResolvedValue();
+
+    const oldClient = getQueryClient();
+    const oldClientUnmount = vi.spyOn(oldClient, "unmount").mockResolvedValue();
+
+    setQueryClient(newClient);
+
+    const currentClient = getQueryClient();
+
+    expect(oldClientUnmount).toBeCalled();
+    expect(currentClient).toBe(newClient);
+    expect(newClientMount).toBeCalled();
+  });
+});
 
 describe("query", () => {
   beforeEach(() => {
