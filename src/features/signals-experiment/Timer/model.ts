@@ -30,9 +30,6 @@ export class TimerModel {
   private _stoppedTimer = () => {
     this._isRunning.value = false;
   };
-  private _resettedTimer = () => {
-    this._elapsedSeconds.value = 0;
-  };
 
   // Read-only state (public for consumption)
   public get isRunning(): ReadonlySignal<boolean> {
@@ -48,9 +45,6 @@ export class TimerModel {
   };
   public stopTimer = async () => {
     this._stoppedTimer();
-  };
-  public resetTimer = async () => {
-    this._resettedTimer();
   };
 }
 

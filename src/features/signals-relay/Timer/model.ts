@@ -30,9 +30,6 @@ export class TimerModel {
   stoppedTimer = () => {
     this.isRunning.value = false;
   };
-  resettedTimer = () => {
-    this.elapsedSeconds.value = 0;
-  };
 
   // Commands
   startTimer = async () => {
@@ -40,9 +37,6 @@ export class TimerModel {
   };
   stopTimer = async () => {
     this.stoppedTimer();
-  };
-  resetTimer = async () => {
-    this.resettedTimer();
   };
 }
 
