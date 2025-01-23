@@ -85,19 +85,16 @@ export class TodosModel {
   // Effects
   private _disposeAutoSaveTodosOnChange: () => void;
 
-  // Getters (read-only signals)
+  // Readonly signals (public for consumption)
   public get todos(): ReadonlySignal<Todo[]> {
     return this._todos;
   }
-
   public get isSaving(): ReadonlySignal<boolean> {
     return this._isSaving;
   }
-
   public get isInitialized(): ReadonlySignal<boolean> {
     return this._isInitialized;
   }
-
   public get todosCount(): ReadonlySignal<number> {
     return this._todosCount;
   }
@@ -113,7 +110,6 @@ export class TodosModel {
     // Trigger event
     this._initializedTodos(todos);
   };
-
   public addTodo = async (payload: string) => {
     // Get dependencies
     const { generateId } = this._injections;
@@ -133,7 +129,6 @@ export class TodosModel {
     this._addedTodo(newTodo);
   };
 
-  // Disposal
   public dispose() {
     this._disposeAutoSaveTodosOnChange();
   }
