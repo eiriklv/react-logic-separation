@@ -146,7 +146,9 @@ export function previous<T>(
   return readOnlyPreviousSignal;
 }
 
-export function derived<T>(getPromise: () => Promise<T>) {
+export function derived<T>(
+  getPromise: (abortSignal: AbortSignal) => Promise<T>,
+) {
   const data = signal<T | undefined>(undefined);
   const isLoading = signal<boolean>(true);
   const error = signal<unknown>(null);
@@ -154,8 +156,11 @@ export function derived<T>(getPromise: () => Promise<T>) {
   effect(() => {
     let isCancelled = false;
 
+    // Create abort controller
+    const abortController = new AbortController();
+
     // Get the promise (this is where we create the dependency on whatever is in the delegate)
-    const promise = getPromise();
+    const promise = getPromise(abortController.signal);
 
     promise
       .then((result) => {
@@ -176,7 +181,9 @@ export function derived<T>(getPromise: () => Promise<T>) {
       });
 
     return () => {
+      abortController.abort();
       isCancelled = true;
+
       data.value = undefined;
       isLoading.value = true;
       error.value = null;
