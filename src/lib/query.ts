@@ -76,7 +76,7 @@ export function query<T>(getQueryConfig: () => QueryObserverOptions<T>) {
 /**
  * NOTE: This is a simplified version of the tanstack-query mutation interface
  */
-export function mutation<T, U, V, X>(
+export function mutation<T, U = Error, V = void, X = unknown>(
   getMutationConfig: () => MutationObserverOptions<T, U, V, X>,
 ) {
   const queryClient = computed(() => getQueryClient());
