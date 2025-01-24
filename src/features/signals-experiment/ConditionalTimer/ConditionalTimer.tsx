@@ -32,33 +32,35 @@ export function ConditionalTimer() {
       <h4>Status: {isRunning ? "running" : "stopped"}</h4>
       <div>{elapsedSeconds}</div>
       <button onClick={resetTimer}>Reset</button>
-      <label>
-        Okay
-        <input
-          name="okay"
-          type="checkbox"
-          checked={isOkay}
-          onChange={toggleOkay}
-        />
-      </label>
-      <label>
-        Safe
-        <input
-          name="safe"
-          type="checkbox"
-          checked={isSafe}
-          onChange={toggleSafe}
-        />
-      </label>
-      <label>
-        Cool
-        <input
-          name="cool"
-          type="checkbox"
-          checked={isCool}
-          onChange={toggleCool}
-        />
-      </label>
+      <div>
+        <label>
+          Okay
+          <input
+            name="okay"
+            type="checkbox"
+            checked={isOkay}
+            onChange={toggleOkay}
+          />
+        </label>
+        <label>
+          Safe
+          <input
+            name="safe"
+            type="checkbox"
+            checked={isSafe}
+            onChange={toggleSafe}
+          />
+        </label>
+        <label>
+          Cool
+          <input
+            name="cool"
+            type="checkbox"
+            checked={isCool}
+            onChange={toggleCool}
+          />
+        </label>
+      </div>
     </div>
   );
 }
