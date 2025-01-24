@@ -1,49 +1,23 @@
-import { useCallback, useMemo, useState } from "react";
-import * as remindersService from "./services/reminders.service";
-import { ReminderItem } from "./components/ReminderItem";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Reminder } from "./types";
+import { useCallback, useContext, useState } from "react";
+import { RemindersContext } from "./Reminders.context";
 
 /**
  * Same as Todos, except stored on the server
  * and using query + mutation (cache invalidation)
  */
 export function Reminders() {
-  // Query client
-  const queryClient = useQueryClient();
+  // Get dependencies
+  const { useRemindersModel, ReminderItem } = useContext(RemindersContext);
 
-  // Queries
+  // Use the reminders model (state and commands)
   const {
-    data: reminders = [],
+    reminders,
+    remindersCount,
     isLoading,
     isFetching,
-  } = useQuery<Reminder[]>({
-    queryKey: ["reminders"],
-    queryFn: () => remindersService.fetchReminders(),
-  });
-
-  // Mutation
-  const { mutate: addReminderMutation, isPending: isSaving } = useMutation({
-    mutationFn: (text: string) => remindersService.addReminder(text),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reminders"] });
-    },
-  });
-
-  // Computed
-  const remindersCount = useMemo(() => reminders.length, [reminders]);
-
-  // Commands
-  const addReminder = useCallback(
-    async (text: string) => {
-      if (!text) {
-        return;
-      }
-
-      addReminderMutation(text);
-    },
-    [addReminderMutation],
-  );
+    isSaving,
+    addReminder,
+  } = useRemindersModel();
 
   // Create local view state for form/input
   const [reminderInputText, setReminderInputText] = useState("");
@@ -77,7 +51,7 @@ export function Reminders() {
 
   return (
     <div>
-      <pre>react-naive</pre>
+      <pre>react-hooks</pre>
       <h3>
         Reminders <span>{isSaving && "(saving...)"}</span>
       </h3>
