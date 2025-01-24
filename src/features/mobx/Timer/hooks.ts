@@ -5,7 +5,7 @@ import { autorun } from "mobx";
 /**
  * Create hook to connect mobx observables to React
  */
-export const useObservableValue = <T>(model: T, key: keyof T) => {
+export const useObservableValue = <T, U>(model: U, key: keyof U) => {
   const [value, setValue] = useState(model[key]);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export const useObservableValue = <T>(model: T, key: keyof T) => {
     });
   }, [model, key]);
 
-  return value;
+  return value as T;
 };
 
 /**
@@ -34,11 +34,17 @@ export const useObservableValue = <T>(model: T, key: keyof T) => {
  */
 
 export const useElapsedSeconds = () => {
-  return useObservableValue(model, "elapsedSeconds");
+  return useObservableValue<typeof model.elapsedSeconds, typeof model>(
+    model,
+    "elapsedSeconds",
+  );
 };
 
 export const useIsRunning = () => {
-  return useObservableValue(model, "isRunning");
+  return useObservableValue<typeof model.isRunning, typeof model>(
+    model,
+    "isRunning",
+  );
 };
 
 export const useStartTimer = () => {

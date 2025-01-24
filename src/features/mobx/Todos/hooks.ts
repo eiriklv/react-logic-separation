@@ -5,7 +5,7 @@ import { autorun } from "mobx";
 /**
  * Create hook to connect mobx observables to React
  */
-export const useObservableValue = <T>(model: T, key: keyof T) => {
+export const useObservableValue = <T, U>(model: U, key: keyof U) => {
   const [value, setValue] = useState(model[key]);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export const useObservableValue = <T>(model: T, key: keyof T) => {
     });
   }, [model, key]);
 
-  return value;
+  return value as T;
 };
 
 /**
@@ -34,19 +34,28 @@ export const useObservableValue = <T>(model: T, key: keyof T) => {
  */
 
 export const useIsInitialized = () => {
-  return useObservableValue(model, "isInitialized");
+  return useObservableValue<typeof model.isInitialized, typeof model>(
+    model,
+    "isInitialized",
+  );
 };
 
 export const useIsSaving = () => {
-  return useObservableValue(model, "isSaving");
+  return useObservableValue<typeof model.isSaving, typeof model>(
+    model,
+    "isSaving",
+  );
 };
 
 export const useTodos = () => {
-  return useObservableValue(model, "todos");
+  return useObservableValue<typeof model.todos, typeof model>(model, "todos");
 };
 
 export const useTodosCount = () => {
-  return useObservableValue(model, "todosCount");
+  return useObservableValue<typeof model.todosCount, typeof model>(
+    model,
+    "todosCount",
+  );
 };
 
 export const useAddTodo = () => {
