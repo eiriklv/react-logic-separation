@@ -1,43 +1,23 @@
 import { signal } from "@preact/signals-core";
-import { query, getQueryClient, mutation, setQueryClient } from "./query";
+import { query, mutation } from "./query";
 import { sleep } from "./utils";
 import { QueryClient } from "@tanstack/query-core";
-
-describe("setQueryClient", () => {
-  beforeEach(() => {
-    getQueryClient().getQueryCache().clear();
-    getQueryClient().getMutationCache().clear();
-  });
-
-  it("should set the client correctly", () => {
-    const newClient: QueryClient = new QueryClient();
-    const newClientMount = vi.spyOn(newClient, "mount").mockResolvedValue();
-
-    const oldClient = getQueryClient();
-    const oldClientUnmount = vi.spyOn(oldClient, "unmount").mockResolvedValue();
-
-    setQueryClient(newClient);
-
-    const currentClient = getQueryClient();
-
-    expect(oldClientUnmount).toBeCalled();
-    expect(currentClient).toBe(newClient);
-    expect(newClientMount).toBeCalled();
-  });
-});
 
 describe("query", () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    getQueryClient().getQueryCache().clear();
-    getQueryClient().getMutationCache().clear();
   });
 
   it("should initialize and resolve correctly (promise)", async () => {
-    const myQuery = query(() => ({
-      queryKey: ["abc"],
-      queryFn: () => Promise.resolve(10),
-    }));
+    const queryClient = new QueryClient();
+
+    const myQuery = query(
+      () => ({
+        queryKey: ["abc"],
+        queryFn: () => Promise.resolve(10),
+      }),
+      queryClient,
+    );
 
     expect(myQuery.isLoading.value).toBe(true);
     expect(myQuery.isPending.value).toBe(true);
@@ -53,10 +33,15 @@ describe("query", () => {
   });
 
   it("should initialize and resolve correctly (async)", async () => {
-    const myQuery = query(() => ({
-      queryKey: ["abc"],
-      queryFn: async () => 10,
-    }));
+    const queryClient = new QueryClient();
+
+    const myQuery = query(
+      () => ({
+        queryKey: ["abc"],
+        queryFn: async () => 10,
+      }),
+      queryClient,
+    );
 
     expect(myQuery.isLoading.value).toBe(true);
     expect(myQuery.isPending.value).toBe(true);
@@ -72,12 +57,18 @@ describe("query", () => {
   });
 
   it("should update according to dependencies", async () => {
+    const queryClient = new QueryClient();
+
     const mySignal1 = signal("a");
     const mySignal2 = signal(10);
-    const myQuery = query(() => ({
-      queryKey: [`abc-${mySignal1.value}`],
-      queryFn: async () => mySignal2.value,
-    }));
+
+    const myQuery = query(
+      () => ({
+        queryKey: [`abc-${mySignal1.value}`],
+        queryFn: async () => mySignal2.value,
+      }),
+      queryClient,
+    );
 
     expect(myQuery.isLoading.value).toBe(true);
     expect(myQuery.isPending.value).toBe(true);
@@ -126,23 +117,26 @@ describe("query", () => {
 describe("mutation", () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    getQueryClient().getQueryCache().clear();
-    getQueryClient().getMutationCache().clear();
   });
 
   it("should trigger re-fetching of query when mutation invalidates cache", async () => {
+    const queryClient = new QueryClient();
+
     let count = 10;
     const getNextCount = () => count++;
 
     const queryKey = ["abc"];
 
-    const myQuery = query(() => ({
-      queryKey,
-      queryFn: async () => {
-        await sleep(100);
-        return getNextCount();
-      },
-    }));
+    const myQuery = query(
+      () => ({
+        queryKey,
+        queryFn: async () => {
+          await sleep(100);
+          return getNextCount();
+        },
+      }),
+      queryClient,
+    );
 
     expect(myQuery.isLoading.value).toBe(true);
     expect(myQuery.isPending.value).toBe(true);
@@ -156,15 +150,18 @@ describe("mutation", () => {
     expect(myQuery.data.value).toEqual(10);
     expect(myQuery.error.value).toEqual(null);
 
-    const myMutation = mutation(() => ({
-      mutationFn: async () => {
-        await sleep(100);
-        return 50;
-      },
-      onSuccess: () => {
-        getQueryClient().invalidateQueries({ queryKey });
-      },
-    }));
+    const myMutation = mutation(
+      () => ({
+        mutationFn: async () => {
+          await sleep(100);
+          return 50;
+        },
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey });
+        },
+      }),
+      queryClient,
+    );
 
     const resultPromise = myMutation.mutate();
 

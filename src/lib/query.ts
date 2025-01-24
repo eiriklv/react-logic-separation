@@ -9,37 +9,26 @@ import {
 } from "@tanstack/query-core";
 
 /**
- * Create default query client
+ * Default query client
  */
-const activeQueryClient: Signal<QueryClient> = signal(new QueryClient());
+export const defaultQueryClient = new QueryClient();
 
 /**
- * Mount default query client
+ * Types
  */
-activeQueryClient.value.mount();
-
-/**
- * Export setter for query client
- */
-export const setQueryClient = (newQueryClient: QueryClient) => {
-  activeQueryClient.value.unmount();
-  activeQueryClient.value = newQueryClient;
-  activeQueryClient.value.mount();
-};
-
-/**
- * Export getter for query client
- */
-export const getQueryClient = () => activeQueryClient.value;
+export type SignalQuery<T> = ReturnType<typeof query<T>>;
+export type SignalMutation<U, T = void> = ReturnType<typeof mutation<T, U>>;
 
 /**
  * NOTE: This is a simplified version of the tanstack-query query interface
  */
-export function query<T>(getQueryConfig: () => QueryObserverOptions<T>) {
-  const queryClient = computed(() => getQueryClient());
+export function query<T>(
+  getQueryConfig: () => QueryObserverOptions<T>,
+  queryClient: QueryClient,
+) {
   const queryConfig = computed(() => getQueryConfig());
   const queryObserver = computed(
-    () => new QueryObserver(queryClient.value, queryConfig.value),
+    () => new QueryObserver(queryClient, queryConfig.value),
   );
 
   /**
@@ -76,13 +65,13 @@ export function query<T>(getQueryConfig: () => QueryObserverOptions<T>) {
 /**
  * NOTE: This is a simplified version of the tanstack-query mutation interface
  */
-export function mutation<T, U = Error, V = void, X = unknown>(
+export function mutation<T, V = void, U = Error, X = unknown>(
   getMutationConfig: () => MutationObserverOptions<T, U, V, X>,
+  queryClient: QueryClient,
 ) {
-  const queryClient = computed(() => getQueryClient());
   const mutationConfig = computed(() => getMutationConfig());
   const mutationObserver = computed(
-    () => new MutationObserver(queryClient.value, mutationConfig.value),
+    () => new MutationObserver(queryClient, mutationConfig.value),
   );
 
   /**
