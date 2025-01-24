@@ -8,7 +8,7 @@ const todos: Todo[] = [
 
 export async function fetchTodos() {
   await sleep(1000);
-  return todos;
+  return todos.slice();
 }
 
 export async function saveTodos(todosToSave: Todo[]) {
