@@ -44,7 +44,7 @@ export class ConditionalTimerModel {
     this._elapsedSeconds.value = 0;
   };
 
-  // Read-only signals (public for consumption)
+  // Getters
   public get isOkay(): ReadonlySignal<boolean> {
     return this._isOkay;
   }

@@ -19,7 +19,7 @@ export class TimerModel {
 
   // Effects
   private _disposeIncrementTimerWhileRunning = effect(() => {
-    // Get dependencies that triggered the effect
+    // Get signal dependencies that triggered the effect
     const isRunning = this._isRunning.value;
 
     if (!isRunning) {

@@ -26,9 +26,10 @@ export interface Todo {
 
 export class TodosModel {
   constructor(dependencies: Dependencies = defaultDependencies) {
+    // Dependencies (init)
     this._injections = dependencies;
 
-    // Effects
+    // Effects (init)
     this._disposeAutoSaveTodosOnChange = effect(() => {
       // Get dependencies
       const { todosService, waitTimeBeforeSave } = this._injections;

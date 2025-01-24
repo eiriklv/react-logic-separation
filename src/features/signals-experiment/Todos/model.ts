@@ -73,7 +73,7 @@ export class TodosModel {
     this._todos.value = [...this._todos.value, payload];
   };
 
-  // Read-only signals (public for consumption)
+  // Getters
   public get todos(): ReadonlySignal<Todo[]> {
     return this._todos;
   }

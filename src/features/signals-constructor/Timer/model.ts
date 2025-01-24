@@ -2,6 +2,27 @@ import { effect, ReadonlySignal, signal } from "@preact/signals-core";
 
 // Model
 export class TimerModel {
+  // Constructor
+  constructor() {
+    // Effects (init)
+    this._disposeIncrementTimerWhileRunning = effect(() => {
+      // Get signal dependencies that triggered the effect
+      const isRunning = this._isRunning.value;
+
+      if (!isRunning) {
+        return;
+      }
+
+      const interval = setInterval(() => {
+        this._incrementedElapsedSeconds();
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    });
+  }
+
   // State
   private _elapsedSeconds = signal<number>(0);
   private _isRunning = signal<boolean>(false);
@@ -18,22 +39,7 @@ export class TimerModel {
   };
 
   // Effects
-  private _disposeIncrementTimerWhileRunning = effect(() => {
-    // Get dependencies that triggered the effect
-    const isRunning = this._isRunning.value;
-
-    if (!isRunning) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      this._incrementedElapsedSeconds();
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  });
+  private _disposeIncrementTimerWhileRunning: () => void;
 
   // Readonly signals
   public get elapsedSeconds(): ReadonlySignal<number> {

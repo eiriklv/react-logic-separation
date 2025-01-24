@@ -33,7 +33,7 @@ export function Timer(): ContainerElement {
 
   // Effects
   effect(() => {
-    // Get dependencies that triggered the effect
+    // Get signal dependencies that triggered the effect
     const isRunningValue = isRunning();
 
     if (!isRunningValue) {

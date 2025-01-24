@@ -3,7 +3,7 @@ import { computed, effect, ReadonlySignal, signal } from "@preact/signals-core";
 // Model
 export class ConditionalTimerModel {
   constructor() {
-    // Effects
+    // Effects (init)
     this._disposeIncrementTimerWhileRunning = effect(() => {
       const isRunning = this._isRunning.value;
 
@@ -52,7 +52,7 @@ export class ConditionalTimerModel {
     this._elapsedSeconds.value = this._elapsedSeconds.value + 1;
   };
 
-  // Read-only signals (public for consumption)
+  // Getters
   public get isOkay(): ReadonlySignal<boolean> {
     return this._isOkay;
   }

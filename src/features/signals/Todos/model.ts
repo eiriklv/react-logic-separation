@@ -27,38 +27,10 @@ export interface Todo {
 export class TodosModel {
   constructor(dependencies: Dependencies = defaultDependencies) {
     this._injections = dependencies;
-
-    // Effects
-    this._disposeAutoSaveTodosOnChange = effect(() => {
-      // Get dependencies
-      const { todosService, waitTimeBeforeSave } = this._injections;
-
-      // Get the changed values that triggered the effect
-      const todos = this._todos.value;
-      const isInitialized = this._isInitialized.value;
-
-      // Validation (only auto-save after the data has been initialized/loaded)
-      if (!isInitialized) {
-        return;
-      }
-
-      // Set a timeout/debounce for running the save effect
-      const saveTimeout = setTimeout(async () => {
-        this._toggledSaveState(true);
-        await todosService.saveTodos(todos);
-        this._toggledSaveState(false);
-      }, waitTimeBeforeSave);
-
-      // Return handle for cancelling debounced save
-      return () => {
-        clearTimeout(saveTimeout);
-        this._toggledSaveState(false);
-      };
-    });
   }
 
   // Dependencies
-  private _injections: Dependencies;
+  private _injections: Dependencies = defaultDependencies;
 
   // State
   private _todos = signal<Todo[]>([]);
@@ -83,7 +55,32 @@ export class TodosModel {
   };
 
   // Effects
-  private _disposeAutoSaveTodosOnChange: () => void;
+  private _disposeAutoSaveTodosOnChange = effect(() => {
+    // Get dependencies
+    const { todosService, waitTimeBeforeSave } = this._injections;
+
+    // Get the changed values that triggered the effect
+    const todos = this._todos.value;
+    const isInitialized = this._isInitialized.value;
+
+    // Validation (only auto-save after the data has been initialized/loaded)
+    if (!isInitialized) {
+      return;
+    }
+
+    // Set a timeout/debounce for running the save effect
+    const saveTimeout = setTimeout(async () => {
+      this._toggledSaveState(true);
+      await todosService.saveTodos(todos);
+      this._toggledSaveState(false);
+    }, waitTimeBeforeSave);
+
+    // Return handle for cancelling debounced save
+    return () => {
+      clearTimeout(saveTimeout);
+      this._toggledSaveState(false);
+    };
+  });
 
   // Getters (read-only signals)
   public get todos(): ReadonlySignal<Todo[]> {
