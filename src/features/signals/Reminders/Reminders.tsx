@@ -18,7 +18,7 @@ export function Reminders() {
   } = useContext(RemindersContext);
 
   // Use the reminders model (state and commands)
-  const reminders = useReminders();
+  const reminders = useReminders() ?? [];
   const remindersCount = useRemindersCount();
   const isLoading = useIsLoading();
   const isFetching = useIsFetching();
@@ -51,7 +51,7 @@ export function Reminders() {
     return <div>Loading...</div>;
   }
 
-  const reminderElements = (reminders || []).map((reminder) => (
+  const reminderElements = reminders.map((reminder) => (
     <ReminderItem key={reminder.id} reminder={reminder}></ReminderItem>
   ));
 
