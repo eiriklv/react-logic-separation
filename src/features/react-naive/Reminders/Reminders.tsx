@@ -23,12 +23,14 @@ export function Reminders() {
   });
 
   // Mutation
-  const { mutate: addReminderMutation, isPending: isSaving } = useMutation({
-    mutationFn: (text: string) => remindersService.addReminder(text),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reminders"] });
+  const { mutateAsync: addReminderMutation, isPending: isSaving } = useMutation(
+    {
+      mutationFn: (text: string) => remindersService.addReminder(text),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["reminders"] });
+      },
     },
-  });
+  );
 
   // Computed
   const remindersCount = useMemo(() => reminders.length, [reminders]);
@@ -40,7 +42,7 @@ export function Reminders() {
         return;
       }
 
-      addReminderMutation(text);
+      await addReminderMutation(text);
     },
     [addReminderMutation],
   );
