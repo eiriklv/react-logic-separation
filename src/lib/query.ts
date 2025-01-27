@@ -24,7 +24,7 @@ export type SignalMutation<U, T = void> = ReturnType<typeof mutation<T, U>>;
  */
 export function query<T>(
   getQueryConfig: () => QueryObserverOptions<T>,
-  queryClient: QueryClient,
+  queryClient: QueryClient = defaultQueryClient,
 ) {
   const queryConfig = computed(() => getQueryConfig());
   const queryObserver = computed(
@@ -67,7 +67,7 @@ export function query<T>(
  */
 export function mutation<T, V = void, U = Error, X = unknown>(
   getMutationConfig: () => MutationObserverOptions<T, U, V, X>,
-  queryClient: QueryClient,
+  queryClient: QueryClient = defaultQueryClient,
 ) {
   const mutationConfig = computed(() => getMutationConfig());
   const mutationObserver = computed(
