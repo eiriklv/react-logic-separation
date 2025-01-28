@@ -1,6 +1,5 @@
 import { RemindersModelDependencies, Reminder, RemindersModel } from "./model";
 import { QueryClient } from "@tanstack/query-core";
-import { waitFor } from "@testing-library/react";
 
 describe("Add reminders (command)", () => {
   it("should work as expected when adding a single reminder", async () => {
@@ -19,45 +18,32 @@ describe("Add reminders (command)", () => {
     };
 
     const queryClient = new QueryClient();
-
     const model = new RemindersModel(queryClient, mockDependencies);
 
-    // wait for loading to stop
-    await waitFor(() => expect(model.isLoading.value).toEqual(false));
+    // check that the reminders load initially
+    expect(model.isLoading.value).toEqual(true);
 
-    // check that fetching was done
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.fetchReminders,
-      ).toHaveBeenCalledTimes(1),
-    );
+    // wait for the loading to finish
+    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
 
-    // check that the reminders are populated correctly
-    await waitFor(() =>
-      expect(model.reminders.value).toEqual(fakeReminderMocks[0]),
-    );
+    // check that the reminders were loaded
+    expect(model.reminders.value).toEqual([]);
 
-    // add a reminder
+    // add some reminders
     await model.addReminder("Paint house");
 
-    // check that the adding the reminder was done once
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.addReminder,
-      ).toHaveBeenCalledTimes(1),
-    );
+    // check that the reminders were added the correct amount of times
+    expect(
+      mockDependencies.remindersService.addReminder,
+    ).toHaveBeenCalledOnce();
 
-    // check that re-fetching was done after mutating
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.fetchReminders,
-      ).toHaveBeenCalledTimes(2),
-    );
+    // check that the reminders were re-fetched the correct amount of times
+    expect(
+      mockDependencies.remindersService.fetchReminders,
+    ).toHaveBeenCalledTimes(2);
 
-    // check that the reminders are populated correctly
-    await waitFor(() =>
-      expect(model.reminders.value).toEqual(fakeReminderMocks[1]),
-    );
+    // check that the list of reminders is correct
+    expect(model.reminders.value).toEqual(fakeReminderMocks[1]);
   });
 
   it("should work as expected when adding multiple reminders", async () => {
@@ -66,20 +52,35 @@ describe("Add reminders (command)", () => {
     const fakeReminderMocks: Reminder[][] = [
       [],
       [{ id: "1", text: "Fake 1" }],
-      [{ id: "2", text: "Fake 2" }],
-      [{ id: "3", text: "Fake 3" }],
+      [
+        { id: "1", text: "Fake 1" },
+        { id: "2", text: "Fake 2" },
+      ],
+      [
+        { id: "1", text: "Fake 1" },
+        { id: "2", text: "Fake 2" },
+        { id: "3", text: "Fake 3" },
+      ],
     ];
 
     const mockDependencies: RemindersModelDependencies = {
       remindersService: {
-        addReminder: vi.fn(),
+        addReminder: vi.fn(async () => {}),
         fetchReminders: vi.fn(async () => fakeReminderMocks[count++]),
       },
     };
 
     const queryClient = new QueryClient();
-
     const model = new RemindersModel(queryClient, mockDependencies);
+
+    // check that the reminders load initially
+    expect(model.isLoading.value).toEqual(true);
+
+    // wait for the loading to finish
+    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+
+    // check that the reminders were loaded
+    expect(model.reminders.value).toEqual([]);
 
     // add some reminders
     await model.addReminder("Paint house");
@@ -87,26 +88,17 @@ describe("Add reminders (command)", () => {
     await model.addReminder("Wash car");
 
     // check that the reminders were added the correct amount of times
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.addReminder,
-      ).toHaveBeenCalledTimes(3),
+    expect(mockDependencies.remindersService.addReminder).toHaveBeenCalledTimes(
+      3,
     );
 
-    // check that the reminders were refetched the correct amount of times
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.fetchReminders,
-      ).toHaveBeenCalledTimes(4),
-    );
-
-    // wait for loading to stop
-    await waitFor(() => expect(model.isLoading.value).toEqual(false));
+    // check that the reminders were re-fetched the correct amount of times
+    expect(
+      mockDependencies.remindersService.fetchReminders,
+    ).toHaveBeenCalledTimes(4);
 
     // check that the list of reminders is correct
-    await waitFor(() =>
-      expect(model.reminders.value).toEqual(fakeReminderMocks[3]),
-    );
+    expect(model.reminders.value).toEqual(fakeReminderMocks[3]);
   });
 
   it("should fail validation when adding empty reminder", async () => {
@@ -123,36 +115,31 @@ describe("Add reminders (command)", () => {
     };
 
     const queryClient = new QueryClient();
-
     const model = new RemindersModel(queryClient, mockDependencies);
 
-    // check that the reminders are populated initially
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.fetchReminders,
-      ).toHaveBeenCalledTimes(1),
-    );
+    // check that the reminders load initially
+    expect(model.isLoading.value).toEqual(true);
+
+    // wait for the loading to finish
+    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+
+    // check that the reminders were loaded
+    expect(model.reminders.value).toEqual([]);
 
     // add a reminder
     await model.addReminder("");
 
     // check that it never added a reminder
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.addReminder,
-      ).toHaveBeenCalledTimes(0),
-    );
+    expect(
+      mockDependencies.remindersService.addReminder,
+    ).not.toHaveBeenCalled();
 
     // check that it did not refetch the reminders
-    await waitFor(() =>
-      expect(
-        mockDependencies.remindersService.fetchReminders,
-      ).toHaveBeenCalledTimes(1),
-    );
+    expect(
+      mockDependencies.remindersService.fetchReminders,
+    ).toHaveBeenCalledTimes(1);
 
     // check that the list of reminders is still the same as before
-    await waitFor(() =>
-      expect(model.reminders.value).toEqual(fakeReminderMocks[0]),
-    );
+    expect(model.reminders.value).toEqual(fakeReminderMocks[0]);
   });
 });
