@@ -70,8 +70,15 @@ describe("Add reminders (command)", () => {
     const fakeReminderMocks: Reminder[][] = [
       [],
       [{ id: "1", text: "Fake 1" }],
-      [{ id: "2", text: "Fake 2" }],
-      [{ id: "3", text: "Fake 3" }],
+      [
+        { id: "1", text: "Fake 1" },
+        { id: "2", text: "Fake 2" },
+      ],
+      [
+        { id: "1", text: "Fake 1" },
+        { id: "2", text: "Fake 2" },
+        { id: "3", text: "Fake 3" },
+      ],
     ];
 
     const mockDependencies: RemindersModelContextInterface = {
