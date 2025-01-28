@@ -1,4 +1,4 @@
-import { Dependencies, Reminder, RemindersModel } from "./model";
+import { RemindersModelDependencies, Reminder, RemindersModel } from "./model";
 import { QueryClient } from "@tanstack/query-core";
 import { waitFor } from "@testing-library/react";
 
@@ -11,7 +11,7 @@ describe("Add reminders (command)", () => {
       [{ id: "abc", text: "Do this thing" }],
     ];
 
-    const mockDependencies: Dependencies = {
+    const mockDependencies: RemindersModelDependencies = {
       remindersService: {
         addReminder: vi.fn(),
         fetchReminders: vi.fn(async () => fakeReminderMocks[count++]),
@@ -70,7 +70,7 @@ describe("Add reminders (command)", () => {
       [{ id: "3", text: "Fake 3" }],
     ];
 
-    const mockDependencies: Dependencies = {
+    const mockDependencies: RemindersModelDependencies = {
       remindersService: {
         addReminder: vi.fn(),
         fetchReminders: vi.fn(async () => fakeReminderMocks[count++]),
@@ -115,7 +115,7 @@ describe("Add reminders (command)", () => {
     const fakeReminderMocks: Reminder[][] = [[], [{ id: "1", text: "Fake 1" }]];
 
     // arrange
-    const mockDependencies: Dependencies = {
+    const mockDependencies: RemindersModelDependencies = {
       remindersService: {
         addReminder: vi.fn(),
         fetchReminders: vi.fn(async () => fakeReminderMocks[count++]),

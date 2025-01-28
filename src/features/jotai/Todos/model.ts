@@ -15,7 +15,7 @@ const defaultDependencies = {
 const defaultStore = getDefaultStore();
 
 // Types and interfaces
-export type Dependencies = typeof defaultDependencies;
+export type TodosDependencies = typeof defaultDependencies;
 
 export interface Todo {
   id: string;
@@ -24,7 +24,7 @@ export interface Todo {
 
 export class TodosModel {
   constructor(
-    dependencies: Dependencies = defaultDependencies,
+    dependencies: TodosDependencies = defaultDependencies,
     store = defaultStore,
   ) {
     // deal with injected dependencies
@@ -35,8 +35,8 @@ export class TodosModel {
     this.store.sub(this.autoSaveTodosOnChange, noop);
   }
 
-  // Dependencies
-  injections: Dependencies = defaultDependencies;
+  // TodosDependencies
+  injections: TodosDependencies = defaultDependencies;
 
   // Store (required by jotai to be able to interact with atoms)
   store: typeof defaultStore = defaultStore;

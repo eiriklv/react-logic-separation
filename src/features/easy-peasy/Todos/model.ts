@@ -21,7 +21,7 @@ const defaultDependencies = {
 };
 
 // Types and interfaces
-export type Dependencies = typeof defaultDependencies;
+export type TodosDependencies = typeof defaultDependencies;
 
 // Model interface
 export interface TodosModel {
@@ -39,11 +39,11 @@ export interface TodosModel {
   toggledSaveState: Action<TodosModel, boolean>;
 
   // Commands
-  initializeTodos: Thunk<TodosModel, undefined, Dependencies>;
-  addTodo: Thunk<TodosModel, string, Dependencies>;
+  initializeTodos: Thunk<TodosModel, undefined, TodosDependencies>;
+  addTodo: Thunk<TodosModel, string, TodosDependencies>;
 
   // Effects
-  autoSaveTodosOnChange: EffectOn<TodosModel, TodosModel, Dependencies>;
+  autoSaveTodosOnChange: EffectOn<TodosModel, TodosModel, TodosDependencies>;
 }
 
 export interface Todo {

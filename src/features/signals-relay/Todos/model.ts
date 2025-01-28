@@ -12,7 +12,7 @@ const defaultDependencies = {
 };
 
 // Types and interfaces
-export type Dependencies = typeof defaultDependencies;
+export type TodosDependencies = typeof defaultDependencies;
 
 export interface Todo {
   id: string;
@@ -20,12 +20,12 @@ export interface Todo {
 }
 
 export class TodosModel {
-  constructor(dependencies: Dependencies = defaultDependencies) {
+  constructor(dependencies: TodosDependencies = defaultDependencies) {
     this.injections = dependencies;
   }
 
   // Dependencies
-  injections: Dependencies = defaultDependencies;
+  injections: TodosDependencies = defaultDependencies;
 
   // State
   todos = signal<Todo[]>([]);

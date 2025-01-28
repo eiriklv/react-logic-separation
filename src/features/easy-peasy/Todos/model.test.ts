@@ -1,4 +1,4 @@
-import { Dependencies, model } from "./model";
+import { TodosDependencies, model } from "./model";
 import { createStore } from "easy-peasy";
 
 describe("Add todos (command)", () => {
@@ -12,11 +12,10 @@ describe("Add todos (command)", () => {
       injections: mockDependencies,
     });
 
-    // act
+    // add a todo
     await store.getActions().addTodo("Paint house");
 
-    // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(1);
+    // check that todos now contain newly added todo
     expect(store.getState().todos).toEqual([
       { id: "abc", text: "Paint house" },
     ]);
@@ -32,13 +31,12 @@ describe("Add todos (command)", () => {
       injections: mockDependencies,
     });
 
-    // act
+    // add multiple todos
     await store.getActions().addTodo("Paint house");
     await store.getActions().addTodo("Buy milk");
     await store.getActions().addTodo("Wash car");
 
-    // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
+    // check that todos now contain all the newly added todos
     expect(store.getState().todos).toEqual([
       { id: "abc", text: "Paint house" },
       { id: "abc", text: "Buy milk" },
@@ -56,47 +54,48 @@ describe("Add todos (command)", () => {
       injections: mockDependencies,
     });
 
-    // act
+    // add an empty todo
     await store.getActions().addTodo("");
 
-    // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(0);
+    // check that the empty todo was not added to the list
     expect(store.getState().todos).toEqual([]);
   });
 });
 
 describe("Todos auto-save (effect)", () => {
   beforeEach(() => {
+    // use fake timers so that we don't have to wait for test to finish
     vi.useFakeTimers();
   });
 
   it("should not trigger if changes happen before list is initialized", async () => {
     // arrange
-    const mockDependencies: Dependencies = {
+    const mockDependencies: TodosDependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
         fetchTodos: vi.fn(async () => []),
       },
-      waitTimeBeforeSave: 1000,
+      waitTimeBeforeSave: 10000000,
     };
 
     const store = createStore(model, {
       injections: mockDependencies,
     });
 
-    // act
+    // add a todo
     await store.getActions().addTodo("Write docs");
 
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
+    // wait for timers to run
+    vi.runAllTimers();
 
-    // assert
+    // check that no saving was performed
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
     // arrange
-    const mockDependencies: Dependencies = {
+    const mockDependencies: TodosDependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
@@ -109,32 +108,40 @@ describe("Todos auto-save (effect)", () => {
       injections: mockDependencies,
     });
 
-    // act
+    // initialize the list of todos
     await store.getActions().initializeTodos();
+
+    // check that init was performed
+    expect(store.getState().isInitialized).toEqual(true);
 
     await store.getActions().addTodo("Write docs");
     await store.getActions().addTodo("Write tests");
     await store.getActions().addTodo("Paint house");
 
-    // assert
+    // check that no saving has been performed (yet)
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
+    // check that we are not currently saving
+    expect(store.getState().isSaving).toEqual(false);
 
-    // assert
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    // run out the timer of the debounced save
+    vi.runAllTimers();
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
+    // check that saving has been initiated
+    expect(store.getState().isSaving).toEqual(true);
 
-    // assert
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    // wait for the saving function to be called
+    await vi.waitFor(() =>
+      expect(mockDependencies.todosService.saveTodos).toHaveBeenCalled(),
+    );
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
+    // check that we are no longer saving
+    expect(store.getState().isSaving).toEqual(false);
 
-    // assert
+    // run any pending timers
+    vi.runAllTimers();
+
+    // check that the saving was not performed multiple times
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
   });
 });

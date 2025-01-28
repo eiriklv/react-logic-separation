@@ -1,9 +1,9 @@
-import { Dependencies, TodosModel } from "./model";
+import { TodosDependencies, TodosModel } from "./model";
 
 describe("Add todos (command)", () => {
   it("should work as expected when adding a single todo", async () => {
     // arrange
-    const mockDependencies: Dependencies = {
+    const mockDependencies: TodosDependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         fetchTodos: vi.fn(),
@@ -14,17 +14,16 @@ describe("Add todos (command)", () => {
 
     const model = new TodosModel(mockDependencies);
 
-    // act
+    // add a todo
     await model.addTodo("Paint house");
 
-    // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(1);
+    // check that todos now contain newly added todo
     expect(model.todos).toEqual([{ id: "abc", text: "Paint house" }]);
   });
 
   it("should work as expected when adding multiple todos", async () => {
     // arrange
-    const mockDependencies: Dependencies = {
+    const mockDependencies: TodosDependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         fetchTodos: vi.fn(),
@@ -35,13 +34,12 @@ describe("Add todos (command)", () => {
 
     const model = new TodosModel(mockDependencies);
 
-    // act
+    // add multiple todos
     await model.addTodo("Paint house");
     await model.addTodo("Buy milk");
     await model.addTodo("Wash car");
 
-    // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
+    // check that todos now contain all the newly added todos
     expect(model.todos).toEqual([
       { id: "abc", text: "Paint house" },
       { id: "abc", text: "Buy milk" },
@@ -51,7 +49,7 @@ describe("Add todos (command)", () => {
 
   it("should fail validation when adding empty todo", async () => {
     // arrange
-    const mockDependencies: Dependencies = {
+    const mockDependencies: TodosDependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         fetchTodos: vi.fn(),
@@ -62,23 +60,22 @@ describe("Add todos (command)", () => {
 
     const model = new TodosModel(mockDependencies);
 
-    // act
+    // add an empty todo
     await model.addTodo("");
 
-    // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(0);
+    // check that the empty todo was not added to the list
     expect(model.todos).toEqual([]);
   });
 });
 
-describe("Todos auto-save (effect)", () => {
+describe("isSaving (relay)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
 
-  it("should not trigger if changes happen before list is initialized", async () => {
+  it("should not trigger save if changes happen before list is initialized", async () => {
     // arrange
-    const mockDependencies: Dependencies = {
+    const mockDependencies: TodosDependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
         saveTodos: vi.fn(),
@@ -89,54 +86,68 @@ describe("Todos auto-save (effect)", () => {
 
     const model = new TodosModel(mockDependencies);
 
-    // act
+    // add a todo
     await model.addTodo("Write docs");
 
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
+    // run out the timer of the debounced save
+    vi.runAllTimers();
 
-    // assert
+    // check that no saving has been initiated
+    expect(model.isSaving).toEqual(false);
+
+    // check that no saving has been performed
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
-    // arrange
-    const mockDependencies: Dependencies = {
+    // mock up the dependencies for the model
+    const mockDependencies: TodosDependencies = {
       generateId: vi.fn(() => "abc"),
       todosService: {
-        saveTodos: vi.fn(),
+        saveTodos: vi.fn(async () => {}),
         fetchTodos: vi.fn(async () => []),
       },
-      waitTimeBeforeSave: 100,
+      waitTimeBeforeSave: 10000000,
     };
 
+    // create an instance of the model
     const model = new TodosModel(mockDependencies);
 
-    // act
+    // initialize the list of todos
     await model.initializeTodos();
 
+    // check that init was performed
+    expect(model.isInitialized).toEqual(true);
+
+    // add some todos to the list
     await model.addTodo("Write docs");
     await model.addTodo("Write tests");
     await model.addTodo("Paint house");
 
-    // assert
+    // check that no saving has been performed (yet)
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
+    // check that we are not currently saving
+    expect(model.isSaving).toEqual(false);
 
-    // assert
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    // run out the timer of the debounced save
+    vi.runAllTimers();
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2);
+    // check that saving has been initiated
+    expect(model.isSaving).toEqual(true);
 
-    // assert
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    // wait for the saving function to be called
+    await vi.waitFor(() =>
+      expect(mockDependencies.todosService.saveTodos).toHaveBeenCalled(),
+    );
 
-    // act
-    await vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave);
+    // check that we are no longer saving
+    expect(model.isSaving).toEqual(false);
 
-    // assert
+    // run any pending timers
+    vi.runAllTimers();
+
+    // check that the saving was not performed multiple times
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
   });
 });

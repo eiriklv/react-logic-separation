@@ -17,7 +17,7 @@ const defaultDependencies = {
 };
 
 // Types and interfaces
-export type Dependencies = typeof defaultDependencies;
+export type RemindersModelDependencies = typeof defaultDependencies;
 
 export interface Reminder {
   id: string;
@@ -27,7 +27,7 @@ export interface Reminder {
 export class RemindersModel {
   constructor(
     queryClient: QueryClient,
-    dependencies: Dependencies = defaultDependencies,
+    dependencies: RemindersModelDependencies = defaultDependencies,
   ) {
     this._queryClient = queryClient;
     this._injections = dependencies;
@@ -55,7 +55,7 @@ export class RemindersModel {
   }
 
   // Dependencies
-  private _injections: Dependencies = defaultDependencies;
+  private _injections: RemindersModelDependencies = defaultDependencies;
 
   // Query client
   private _queryClient: QueryClient;

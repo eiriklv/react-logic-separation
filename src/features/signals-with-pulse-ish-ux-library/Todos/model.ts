@@ -9,7 +9,7 @@ import {
 import * as todosService from "./services/todos.service";
 import { generateId } from "../../../lib/utils";
 
-// Dependencies to be injected
+// TodosDependencies to be injected
 const defaultDependencies = {
   todosService,
   generateId,
@@ -17,7 +17,7 @@ const defaultDependencies = {
 };
 
 // Types and interfaces
-export type Dependencies = typeof defaultDependencies;
+export type TodosDependencies = typeof defaultDependencies;
 
 export interface Todo {
   id: string;
@@ -25,8 +25,8 @@ export interface Todo {
 }
 
 export class TodosModel {
-  constructor(dependencies: Dependencies = defaultDependencies) {
-    // Dependencies (init)
+  constructor(dependencies: TodosDependencies = defaultDependencies) {
+    // TodosDependencies (init)
     this._injections = dependencies;
 
     // Effects (init)
@@ -59,7 +59,7 @@ export class TodosModel {
   }
 
   // Dependencies
-  private _injections: Dependencies;
+  private _injections: TodosDependencies;
 
   // State
   private _todos = signal<Todo[]>([]);

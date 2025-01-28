@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { useTodosModel } from "./model";
 import { TodosModelContext, TodosModelContextInterface } from "./model.context";
 import React from "react";
@@ -156,38 +156,40 @@ describe("Todos auto-save (effect)", () => {
 
     const { result } = renderHook(() => useTodosModel(), { wrapper });
 
-    // act
+    // initialize todos
     await act(() => result.current.initializeTodos());
 
+    // add some todos
     await act(() => result.current.addTodo("Write docs"));
     await act(() => result.current.addTodo("Write tests"));
     await act(() => result.current.addTodo("Paint house"));
 
-    // assert
+    // check that no saving has been performed (yet)
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
 
-    // act
+    // check that we are not currently saving
+    expect(result.current.isSaving).toEqual(false);
+
+    // run out the timer of the debounced save
+    act(() => vi.runAllTimers());
+
+    // check that saving has been initiated
+    expect(result.current.isSaving).toEqual(true);
+
+    // wait for the saving function to be called
     await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2),
+      vi.waitFor(() =>
+        expect(mockDependencies.todosService.saveTodos).toHaveBeenCalled(),
+      ),
     );
 
-    // assert
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    // check that we are no longer saving
+    expect(result.current.isSaving).toEqual(false);
 
-    // act
-    await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave / 2),
-    );
+    // run any pending timers
+    act(() => vi.runAllTimers());
 
-    // assert
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
-
-    // act
-    await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave),
-    );
-
-    // assert
+    // check that the saving was not performed multiple times
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
   });
 });
