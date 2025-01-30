@@ -1,6 +1,6 @@
 import React from "react";
-import { useTodosModel } from "./model";
 import { TodoItem } from "./components/TodoItem";
+import { useTodosViewModel } from "./Todos.viewmodel";
 
 /**
  * The context can be used to inject any kind of
@@ -20,12 +20,12 @@ import { TodoItem } from "./components/TodoItem";
  */
 
 export interface TodosContextInterface {
-  useTodosModel: typeof useTodosModel;
+  useTodosViewModel: typeof useTodosViewModel;
   TodoItem: typeof TodoItem;
 }
 
 export const defaultValue: TodosContextInterface = {
-  useTodosModel,
+  useTodosViewModel,
   TodoItem,
 };
 

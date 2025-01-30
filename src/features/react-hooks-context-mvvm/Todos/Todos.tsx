@@ -3,7 +3,7 @@ import { TodosContext } from "./Todos.context";
 
 export function Todos() {
   // Get injected dependencies from context
-  const { useTodosModel, TodoItem } = useContext(TodosContext);
+  const { useTodosViewModel, TodoItem } = useContext(TodosContext);
 
   // Use the todos model (state and commands)
   const {
@@ -13,7 +13,7 @@ export function Todos() {
     todosCount,
     addTodo,
     initializeTodos,
-  } = useTodosModel();
+  } = useTodosViewModel();
 
   // Since a hook cannot be consumed outside of React we have
   // to perform any initialization inside the component tree itself

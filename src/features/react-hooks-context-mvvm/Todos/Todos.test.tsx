@@ -7,7 +7,7 @@ describe("Todos Component", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: TodosContextInterface = {
-      useTodosModel: () => ({
+      useTodosViewModel: () => ({
         addTodo: vi.fn(),
         initializeTodos: vi.fn(),
         isInitialized: true,
@@ -33,7 +33,7 @@ describe("Todos Component", () => {
     const addTodo = vi.fn();
 
     const dependencies: TodosContextInterface = {
-      useTodosModel: () => ({
+      useTodosViewModel: () => ({
         addTodo,
         initializeTodos: vi.fn(),
         isInitialized: true,
