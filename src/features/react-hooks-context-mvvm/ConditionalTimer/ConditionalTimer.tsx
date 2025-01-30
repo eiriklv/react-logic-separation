@@ -18,7 +18,7 @@ export function ConditionalTimer() {
 
   return (
     <div>
-      <pre>react-hooks-context</pre>
+      <pre>react-hooks-context-mvvm</pre>
       <h3>Conditional Timer</h3>
       <h4>Status: {isRunning ? "running" : "stopped"}</h4>
       <div>{elapsedSeconds}</div>

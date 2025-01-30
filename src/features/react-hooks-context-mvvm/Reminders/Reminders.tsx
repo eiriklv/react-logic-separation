@@ -51,7 +51,7 @@ export function Reminders() {
 
   return (
     <div>
-      <pre>react-hooks</pre>
+      <pre>react-hooks-context-mvvm</pre>
       <h3>
         Reminders <span>{isSaving && "(saving...)"}</span>
       </h3>

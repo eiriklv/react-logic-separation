@@ -53,7 +53,7 @@ export function Todos() {
 
   return (
     <div>
-      <pre>react-hooks-context</pre>
+      <pre>react-hooks-context-mvvm</pre>
       <h3>
         Todos <span>{isSaving && "(saving...)"}</span>
       </h3>
