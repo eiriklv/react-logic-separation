@@ -7,11 +7,13 @@ describe("Todos Component", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: TodosContextInterface = {
-      useAddTodo: () => vi.fn(),
-      useIsInitialized: () => true,
-      useIsSaving: () => false,
-      useTodos: () => [],
-      useTodosCount: () => 0,
+      useTodosViewModel: vi.fn(() => ({
+        isInitialized: true,
+        isSaving: false,
+        todos: [],
+        todosCount: 0,
+        addTodo: vi.fn(),
+      })),
       TodoItem: () => <></>,
     };
 
@@ -30,11 +32,13 @@ describe("Todos Component", () => {
     const addTodo = vi.fn();
 
     const dependencies: TodosContextInterface = {
-      useAddTodo: () => addTodo,
-      useIsInitialized: () => true,
-      useIsSaving: () => false,
-      useTodos: () => [],
-      useTodosCount: () => 0,
+      useTodosViewModel: vi.fn(() => ({
+        isInitialized: true,
+        isSaving: false,
+        todos: [],
+        todosCount: 0,
+        addTodo,
+      })),
       TodoItem: () => <></>,
     };
 

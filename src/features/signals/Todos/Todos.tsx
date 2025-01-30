@@ -3,21 +3,11 @@ import { TodosContext } from "./Todos.context";
 
 export function Todos() {
   // Get injected dependencies from context
-  const {
-    useTodos,
-    useTodosCount,
-    useAddTodo,
-    useIsSaving,
-    useIsInitialized,
-    TodoItem,
-  } = useContext(TodosContext);
+  const { useTodosViewModel, TodoItem } = useContext(TodosContext);
 
-  // Use injected dependencies (domain state/actions, components, etc)
-  const isInitialized = useIsInitialized();
-  const isSaving = useIsSaving();
-  const todos = useTodos();
-  const todosCount = useTodosCount();
-  const addTodo = useAddTodo();
+  // Use view model
+  const { isInitialized, isSaving, todos, todosCount, addTodo } =
+    useTodosViewModel();
 
   // Create local view state for form/input
   const [todoInputText, setTodoInputText] = useState("");

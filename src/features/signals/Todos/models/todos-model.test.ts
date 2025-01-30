@@ -1,4 +1,4 @@
-import { TodosDependencies, TodosModel } from "./model";
+import { TodosDependencies, TodosModel } from "./todos-model";
 
 describe("Add todos (command)", () => {
   it("should work as expected when adding a single todo", async () => {

@@ -1,5 +1,5 @@
 import { useSignalValue } from "../../../lib/use-signal-value";
-import { model } from "./model";
+import { remindersModel } from "./models/reminders-model";
 
 /**
  * The main purpose of this file is to
@@ -17,18 +17,13 @@ import { model } from "./model";
  * the custom hooks into it
  */
 
-export const useElapsedSeconds = () => {
-  return useSignalValue(model.elapsedSeconds);
-};
-
-export const useIsRunning = () => {
-  return useSignalValue(model.isRunning);
-};
-
-export const useStartTimer = () => {
-  return model.startTimer;
-};
-
-export const useStopTimer = () => {
-  return model.stopTimer;
+export const useRemindersViewModel = () => {
+  return {
+    reminders: useSignalValue(remindersModel.reminders),
+    remindersCount: useSignalValue(remindersModel.remindersCount),
+    isLoading: useSignalValue(remindersModel.isLoading),
+    isFetching: useSignalValue(remindersModel.isFetching),
+    isSaving: useSignalValue(remindersModel.isSaving),
+    addReminder: remindersModel.addReminder,
+  };
 };

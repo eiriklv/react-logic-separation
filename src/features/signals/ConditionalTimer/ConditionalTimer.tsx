@@ -3,28 +3,20 @@ import { ConditionalTimerContext } from "./ConditionalTimer.context";
 
 export function ConditionalTimer() {
   // Get injected dependencies from context
-  const {
-    useElapsedSeconds,
-    useIsOkay,
-    useIsSafe,
-    useIsCool,
-    useIsRunning,
-    useToggleOkay,
-    useToggleSafe,
-    useToggleCool,
-    useResetTimer,
-  } = useContext(ConditionalTimerContext);
+  const { useConditionalTimerViewModel } = useContext(ConditionalTimerContext);
 
-  // Use injected dependencies (domain state/actions, components, etc)
-  const elapsedSeconds = useElapsedSeconds();
-  const isOkay = useIsOkay();
-  const isSafe = useIsSafe();
-  const isCool = useIsCool();
-  const isRunning = useIsRunning();
-  const toggleOkay = useToggleOkay();
-  const toggleSafe = useToggleSafe();
-  const toggleCool = useToggleCool();
-  const resetTimer = useResetTimer();
+  // Use view model
+  const {
+    elapsedSeconds,
+    isOkay,
+    isSafe,
+    isCool,
+    isRunning,
+    toggleOkay,
+    toggleSafe,
+    toggleCool,
+    resetTimer,
+  } = useConditionalTimerViewModel();
 
   return (
     <div>

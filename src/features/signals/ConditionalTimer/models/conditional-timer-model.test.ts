@@ -1,4 +1,4 @@
-import { ConditionalTimerModel } from "./model";
+import { ConditionalTimerModel } from "./conditional-timer-model";
 
 describe("toggle okay, safe and cool (commands)", () => {
   it("should work as expected when starting timer", async () => {

@@ -6,8 +6,8 @@ import {
   ReadonlySignal,
 } from "@preact/signals-core";
 
-import * as todosService from "./services/todos.service";
-import { generateId } from "../../../lib/utils";
+import * as todosService from "../services/todos.service";
+import { generateId } from "../../../../lib/utils";
 
 // Dependencies to be injected
 const defaultDependencies = {
@@ -137,4 +137,4 @@ export class TodosModel {
 }
 
 // Model singleton
-export const model = new TodosModel();
+export const todosModel = new TodosModel();

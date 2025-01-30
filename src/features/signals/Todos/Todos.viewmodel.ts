@@ -1,5 +1,5 @@
 import { useSignalValue } from "../../../lib/use-signal-value";
-import { model } from "./model";
+import { todosModel } from "./models/todos-model";
 
 /**
  * The main purpose of this file is to
@@ -17,22 +17,12 @@ import { model } from "./model";
  * the custom hooks into it
  */
 
-export const useIsInitialized = () => {
-  return useSignalValue(model.isInitialized);
-};
-
-export const useIsSaving = () => {
-  return useSignalValue(model.isSaving);
-};
-
-export const useTodos = () => {
-  return useSignalValue(model.todos);
-};
-
-export const useTodosCount = () => {
-  return useSignalValue(model.todosCount);
-};
-
-export const useAddTodo = () => {
-  return model.addTodo;
+export const useTodosViewModel = () => {
+  return {
+    isInitialized: useSignalValue(todosModel.isInitialized),
+    isSaving: useSignalValue(todosModel.isSaving),
+    todos: useSignalValue(todosModel.todos),
+    todosCount: useSignalValue(todosModel.todosCount),
+    addTodo: todosModel.addTodo,
+  };
 };

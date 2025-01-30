@@ -10,15 +10,17 @@ describe("ConditionalTimer Component", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: ConditionalTimerContextInterface = {
-      useElapsedSeconds: () => 10,
-      useIsOkay: () => false,
-      useIsSafe: () => false,
-      useIsCool: () => false,
-      useIsRunning: () => false,
-      useToggleOkay: () => vi.fn(),
-      useToggleSafe: () => vi.fn(),
-      useToggleCool: () => vi.fn(),
-      useResetTimer: () => vi.fn(),
+      useConditionalTimerViewModel: vi.fn(() => ({
+        elapsedSeconds: 10,
+        isOkay: false,
+        isSafe: false,
+        isCool: false,
+        isRunning: false,
+        toggleOkay: vi.fn(),
+        toggleSafe: vi.fn(),
+        toggleCool: vi.fn(),
+        resetTimer: vi.fn(),
+      })),
     };
 
     render(
@@ -42,15 +44,17 @@ describe("ConditionalTimer Component", () => {
     const resetTimer = vi.fn();
 
     const dependencies: ConditionalTimerContextInterface = {
-      useElapsedSeconds: () => 10,
-      useIsOkay: () => false,
-      useIsSafe: () => false,
-      useIsCool: () => false,
-      useIsRunning: () => false,
-      useToggleOkay: () => toggleOkay,
-      useToggleSafe: () => toggleSafe,
-      useToggleCool: () => toggleCool,
-      useResetTimer: () => resetTimer,
+      useConditionalTimerViewModel: vi.fn(() => ({
+        elapsedSeconds: 10,
+        isOkay: false,
+        isSafe: false,
+        isCool: false,
+        isRunning: false,
+        toggleOkay,
+        toggleSafe,
+        toggleCool,
+        resetTimer,
+      })),
     };
 
     render(

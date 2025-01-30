@@ -1,4 +1,4 @@
-import * as remindersService from "./services/reminders.service";
+import * as remindersService from "../services/reminders.service";
 
 import { computed, ReadonlySignal } from "@preact/signals-core";
 
@@ -8,7 +8,7 @@ import {
   query,
   SignalMutation,
   SignalQuery,
-} from "../../../lib/query";
+} from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 
 // Dependencies to be injected
@@ -104,4 +104,4 @@ export class RemindersModel {
 }
 
 // Model singleton
-export const model = new RemindersModel(defaultQueryClient);
+export const remindersModel = new RemindersModel(defaultQueryClient);

@@ -1,5 +1,5 @@
 import { useSignalValue } from "../../../lib/use-signal-value";
-import { model } from "./model";
+import { todosModel } from "./models/todos-model";
 
 /**
  * The main purpose of this file is to
@@ -17,26 +17,11 @@ import { model } from "./model";
  * the custom hooks into it
  */
 
-export const useReminders = () => {
-  return useSignalValue(model.reminders);
-};
-
-export const useRemindersCount = () => {
-  return useSignalValue(model.remindersCount);
-};
-
-export const useIsLoading = () => {
-  return useSignalValue(model.isLoading);
-};
-
-export const useIsFetching = () => {
-  return useSignalValue(model.isFetching);
-};
-
-export const useIsSaving = () => {
-  return useSignalValue(model.isSaving);
-};
-
-export const useAddReminder = () => {
-  return model.addReminder;
+export const useTimerViewModel = () => {
+  return {
+    elapsedSeconds: useSignalValue(todosModel.elapsedSeconds),
+    isRunning: useSignalValue(todosModel.isRunning),
+    startTimer: todosModel.startTimer,
+    stopTimer: todosModel.stopTimer,
+  };
 };

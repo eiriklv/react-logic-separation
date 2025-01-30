@@ -1,4 +1,5 @@
 import { generateId, sleep } from "../../../../lib/utils";
+import { Reminder } from "../models/reminders-model";
 
 const reminders: Reminder[] = [
   { id: "1", text: "Write self reflection" },

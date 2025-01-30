@@ -85,4 +85,4 @@ export class ConditionalTimerModel {
 }
 
 // Model singleton
-export const model = new ConditionalTimerModel();
+export const conditionalTimerModel = new ConditionalTimerModel();

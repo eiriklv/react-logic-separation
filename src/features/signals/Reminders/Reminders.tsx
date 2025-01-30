@@ -7,23 +7,17 @@ import { RemindersContext } from "./Reminders.context";
  */
 export function Reminders() {
   // Get dependencies
-  const {
-    useReminders,
-    useRemindersCount,
-    useIsLoading,
-    useIsFetching,
-    useIsSaving,
-    useAddReminder,
-    ReminderItem,
-  } = useContext(RemindersContext);
+  const { useRemindersViewModel, ReminderItem } = useContext(RemindersContext);
 
-  // Use the reminders model (state and commands)
-  const reminders = useReminders() ?? [];
-  const remindersCount = useRemindersCount();
-  const isLoading = useIsLoading();
-  const isFetching = useIsFetching();
-  const isSaving = useIsSaving();
-  const addReminder = useAddReminder();
+  // Use the view model (state and commands)
+  const {
+    reminders = [],
+    remindersCount,
+    isLoading,
+    isFetching,
+    isSaving,
+    addReminder,
+  } = useRemindersViewModel();
 
   // Create local view state for form/input
   const [reminderInputText, setReminderInputText] = useState("");
@@ -57,7 +51,7 @@ export function Reminders() {
 
   return (
     <div>
-      <pre>react-hooks</pre>
+      <pre>signals</pre>
       <h3>
         Reminders <span>{isSaving && "(saving...)"}</span>
       </h3>

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  useElapsedSeconds,
-  useIsRunning,
-  useStartTimer,
-  useStopTimer,
-} from "./hooks";
+import { useTimerViewModel } from "./Timer.viewmodel";
 
 /**
  * The context can be used to inject any kind of
@@ -24,17 +19,11 @@ import {
  */
 
 export interface TimerContextInterface {
-  useElapsedSeconds: typeof useElapsedSeconds;
-  useIsRunning: typeof useIsRunning;
-  useStartTimer: typeof useStartTimer;
-  useStopTimer: typeof useStopTimer;
+  useTimerViewModel: typeof useTimerViewModel;
 }
 
 export const defaultValue: TimerContextInterface = {
-  useElapsedSeconds,
-  useIsRunning,
-  useStartTimer,
-  useStopTimer,
+  useTimerViewModel,
 };
 
 export const TimerContext =

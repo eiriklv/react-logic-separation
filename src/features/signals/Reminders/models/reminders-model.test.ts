@@ -1,4 +1,8 @@
-import { RemindersModelDependencies, Reminder, RemindersModel } from "./model";
+import {
+  RemindersModelDependencies,
+  Reminder,
+  RemindersModel,
+} from "./reminders-model";
 import { QueryClient } from "@tanstack/query-core";
 
 describe("Add reminders (command)", () => {

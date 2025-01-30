@@ -10,12 +10,14 @@ describe("Reminders Component", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: RemindersContextInterface = {
-      useReminders: vi.fn(() => []),
-      useRemindersCount: vi.fn(() => 0),
-      useIsLoading: vi.fn(() => false),
-      useIsFetching: vi.fn(() => false),
-      useIsSaving: vi.fn(() => false),
-      useAddReminder: vi.fn(),
+      useRemindersViewModel: vi.fn(() => ({
+        reminders: [],
+        remindersCount: 0,
+        isLoading: false,
+        isFetching: false,
+        isSaving: false,
+        addReminder: vi.fn(),
+      })),
       ReminderItem: () => <></>,
     };
 
@@ -34,12 +36,14 @@ describe("Reminders Component", () => {
     const addReminder = vi.fn();
 
     const dependencies: RemindersContextInterface = {
-      useReminders: vi.fn(() => []),
-      useRemindersCount: vi.fn(() => 0),
-      useIsLoading: vi.fn(() => false),
-      useIsFetching: vi.fn(() => false),
-      useIsSaving: vi.fn(() => false),
-      useAddReminder: vi.fn(() => addReminder),
+      useRemindersViewModel: vi.fn(() => ({
+        reminders: [],
+        remindersCount: 0,
+        isLoading: false,
+        isFetching: false,
+        isSaving: false,
+        addReminder,
+      })),
       ReminderItem: () => <></>,
     };
 
