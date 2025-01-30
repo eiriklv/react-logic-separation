@@ -26,7 +26,7 @@ describe("Add todos (command)", () => {
     const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
-    await act(() => result.current.addTodo("Paint house"));
+    await waitFor(() => result.current.addTodo("Paint house"));
 
     // assert
     expect(mockDependencies.generateId).toHaveBeenCalledTimes(1);
@@ -55,9 +55,9 @@ describe("Add todos (command)", () => {
     const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
-    await act(() => result.current.addTodo("Paint house"));
-    await act(() => result.current.addTodo("Buy milk"));
-    await act(() => result.current.addTodo("Wash car"));
+    await waitFor(() => result.current.addTodo("Paint house"));
+    await waitFor(() => result.current.addTodo("Buy milk"));
+    await waitFor(() => result.current.addTodo("Wash car"));
 
     // assert
     expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
@@ -90,7 +90,7 @@ describe("Add todos (command)", () => {
     const { result } = renderHook(() => useTodosModel(), { wrapper });
 
     // act
-    await act(() => result.current.addTodo(""));
+    await waitFor(() => result.current.addTodo(""));
 
     // assert
     expect(mockDependencies.generateId).toHaveBeenCalledTimes(0);
@@ -111,7 +111,7 @@ describe("Todos auto-save (effect)", () => {
         saveTodos: vi.fn(),
         fetchTodos: vi.fn(),
       },
-      waitTimeBeforeSave: 100,
+      waitTimeBeforeSave: 1000,
     };
 
     const wrapper: React.FC<{
@@ -124,19 +124,21 @@ describe("Todos auto-save (effect)", () => {
 
     const { result } = renderHook(() => useTodosModel(), { wrapper });
 
-    // act
+    // add a todo
     await act(() => result.current.addTodo("Write docs"));
 
-    await act(() =>
-      vi.advanceTimersByTimeAsync(mockDependencies.waitTimeBeforeSave),
-    );
+    // run out the timer of the debounced save
+    act(() => vi.runAllTimers());
 
-    // assert
+    // check that no saving has been initiated
+    expect(result.current.isSaving).toEqual(false);
+
+    // check that no saving has been performed
     expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
-    // arrange
+    // mock up the dependencies for the model
     const mockDependencies: TodosModelContextInterface = {
       generateId: vi.fn(() => "abc"),
       todosService: {
@@ -154,12 +156,16 @@ describe("Todos auto-save (effect)", () => {
       </TodosModelContext.Provider>
     );
 
+    // create an instance of the model
     const { result } = renderHook(() => useTodosModel(), { wrapper });
 
-    // initialize todos
+    // initialize the list of todos
     await act(() => result.current.initializeTodos());
 
-    // add some todos
+    // check that init was performed
+    expect(result.current.isInitialized).toEqual(true);
+
+    // add some todos to the list
     await act(() => result.current.addTodo("Write docs"));
     await act(() => result.current.addTodo("Write tests"));
     await act(() => result.current.addTodo("Paint house"));
