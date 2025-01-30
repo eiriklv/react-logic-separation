@@ -1,6 +1,7 @@
 import { TimerFeature as TimerReactNaive } from "./features/react-naive/Timer";
 import { TimerFeature as TimerReactHooks } from "./features/react-hooks/Timer";
 import { TimerFeature as TimerReactHooksContext } from "./features/react-hooks-context/Timer";
+import { TimerFeature as TimerReactHooksContextMvvm } from "./features/react-hooks-context-mvvm/Timer";
 import { TimerFeature as TimerEasyPeasy } from "./features/easy-peasy/Timer";
 import { TimerFeature as TimerJotai } from "./features/jotai/Timer";
 import { TimerFeature as TimerMobx } from "./features/mobx/Timer";
@@ -9,6 +10,7 @@ import { TimerFeature as TimerPulse } from "./features/pulse/Timer";
 import { ConditionalTimerFeature as ConditionalTimerReactNaive } from "./features/react-naive/ConditionalTimer";
 import { ConditionalTimerFeature as ConditionalTimerReactHooks } from "./features/react-hooks/ConditionalTimer";
 import { ConditionalTimerFeature as ConditionalTimerReactHooksContext } from "./features/react-hooks-context/ConditionalTimer";
+import { ConditionalTimerFeature as ConditionalTimerReactHooksContextMvvm } from "./features/react-hooks-context-mvvm/ConditionalTimer";
 import { ConditionalTimerFeature as ConditionalTimerEasyPeasy } from "./features/easy-peasy/ConditionalTimer";
 import { ConditionalTimerFeature as ConditionalTimerJotai } from "./features/jotai/ConditionalTimer";
 import { ConditionalTimerFeature as ConditionalTimerMobx } from "./features/mobx/ConditionalTimer";
@@ -17,6 +19,7 @@ import { ConditionalTimerFeature as ConditionalTimerPulse } from "./features/pul
 import { TodosFeature as TodosReactNaive } from "./features/react-naive/Todos";
 import { TodosFeature as TodosReactHooks } from "./features/react-hooks/Todos";
 import { TodosFeature as TodosReactHooksContext } from "./features/react-hooks-context/Todos";
+import { TodosFeature as TodosReactHooksContextMvvm } from "./features/react-hooks-context-mvvm/Todos";
 import { TodosFeature as TodosEasyPeasy } from "./features/easy-peasy/Todos";
 import { TodosFeature as TodosJotai } from "./features/jotai/Todos";
 import { TodosFeature as TodosMobx } from "./features/mobx/Todos";
@@ -41,6 +44,11 @@ function App() {
         <TimerReactHooksContext />
         <ConditionalTimerReactHooksContext />
         <TodosReactHooksContext />
+      </div>
+      <div className="library-group">
+        <TimerReactHooksContextMvvm />
+        <ConditionalTimerReactHooksContextMvvm />
+        <TodosReactHooksContextMvvm />
       </div>
       <div className="library-group">
         <TimerEasyPeasy />
