@@ -68,7 +68,7 @@ describe("Add todos (command)", () => {
   });
 });
 
-describe("isSaving (relay)", () => {
+describe("Todos auto-save (effect)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
