@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { TodoItem } from "./TodoItem";
-import { Todo } from "../model";
+import { Todo } from "../types";
 
 describe("TodoItem Component", () => {
   it("Renders correctly", () => {

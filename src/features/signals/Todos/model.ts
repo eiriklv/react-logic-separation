@@ -8,6 +8,7 @@ import {
 
 import * as todosService from "./services/todos.service";
 import { generateId } from "../../../lib/utils";
+import { Todo } from "./types";
 
 // TodosDependencies to be injected
 const defaultDependencies = {
@@ -19,12 +20,36 @@ const defaultDependencies = {
 // Types and interfaces
 export type TodosDependencies = typeof defaultDependencies;
 
-export interface Todo {
-  id: string;
-  text: string;
-}
-
 export class TodosModel {
+  // Dependencies
+  private _injections: TodosDependencies;
+
+  // State
+  private _todos = signal<Todo[]>([]);
+  private _isSaving = signal<boolean>(false);
+  private _isInitialized = signal<boolean>(false);
+
+  // Computed values
+  private _todosCount = computed<number>(() => this._todos.value.length);
+
+  // Events
+  private _initializedTodos = (payload: Todo[]) => {
+    batch(() => {
+      this._todos.value = payload;
+      this._isInitialized.value = true;
+    });
+  };
+  private _addedTodo = (payload: Todo) => {
+    this._todos.value = [...this._todos.value, payload];
+  };
+  private _toggledSaveState = (payload: boolean) => {
+    this._isSaving.value = payload;
+  };
+
+  // Effects
+  private _disposeAutoSaveTodosOnChange: () => void;
+
+  // Constructor
   constructor(dependencies: TodosDependencies = defaultDependencies) {
     // TodosDependencies (init)
     this._injections = dependencies;
@@ -57,34 +82,6 @@ export class TodosModel {
       };
     });
   }
-
-  // Dependencies
-  private _injections: TodosDependencies;
-
-  // State
-  private _todos = signal<Todo[]>([]);
-  private _isSaving = signal<boolean>(false);
-  private _isInitialized = signal<boolean>(false);
-
-  // Computed values
-  private _todosCount = computed<number>(() => this._todos.value.length);
-
-  // Events
-  private _initializedTodos = (payload: Todo[]) => {
-    batch(() => {
-      this._todos.value = payload;
-      this._isInitialized.value = true;
-    });
-  };
-  private _addedTodo = (payload: Todo) => {
-    this._todos.value = [...this._todos.value, payload];
-  };
-  private _toggledSaveState = (payload: boolean) => {
-    this._isSaving.value = payload;
-  };
-
-  // Effects
-  private _disposeAutoSaveTodosOnChange: () => void;
 
   // Readonly signals
   public get todos(): ReadonlySignal<Todo[]> {
