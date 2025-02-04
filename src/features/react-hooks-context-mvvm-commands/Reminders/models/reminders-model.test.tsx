@@ -1,9 +1,9 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { useRemindersModel } from "./model";
+import { useRemindersModel } from "./reminders-model";
 import {
   RemindersModelContext,
   RemindersModelContextInterface,
-} from "./model.context";
+} from "./reminders-model.context";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Reminder } from "../types";
@@ -18,10 +18,8 @@ describe("Add reminders (command)", () => {
     ];
 
     const mockDependencies: RemindersModelContextInterface = {
-      remindersService: {
-        addReminder: vi.fn(async () => {}),
-        fetchReminders: vi.fn(async () => fakeReminderMocks[count++]),
-      },
+      addReminderCommand: vi.fn(async (text) => ({ id: "1", text })),
+      fetchRemindersCommand: vi.fn(async () => fakeReminderMocks[count++]),
     };
 
     const queryClient = new QueryClient();
@@ -51,14 +49,10 @@ describe("Add reminders (command)", () => {
     await waitFor(() => result.current.addReminder("Paint house"));
 
     // check that the reminders were added the correct amount of times
-    expect(
-      mockDependencies.remindersService.addReminder,
-    ).toHaveBeenCalledOnce();
+    expect(mockDependencies.addReminderCommand).toHaveBeenCalledOnce();
 
     // check that the reminders were re-fetched the correct amount of times
-    expect(
-      mockDependencies.remindersService.fetchReminders,
-    ).toHaveBeenCalledTimes(2);
+    expect(mockDependencies.fetchRemindersCommand).toHaveBeenCalledTimes(2);
 
     // check that the list of reminders is correct
     expect(result.current.reminders).toEqual(fakeReminderMocks[1]);
@@ -82,10 +76,8 @@ describe("Add reminders (command)", () => {
     ];
 
     const mockDependencies: RemindersModelContextInterface = {
-      remindersService: {
-        addReminder: vi.fn(async () => {}),
-        fetchReminders: vi.fn(async () => fakeReminderMocks[count++]),
-      },
+      addReminderCommand: vi.fn(async (text) => ({ id: "1", text })),
+      fetchRemindersCommand: vi.fn(async () => fakeReminderMocks[count++]),
     };
 
     const queryClient = new QueryClient();
@@ -117,14 +109,10 @@ describe("Add reminders (command)", () => {
     await waitFor(() => result.current.addReminder("Wash car"));
 
     // check that the reminders were added the correct amount of times
-    expect(mockDependencies.remindersService.addReminder).toHaveBeenCalledTimes(
-      3,
-    );
+    expect(mockDependencies.addReminderCommand).toHaveBeenCalledTimes(3);
 
     // check that the reminders were re-fetched the correct amount of times
-    expect(
-      mockDependencies.remindersService.fetchReminders,
-    ).toHaveBeenCalledTimes(4);
+    expect(mockDependencies.fetchRemindersCommand).toHaveBeenCalledTimes(4);
 
     // check that the list of reminders is correct
     expect(result.current.reminders).toEqual(fakeReminderMocks[3]);
@@ -137,10 +125,8 @@ describe("Add reminders (command)", () => {
 
     // arrange
     const mockDependencies: RemindersModelContextInterface = {
-      remindersService: {
-        addReminder: vi.fn(async () => {}),
-        fetchReminders: vi.fn(async () => fakeReminderMocks[count++]),
-      },
+      addReminderCommand: vi.fn(async (text) => ({ id: "1", text })),
+      fetchRemindersCommand: vi.fn(async () => fakeReminderMocks[count++]),
     };
 
     const queryClient = new QueryClient();
@@ -170,14 +156,10 @@ describe("Add reminders (command)", () => {
     await waitFor(() => result.current.addReminder(""));
 
     // check that it never added a reminder
-    expect(
-      mockDependencies.remindersService.addReminder,
-    ).not.toHaveBeenCalled();
+    expect(mockDependencies.addReminderCommand).not.toHaveBeenCalled();
 
     // check that it did not refetch the reminders
-    expect(
-      mockDependencies.remindersService.fetchReminders,
-    ).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.fetchRemindersCommand).toHaveBeenCalledTimes(1);
 
     // check that the list of reminders is still the same as before
     expect(result.current.reminders).toEqual(fakeReminderMocks[0]);

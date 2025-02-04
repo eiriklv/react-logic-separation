@@ -1,5 +1,5 @@
 import React from "react";
-import * as remindersService from "../services/reminders.service";
+import { useConditionalTimerViewModel } from "./ConditionalTimer.viewmodel";
 
 /**
  * The context can be used to inject any kind of
@@ -18,13 +18,13 @@ import * as remindersService from "../services/reminders.service";
  * The interfaces of the components also become much simpler.
  */
 
-export interface RemindersModelContextInterface {
-  remindersService: typeof remindersService;
+export interface ConditionalTimerContextInterface {
+  useConditionalTimerViewModel: typeof useConditionalTimerViewModel;
 }
 
-export const defaultValue: RemindersModelContextInterface = {
-  remindersService,
+export const defaultValue: ConditionalTimerContextInterface = {
+  useConditionalTimerViewModel,
 };
 
-export const RemindersModelContext =
-  React.createContext<RemindersModelContextInterface>(defaultValue);
+export const ConditionalTimerContext =
+  React.createContext<ConditionalTimerContextInterface>(defaultValue);

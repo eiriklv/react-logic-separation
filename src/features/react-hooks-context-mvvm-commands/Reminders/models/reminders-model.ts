@@ -1,11 +1,13 @@
 import { useCallback, useContext, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { RemindersModelContext } from "./model.context";
+import { RemindersModelContext } from "./reminders-model.context";
 import { Reminder } from "../types";
 
 export const useRemindersModel = () => {
   // Get dependencies
-  const { remindersService } = useContext(RemindersModelContext);
+  const { fetchRemindersCommand, addReminderCommand } = useContext(
+    RemindersModelContext,
+  );
 
   // Query client
   const queryClient = useQueryClient();
@@ -17,13 +19,13 @@ export const useRemindersModel = () => {
     isFetching,
   } = useQuery<Reminder[]>({
     queryKey: ["reminders"],
-    queryFn: () => remindersService.fetchReminders(),
+    queryFn: () => fetchRemindersCommand(),
   });
 
   // Mutations
   const { mutateAsync: addReminderMutation, isPending: isSaving } = useMutation(
     {
-      mutationFn: (text: string) => remindersService.addReminder(text),
+      mutationFn: (text: string) => addReminderCommand(text),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["reminders"] });
       },
@@ -36,7 +38,7 @@ export const useRemindersModel = () => {
   // Commands
   const addReminder = useCallback(
     async (text: string) => {
-      // Validation
+      // Model specific input validation
       if (!text) {
         return;
       }
