@@ -10,6 +10,7 @@ import {
 import { QueryClient } from "@tanstack/query-core";
 import { fetchRemindersCommand } from "../commands/fetch-reminders";
 import { addReminderCommand } from "../commands/add-reminder";
+import { Reminder } from "../types";
 
 // Dependencies to be injected
 const defaultDependencies = {
@@ -19,11 +20,6 @@ const defaultDependencies = {
 
 // Types and interfaces
 export type RemindersModelDependencies = typeof defaultDependencies;
-
-export interface Reminder {
-  id: string;
-  text: string;
-}
 
 export class RemindersModel {
   // Dependencies
@@ -36,7 +32,7 @@ export class RemindersModel {
   private _remindersQuery: SignalQuery<Reminder[]>;
 
   // Mutations
-  private _addReminderMutation: SignalMutation<string>;
+  private _addReminderMutation: SignalMutation<string, Reminder>;
 
   // Computed
   private _remindersCount = computed(

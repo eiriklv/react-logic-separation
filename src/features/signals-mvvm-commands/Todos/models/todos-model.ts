@@ -8,6 +8,7 @@ import {
 
 import * as todosService from "../services/todos.service";
 import { generateId } from "../../../../lib/utils";
+import { Todo } from "../types";
 
 // Dependencies to be injected
 const defaultDependencies = {
@@ -19,16 +20,7 @@ const defaultDependencies = {
 // Types and interfaces
 export type TodosDependencies = typeof defaultDependencies;
 
-export interface Todo {
-  id: string;
-  text: string;
-}
-
 export class TodosModel {
-  constructor(dependencies: TodosDependencies = defaultDependencies) {
-    this._injections = dependencies;
-  }
-
   // Dependencies
   private _injections: TodosDependencies = defaultDependencies;
 
@@ -47,40 +39,50 @@ export class TodosModel {
       this._isInitialized.value = true;
     });
   };
+
   private _addedTodo = (payload: Todo) => {
     this._todos.value = [...this._todos.value, payload];
   };
+
   private _toggledSaveState = (payload: boolean) => {
     this._isSaving.value = payload;
   };
 
   // Effects
-  private _disposeAutoSaveTodosOnChange = effect(() => {
-    // Get dependencies
-    const { todosService, waitTimeBeforeSave } = this._injections;
+  private _disposeAutoSaveTodosOnChange: () => void;
 
-    // Get the changed values that triggered the effect
-    const todos = this._todos.value;
-    const isInitialized = this._isInitialized.value;
+  // Constructor
+  constructor(dependencies: TodosDependencies = defaultDependencies) {
+    this._injections = dependencies;
 
-    // Validation (only auto-save after the data has been initialized/loaded)
-    if (!isInitialized) {
-      return;
-    }
+    // Effects
+    this._disposeAutoSaveTodosOnChange = effect(() => {
+      // Get dependencies
+      const { todosService, waitTimeBeforeSave } = this._injections;
 
-    // Set a timeout/debounce for running the save effect
-    const saveTimeout = setTimeout(async () => {
-      this._toggledSaveState(true);
-      await todosService.saveTodos(todos);
-      this._toggledSaveState(false);
-    }, waitTimeBeforeSave);
+      // Get the changed values that triggered the effect
+      const todos = this._todos.value;
+      const isInitialized = this._isInitialized.value;
 
-    // Return handle for cancelling debounced save
-    return () => {
-      clearTimeout(saveTimeout);
-      this._toggledSaveState(false);
-    };
-  });
+      // Validation (only auto-save after the data has been initialized/loaded)
+      if (!isInitialized) {
+        return;
+      }
+
+      // Set a timeout/debounce for running the save effect
+      const saveTimeout = setTimeout(async () => {
+        this._toggledSaveState(true);
+        await todosService.saveTodos(todos);
+        this._toggledSaveState(false);
+      }, waitTimeBeforeSave);
+
+      // Return handle for cancelling debounced save
+      return () => {
+        clearTimeout(saveTimeout);
+        this._toggledSaveState(false);
+      };
+    });
+  }
 
   // Getters (read-only signals)
   public get todos(): ReadonlySignal<Todo[]> {

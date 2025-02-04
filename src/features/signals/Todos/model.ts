@@ -39,9 +39,11 @@ export class TodosModel {
       this._isInitialized.value = true;
     });
   };
+
   private _addedTodo = (payload: Todo) => {
     this._todos.value = [...this._todos.value, payload];
   };
+
   private _toggledSaveState = (payload: boolean) => {
     this._isSaving.value = payload;
   };
@@ -108,6 +110,7 @@ export class TodosModel {
     // Trigger event
     this._initializedTodos(todos);
   };
+
   public addTodo = async (payload: string) => {
     // Get dependencies
     const { generateId } = this._injections;

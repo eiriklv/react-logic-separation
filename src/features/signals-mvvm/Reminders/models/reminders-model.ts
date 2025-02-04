@@ -25,6 +25,24 @@ export interface Reminder {
 }
 
 export class RemindersModel {
+  // Dependencies
+  private _injections: RemindersModelDependencies = defaultDependencies;
+
+  // Query client
+  private _queryClient: QueryClient;
+
+  // Queries
+  private _remindersQuery: SignalQuery<Reminder[]>;
+
+  // Mutations
+  private _addReminderMutation: SignalMutation<string>;
+
+  // Computed
+  private _remindersCount = computed(
+    () => this._remindersQuery.data.value?.length || 0,
+  );
+
+  // Constructor
   constructor(
     queryClient: QueryClient,
     dependencies: RemindersModelDependencies = defaultDependencies,
@@ -53,23 +71,6 @@ export class RemindersModel {
       this._queryClient,
     );
   }
-
-  // Dependencies
-  private _injections: RemindersModelDependencies = defaultDependencies;
-
-  // Query client
-  private _queryClient: QueryClient;
-
-  // Queries
-  private _remindersQuery: SignalQuery<Reminder[]>;
-
-  // Mutations
-  private _addReminderMutation: SignalMutation<string>;
-
-  // Computed
-  private _remindersCount = computed(
-    () => this._remindersQuery.data.value?.length || 0,
-  );
 
   // Getters
   public get reminders(): ReadonlySignal<Reminder[] | undefined> {
