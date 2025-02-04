@@ -25,7 +25,7 @@ export const UninitializedList: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodosModel: () => ({
+      useTodosViewModel: () => ({
         todos: [],
         todosCount: 0,
         addTodo: async () => {},
@@ -42,7 +42,7 @@ export const EmptyList: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodosModel: () => ({
+      useTodosViewModel: () => ({
         todos: [],
         todosCount: 0,
         addTodo: async () => {},
@@ -59,7 +59,7 @@ export const ListWithItems: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodosModel: () => ({
+      useTodosViewModel: () => ({
         todos: [
           { id: "1", text: "Buy milk" },
           { id: "2", text: "Paint house" },
@@ -79,7 +79,7 @@ export const SavingTodos: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodosModel: () => ({
+      useTodosViewModel: () => ({
         todos: [
           { id: "1", text: "Buy milk" },
           { id: "2", text: "Paint house" },

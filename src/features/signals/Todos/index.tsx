@@ -1,8 +1,8 @@
-import { todosModel } from "./models/todos-model";
+import { model } from "./model";
 import { Todos } from "./Todos";
 
-// Trigger init of the store (can be done outside of React)
-todosModel.initializeTodos();
+// Trigger init of the store
+model.initializeTodos();
 
 export function TodosFeature() {
   return <Todos />;

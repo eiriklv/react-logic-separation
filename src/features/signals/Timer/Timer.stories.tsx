@@ -25,12 +25,10 @@ export const ZeroStoppedTimer: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTimerViewModel: () => ({
-        elapsedSeconds: 0,
-        isRunning: false,
-        startTimer: async () => {},
-        stopTimer: async () => {},
-      }),
+      useElapsedSeconds: () => 0,
+      useIsRunning: () => false,
+      useStartTimer: () => async () => {},
+      useStopTimer: () => async () => {},
     } satisfies TimerContextInterface,
   },
 };
@@ -39,12 +37,10 @@ export const TenStoppedTimer: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTimerViewModel: () => ({
-        elapsedSeconds: 10,
-        isRunning: false,
-        startTimer: async () => {},
-        stopTimer: async () => {},
-      }),
+      useElapsedSeconds: () => 10,
+      useIsRunning: () => false,
+      useStartTimer: () => async () => {},
+      useStopTimer: () => async () => {},
     } satisfies TimerContextInterface,
   },
 };
@@ -53,12 +49,10 @@ export const TenRunningTimer: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTimerViewModel: () => ({
-        elapsedSeconds: 10,
-        isRunning: true,
-        startTimer: async () => {},
-        stopTimer: async () => {},
-      }),
+      useElapsedSeconds: () => 10,
+      useIsRunning: () => true,
+      useStartTimer: () => async () => {},
+      useStopTimer: () => async () => {},
     } satisfies TimerContextInterface,
   },
 };

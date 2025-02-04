@@ -7,12 +7,10 @@ describe("Timer Component", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: TimerContextInterface = {
-      useTimerViewModel: vi.fn(() => ({
-        elapsedSeconds: 10,
-        isRunning: false,
-        startTimer: vi.fn(),
-        stopTimer: vi.fn(),
-      })),
+      useElapsedSeconds: () => 10,
+      useIsRunning: () => false,
+      useStartTimer: () => vi.fn(),
+      useStopTimer: () => vi.fn(),
     };
 
     render(
@@ -34,12 +32,10 @@ describe("Timer Component", () => {
     const stopTimer = vi.fn();
 
     const dependencies: TimerContextInterface = {
-      useTimerViewModel: vi.fn(() => ({
-        elapsedSeconds: 10,
-        isRunning: false,
-        startTimer,
-        stopTimer,
-      })),
+      useElapsedSeconds: () => 10,
+      useIsRunning: () => false,
+      useStartTimer: () => startTimer,
+      useStopTimer: () => stopTimer,
     };
 
     render(

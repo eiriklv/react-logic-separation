@@ -1,5 +1,15 @@
 import React from "react";
-import { useConditionalTimerViewModel } from "./ConditionalTimer.viewmodel";
+import {
+  useElapsedSeconds,
+  useIsCool,
+  useIsOkay,
+  useIsRunning,
+  useIsSafe,
+  useToggleCool,
+  useToggleOkay,
+  useToggleSafe,
+  useResetTimer,
+} from "./hooks";
 
 /**
  * The context can be used to inject any kind of
@@ -19,11 +29,27 @@ import { useConditionalTimerViewModel } from "./ConditionalTimer.viewmodel";
  */
 
 export interface ConditionalTimerContextInterface {
-  useConditionalTimerViewModel: typeof useConditionalTimerViewModel;
+  useElapsedSeconds: typeof useElapsedSeconds;
+  useIsOkay: typeof useIsOkay;
+  useIsSafe: typeof useIsSafe;
+  useIsCool: typeof useIsCool;
+  useIsRunning: typeof useIsRunning;
+  useToggleOkay: typeof useToggleOkay;
+  useToggleSafe: typeof useToggleSafe;
+  useToggleCool: typeof useToggleCool;
+  useResetTimer: typeof useResetTimer;
 }
 
 export const defaultValue: ConditionalTimerContextInterface = {
-  useConditionalTimerViewModel,
+  useElapsedSeconds,
+  useIsRunning,
+  useIsOkay,
+  useIsSafe,
+  useIsCool,
+  useToggleOkay,
+  useToggleSafe,
+  useToggleCool,
+  useResetTimer,
 };
 
 export const ConditionalTimerContext =

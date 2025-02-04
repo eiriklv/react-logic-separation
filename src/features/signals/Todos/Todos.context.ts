@@ -1,5 +1,11 @@
 import React from "react";
-import { useTodosViewModel } from "./Todos.viewmodel";
+import {
+  useTodos,
+  useAddTodo,
+  useIsSaving,
+  useIsInitialized,
+  useTodosCount,
+} from "./hooks";
 import { TodoItem } from "./components/TodoItem";
 
 /**
@@ -20,12 +26,20 @@ import { TodoItem } from "./components/TodoItem";
  */
 
 export interface TodosContextInterface {
-  useTodosViewModel: typeof useTodosViewModel;
+  useTodos: typeof useTodos;
+  useTodosCount: typeof useTodosCount;
+  useAddTodo: typeof useAddTodo;
+  useIsSaving: typeof useIsSaving;
+  useIsInitialized: typeof useIsInitialized;
   TodoItem: typeof TodoItem;
 }
 
 export const defaultValue: TodosContextInterface = {
-  useTodosViewModel,
+  useTodos,
+  useTodosCount,
+  useAddTodo,
+  useIsSaving,
+  useIsInitialized,
   TodoItem,
 };
 

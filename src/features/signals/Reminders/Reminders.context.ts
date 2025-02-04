@@ -1,6 +1,13 @@
 import React from "react";
 import { ReminderItem } from "./components/ReminderItem";
-import { useRemindersViewModel } from "./Reminders.viewmodel";
+import {
+  useReminders,
+  useRemindersCount,
+  useAddReminder,
+  useIsSaving,
+  useIsLoading,
+  useIsFetching,
+} from "./hooks";
 
 /**
  * The context can be used to inject any kind of
@@ -20,12 +27,22 @@ import { useRemindersViewModel } from "./Reminders.viewmodel";
  */
 
 export interface RemindersContextInterface {
-  useRemindersViewModel: typeof useRemindersViewModel;
+  useReminders: typeof useReminders;
+  useRemindersCount: typeof useRemindersCount;
+  useAddReminder: typeof useAddReminder;
+  useIsSaving: typeof useIsSaving;
+  useIsLoading: typeof useIsLoading;
+  useIsFetching: typeof useIsFetching;
   ReminderItem: typeof ReminderItem;
 }
 
 export const defaultValue: RemindersContextInterface = {
-  useRemindersViewModel,
+  useReminders,
+  useRemindersCount,
+  useAddReminder,
+  useIsSaving,
+  useIsLoading,
+  useIsFetching,
   ReminderItem,
 };
 

@@ -3,15 +3,17 @@ import { TimerContext } from "./Timer.context";
 
 export function Timer() {
   // Get injected dependencies from context
-  const { useTimerViewModel } = useContext(TimerContext);
+  const { useElapsedSeconds, useIsRunning, useStartTimer, useStopTimer } =
+    useContext(TimerContext);
 
-  // Use view model
-  const { elapsedSeconds, isRunning, startTimer, stopTimer } =
-    useTimerViewModel();
+  // Use injected dependencies (domain state/actions, components, etc)
+  const elapsedSeconds = useElapsedSeconds();
+  const isRunning = useIsRunning();
+  const startTimer = useStartTimer();
+  const stopTimer = useStopTimer();
 
   return (
     <div>
-      <pre>signals</pre>
       <h3>Timer</h3>
       <h4>Status: {isRunning ? "running" : "stopped"}</h4>
       <div>{elapsedSeconds}</div>

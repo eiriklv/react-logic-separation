@@ -2,22 +2,28 @@ import { useCallback, useContext, useState } from "react";
 import { RemindersContext } from "./Reminders.context";
 
 /**
- * Same as Todos, except stored on the server
+ * Same as Reminders, except stored on the server
  * and using query + mutation (cache invalidation)
  */
 export function Reminders() {
-  // Get dependencies
-  const { useRemindersViewModel, ReminderItem } = useContext(RemindersContext);
-
-  // Use the view model (state and commands)
+  // Get injected dependencies from context
   const {
-    reminders = [],
-    remindersCount,
-    isLoading,
-    isFetching,
-    isSaving,
-    addReminder,
-  } = useRemindersViewModel();
+    useReminders,
+    useRemindersCount,
+    useAddReminder,
+    useIsSaving,
+    useIsLoading,
+    useIsFetching,
+    ReminderItem,
+  } = useContext(RemindersContext);
+
+  // Use injected dependencies (domain state/actions, components, etc)
+  const isSaving = useIsSaving();
+  const isLoading = useIsLoading();
+  const isFetching = useIsFetching();
+  const reminders = useReminders();
+  const remindersCount = useRemindersCount();
+  const addReminder = useAddReminder();
 
   // Create local view state for form/input
   const [reminderInputText, setReminderInputText] = useState("");
@@ -45,7 +51,7 @@ export function Reminders() {
     return <div>Loading...</div>;
   }
 
-  const reminderElements = reminders.map((reminder) => (
+  const reminderElements = reminders?.map((reminder) => (
     <ReminderItem key={reminder.id} reminder={reminder}></ReminderItem>
   ));
 

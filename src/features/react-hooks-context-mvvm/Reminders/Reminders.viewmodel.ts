@@ -1,4 +1,4 @@
-import { useRemindersModel } from "./models/model";
+import { useRemindersModel } from "./models/reminders-model";
 
 /**
  * The main purpose of this file is to

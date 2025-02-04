@@ -10,17 +10,15 @@ describe("ConditionalTimer Component", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: ConditionalTimerContextInterface = {
-      useConditionalTimerViewModel: vi.fn(() => ({
-        elapsedSeconds: 10,
-        isOkay: false,
-        isSafe: false,
-        isCool: false,
-        isRunning: false,
-        toggleOkay: vi.fn(),
-        toggleSafe: vi.fn(),
-        toggleCool: vi.fn(),
-        resetTimer: vi.fn(),
-      })),
+      useElapsedSeconds: () => 10,
+      useIsOkay: () => false,
+      useIsSafe: () => false,
+      useIsCool: () => false,
+      useIsRunning: () => false,
+      useToggleOkay: () => vi.fn(),
+      useToggleSafe: () => vi.fn(),
+      useToggleCool: () => vi.fn(),
+      useResetTimer: () => vi.fn(),
     };
 
     render(
@@ -30,10 +28,10 @@ describe("ConditionalTimer Component", () => {
     );
 
     // assert
-    expect(screen.getByText("10")).toBeInTheDocument();
+    expect(screen.getByText("Conditional Timer")).toBeInTheDocument();
 
     // assert
-    expect(screen.getByText("Conditional Timer")).toBeInTheDocument();
+    expect(screen.getByText("10")).toBeInTheDocument();
   });
 
   it("Calls the correct handlers for toggling all the condition of the timer", async () => {
@@ -44,17 +42,15 @@ describe("ConditionalTimer Component", () => {
     const resetTimer = vi.fn();
 
     const dependencies: ConditionalTimerContextInterface = {
-      useConditionalTimerViewModel: vi.fn(() => ({
-        elapsedSeconds: 10,
-        isOkay: false,
-        isSafe: false,
-        isCool: false,
-        isRunning: false,
-        toggleOkay,
-        toggleSafe,
-        toggleCool,
-        resetTimer,
-      })),
+      useElapsedSeconds: () => 10,
+      useIsOkay: () => false,
+      useIsSafe: () => false,
+      useIsCool: () => false,
+      useIsRunning: () => false,
+      useToggleOkay: () => toggleOkay,
+      useToggleSafe: () => toggleSafe,
+      useToggleCool: () => toggleCool,
+      useResetTimer: () => resetTimer,
     };
 
     render(
