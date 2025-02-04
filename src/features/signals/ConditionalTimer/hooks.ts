@@ -48,3 +48,7 @@ export const useToggleSafe = () => {
 export const useToggleCool = () => {
   return model.toggleCool;
 };
+
+export const useResetTimer = () => {
+  return model.resetTimer;
+};
