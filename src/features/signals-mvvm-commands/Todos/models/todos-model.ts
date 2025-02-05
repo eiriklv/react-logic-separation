@@ -6,13 +6,15 @@ import {
   ReadonlySignal,
 } from "@preact/signals-core";
 
-import * as todosService from "../services/todos.service";
 import { generateId } from "../../../../lib/utils";
 import { Todo } from "../types";
+import { fetchTodosCommand } from "../commands/fetch-todos";
+import { saveTodosCommand } from "../commands/save-todos";
 
 // Dependencies to be injected
 const defaultDependencies = {
-  todosService,
+  fetchTodosCommand,
+  saveTodosCommand,
   generateId,
   waitTimeBeforeSave: 1000,
 };
@@ -58,7 +60,7 @@ export class TodosModel {
     // Effects
     this._disposeAutoSaveTodosOnChange = effect(() => {
       // Get dependencies
-      const { todosService, waitTimeBeforeSave } = this._injections;
+      const { saveTodosCommand, waitTimeBeforeSave } = this._injections;
 
       // Get the changed values that triggered the effect
       const todos = this._todos.value;
@@ -72,7 +74,7 @@ export class TodosModel {
       // Set a timeout/debounce for running the save effect
       const saveTimeout = setTimeout(async () => {
         this._toggledSaveState(true);
-        await todosService.saveTodos(todos);
+        await saveTodosCommand(todos);
         this._toggledSaveState(false);
       }, waitTimeBeforeSave);
 
@@ -104,10 +106,10 @@ export class TodosModel {
   // Commands
   public initializeTodos = async () => {
     // Get dependencies
-    const { todosService } = this._injections;
+    const { fetchTodosCommand } = this._injections;
 
     // Run side effect
-    const todos = await todosService.fetchTodos();
+    const todos = await fetchTodosCommand();
 
     // Trigger event
     this._initializedTodos(todos);
