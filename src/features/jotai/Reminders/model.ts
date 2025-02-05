@@ -51,7 +51,6 @@ export class RemindersModel {
   private _remindersCount = atom(
     (get) => get(this._remindersQuery).data?.length || 0,
   );
-
   private _reminders = atom((get) => get(this._remindersQuery).data);
   private _isLoading = atom((get) => get(this._remindersQuery).isLoading);
   private _isFetching = atom((get) => get(this._remindersQuery).isFetching);
