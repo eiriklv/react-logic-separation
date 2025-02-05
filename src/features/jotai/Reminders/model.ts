@@ -71,11 +71,7 @@ export class RemindersModel {
     this._remindersQuery = atomWithQuery<Reminder[]>(
       () => ({
         queryKey: ["reminders"],
-        queryFn: () => {
-          const result = this._injections.remindersService.fetchReminders();
-          console.log({ result });
-          return result;
-        },
+        queryFn: () => this._injections.remindersService.fetchReminders(),
       }),
       () => this._queryClient,
     );
