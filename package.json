@@ -24,6 +24,7 @@
     "fast-array-diff": "^1.1.0",
     "jotai": "^2.11.0",
     "jotai-effect": "^1.0.7",
+    "jotai-tanstack-query": "^0.9.0",
     "lodash": "^4.17.21",
     "mobx": "^6.13.5",
     "react": "18.3.1",
