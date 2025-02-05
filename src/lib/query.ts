@@ -24,6 +24,7 @@ export type SignalMutation<U, T = void> = ReturnType<typeof mutation<T, U>>;
  */
 export function query<T>(
   getQueryConfig: () => QueryObserverOptions<T>,
+  // TODO: Make this a getter "getQueryClient" instead for more flexibility (same as jotai-tanstack-query)
   queryClient: QueryClient = defaultQueryClient,
 ) {
   const queryConfig = computed(() => getQueryConfig());
