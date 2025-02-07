@@ -159,7 +159,7 @@ describe("Add reminders (command)", () => {
     expect(mockDependencies.addReminderCommand).not.toHaveBeenCalled();
 
     // check that it did not refetch the reminders
-    expect(mockDependencies.fetchRemindersCommand).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.fetchRemindersCommand).toHaveBeenCalledOnce();
 
     // check that the list of reminders is still the same as before
     expect(result.current.reminders).toEqual(fakeReminderMocks[0]);

@@ -74,24 +74,24 @@ describe("ConditionalTimer Component", () => {
     container.getElementById(BaseInput, OKAY_CHECKBOX_ID).onValueChange(true);
 
     // assert
-    expect(conditionalTimerModelMock.toggleOkay).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.toggleOkay).toHaveBeenCalledOnce();
 
     // act
     container.getElementById(BaseInput, SAFE_CHECKBOX_ID).onValueChange(true);
 
     // assert
-    expect(conditionalTimerModelMock.toggleSafe).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.toggleSafe).toHaveBeenCalledOnce();
 
     // act
     container.getElementById(BaseInput, COOL_CHECKBOX_ID).onValueChange(true);
 
     // assert
-    expect(conditionalTimerModelMock.toggleCool).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.toggleCool).toHaveBeenCalledOnce();
 
     // act
     container.getElementById(ButtonElement, RESET_BUTTON_ID).onApply();
 
     // assert
-    expect(conditionalTimerModelMock.resetTimer).toHaveBeenCalledTimes(1);
+    expect(conditionalTimerModelMock.resetTimer).toHaveBeenCalledOnce();
   });
 });

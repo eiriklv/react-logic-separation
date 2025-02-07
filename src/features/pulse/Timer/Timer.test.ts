@@ -61,12 +61,12 @@ describe("Timer Component", () => {
     container.getElementById(ButtonElement, START_BUTTON_ID).onApply();
 
     // assert
-    expect(timerModelMock.startTimer).toHaveBeenCalledTimes(1);
+    expect(timerModelMock.startTimer).toHaveBeenCalledOnce();
 
     // act
     container.getElementById(ButtonElement, STOP_BUTTON_ID).onApply();
 
     // assert
-    expect(timerModelMock.startTimer).toHaveBeenCalledTimes(1);
+    expect(timerModelMock.startTimer).toHaveBeenCalledOnce();
   });
 });

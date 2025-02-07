@@ -148,6 +148,6 @@ describe("isSaving (relay)", () => {
     vi.runAllTimers();
 
     // check that the saving was not performed multiple times
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledOnce();
   });
 });

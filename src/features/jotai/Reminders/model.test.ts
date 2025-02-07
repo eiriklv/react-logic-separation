@@ -152,7 +152,7 @@ describe("Add reminders (command)", () => {
     // check that it did not refetch the reminders
     expect(
       mockDependencies.remindersService.fetchReminders,
-    ).toHaveBeenCalledTimes(1);
+    ).toHaveBeenCalledOnce();
 
     // check that the list of reminders is still the same as before
     expect(store.get(model.reminders)).toEqual(fakeReminderMocks[0]);

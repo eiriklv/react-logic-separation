@@ -138,6 +138,6 @@ describe("Todos auto-save (effect)", () => {
     vi.runAllTimers();
 
     // check that the saving was not performed multiple times
-    expect(mockDependencies.saveTodosCommand).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.saveTodosCommand).toHaveBeenCalledOnce();
   });
 });

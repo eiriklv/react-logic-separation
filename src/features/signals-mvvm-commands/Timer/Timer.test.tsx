@@ -52,12 +52,12 @@ describe("Timer Component", () => {
     await userEvent.click(screen.getByText("Start"));
 
     // assert
-    expect(startTimer).toHaveBeenCalledTimes(1);
+    expect(startTimer).toHaveBeenCalledOnce();
 
     // act
     await userEvent.click(screen.getByText("Stop"));
 
     // assert
-    expect(stopTimer).toHaveBeenCalledTimes(1);
+    expect(stopTimer).toHaveBeenCalledOnce();
   });
 });

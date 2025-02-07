@@ -67,24 +67,24 @@ describe("ConditionalTimer Component", () => {
     await userEvent.click(screen.getByText("Okay"));
 
     // assert
-    expect(toggleOkay).toHaveBeenCalledTimes(1);
+    expect(toggleOkay).toHaveBeenCalledOnce();
 
     // act
     await userEvent.click(screen.getByText("Safe"));
 
     // assert
-    expect(toggleSafe).toHaveBeenCalledTimes(1);
+    expect(toggleSafe).toHaveBeenCalledOnce();
 
     // act
     await userEvent.click(screen.getByText("Cool"));
 
     // assert
-    expect(toggleCool).toHaveBeenCalledTimes(1);
+    expect(toggleCool).toHaveBeenCalledOnce();
 
     // act
     await userEvent.click(screen.getByText("Reset"));
 
     // assert
-    expect(resetTimer).toHaveBeenCalledTimes(1);
+    expect(resetTimer).toHaveBeenCalledOnce();
   });
 });

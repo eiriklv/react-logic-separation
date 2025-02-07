@@ -29,7 +29,7 @@ describe("Add todos (command)", () => {
     await waitFor(() => result.current.addTodo("Paint house"));
 
     // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.generateId).toHaveBeenCalledOnce();
     expect(result.current.todos).toEqual([{ id: "abc", text: "Paint house" }]);
   });
 
@@ -196,6 +196,6 @@ describe("Todos auto-save (effect)", () => {
     act(() => vi.runAllTimers());
 
     // check that the saving was not performed multiple times
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledOnce();
   });
 });
