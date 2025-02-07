@@ -1,5 +1,6 @@
+import { useContext } from "react";
 import { useSignalValue } from "../../../lib/use-signal-value";
-import { todosModel } from "./models/todos-model";
+import { TodosViewModelContext } from "./Todos.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -18,6 +19,8 @@ import { todosModel } from "./models/todos-model";
  */
 
 export const useTodosViewModel = () => {
+  const { todosModel } = useContext(TodosViewModelContext);
+
   return {
     isInitialized: useSignalValue(todosModel.isInitialized),
     isSaving: useSignalValue(todosModel.isSaving),
