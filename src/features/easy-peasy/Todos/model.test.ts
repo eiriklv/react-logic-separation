@@ -90,7 +90,7 @@ describe("Todos auto-save (effect)", () => {
     vi.runAllTimers();
 
     // check that no saving was performed
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).not.toHaveBeenCalled();
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
@@ -119,7 +119,7 @@ describe("Todos auto-save (effect)", () => {
     await store.getActions().addTodo("Paint house");
 
     // check that no saving has been performed (yet)
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).not.toHaveBeenCalled();
 
     // check that we are not currently saving
     expect(store.getState().isSaving).toEqual(false);

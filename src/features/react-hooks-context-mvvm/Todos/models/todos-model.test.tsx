@@ -96,7 +96,7 @@ describe("Add todos (command)", () => {
     await waitFor(() => result.current.addTodo(""));
 
     // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.generateId).not.toHaveBeenCalled();
     expect(result.current.todos).toEqual([]);
   });
 });
@@ -137,7 +137,7 @@ describe("Todos auto-save (effect)", () => {
     expect(result.current.isSaving).toEqual(false);
 
     // check that no saving has been performed
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).not.toHaveBeenCalled();
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
@@ -174,7 +174,7 @@ describe("Todos auto-save (effect)", () => {
     await act(() => result.current.addTodo("Paint house"));
 
     // check that no saving has been performed (yet)
-    expect(mockDependencies.todosService.saveTodos).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.todosService.saveTodos).not.toHaveBeenCalled();
 
     // check that we are not currently saving
     expect(result.current.isSaving).toEqual(false);

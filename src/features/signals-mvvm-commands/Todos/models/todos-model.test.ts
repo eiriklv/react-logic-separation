@@ -88,7 +88,7 @@ describe("Todos auto-save (effect)", () => {
     expect(model.isSaving.value).toEqual(false);
 
     // check that no saving has been performed
-    expect(mockDependencies.saveTodosCommand).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.saveTodosCommand).not.toHaveBeenCalled();
   });
 
   it("should only trigger save after specified wait/debounce time", async () => {
@@ -115,7 +115,7 @@ describe("Todos auto-save (effect)", () => {
     await model.addTodo("Paint house");
 
     // check that no saving has been performed (yet)
-    expect(mockDependencies.saveTodosCommand).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.saveTodosCommand).not.toHaveBeenCalled();
 
     // check that we are not currently saving
     expect(model.isSaving.value).toEqual(false);
