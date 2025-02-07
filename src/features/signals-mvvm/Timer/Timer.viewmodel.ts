@@ -1,5 +1,6 @@
+import { useContext } from "react";
 import { useSignalValue } from "../../../lib/use-signal-value";
-import { todosModel } from "./models/todos-model";
+import { TimerViewModelContext } from "./Timer.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -18,10 +19,12 @@ import { todosModel } from "./models/todos-model";
  */
 
 export const useTimerViewModel = () => {
+  const { timerModel } = useContext(TimerViewModelContext);
+
   return {
-    elapsedSeconds: useSignalValue(todosModel.elapsedSeconds),
-    isRunning: useSignalValue(todosModel.isRunning),
-    startTimer: todosModel.startTimer,
-    stopTimer: todosModel.stopTimer,
+    elapsedSeconds: useSignalValue(timerModel.elapsedSeconds),
+    isRunning: useSignalValue(timerModel.isRunning),
+    startTimer: timerModel.startTimer,
+    stopTimer: timerModel.stopTimer,
   };
 };

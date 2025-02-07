@@ -58,4 +58,4 @@ export class TimerModel {
 }
 
 // Model singleton
-export const todosModel = new TimerModel();
+export const timerModel = new TimerModel();

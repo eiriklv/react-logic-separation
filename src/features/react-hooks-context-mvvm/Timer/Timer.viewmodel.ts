@@ -1,4 +1,5 @@
-import { useTimerModel } from "./models/timer-model";
+import { useContext } from "react";
+import { TimerViewModelContext } from "./Timer.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -17,6 +18,8 @@ import { useTimerModel } from "./models/timer-model";
  */
 
 export const useTimerViewModel = () => {
+  const { useTimerModel } = useContext(TimerViewModelContext);
+
   const { elapsedSeconds, isRunning, startTimer, stopTimer } = useTimerModel();
 
   return {

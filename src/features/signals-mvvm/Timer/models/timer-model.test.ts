@@ -1,4 +1,4 @@
-import { TimerModel } from "./todos-model";
+import { TimerModel } from "./timer-model";
 
 describe("startTimer (command)", () => {
   it("should work as expected when starting timer", async () => {
