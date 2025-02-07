@@ -1,5 +1,6 @@
+import { useContext } from "react";
 import { useSignalValue } from "../../../lib/use-signal-value";
-import { remindersModel } from "./models/reminders-model";
+import { RemindersViewModelContext } from "./Reminders.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -18,6 +19,8 @@ import { remindersModel } from "./models/reminders-model";
  */
 
 export const useRemindersViewModel = () => {
+  const { remindersModel } = useContext(RemindersViewModelContext);
+
   return {
     reminders: useSignalValue(remindersModel.reminders),
     remindersCount: useSignalValue(remindersModel.remindersCount),

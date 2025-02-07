@@ -1,4 +1,5 @@
-import { useRemindersModel } from "./models/reminders-model";
+import { useContext } from "react";
+import { RemindersViewModelContext } from "./Reminders.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -17,6 +18,8 @@ import { useRemindersModel } from "./models/reminders-model";
  */
 
 export const useRemindersViewModel = () => {
+  const { useRemindersModel } = useContext(RemindersViewModelContext);
+
   const {
     reminders,
     remindersCount,
