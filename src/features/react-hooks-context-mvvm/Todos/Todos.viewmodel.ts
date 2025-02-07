@@ -1,4 +1,5 @@
-import { useTodosModel } from "./models/todos-model";
+import { useContext } from "react";
+import { TodosViewModelContext } from "./Todos.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -17,6 +18,8 @@ import { useTodosModel } from "./models/todos-model";
  */
 
 export const useTodosViewModel = () => {
+  const { useTodosModel } = useContext(TodosViewModelContext);
+
   const {
     isInitialized,
     isSaving,
