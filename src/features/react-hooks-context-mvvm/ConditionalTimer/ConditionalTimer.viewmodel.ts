@@ -1,4 +1,5 @@
-import { useConditionalTimerModel } from "./models/conditional-timer-model";
+import { useContext } from "react";
+import { ConditionalTimerViewModelContext } from "./ConditionalTimer.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -17,6 +18,10 @@ import { useConditionalTimerModel } from "./models/conditional-timer-model";
  */
 
 export const useConditionalTimerViewModel = () => {
+  const { useConditionalTimerModel } = useContext(
+    ConditionalTimerViewModelContext,
+  );
+
   const {
     elapsedSeconds,
     isOkay,

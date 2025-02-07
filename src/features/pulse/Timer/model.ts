@@ -1,4 +1,4 @@
-import { effect, signal, computed, ReadonlySignal } from "@cognite/pulse";
+import { effect, signal, ReadonlySignal } from "@cognite/pulse";
 
 // Model
 export class TimerModel {

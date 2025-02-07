@@ -1,5 +1,6 @@
+import { useContext } from "react";
 import { useSignalValue } from "../../../lib/use-signal-value";
-import { conditionalTimerModel } from "./models/conditional-timer-model";
+import { ConditionalTimerViewModelContext } from "./ConditionalTimer.viewmodel.context";
 
 /**
  * The main purpose of this file is to
@@ -18,6 +19,10 @@ import { conditionalTimerModel } from "./models/conditional-timer-model";
  */
 
 export const useConditionalTimerViewModel = () => {
+  const { conditionalTimerModel } = useContext(
+    ConditionalTimerViewModelContext,
+  );
+
   return {
     elapsedSeconds: useSignalValue(conditionalTimerModel.elapsedSeconds),
     isOkay: useSignalValue(conditionalTimerModel.isOkay),
