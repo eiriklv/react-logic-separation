@@ -25,11 +25,13 @@ export const UninitializedList: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodos: () => [],
-      useTodosCount: () => 0,
-      useAddTodo: () => async () => {},
-      useIsInitialized: () => false,
-      useIsSaving: () => false,
+      useTodosViewModel: () => ({
+        todos: [],
+        todosCount: 0,
+        addTodo: async () => {},
+        isInitialized: false,
+        isSaving: false,
+      }),
       TodoItem: ({ todo }) => <li>{todo.text}</li>,
     } satisfies TodosContextInterface,
   },
@@ -39,11 +41,13 @@ export const EmptyList: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodos: () => [],
-      useTodosCount: () => 0,
-      useAddTodo: () => async () => {},
-      useIsInitialized: () => true,
-      useIsSaving: () => false,
+      useTodosViewModel: () => ({
+        todos: [],
+        todosCount: 0,
+        addTodo: async () => {},
+        isInitialized: true,
+        isSaving: false,
+      }),
       TodoItem: ({ todo }) => <li>{todo.text}</li>,
     } satisfies TodosContextInterface,
   },
@@ -53,14 +57,16 @@ export const ListWithItems: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodos: () => [
-        { id: "1", text: "Buy milk" },
-        { id: "2", text: "Paint house" },
-      ],
-      useTodosCount: () => 2,
-      useAddTodo: () => async () => {},
-      useIsInitialized: () => true,
-      useIsSaving: () => false,
+      useTodosViewModel: () => ({
+        todos: [
+          { id: "1", text: "Buy milk" },
+          { id: "2", text: "Paint house" },
+        ],
+        todosCount: 0,
+        addTodo: async () => {},
+        isInitialized: true,
+        isSaving: false,
+      }),
       TodoItem: ({ todo }) => <li>{todo.text}</li>,
     } satisfies TodosContextInterface,
   },
@@ -70,14 +76,16 @@ export const SavingTodos: Story = {
   args: {},
   parameters: {
     dependencies: {
-      useTodos: () => [
-        { id: "1", text: "Buy milk" },
-        { id: "2", text: "Paint house" },
-      ],
-      useTodosCount: () => 2,
-      useAddTodo: () => async () => {},
-      useIsInitialized: () => true,
-      useIsSaving: () => true,
+      useTodosViewModel: () => ({
+        todos: [
+          { id: "1", text: "Buy milk" },
+          { id: "2", text: "Paint house" },
+        ],
+        todosCount: 0,
+        addTodo: async () => {},
+        isInitialized: true,
+        isSaving: true,
+      }),
       TodoItem: ({ todo }) => <li>{todo.text}</li>,
     } satisfies TodosContextInterface,
   },

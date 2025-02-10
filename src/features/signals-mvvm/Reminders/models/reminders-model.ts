@@ -10,6 +10,7 @@ import {
   SignalQuery,
 } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
+import { Reminder } from "../types";
 
 // Dependencies to be injected
 const defaultDependencies = {
@@ -18,11 +19,6 @@ const defaultDependencies = {
 
 // Types and interfaces
 export type RemindersModelDependencies = typeof defaultDependencies;
-
-export interface Reminder {
-  id: string;
-  text: string;
-}
 
 export class RemindersModel {
   // Dependencies
