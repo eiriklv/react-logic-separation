@@ -1,4 +1,3 @@
-import { PartialDeep } from "type-fest";
 import { Reminder } from "../types";
 import {
   RemindersModelContext,
@@ -14,9 +13,10 @@ describe("useRemindersModel", () => {
     // arrange
     const remindersMock: Reminder[] = [{ id: "abc", text: "Do this thing" }];
 
-    const mockDependencies: PartialDeep<RemindersModelContextInterface> = {
+    const mockDependencies: RemindersModelContextInterface = {
       remindersService: {
         fetchReminders: vi.fn(async () => remindersMock),
+        addReminder: vi.fn(),
       },
     };
 
@@ -26,9 +26,7 @@ describe("useRemindersModel", () => {
       children?: React.ReactNode;
     }> = ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <RemindersModelContext.Provider
-          value={mockDependencies as RemindersModelContextInterface}
-        >
+        <RemindersModelContext.Provider value={mockDependencies}>
           {children}
         </RemindersModelContext.Provider>
       </QueryClientProvider>
@@ -64,9 +62,10 @@ describe("useRemindersModel", () => {
       [{ id: "abc", text: "Do this thing" }],
     ];
 
-    const mockDependencies: PartialDeep<RemindersModelContextInterface> = {
+    const mockDependencies: RemindersModelContextInterface = {
       remindersService: {
         fetchReminders: vi.fn(async () => remindersMocks[count++]),
+        addReminder: vi.fn(),
       },
     };
 
@@ -76,9 +75,7 @@ describe("useRemindersModel", () => {
       children?: React.ReactNode;
     }> = ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <RemindersModelContext.Provider
-          value={mockDependencies as RemindersModelContextInterface}
-        >
+        <RemindersModelContext.Provider value={mockDependencies}>
           {children}
         </RemindersModelContext.Provider>
       </QueryClientProvider>
@@ -123,11 +120,12 @@ describe("useRemindersModel", () => {
     // arrange
     const remindersErrorMock = new Error("Service Unavailable");
 
-    const mockDependencies: PartialDeep<RemindersModelContextInterface> = {
+    const mockDependencies: RemindersModelContextInterface = {
       remindersService: {
         fetchReminders: vi.fn(async () => {
           throw remindersErrorMock;
         }),
+        addReminder: vi.fn(),
       },
     };
 
@@ -137,9 +135,7 @@ describe("useRemindersModel", () => {
       children?: React.ReactNode;
     }> = ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <RemindersModelContext.Provider
-          value={mockDependencies as RemindersModelContextInterface}
-        >
+        <RemindersModelContext.Provider value={mockDependencies}>
           {children}
         </RemindersModelContext.Provider>
       </QueryClientProvider>
@@ -173,7 +169,7 @@ describe("useRemindersModel", () => {
     // arrange
     const addReminderErrorMock = new Error("Service Unavailable");
 
-    const mockDependencies: PartialDeep<RemindersModelContextInterface> = {
+    const mockDependencies: RemindersModelContextInterface = {
       remindersService: {
         fetchReminders: vi.fn(async () => []),
         addReminder: vi.fn(async () => {
@@ -188,9 +184,7 @@ describe("useRemindersModel", () => {
       children?: React.ReactNode;
     }> = ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <RemindersModelContext.Provider
-          value={mockDependencies as RemindersModelContextInterface}
-        >
+        <RemindersModelContext.Provider value={mockDependencies}>
           {children}
         </RemindersModelContext.Provider>
       </QueryClientProvider>
@@ -236,7 +230,7 @@ describe("useRemindersModel", () => {
       ],
     ];
 
-    const mockDependencies: PartialDeep<RemindersModelContextInterface> = {
+    const mockDependencies: RemindersModelContextInterface = {
       remindersService: {
         fetchReminders: vi.fn(async () => remindersMocks[count++]),
         addReminder: vi.fn(async () => {}),
@@ -249,9 +243,7 @@ describe("useRemindersModel", () => {
       children?: React.ReactNode;
     }> = ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <RemindersModelContext.Provider
-          value={mockDependencies as RemindersModelContextInterface}
-        >
+        <RemindersModelContext.Provider value={mockDependencies}>
           {children}
         </RemindersModelContext.Provider>
       </QueryClientProvider>
