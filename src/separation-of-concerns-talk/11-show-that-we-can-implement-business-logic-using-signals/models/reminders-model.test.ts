@@ -2,7 +2,7 @@ import { Reminder } from "../types";
 import { QueryClient } from "@tanstack/query-core";
 import { RemindersModel, RemindersModelDependencies } from "./reminders-model";
 
-describe("useRemindersModel", () => {
+describe("RemindersModel", () => {
   it("should expose loaded reminders correctly", async () => {
     // arrange
     const remindersMock: Reminder[] = [{ id: "abc", text: "Do this thing" }];
