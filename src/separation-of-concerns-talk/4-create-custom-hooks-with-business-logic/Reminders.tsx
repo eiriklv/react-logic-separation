@@ -49,7 +49,7 @@ export function Reminders() {
 
   return (
     <div>
-      <pre>4-1</pre>
+      <pre>4</pre>
       <h3>
         Reminders <span>{isSaving && "(saving...)"}</span>
       </h3>
