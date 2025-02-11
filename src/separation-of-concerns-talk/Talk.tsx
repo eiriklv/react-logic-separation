@@ -1,5 +1,5 @@
-import "./App.css";
-import { RemindersFeature } from "./separation-of-concerns-talk/1-naive-approach-with-no-tests-for-container";
+import { RemindersFeature } from "./1-naive-approach-with-no-tests-for-container";
+import "../App.css";
 
 function Talk() {
   return <RemindersFeature />;
