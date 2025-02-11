@@ -41,7 +41,7 @@ export function query<T>(
   const isPending: Signal<boolean> = signal(false);
   const isFetching: Signal<boolean> = signal(false);
   const isSuccess: Signal<boolean> = signal(false);
-  const error: Signal<unknown> = signal(null);
+  const error: Signal<Error | null> = signal(null);
 
   effect(() => {
     const disposeQuerySubscription = queryObserver.value.subscribe((result) => {
@@ -82,7 +82,7 @@ export function mutation<T, V = void, U = Error, X = unknown>(
   const data: Signal<T | undefined> = signal(undefined);
   const isSuccess: Signal<boolean> = signal(false);
   const isPending: Signal<boolean> = signal(false);
-  const error: Signal<unknown> = signal(null);
+  const error: Signal<U | null> = signal(null);
 
   effect(() => {
     const disposeMutationSubscription = mutationObserver.value.subscribe(
