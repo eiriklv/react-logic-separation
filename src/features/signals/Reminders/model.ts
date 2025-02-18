@@ -33,11 +33,6 @@ export class RemindersModel {
   // Mutations
   private _addReminderMutation: SignalMutation<string>;
 
-  // Computed
-  private _remindersCount = computed(
-    () => this._remindersQuery.data.value?.length || 0,
-  );
-
   // Constructor
   constructor(
     queryClient: QueryClient,
@@ -70,23 +65,23 @@ export class RemindersModel {
 
   // Getters
   public get reminders(): ReadonlySignal<Reminder[] | undefined> {
-    return this._remindersQuery.data;
+    return computed(() => this._remindersQuery.value.data);
   }
 
   public get remindersCount(): ReadonlySignal<number> {
-    return this._remindersCount;
+    return computed(() => this._remindersQuery.value.data?.length || 0);
   }
 
   public get isLoading(): ReadonlySignal<boolean> {
-    return this._remindersQuery.isLoading;
+    return computed(() => this._remindersQuery.value.isLoading);
   }
 
   public get isFetching(): ReadonlySignal<boolean> {
-    return this._remindersQuery.isFetching;
+    return computed(() => this._remindersQuery.value.isFetching);
   }
 
   public get isSaving(): ReadonlySignal<boolean> {
-    return this._remindersQuery.isPending;
+    return computed(() => this._remindersQuery.value.isPending);
   }
 
   // Commands
@@ -96,7 +91,7 @@ export class RemindersModel {
       return;
     }
 
-    await this._addReminderMutation.mutate(text);
+    await this._addReminderMutation.value.mutate(text);
   };
 }
 

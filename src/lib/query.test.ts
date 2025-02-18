@@ -19,17 +19,17 @@ describe("query", () => {
       queryClient,
     );
 
-    expect(myQuery.isLoading.value).toBe(true);
-    expect(myQuery.isPending.value).toBe(true);
-    expect(myQuery.data.value).toEqual(undefined);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(true);
+    expect(myQuery.value.isPending).toBe(true);
+    expect(myQuery.value.data).toEqual(undefined);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(10);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(10);
+    expect(myQuery.value.error).toEqual(null);
   });
 
   it("should initialize and resolve correctly (async)", async () => {
@@ -43,17 +43,17 @@ describe("query", () => {
       queryClient,
     );
 
-    expect(myQuery.isLoading.value).toBe(true);
-    expect(myQuery.isPending.value).toBe(true);
-    expect(myQuery.data.value).toEqual(undefined);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(true);
+    expect(myQuery.value.isPending).toBe(true);
+    expect(myQuery.value.data).toEqual(undefined);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(10);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(10);
+    expect(myQuery.value.error).toEqual(null);
   });
 
   it("should update according to dependencies", async () => {
@@ -70,47 +70,47 @@ describe("query", () => {
       queryClient,
     );
 
-    expect(myQuery.isLoading.value).toBe(true);
-    expect(myQuery.isPending.value).toBe(true);
-    expect(myQuery.data.value).toEqual(undefined);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(true);
+    expect(myQuery.value.isPending).toBe(true);
+    expect(myQuery.value.data).toEqual(undefined);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(10);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(10);
+    expect(myQuery.value.error).toEqual(null);
 
     // This changes the query function
     mySignal2.value = 20;
 
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(10);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(10);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(20);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(20);
+    expect(myQuery.value.error).toEqual(null);
 
     // This changes the cache key
     mySignal1.value = "b";
 
-    expect(myQuery.isLoading.value).toBe(true);
-    expect(myQuery.isPending.value).toBe(true);
-    expect(myQuery.data.value).toEqual(undefined);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(true);
+    expect(myQuery.value.isPending).toBe(true);
+    expect(myQuery.value.data).toEqual(undefined);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(20);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(20);
+    expect(myQuery.value.error).toEqual(null);
   });
 });
 
@@ -138,17 +138,17 @@ describe("mutation", () => {
       queryClient,
     );
 
-    expect(myQuery.isLoading.value).toBe(true);
-    expect(myQuery.isPending.value).toBe(true);
-    expect(myQuery.data.value).toEqual(undefined);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(true);
+    expect(myQuery.value.isPending).toBe(true);
+    expect(myQuery.value.data).toEqual(undefined);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(10);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(10);
+    expect(myQuery.value.error).toEqual(null);
 
     const myMutation = mutation(
       () => ({
@@ -163,49 +163,49 @@ describe("mutation", () => {
       queryClient,
     );
 
-    const resultPromise = myMutation.mutate();
+    const resultPromise = myMutation.value.mutate();
 
-    expect(myMutation.isSuccess.value).toBe(false);
-    expect(myMutation.isPending.value).toBe(true);
-    expect(myMutation.data.value).toEqual(undefined);
-    expect(myMutation.error.value).toEqual(null);
+    expect(myMutation.value.isSuccess).toBe(false);
+    expect(myMutation.value.isPending).toBe(true);
+    expect(myMutation.value.data).toEqual(undefined);
+    expect(myMutation.value.error).toEqual(null);
 
-    expect(myQuery.isFetching.value).toBe(false);
-    expect(myQuery.isSuccess.value).toBe(true);
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(10);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isFetching).toBe(false);
+    expect(myQuery.value.isSuccess).toBe(true);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(10);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myMutation.isSuccess.value).toBe(true);
-    expect(myMutation.isPending.value).toBe(false);
-    expect(myMutation.data.value).toEqual(50);
-    expect(myMutation.error.value).toEqual(null);
+    expect(myMutation.value.isSuccess).toBe(true);
+    expect(myMutation.value.isPending).toBe(false);
+    expect(myMutation.value.data).toEqual(50);
+    expect(myMutation.value.error).toEqual(null);
 
     const result = await resultPromise;
     expect(result).toEqual(50);
 
-    expect(myQuery.isFetching.value).toBe(true);
-    expect(myQuery.isSuccess.value).toBe(true);
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(10);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isFetching).toBe(true);
+    expect(myQuery.value.isSuccess).toBe(true);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(10);
+    expect(myQuery.value.error).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
 
-    expect(myMutation.isSuccess.value).toBe(true);
-    expect(myMutation.isPending.value).toBe(false);
-    expect(myMutation.data.value).toEqual(50);
-    expect(myMutation.error.value).toEqual(null);
+    expect(myMutation.value.isSuccess).toBe(true);
+    expect(myMutation.value.isPending).toBe(false);
+    expect(myMutation.value.data).toEqual(50);
+    expect(myMutation.value.error).toEqual(null);
 
-    expect(myQuery.isFetching.value).toBe(false);
-    expect(myQuery.isSuccess.value).toBe(true);
-    expect(myQuery.isLoading.value).toBe(false);
-    expect(myQuery.isPending.value).toBe(false);
-    expect(myQuery.data.value).toEqual(11);
-    expect(myQuery.error.value).toEqual(null);
+    expect(myQuery.value.isFetching).toBe(false);
+    expect(myQuery.value.isSuccess).toBe(true);
+    expect(myQuery.value.isLoading).toBe(false);
+    expect(myQuery.value.isPending).toBe(false);
+    expect(myQuery.value.data).toEqual(11);
+    expect(myQuery.value.error).toEqual(null);
   });
 });

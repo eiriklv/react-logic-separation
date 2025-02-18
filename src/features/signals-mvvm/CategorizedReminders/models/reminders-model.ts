@@ -37,19 +37,6 @@ export class RemindersModel {
     category: string;
   }>;
 
-  // Computed
-  private _remindersCount = computed(
-    () => this._remindersQuery.data.value?.length || 0,
-  );
-
-  private _categories = computed(() => {
-    return uniq(
-      this._remindersQuery.data.value?.map((reminder) => {
-        return reminder.category;
-      }) || [],
-    );
-  });
-
   // Constructor
   constructor(
     queryClient: QueryClient = defaultQueryClient,
@@ -86,14 +73,14 @@ export class RemindersModel {
   ): ReadonlySignal<Reminder[] | undefined> {
     return computed(() => {
       const selectedCategoryValue = selectedCategory.value;
-      return this._remindersQuery.data.value?.filter(
+      return this._remindersQuery.value.data?.filter(
         (reminder) => reminder.category === selectedCategoryValue,
       );
     });
   }
 
   public get reminders(): ReadonlySignal<Reminder[] | undefined> {
-    return this._remindersQuery.data;
+    return computed(() => this._remindersQuery.value.data);
   }
 
   public getRemindersCountByCategory(
@@ -102,7 +89,7 @@ export class RemindersModel {
     return computed(() => {
       const selectedCategoryValue = selectedCategory.value;
       return (
-        this._remindersQuery.data.value?.filter(
+        this._remindersQuery.value.data?.filter(
           (reminder) => reminder.category === selectedCategoryValue,
         ).length || 0
       );
@@ -110,23 +97,29 @@ export class RemindersModel {
   }
 
   public get remindersCount(): ReadonlySignal<number> {
-    return this._remindersCount;
+    return computed(() => this._remindersQuery.value.data?.length || 0);
   }
 
   public get categories(): ReadonlySignal<string[]> {
-    return this._categories;
+    return computed(() => {
+      return uniq(
+        this._remindersQuery.value.data?.map((reminder) => {
+          return reminder.category;
+        }) || [],
+      );
+    });
   }
 
   public get isLoading(): ReadonlySignal<boolean> {
-    return this._remindersQuery.isLoading;
+    return computed(() => this._remindersQuery.value.isLoading);
   }
 
   public get isFetching(): ReadonlySignal<boolean> {
-    return this._remindersQuery.isFetching;
+    return computed(() => this._remindersQuery.value.isFetching);
   }
 
   public get isSaving(): ReadonlySignal<boolean> {
-    return this._remindersQuery.isPending;
+    return computed(() => this._remindersQuery.value.isPending);
   }
 
   // Commands
@@ -136,7 +129,7 @@ export class RemindersModel {
       return;
     }
 
-    await this._addReminderMutation.mutate({ text, category });
+    await this._addReminderMutation.value.mutate({ text, category });
   };
 }
 

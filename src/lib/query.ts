@@ -1,11 +1,12 @@
-import { batch, computed, effect, Signal, signal } from "@preact/signals-core";
+import { computed, effect, Signal, signal } from "@preact/signals-core";
 import {
-  MutateOptions,
   MutationObserver,
   MutationObserverOptions,
+  MutationObserverResult,
   QueryClient,
   QueryObserver,
   QueryObserverOptions,
+  QueryObserverResult,
 } from "@tanstack/query-core";
 
 /**
@@ -32,35 +33,21 @@ export function query<T>(
     () => new QueryObserver(queryClient, queryConfig.value),
   );
 
-  /**
-   * NOTE: At the moment we only expose a subset of the query results,
-   * but this can be extended to include everything (as signals when applicable)
-   */
-  const data: Signal<T | undefined> = signal(undefined);
-  const isLoading: Signal<boolean> = signal(false);
-  const isPending: Signal<boolean> = signal(false);
-  const isFetching: Signal<boolean> = signal(false);
-  const isSuccess: Signal<boolean> = signal(false);
-  const error: Signal<Error | null> = signal(null);
+  const queryResultSignal: Signal<QueryObserverResult<T, Error>> = signal(
+    queryObserver.value.getCurrentResult(),
+  );
 
   effect(() => {
-    const disposeQuerySubscription = queryObserver.value.subscribe((result) => {
-      batch(() => {
-        data.value = result.data;
-        isLoading.value = result.isLoading;
-        isPending.value = result.isPending;
-        isFetching.value = result.isFetching;
-        isSuccess.value = result.isSuccess;
-        error.value = result.error;
-      });
-    });
+    const disposeQuerySubscription = queryObserver.value.subscribe(
+      (result) => (queryResultSignal.value = result),
+    );
 
     return () => {
       disposeQuerySubscription();
     };
   });
 
-  return { data, isLoading, isPending, isFetching, isSuccess, error };
+  return queryResultSignal;
 }
 
 /**
@@ -75,25 +62,12 @@ export function mutation<T, V = void, U = Error, X = unknown>(
     () => new MutationObserver(queryClient, mutationConfig.value),
   );
 
-  /**
-   * NOTE: At the moment we only expose a subset of the query results,
-   * but this can be extended to include everything (as signals when applicable)
-   */
-  const data: Signal<T | undefined> = signal(undefined);
-  const isSuccess: Signal<boolean> = signal(false);
-  const isPending: Signal<boolean> = signal(false);
-  const error: Signal<U | null> = signal(null);
+  const mutationResultSignal: Signal<MutationObserverResult<T, U, V, X>> =
+    signal(mutationObserver.value.getCurrentResult());
 
   effect(() => {
     const disposeMutationSubscription = mutationObserver.value.subscribe(
-      (result) => {
-        batch(() => {
-          data.value = result.data;
-          isSuccess.value = result.isSuccess;
-          isPending.value = result.isPending;
-          error.value = result.error;
-        });
-      },
+      (result) => (mutationResultSignal.value = result),
     );
 
     return () => {
@@ -101,9 +75,5 @@ export function mutation<T, V = void, U = Error, X = unknown>(
     };
   });
 
-  const mutate = (variables: V, options?: MutateOptions<T, U, V, X>) => {
-    return mutationObserver.value.mutate(variables, options);
-  };
-
-  return { mutate, data, isSuccess, isPending, error };
+  return mutationResultSignal;
 }
