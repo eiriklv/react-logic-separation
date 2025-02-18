@@ -24,7 +24,7 @@ export type TodosDependencies = typeof defaultDependencies;
 
 export class TodosModel {
   // Dependencies
-  private _injections: TodosDependencies = defaultDependencies;
+  private _injections: TodosDependencies;
 
   // State
   private _todos = signal<Todo[]>([]);

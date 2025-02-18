@@ -23,7 +23,7 @@ export type RemindersModelDependencies = typeof defaultDependencies;
 
 export class RemindersModel {
   // Dependencies
-  private _injections: RemindersModelDependencies = defaultDependencies;
+  private _injections: RemindersModelDependencies;
 
   // Query client
   private _queryClient: QueryClient;
@@ -41,7 +41,7 @@ export class RemindersModel {
 
   // Constructor
   constructor(
-    queryClient: QueryClient,
+    queryClient: QueryClient = defaultQueryClient,
     dependencies: RemindersModelDependencies = defaultDependencies,
   ) {
     this._queryClient = queryClient;
@@ -101,4 +101,4 @@ export class RemindersModel {
 }
 
 // Model singleton
-export const remindersModel = new RemindersModel(defaultQueryClient);
+export const remindersModel = new RemindersModel();
