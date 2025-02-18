@@ -17,7 +17,10 @@ import {
   TopbarViewModelContextInterface,
 } from "./containers/Topbar/Topbar.viewmodel.context";
 import { SelectedCategoryModel } from "./models/selected-category-model";
-import { RemindersModel } from "./models/reminders-model";
+import {
+  RemindersModel,
+  RemindersModelDependencies,
+} from "./models/reminders-model";
 import { QueryClient } from "@tanstack/query-core";
 import { Reminder } from "./types";
 import {
@@ -42,9 +45,10 @@ import { ReminderItem } from "./components/ReminderItem";
 
 describe("CategorizedReminders Integration", () => {
   it("should reflect changes in category in all applicable views", async () => {
-    // arrange
+    // create query client for test
     const queryClient = new QueryClient();
 
+    // create fake reminders
     const mockReminders: Reminder[] = [
       { id: "1", text: "Reminder 1", category: "category-1" },
       { id: "2", text: "Reminder 2", category: "category-1" },
@@ -52,52 +56,115 @@ describe("CategorizedReminders Integration", () => {
       { id: "4", text: "Reminder 4", category: "category-2" },
     ];
 
-    const remindersModel: RemindersModel = new RemindersModel(queryClient, {
+    // create dependencies for the RemindersModel
+    const remindersModelDependencies: RemindersModelDependencies = {
       remindersService: {
         fetchReminders: vi.fn(async () => mockReminders),
         addReminder: vi.fn(),
       },
-    });
+    };
 
+    // create an instance of the RemindersModel using the dependencies
+    const remindersModel: RemindersModel = new RemindersModel(
+      /**
+       * Use the query client instance we created further up
+       */
+      queryClient,
+      /**
+       * Use the dependencies we created further up
+       */
+      remindersModelDependencies,
+    );
+
+    // create an instance of the SelectedCategoryModel (has no dependencies)
     const selectedCategoryModel: SelectedCategoryModel =
       new SelectedCategoryModel();
 
+    // create the dependencies for the Topbar container
     const topbarDependencies: TopbarContextInterface = {
-      useTopbarViewModel: useTopbarViewModel,
+      /**
+       * Use the real viewmodel hook since it's
+       * part of the integration we want to test
+       */
+      useTopbarViewModel,
     };
 
+    // create the dependencies for the topbar view model
     const topbarViewModelDependencies: TopbarViewModelContextInterface = {
+      /**
+       * Use the instance of reminders model we created further up
+       */
       remindersModel,
+      /**
+       * Use the instance of selected category model we created further up
+       */
       selectedCategoryModel,
     };
 
+    // create the dependencies for the category sidebar container
     const categorySidebarDependencies: CategorySidebarContextInterface = {
-      useCategorySidebarViewModel: useCategorySidebarViewModel,
+      /**
+       * Use the real viewmodel hook since it's
+       * part of the integration we want to test
+       */
+      useCategorySidebarViewModel,
     };
 
+    // create the dependencies for the category sidebar view model
     const categorySidebarViewModelDependencies: CategorySidebarViewModelContextInterface =
       {
+        /**
+         * Use the instance of reminders model we created further up
+         */
         remindersModel,
+        /**
+         * Use the instance of selected category model we created further up
+         */
         selectedCategoryModel,
       };
 
-    const categorizedRemindersDependencies: CategorizedRemindersContextInterface =
-      {
-        Topbar: Topbar,
-        CategorySidebar: CategorySidebar,
-        Reminders: Reminders,
-      };
-
+    // create the dependencies for the reminders container
     const remindersDependencies: RemindersContextInterface = {
-      useRemindersViewModel: useRemindersViewModel,
-      ReminderItem: ReminderItem,
+      /**
+       * Use the real view model hook since it's
+       * part of the integration we want to test
+       */
+      useRemindersViewModel,
+      /**
+       * Use the real implementation of the
+       * reminder item component, since it's
+       * part of the integration we want to test
+       */
+      ReminderItem,
     };
 
+    // create the dependencies for the reminders view model
     const remindersViewModelDependencies: RemindersViewModelContextInterface = {
+      /**
+       * Use the instance of reminders model we created further up
+       */
       remindersModel,
+      /**
+       * Use the instance of selected category model we created further up
+       */
       selectedCategoryModel,
     };
 
+    // create the dependencies for the categorized reminder container
+    const categorizedRemindersDependencies: CategorizedRemindersContextInterface =
+      {
+        /**
+         * Use the real implementations of all the sub-containers
+         */
+        Topbar,
+        CategorySidebar,
+        Reminders,
+      };
+
+    /**
+     * Render a version that injects all the dependencies
+     * we created further up so that we can test our integration
+     */
     render(
       <QueryClientProvider client={queryClient}>
         <TopbarViewModelContext.Provider value={topbarViewModelDependencies}>
