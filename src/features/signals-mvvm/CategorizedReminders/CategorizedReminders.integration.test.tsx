@@ -137,6 +137,9 @@ describe("CategorizedReminders Integration", () => {
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
+    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
+      "font-weight: normal",
+    );
     expect(screen.getByLabelText("Selected category:")).toHaveValue(
       "category-1",
     );
@@ -154,6 +157,9 @@ describe("CategorizedReminders Integration", () => {
 
     // check that everything is reflected correctly
     expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
+    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
+      "font-weight: normal",
+    );
     expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
       "font-weight: bold",
     );
@@ -173,6 +179,9 @@ describe("CategorizedReminders Integration", () => {
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
+    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
+      "font-weight: normal",
+    );
     expect(screen.getByLabelText("Selected category:")).toHaveValue(
       "category-1",
     );
@@ -186,6 +195,9 @@ describe("CategorizedReminders Integration", () => {
 
     // check that everything is reflected correctly
     expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
+    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
+      "font-weight: normal",
+    );
     expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
       "font-weight: bold",
     );
