@@ -53,7 +53,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     // create query client for test
     const queryClient = new QueryClient();
 
-    // create fake reminders
+    // create mock reminders
     const mockReminders: Reminder[] = [
       { id: "1", text: "Reminder 1", category: "category-1" },
       { id: "2", text: "Reminder 2", category: "category-1" },
@@ -232,7 +232,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     // create query client for test
     const queryClient = new QueryClient();
 
-    // create fake reminders
+    // create mock reminders
     const mockReminders: Reminder[] = [
       { id: "1", text: "Reminder 1", category: "category-1" },
       { id: "2", text: "Reminder 2", category: "category-1" },

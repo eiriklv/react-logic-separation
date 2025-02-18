@@ -57,7 +57,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     // create query client for test
     const queryClient = new QueryClient();
 
-    // create fake reminders
+    // create mock reminders
     const mockReminders: Reminder[] = [
       { id: "1", text: "Reminder 1", category: "category-1" },
       { id: "2", text: "Reminder 2", category: "category-1" },
@@ -65,7 +65,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
       { id: "4", text: "Reminder 4", category: "category-2" },
     ];
 
-    // create fake reminders service instance
+    // create mock reminders service instance
     const mockRemindersService: PartialDeep<RemindersService> = {
       fetchReminders: vi.fn(async () => mockReminders),
       addReminder: vi.fn(),
@@ -250,7 +250,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     // create query client for test
     const queryClient = new QueryClient();
 
-    // create fake reminders
+    // create mock reminders
     const mockReminders: Reminder[] = [
       { id: "1", text: "Reminder 1", category: "category-1" },
       { id: "2", text: "Reminder 2", category: "category-1" },
@@ -258,7 +258,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
       { id: "4", text: "Reminder 4", category: "category-2" },
     ];
 
-    // create fake reminders service instance
+    // create mock reminders service instance
     const mockRemindersService: PartialDeep<RemindersService> = {
       fetchReminders: vi.fn(async () => mockReminders),
       addReminder: vi.fn(),
