@@ -43,6 +43,11 @@ import { useRemindersViewModel } from "./containers/Reminders/Reminders.viewmode
 import { RemindersViewModelContext } from "./containers/Reminders/Reminders.viewmodel.context";
 import { ReminderItem } from "./components/ReminderItem";
 
+/**
+ * This one actually catches more integration errors than
+ * the one below, just for the fact that it will use the
+ * default dependencies, which might have been imported wrong
+ */
 describe("CategorizedReminders Integration (only necessary dependencies)", () => {
   it("should reflect changes in category in all applicable views", async () => {
     // create query client for test
