@@ -16,7 +16,7 @@ describe("query", () => {
         queryKey: ["abc"],
         queryFn: () => Promise.resolve(10),
       }),
-      queryClient,
+      () => queryClient,
     );
 
     expect(myQuery.value.isLoading).toBe(true);
@@ -40,7 +40,7 @@ describe("query", () => {
         queryKey: ["abc"],
         queryFn: async () => 10,
       }),
-      queryClient,
+      () => queryClient,
     );
 
     expect(myQuery.value.isLoading).toBe(true);
@@ -67,7 +67,7 @@ describe("query", () => {
         queryKey: [`abc-${mySignal1.value}`],
         queryFn: async () => mySignal2.value,
       }),
-      queryClient,
+      () => queryClient,
     );
 
     expect(myQuery.value.isLoading).toBe(true);
@@ -135,7 +135,7 @@ describe("mutation", () => {
           return getNextCount();
         },
       }),
-      queryClient,
+      () => queryClient,
     );
 
     expect(myQuery.value.isLoading).toBe(true);
@@ -160,7 +160,7 @@ describe("mutation", () => {
           queryClient.invalidateQueries({ queryKey });
         },
       }),
-      queryClient,
+      () => queryClient,
     );
 
     const resultPromise = myMutation.value.mutate();

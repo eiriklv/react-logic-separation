@@ -48,7 +48,7 @@ export class RemindersModel {
         queryFn: () => this._injections.remindersService.fetchReminders(),
         retry: false,
       }),
-      this._queryClient,
+      () => this._queryClient,
     );
 
     // Mutations
@@ -60,7 +60,7 @@ export class RemindersModel {
           this._queryClient.invalidateQueries({ queryKey: ["reminders"] });
         },
       }),
-      this._queryClient,
+      () => this._queryClient,
     );
   }
 
