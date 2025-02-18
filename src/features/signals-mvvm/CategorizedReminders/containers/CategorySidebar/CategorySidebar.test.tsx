@@ -11,7 +11,7 @@ describe("CategorySidebar Component", () => {
     // arrange
     const dependencies: CategorySidebarContextInterface = {
       useCategorySidebarViewModel: vi.fn(() => ({
-        selectedCategory: "selected-category",
+        selectedCategory: "category-1",
         categories: ["category-1", "category-2"],
         setSelectedCategory: vi.fn(),
       })),
@@ -27,6 +27,8 @@ describe("CategorySidebar Component", () => {
     expect(screen.getByText("Categories")).toBeInTheDocument();
     expect(screen.getByText("category-1")).toBeInTheDocument();
     expect(screen.getByText("category-2")).toBeInTheDocument();
+
+    expect(screen.getByText("category-1")).toHaveStyle("font-weight: bold");
   });
 
   it("Calls the correct handler when selecting a category", async () => {

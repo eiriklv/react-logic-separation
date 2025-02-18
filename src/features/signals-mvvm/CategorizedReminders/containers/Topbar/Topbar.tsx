@@ -17,7 +17,7 @@ export function Topbar() {
   );
 
   const categoryItems = categories.map((category) => (
-    <li key={category}>{category}</li>
+    <option key={category}>{category}</option>
   ));
 
   return (
@@ -35,7 +35,7 @@ export function Topbar() {
       </div>
       <div>
         Available categories:
-        <ul>{categoryItems}</ul>
+        <select>{categoryItems}</select>
       </div>
     </div>
   );

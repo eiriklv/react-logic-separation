@@ -209,4 +209,33 @@ describe("RemindersModel", () => {
     // check that correct filtered reminders count is provided
     expect(remindersCountBySelectedCategory.value).toEqual(2);
   });
+
+  it("should provide all categories correctly", async () => {
+    // arrange
+    const fakeReminders: Reminder[] = [
+      { id: "1", text: "Reminder 1", category: "category-1" },
+      { id: "2", text: "Reminder 2", category: "category-1" },
+      { id: "3", text: "Reminder 3", category: "category-2" },
+      { id: "4", text: "Reminder 4", category: "category-2" },
+    ];
+
+    const mockDependencies: RemindersModelDependencies = {
+      remindersService: {
+        addReminder: vi.fn(),
+        fetchReminders: vi.fn(async () => fakeReminders),
+      },
+    };
+
+    const queryClient = new QueryClient();
+    const model = new RemindersModel(queryClient, mockDependencies);
+
+    // check that the reminders load initially
+    expect(model.isLoading.value).toEqual(true);
+
+    // wait for the loading to finish
+    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+
+    // check that available categories are correct
+    expect(model.categories.value).toEqual(["category-1", "category-2"]);
+  });
 });

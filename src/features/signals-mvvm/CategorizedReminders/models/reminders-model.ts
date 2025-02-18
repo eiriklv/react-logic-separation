@@ -11,6 +11,7 @@ import {
 } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { Reminder } from "../types";
+import { uniq } from "lodash";
 
 // Dependencies to be injected
 const defaultDependencies = {
@@ -42,10 +43,10 @@ export class RemindersModel {
   );
 
   private _categories = computed(() => {
-    return (
+    return uniq(
       this._remindersQuery.data.value?.map((reminder) => {
         return reminder.category;
-      }) || []
+      }) || [],
     );
   });
 

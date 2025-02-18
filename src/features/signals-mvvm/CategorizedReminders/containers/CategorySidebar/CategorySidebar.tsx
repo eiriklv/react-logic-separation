@@ -29,12 +29,14 @@ export function CategorySidebar() {
      * (to avoid unnecessary updates for consumers not caring about counts)
      */
     return (
-      <li
-        key={category}
-        style={{ fontWeight: isSelectedCategory ? "bold" : "normal" }}
-        onClick={() => setSelectedCategory(category)}
-      >
-        {category}
+      <li key={category}>
+        <a
+          href="#"
+          onClick={() => setSelectedCategory(category)}
+          style={{ fontWeight: isSelectedCategory ? "bold" : "normal" }}
+        >
+          {category}
+        </a>
       </li>
     );
   });
