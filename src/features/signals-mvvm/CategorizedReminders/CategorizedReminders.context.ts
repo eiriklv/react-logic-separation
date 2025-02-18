@@ -1,7 +1,7 @@
 import React from "react";
 import { Topbar } from "./containers/Topbar/Topbar";
 import { CategorySidebar } from "./containers/CategorySidebar/CategorySidebar";
-import { Reminders } from "../Reminders/Reminders";
+import { Reminders } from "./containers/Reminders/Reminders";
 
 /**
  * The context can be used to inject any kind of

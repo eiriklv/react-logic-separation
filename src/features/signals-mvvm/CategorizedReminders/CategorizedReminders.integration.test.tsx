@@ -43,7 +43,186 @@ import { useRemindersViewModel } from "./containers/Reminders/Reminders.viewmode
 import { RemindersViewModelContext } from "./containers/Reminders/Reminders.viewmodel.context";
 import { ReminderItem } from "./components/ReminderItem";
 
-describe("CategorizedReminders Integration", () => {
+describe("CategorizedReminders Integration (only necessary dependencies)", () => {
+  it("should reflect changes in category in all applicable views", async () => {
+    // create query client for test
+    const queryClient = new QueryClient();
+
+    // create fake reminders
+    const mockReminders: Reminder[] = [
+      { id: "1", text: "Reminder 1", category: "category-1" },
+      { id: "2", text: "Reminder 2", category: "category-1" },
+      { id: "3", text: "Reminder 3", category: "category-2" },
+      { id: "4", text: "Reminder 4", category: "category-2" },
+    ];
+
+    // create dependencies for the RemindersModel
+    const remindersModelDependencies: RemindersModelDependencies = {
+      remindersService: {
+        fetchReminders: vi.fn(async () => mockReminders),
+        addReminder: vi.fn(),
+      },
+    };
+
+    // create an instance of the RemindersModel using the dependencies
+    const remindersModel: RemindersModel = new RemindersModel(
+      /**
+       * Use the query client instance we created further up
+       */
+      queryClient,
+      /**
+       * Use the dependencies we created further up
+       */
+      remindersModelDependencies,
+    );
+
+    // create an instance of the SelectedCategoryModel (has no dependencies)
+    const selectedCategoryModel: SelectedCategoryModel =
+      new SelectedCategoryModel();
+
+    // create the dependencies for the topbar view model
+    const topbarViewModelDependencies: TopbarViewModelContextInterface = {
+      /**
+       * Use the instance of reminders model we created further up
+       */
+      remindersModel,
+      /**
+       * Use the instance of selected category model we created further up
+       */
+      selectedCategoryModel,
+    };
+
+    // create the dependencies for the category sidebar view model
+    const categorySidebarViewModelDependencies: CategorySidebarViewModelContextInterface =
+      {
+        /**
+         * Use the instance of reminders model we created further up
+         */
+        remindersModel,
+        /**
+         * Use the instance of selected category model we created further up
+         */
+        selectedCategoryModel,
+      };
+
+    // create the dependencies for the reminders view model
+    const remindersViewModelDependencies: RemindersViewModelContextInterface = {
+      /**
+       * Use the instance of reminders model we created further up
+       */
+      remindersModel,
+      /**
+       * Use the instance of selected category model we created further up
+       */
+      selectedCategoryModel,
+    };
+
+    /**
+     * Render a version that injects all the dependencies
+     * we created further up so that we can test our integration
+     */
+    render(
+      <QueryClientProvider client={queryClient}>
+        <TopbarViewModelContext.Provider value={topbarViewModelDependencies}>
+          <CategorySidebarViewModelContext.Provider
+            value={categorySidebarViewModelDependencies}
+          >
+            <RemindersViewModelContext.Provider
+              value={remindersViewModelDependencies}
+            >
+              <CategorizedReminders />
+            </RemindersViewModelContext.Provider>
+          </CategorySidebarViewModelContext.Provider>
+        </TopbarViewModelContext.Provider>
+      </QueryClientProvider>,
+    );
+
+    // set the category via the topbar
+    await userEvent.type(
+      screen.getByLabelText("Selected category:"),
+      "category-1",
+    );
+
+    // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-1");
+    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
+      "font-weight: bold",
+    );
+    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
+      "font-weight: normal",
+    );
+    expect(screen.getByLabelText("Selected category:")).toHaveValue(
+      "category-1",
+    );
+    expect(screen.getByText(/Reminder 1/)).toBeInTheDocument();
+    expect(screen.getByText(/Reminder 2/)).toBeInTheDocument();
+    expect(screen.queryByText(/Reminder 3/)).toBeNull();
+    expect(screen.queryByText(/Reminder 4/)).toBeNull();
+
+    // set the category via the topbar
+    await userEvent.clear(screen.getByLabelText("Selected category:"));
+    await userEvent.type(
+      screen.getByLabelText("Selected category:"),
+      "category-2",
+    );
+
+    // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
+    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
+      "font-weight: normal",
+    );
+    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
+      "font-weight: bold",
+    );
+    expect(screen.getByLabelText("Selected category:")).toHaveValue(
+      "category-2",
+    );
+    expect(screen.queryByText(/Reminder 1/)).toBeNull();
+    expect(screen.queryByText(/Reminder 2/)).toBeNull();
+    expect(screen.getByText(/Reminder 3/)).toBeInTheDocument();
+    expect(screen.getByText(/Reminder 4/)).toBeInTheDocument();
+
+    // set the category via the sidebar
+    await userEvent.click(screen.getByRole("link", { name: "category-1" }));
+
+    // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-1");
+    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
+      "font-weight: bold",
+    );
+    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
+      "font-weight: normal",
+    );
+    expect(screen.getByLabelText("Selected category:")).toHaveValue(
+      "category-1",
+    );
+    expect(screen.getByText(/Reminder 1/)).toBeInTheDocument();
+    expect(screen.getByText(/Reminder 2/)).toBeInTheDocument();
+    expect(screen.queryByText(/Reminder 3/)).toBeNull();
+    expect(screen.queryByText(/Reminder 4/)).toBeNull();
+
+    // set the category via the sidebar
+    await userEvent.click(screen.getByRole("link", { name: "category-2" }));
+
+    // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
+    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
+      "font-weight: normal",
+    );
+    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
+      "font-weight: bold",
+    );
+    expect(screen.getByLabelText("Selected category:")).toHaveValue(
+      "category-2",
+    );
+    expect(screen.queryByText(/Reminder 1/)).toBeNull();
+    expect(screen.queryByText(/Reminder 2/)).toBeNull();
+    expect(screen.getByText(/Reminder 3/)).toBeInTheDocument();
+    expect(screen.getByText(/Reminder 4/)).toBeInTheDocument();
+  });
+});
+
+describe("CategorizedReminders Integration (all dependencies explicit)", () => {
   it("should reflect changes in category in all applicable views", async () => {
     // create query client for test
     const queryClient = new QueryClient();
