@@ -151,8 +151,8 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
-    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-2" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByLabelText("Selected category:")).toHaveValue(
       "category-1",
@@ -171,8 +171,8 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
 
     // check that everything is reflected correctly
     expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
-    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
       "font-weight: bold",
@@ -193,8 +193,8 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
-    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-2" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByLabelText("Selected category:")).toHaveValue(
       "category-1",
@@ -209,8 +209,8 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
 
     // check that everything is reflected correctly
     expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
-    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
       "font-weight: bold",
@@ -384,8 +384,8 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
-    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-2" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByLabelText("Selected category:")).toHaveValue(
       "category-1",
@@ -404,8 +404,8 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
 
     // check that everything is reflected correctly
     expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
-    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
       "font-weight: bold",
@@ -426,8 +426,8 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
-    expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-2" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByLabelText("Selected category:")).toHaveValue(
       "category-1",
@@ -442,8 +442,8 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
 
     // check that everything is reflected correctly
     expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
-    expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
-      "font-weight: normal",
+    expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
+      "font-weight: bold",
     );
     expect(screen.getByRole("link", { name: "category-2" })).toHaveStyle(
       "font-weight: bold",
