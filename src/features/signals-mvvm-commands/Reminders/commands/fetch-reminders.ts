@@ -21,14 +21,14 @@ export type FetchRemindersCommandDependencies = typeof defaultDependencies;
 export class FetchRemindersCommand {
   private _dependencies: FetchRemindersCommandDependencies;
 
+  public invoke = () => {
+    return this._dependencies.remindersService.fetchReminders();
+  };
+
   constructor(
     dependencies: FetchRemindersCommandDependencies = defaultDependencies,
   ) {
     this._dependencies = dependencies;
-  }
-
-  public invoke() {
-    return this._dependencies.remindersService.fetchReminders();
   }
 }
 

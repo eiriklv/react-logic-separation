@@ -22,14 +22,14 @@ export type SaveTodosCommandDependencies = typeof defaultDependencies;
 export class SaveTodosCommand {
   private _dependencies: SaveTodosCommandDependencies;
 
+  public invoke = (todos: Todo[]) => {
+    return this._dependencies.todosService.saveTodos(todos);
+  };
+
   constructor(
     dependencies: SaveTodosCommandDependencies = defaultDependencies,
   ) {
     this._dependencies = dependencies;
-  }
-
-  public invoke(todos: Todo[]) {
-    return this._dependencies.todosService.saveTodos(todos);
   }
 }
 

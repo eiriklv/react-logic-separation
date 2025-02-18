@@ -21,18 +21,18 @@ export type AddReminderCommandDependencies = typeof defaultDependencies;
 export class AddReminderCommand {
   private _dependencies: AddReminderCommandDependencies;
 
-  constructor(
-    dependencies: AddReminderCommandDependencies = defaultDependencies,
-  ) {
-    this._dependencies = dependencies;
-  }
-
-  public invoke(text: string) {
+  public invoke = (text: string) => {
     if (!text) {
       throw new Error("Reminder text is missing");
     }
 
     return this._dependencies.remindersService.addReminder(text);
+  };
+
+  constructor(
+    dependencies: AddReminderCommandDependencies = defaultDependencies,
+  ) {
+    this._dependencies = dependencies;
   }
 }
 

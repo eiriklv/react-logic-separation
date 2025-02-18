@@ -21,14 +21,14 @@ export type FetchTodosCommandDependencies = typeof defaultDependencies;
 export class FetchTodosCommand {
   private _dependencies: FetchTodosCommandDependencies;
 
+  public invoke = () => {
+    return this._dependencies.todosService.fetchTodos();
+  };
+
   constructor(
     dependencies: FetchTodosCommandDependencies = defaultDependencies,
   ) {
     this._dependencies = dependencies;
-  }
-
-  public invoke() {
-    return this._dependencies.todosService.fetchTodos();
   }
 }
 

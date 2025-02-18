@@ -42,6 +42,10 @@ import { RemindersViewModelContextInterface } from "./containers/Reminders/Remin
 import { useRemindersViewModel } from "./containers/Reminders/Reminders.viewmodel";
 import { RemindersViewModelContext } from "./containers/Reminders/Reminders.viewmodel.context";
 import { ReminderItem } from "./components/ReminderItem";
+import { RemindersService } from "./services/reminders.service";
+import { PartialDeep } from "type-fest";
+import { FetchRemindersCommand } from "./commands/fetch-reminders";
+import { AddReminderCommand } from "./commands/add-reminder";
 
 /**
  * This one actually catches more integration errors than
@@ -61,10 +65,26 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
       { id: "4", text: "Reminder 4", category: "category-2" },
     ];
 
+    // create fake reminders service instance
+    const mockRemindersService: PartialDeep<RemindersService> = {
+      fetchReminders: vi.fn(async () => mockReminders),
+      addReminder: vi.fn(),
+    };
+
+    // create fetch reminders command instance
+    const fetchRemindersCommand = new FetchRemindersCommand({
+      remindersService: mockRemindersService as RemindersService,
+    });
+
+    // create add reminders command instance
+    const addReminderCommand = new AddReminderCommand({
+      remindersService: mockRemindersService as RemindersService,
+    });
+
     // create dependencies for the RemindersModel
     const remindersModelDependencies: RemindersModelDependencies = {
-      fetchRemindersCommand: vi.fn(async () => mockReminders),
-      addReminderCommand: vi.fn(),
+      fetchRemindersCommand: fetchRemindersCommand.invoke,
+      addReminderCommand: addReminderCommand.invoke,
     };
 
     // create an instance of the RemindersModel using the dependencies
@@ -238,10 +258,26 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
       { id: "4", text: "Reminder 4", category: "category-2" },
     ];
 
+    // create fake reminders service instance
+    const mockRemindersService: PartialDeep<RemindersService> = {
+      fetchReminders: vi.fn(async () => mockReminders),
+      addReminder: vi.fn(),
+    };
+
+    // create fetch reminders command instance
+    const fetchRemindersCommand = new FetchRemindersCommand({
+      remindersService: mockRemindersService as RemindersService,
+    });
+
+    // create add reminders command instance
+    const addReminderCommand = new AddReminderCommand({
+      remindersService: mockRemindersService as RemindersService,
+    });
+
     // create dependencies for the RemindersModel
     const remindersModelDependencies: RemindersModelDependencies = {
-      fetchRemindersCommand: vi.fn(async () => mockReminders),
-      addReminderCommand: vi.fn(),
+      fetchRemindersCommand: fetchRemindersCommand.invoke,
+      addReminderCommand: addReminderCommand.invoke,
     };
 
     // create an instance of the RemindersModel using the dependencies
