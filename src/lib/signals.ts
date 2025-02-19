@@ -7,7 +7,7 @@ import * as arrayDiff from "fast-array-diff";
  * cleaned up and the setup again - add this
  */
 export function mapSignalArray<T, U>(
-  currentInput: Signal<T[]>,
+  input: Signal<T[]>,
   setupFn: (item: T) => U,
   cleanupFn?: (item: U) => void,
   compareFn?: (a: T, b: T) => boolean,
@@ -16,7 +16,7 @@ export function mapSignalArray<T, U>(
   const noop: () => U = (() => {}) as () => U;
 
   // keep reference to previous value of array for diffing
-  const previousInput = previous(currentInput, []);
+  const previousInput = previous(input, []);
 
   // store effect disposal function for each of the elements
   const output: Signal<U[]> = signal([]);
@@ -24,13 +24,13 @@ export function mapSignalArray<T, U>(
   effect(() => {
     // listen to original array for changes
     const outputValue = output.peek();
-    const currentInputValue = currentInput.value;
+    const inputValue = input.value;
     const previousInputValue = previousInput.peek();
 
     // get a diff patch of the changes
     const diffPatch = arrayDiff.getPatch(
       previousInputValue,
-      currentInputValue,
+      inputValue,
       compareFn,
     );
 
@@ -59,12 +59,10 @@ export function mapSignalArray<T, U>(
 }
 
 export function arrayEffect<T>(
-  currentInput: Signal<T[]>,
+  input: Signal<T[]>,
   effectFn: (item: T) => (() => void) | void,
 ) {
-  const disposals = mapSignalArray(currentInput, effectFn, (dispose) =>
-    dispose?.(),
-  );
+  const disposals = mapSignalArray(input, effectFn, (dispose) => dispose?.());
   return () => {
     disposals.value.forEach((dispose) => dispose?.());
   };
