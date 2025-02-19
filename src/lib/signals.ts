@@ -4,6 +4,7 @@ import * as arrayDiff from "fast-array-diff";
 export function mapSignalArray<T, U>(
   currentInput: Signal<T[]>,
   setupFn: (item: T) => U,
+  cleanupFn?: (item: U) => void,
   compareFn?: (a: T, b: T) => boolean,
 ): Signal<U[]> {
   // Make a noop
@@ -33,7 +34,7 @@ export function mapSignalArray<T, U>(
       .filter((patch) => patch.type === "remove")
       .map((patch) => patch.oldPos)
       .map((index) => outputValue[index])
-      .forEach((val) => (typeof val === "function" ? val() : noop()));
+      .forEach((val) => cleanupFn?.(val));
 
     // map the diff patch info the correct format
     const mappedDiffPatch = diffPatch.map((patch) => {

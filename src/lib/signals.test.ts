@@ -17,15 +17,21 @@ describe("mapSignalArray", () => {
     const effectInitialized = vi.fn();
     const effectDisposed = vi.fn();
 
-    const disposalFns = mapSignalArray(ids, (id) => {
-      return effect(() => {
-        effectInitialized(id);
+    const disposalFns = mapSignalArray(
+      ids,
+      (id) => {
+        return effect(() => {
+          effectInitialized(id);
 
-        return () => {
-          effectDisposed(id);
-        };
-      });
-    });
+          return () => {
+            effectDisposed(id);
+          };
+        });
+      },
+      (dispose) => {
+        dispose();
+      },
+    );
 
     expect(effectDisposed).toBeCalledTimes(0);
     expect(effectInitialized).toBeCalledTimes(3);
@@ -95,15 +101,21 @@ describe("mapSignalArray", () => {
     const effectInitialized = vi.fn();
     const effectDisposed = vi.fn();
 
-    const disposalFns = mapSignalArray(ids, ({ id }) => {
-      return effect(() => {
-        effectInitialized(id);
+    const disposalFns = mapSignalArray(
+      ids,
+      ({ id }) => {
+        return effect(() => {
+          effectInitialized(id);
 
-        return () => {
-          effectDisposed(id);
-        };
-      });
-    });
+          return () => {
+            effectDisposed(id);
+          };
+        });
+      },
+      (dispose) => {
+        dispose();
+      },
+    );
 
     expect(effectDisposed).toBeCalledTimes(0);
     expect(effectInitialized).toBeCalledTimes(3);
@@ -155,6 +167,9 @@ describe("mapSignalArray", () => {
             effectDisposed(id);
           };
         });
+      },
+      (dispose) => {
+        dispose();
       },
       isEqual,
     );
