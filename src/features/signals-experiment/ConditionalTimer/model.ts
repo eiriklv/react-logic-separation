@@ -14,7 +14,7 @@ export class ConditionalTimerModel {
   );
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  private _elapsedSeconds = relay<number>(0, (set, get) => {
+  private _elapsedSecondsRelay = relay<number>(0, (set, get) => {
     const isRunning = this._isRunning.value;
 
     if (!isRunning) {
@@ -41,7 +41,7 @@ export class ConditionalTimerModel {
     this._isCool.value = !this._isCool.value;
   };
   private _resettedTimer = () => {
-    this._elapsedSeconds.value = 0;
+    this._elapsedSecondsRelay[0].value = 0;
   };
 
   // Getters
@@ -58,7 +58,8 @@ export class ConditionalTimerModel {
     return this._isRunning;
   }
   public get elapsedSeconds(): ReadonlySignal<number> {
-    return this._elapsedSeconds;
+    const [elapsedSeconds] = this._elapsedSecondsRelay;
+    return elapsedSeconds;
   }
 
   // Commands (public for consumption)

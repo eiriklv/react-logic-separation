@@ -35,7 +35,7 @@ export class TodosModel {
   todosCount = computed<number>(() => this.todos.value.length);
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  isSaving = relay(false, (set) => {
+  isSavingRelay = relay(false, (set) => {
     // Get dependencies
     const { todosService, waitTimeBeforeSave } = this.injections;
 
@@ -72,6 +72,12 @@ export class TodosModel {
   addedTodo = (payload: Todo) => {
     this.todos.value = [...this.todos.value, payload];
   };
+
+  // Getters
+  get isSaving() {
+    const [isSaving] = this.isSavingRelay;
+    return isSaving;
+  }
 
   // Commands
   initializeTodos = async () => {

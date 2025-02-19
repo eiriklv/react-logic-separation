@@ -280,7 +280,7 @@ describe("relay", () => {
     // arrange
     const timeoutInMs = 1000;
 
-    const myRelaySignal = relay(0, (set) => {
+    const [myRelaySignal] = relay(0, (set) => {
       setTimeout(() => {
         set(10);
       }, timeoutInMs);
@@ -296,11 +296,85 @@ describe("relay", () => {
     expect(myRelaySignal.value).toEqual(10);
   });
 
+  it("should set from the outside correctly", () => {
+    // arrange
+    const timeoutInMs = 1000;
+
+    const [myRelaySignal, setMyRelaySignal] = relay(0, (set) => {
+      setTimeout(() => {
+        set(10);
+      }, timeoutInMs);
+    });
+
+    // assert
+    expect(myRelaySignal.value).toEqual(0);
+
+    // act
+    setMyRelaySignal(5);
+
+    // assert
+    expect(myRelaySignal.value).toEqual(5);
+
+    // act
+    vi.advanceTimersByTime(timeoutInMs);
+
+    // assert
+    expect(myRelaySignal.value).toEqual(10);
+  });
+
+  it("should dispose from outside correctly", () => {
+    // arrange
+    const intervalInMs = 1000;
+
+    const [myRelaySignal, setMyRelaySignal, disposeMyRelaySignal] = relay(
+      0,
+      (set, get) => {
+        const myInterval = setInterval(() => {
+          set(get() + 1);
+        }, intervalInMs);
+
+        return () => {
+          clearTimeout(myInterval);
+        };
+      },
+    );
+
+    // assert
+    expect(myRelaySignal.value).toEqual(0);
+
+    // act
+    setMyRelaySignal(5);
+
+    // assert
+    expect(myRelaySignal.value).toEqual(5);
+
+    // act
+    vi.advanceTimersByTime(intervalInMs);
+
+    // assert
+    expect(myRelaySignal.value).toEqual(6);
+
+    // act
+    vi.advanceTimersByTime(intervalInMs);
+
+    // assert
+    expect(myRelaySignal.value).toEqual(7);
+
+    // act
+    disposeMyRelaySignal();
+
+    // act
+    vi.advanceTimersByTime(intervalInMs);
+
+    // assert
+    expect(myRelaySignal.value).toEqual(7);
+  });
+
   it("should continue to update correctly", () => {
     // arrange
     const intervalInMs = 1000;
 
-    const myRelaySignal = relay(0, (set, get) => {
+    const [myRelaySignal] = relay(0, (set, get) => {
       setInterval(() => {
         set(get() + 1);
       }, intervalInMs);
@@ -333,7 +407,7 @@ describe("relay", () => {
     const intervalInMs = 1000;
     const mySignal = signal(0);
 
-    const myRelaySignal = relay(0, (set, get) => {
+    const [myRelaySignal] = relay(0, (set, get) => {
       const signalValue = mySignal.value;
       set(signalValue);
 

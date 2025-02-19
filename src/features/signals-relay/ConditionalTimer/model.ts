@@ -14,7 +14,7 @@ export class ConditionalTimerModel {
   );
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  elapsedSeconds = relay<number>(0, (set, get) => {
+  elapsedSecondsRelay = relay<number>(0, (set, get) => {
     const isRunning = this.isRunning.value;
 
     if (!isRunning) {
@@ -43,6 +43,12 @@ export class ConditionalTimerModel {
   resettedTimer = () => {
     this.elapsedSeconds.value = 0;
   };
+
+  // Getters
+  get elapsedSeconds() {
+    const [elapsedSeconds] = this.elapsedSecondsRelay;
+    return elapsedSeconds;
+  }
 
   // Commands (public for consumption)
   toggleOkay = async () => {

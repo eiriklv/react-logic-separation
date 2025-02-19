@@ -72,16 +72,18 @@ export function arrayEffect<T>(
 export function relay<T>(
   initialState: T,
   setup: (set: (newValue: T) => void, get: () => T) => (() => void) | void,
-): Signal<T> {
+): [Signal<T>, Parameters<typeof setup>[0], () => void] {
   const stateSignal = signal(initialState);
-  const get = () => stateSignal.peek();
-  const set = (newValue: T) => (stateSignal.value = newValue);
-  effect(() => setup(set, get));
-  return stateSignal;
+  const get: Parameters<typeof setup>[1] = () => stateSignal.peek();
+  const set: Parameters<typeof setup>[0] = (newValue: T) => {
+    stateSignal.value = newValue;
+  };
+  const dispose = effect(() => setup(set, get));
+  return [stateSignal, set, dispose];
 }
 
 export function debounced<T>(inputSignal: Signal<T>, debounceTimeInMs: number) {
-  const debouncedSignal = relay(inputSignal.value, (set) => {
+  const [debouncedSignal] = relay(inputSignal.value, (set) => {
     const valueToDebounce = inputSignal.value;
 
     const debounceTimeout = setTimeout(() => {
@@ -102,7 +104,7 @@ export function previous<T>(
   inputSignal: Signal<T>,
   initialValue: T = inputSignal.value,
 ) {
-  const previousSignal = relay(initialValue, (set) => {
+  const [previousSignal] = relay(initialValue, (set) => {
     const currentValue = inputSignal.value;
 
     return () => {

@@ -7,7 +7,7 @@ export class TimerModel {
   private _isRunning = signal<boolean>(false);
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  private _elapsedSeconds = relay<number>(0, (set, get) => {
+  private _elapsedSecondsRelay = relay<number>(0, (set, get) => {
     const isRunning = this._isRunning.value;
 
     if (!isRunning) {
@@ -36,7 +36,8 @@ export class TimerModel {
     return this._isRunning;
   }
   public get elapsedSeconds(): ReadonlySignal<number> {
-    return this._elapsedSeconds;
+    const [elapsedSeconds] = this._elapsedSecondsRelay;
+    return elapsedSeconds;
   }
 
   // Commands (public for consumption)

@@ -7,7 +7,7 @@ export class TimerModel {
   isRunning = signal<boolean>(false);
 
   // Relays (based on: https://www.pzuraq.com/blog/on-signal-relays)
-  elapsedSeconds = relay<number>(0, (set, get) => {
+  elapsedSecondsRelay = relay<number>(0, (set, get) => {
     const isRunning = this.isRunning.value;
 
     if (!isRunning) {
@@ -22,6 +22,12 @@ export class TimerModel {
       clearInterval(interval);
     };
   });
+
+  // Computed
+  get elapsedSeconds() {
+    const [elapsedSeconds] = this.elapsedSecondsRelay;
+    return elapsedSeconds;
+  }
 
   // Events
   startedTimer = () => {
