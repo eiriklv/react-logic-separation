@@ -62,46 +62,11 @@ export function arrayEffect<T>(
   currentInput: Signal<T[]>,
   effectFn: (item: T) => (() => void) | void,
 ) {
-  // keep reference to previous value of array for diffing
-  const previousInput = previous(currentInput, []);
-
-  // store effect disposal function for each of the elements
-  let disposals: ((() => void) | void)[] = [];
-
-  const disposeEffect = effect(() => {
-    // listen to original array for changes
-    const currentInputValue = currentInput.value;
-    const previousInputValue = previousInput.peek();
-
-    // get a diff patch of the changes
-    const diffPatch = arrayDiff.getPatch(previousInputValue, currentInputValue);
-
-    // figure our which of the effect to dispose
-    const disposalsToRun = diffPatch
-      .filter((patch) => patch.type === "remove")
-      .map((patch) => patch.oldPos)
-      .map((index) => disposals[index]);
-
-    // dispose the applicable effects
-    disposalsToRun.forEach((dispose) => dispose?.());
-
-    // map the diff patch info the correct format
-    const mappedDiffPatch = diffPatch.map((patch) => {
-      switch (patch.type) {
-        case "add":
-          return { ...patch, items: patch.items.map((item) => effectFn(item)) };
-        case "remove":
-          return { ...patch, items: patch.items.map(() => {}) };
-      }
-    });
-
-    // apply the patch
-    disposals = arrayDiff.applyPatch(disposals, mappedDiffPatch);
-  });
-
+  const disposals = mapSignalArray(currentInput, effectFn, (dispose) =>
+    dispose?.(),
+  );
   return () => {
-    disposeEffect();
-    disposals.forEach((dispose) => dispose?.());
+    disposals.value.forEach((dispose) => dispose?.());
   };
 }
 
