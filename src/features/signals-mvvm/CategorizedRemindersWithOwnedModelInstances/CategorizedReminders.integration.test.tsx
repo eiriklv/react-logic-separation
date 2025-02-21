@@ -16,7 +16,7 @@ import {
   TopbarViewModelContext,
   TopbarViewModelContextInterface,
 } from "./containers/Topbar/Topbar.viewmodel.context";
-import { createSelectedCategoryModel } from "./models/selected-category-model";
+import { SelectedCategoryModel } from "./models/selected-category-model";
 import {
   RemindersModel,
   RemindersModelDependencies,
@@ -74,6 +74,10 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
       },
     };
 
+    // create an instance of the SelectedCategoryModel (has no dependencies)
+    const selectedCategoryModel: SelectedCategoryModel =
+      new SelectedCategoryModel();
+
     // create an instance of the RemindersModel using the dependencies
     const remindersModel: RemindersModel = new RemindersModel(
       /**
@@ -117,7 +121,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
         /**
          * Use the instance of selected category model we created further up
          */
-        createSelectedCategoryModel,
+        createSelectedCategoryModel: () => selectedCategoryModel,
       };
 
     /**
@@ -151,6 +155,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     );
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-1");
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
@@ -173,6 +178,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     );
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
     expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
       "font-weight: bold",
     );
@@ -191,6 +197,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     await userEvent.click(screen.getByRole("link", { name: "category-1" }));
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-1");
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
@@ -209,6 +216,7 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     await userEvent.click(screen.getByRole("link", { name: "category-2" }));
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
     expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
       "font-weight: bold",
     );
@@ -245,6 +253,10 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
         addReminder: vi.fn(),
       },
     };
+
+    // create an instance of the SelectedCategoryModel (has no dependencies)
+    const selectedCategoryModel: SelectedCategoryModel =
+      new SelectedCategoryModel();
 
     // create an instance of the RemindersModel using the dependencies
     const remindersModel: RemindersModel = new RemindersModel(
@@ -316,7 +328,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
       remindersModel,
     };
 
-    // create the dependencies for the categorized reminder container
+    // create the dependencies for the categorized reminders container
     const categorizedRemindersDependencies: CategorizedRemindersContextInterface =
       {
         /**
@@ -326,6 +338,15 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
         Topbar,
         CategorySidebar,
         Reminders,
+      };
+
+    // create the dependencies for the categorized reminders view model
+    const categorizedRemindersViewModelDependencies: CategorizedRemindersViewModelContextInterface =
+      {
+        /**
+         * Use the instance of reminders model we created further up
+         */
+        createSelectedCategoryModel: () => selectedCategoryModel,
       };
 
     /**
@@ -341,19 +362,23 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
             <RemindersViewModelContext.Provider
               value={remindersViewModelDependencies}
             >
-              <TopbarContext.Provider value={topbarDependencies}>
-                <CategorySidebarContext.Provider
-                  value={categorySidebarDependencies}
-                >
-                  <RemindersContext.Provider value={remindersDependencies}>
-                    <CategorizedRemindersContext.Provider
-                      value={categorizedRemindersDependencies}
-                    >
-                      <CategorizedReminders />
-                    </CategorizedRemindersContext.Provider>
-                  </RemindersContext.Provider>
-                </CategorySidebarContext.Provider>
-              </TopbarContext.Provider>
+              <CategorizedRemindersViewModelContext.Provider
+                value={categorizedRemindersViewModelDependencies}
+              >
+                <TopbarContext.Provider value={topbarDependencies}>
+                  <CategorySidebarContext.Provider
+                    value={categorySidebarDependencies}
+                  >
+                    <RemindersContext.Provider value={remindersDependencies}>
+                      <CategorizedRemindersContext.Provider
+                        value={categorizedRemindersDependencies}
+                      >
+                        <CategorizedReminders />
+                      </CategorizedRemindersContext.Provider>
+                    </RemindersContext.Provider>
+                  </CategorySidebarContext.Provider>
+                </TopbarContext.Provider>
+              </CategorizedRemindersViewModelContext.Provider>
             </RemindersViewModelContext.Provider>
           </CategorySidebarViewModelContext.Provider>
         </TopbarViewModelContext.Provider>
@@ -367,6 +392,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     );
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-1");
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
@@ -389,6 +415,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     );
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
     expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
       "font-weight: bold",
     );
@@ -407,6 +434,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     await userEvent.click(screen.getByRole("link", { name: "category-1" }));
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-1");
     expect(screen.getByRole("link", { name: "category-1" })).toHaveStyle(
       "font-weight: bold",
     );
@@ -425,6 +453,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
     await userEvent.click(screen.getByRole("link", { name: "category-2" }));
 
     // check that everything is reflected correctly
+    expect(selectedCategoryModel.selectedCategory.value).toEqual("category-2");
     expect(screen.getByRole("link", { name: "category-1" })).not.toHaveStyle(
       "font-weight: bold",
     );
