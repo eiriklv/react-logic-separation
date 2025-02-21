@@ -1,5 +1,10 @@
 import React, { PropsWithChildren } from "react";
 
+/**
+ * This is mostly meant for integration testing purposes,
+ * where you have to create large/deep provider trees
+ * to inject all the dependencies to each layer
+ */
 export const createProviderTree = (providers: JSX.Element[]) => {
   return function ProviderTree(props: PropsWithChildren) {
     const lastIndex = providers.length - 1;
