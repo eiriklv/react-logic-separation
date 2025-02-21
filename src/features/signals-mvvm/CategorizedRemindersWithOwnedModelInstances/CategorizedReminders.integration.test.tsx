@@ -47,6 +47,7 @@ import {
   CategorizedRemindersViewModelContextInterface,
 } from "./CategorizedReminders.viewmodel.context";
 import { useCategorizedRemindersViewModel } from "./CategorizedReminders.viewmodel";
+import { createProviderTree } from "../../../lib/create-provider-tree";
 
 /**
  * This one actually catches more integration errors than
@@ -124,28 +125,29 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
         createSelectedCategoryModel: () => selectedCategoryModel,
       };
 
+    // create provider tree stack
+    const Providers = createProviderTree([
+      <QueryClientProvider client={queryClient} />,
+      <TopbarViewModelContext.Provider value={topbarViewModelDependencies} />,
+      <CategorySidebarViewModelContext.Provider
+        value={categorySidebarViewModelDependencies}
+      />,
+      <RemindersViewModelContext.Provider
+        value={remindersViewModelDependencies}
+      />,
+      <CategorizedRemindersViewModelContext.Provider
+        value={categorizedRemindersViewModelDependencies}
+      />,
+    ]);
+
     /**
      * Render a version that injects all the dependencies
      * we created further up so that we can test our integration
      */
     render(
-      <QueryClientProvider client={queryClient}>
-        <TopbarViewModelContext.Provider value={topbarViewModelDependencies}>
-          <CategorySidebarViewModelContext.Provider
-            value={categorySidebarViewModelDependencies}
-          >
-            <RemindersViewModelContext.Provider
-              value={remindersViewModelDependencies}
-            >
-              <CategorizedRemindersViewModelContext.Provider
-                value={categorizedRemindersViewModelDependencies}
-              >
-                <CategorizedReminders />
-              </CategorizedRemindersViewModelContext.Provider>
-            </RemindersViewModelContext.Provider>
-          </CategorySidebarViewModelContext.Provider>
-        </TopbarViewModelContext.Provider>
-      </QueryClientProvider>,
+      <Providers>
+        <CategorizedReminders />
+      </Providers>,
     );
 
     // set the category via the topbar
@@ -349,40 +351,35 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
         createSelectedCategoryModel: () => selectedCategoryModel,
       };
 
+    // create provider tree stack
+    const Providers = createProviderTree([
+      <QueryClientProvider client={queryClient} />,
+      <TopbarViewModelContext.Provider value={topbarViewModelDependencies} />,
+      <CategorySidebarViewModelContext.Provider
+        value={categorySidebarViewModelDependencies}
+      />,
+      <RemindersViewModelContext.Provider
+        value={remindersViewModelDependencies}
+      />,
+      <CategorizedRemindersViewModelContext.Provider
+        value={categorizedRemindersViewModelDependencies}
+      />,
+      <TopbarContext.Provider value={topbarDependencies} />,
+      <CategorySidebarContext.Provider value={categorySidebarDependencies} />,
+      <RemindersContext.Provider value={remindersDependencies} />,
+      <CategorizedRemindersContext.Provider
+        value={categorizedRemindersDependencies}
+      />,
+    ]);
+
     /**
      * Render a version that injects all the dependencies
      * we created further up so that we can test our integration
      */
     render(
-      <QueryClientProvider client={queryClient}>
-        <TopbarViewModelContext.Provider value={topbarViewModelDependencies}>
-          <CategorySidebarViewModelContext.Provider
-            value={categorySidebarViewModelDependencies}
-          >
-            <RemindersViewModelContext.Provider
-              value={remindersViewModelDependencies}
-            >
-              <CategorizedRemindersViewModelContext.Provider
-                value={categorizedRemindersViewModelDependencies}
-              >
-                <TopbarContext.Provider value={topbarDependencies}>
-                  <CategorySidebarContext.Provider
-                    value={categorySidebarDependencies}
-                  >
-                    <RemindersContext.Provider value={remindersDependencies}>
-                      <CategorizedRemindersContext.Provider
-                        value={categorizedRemindersDependencies}
-                      >
-                        <CategorizedReminders />
-                      </CategorizedRemindersContext.Provider>
-                    </RemindersContext.Provider>
-                  </CategorySidebarContext.Provider>
-                </TopbarContext.Provider>
-              </CategorizedRemindersViewModelContext.Provider>
-            </RemindersViewModelContext.Provider>
-          </CategorySidebarViewModelContext.Provider>
-        </TopbarViewModelContext.Provider>
-      </QueryClientProvider>,
+      <Providers>
+        <CategorizedReminders />
+      </Providers>,
     );
 
     // set the category via the topbar
