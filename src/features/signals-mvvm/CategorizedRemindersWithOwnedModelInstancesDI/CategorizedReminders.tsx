@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { CategorizedRemindersContext } from "./CategorizedReminders.context";
 
 import {
@@ -28,30 +28,43 @@ export function CategorizedReminders() {
   // Use view model
   const { selectedCategoryModel } = useCategorizedRemindersViewModel();
 
+  const topbarViewModelDependencies = useMemo(
+    () => ({
+      ...topbarViewModelContextDefaultValue,
+      selectedCategoryModel,
+    }),
+    [selectedCategoryModel],
+  );
+
+  const categorySidebarViewModelDependencies = useMemo(
+    () => ({
+      ...categorySidebarViewModelContextDefaultValue,
+      selectedCategoryModel,
+    }),
+    [selectedCategoryModel],
+  );
+
+  const remindersViewModelDependencies = useMemo(
+    () => ({
+      ...remindersViewModelContextDefaultValue,
+      selectedCategoryModel,
+    }),
+    [selectedCategoryModel],
+  );
+
   return (
     <div>
-      <TopbarViewModelContext.Provider
-        value={{
-          ...topbarViewModelContextDefaultValue,
-          selectedCategoryModel,
-        }}
-      >
+      <TopbarViewModelContext.Provider value={topbarViewModelDependencies}>
         <Topbar />
       </TopbarViewModelContext.Provider>
       <div>
         <CategorySidebarViewModelContext.Provider
-          value={{
-            ...categorySidebarViewModelContextDefaultValue,
-            selectedCategoryModel,
-          }}
+          value={categorySidebarViewModelDependencies}
         >
           <CategorySidebar />
         </CategorySidebarViewModelContext.Provider>
         <RemindersViewModelContext.Provider
-          value={{
-            ...remindersViewModelContextDefaultValue,
-            selectedCategoryModel,
-          }}
+          value={remindersViewModelDependencies}
         >
           <Reminders />
         </RemindersViewModelContext.Provider>
