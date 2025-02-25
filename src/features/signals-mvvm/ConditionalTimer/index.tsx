@@ -1,4 +1,4 @@
-import { ConditionalTimer } from "./ConditionalTimer";
+import { ConditionalTimer } from "./ConditionalTimer.view";
 
 export function ConditionalTimerFeature() {
   return <ConditionalTimer />;
