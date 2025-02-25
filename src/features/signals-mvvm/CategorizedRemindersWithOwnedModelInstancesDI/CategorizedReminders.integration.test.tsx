@@ -168,13 +168,6 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
     // create provider tree stack
     const Providers = createProviderTree([
       <QueryClientProvider client={queryClient} />,
-      <TopbarViewModelContext.Provider value={topbarViewModelDependencies} />,
-      <CategorySidebarViewModelContext.Provider
-        value={categorySidebarViewModelDependencies}
-      />,
-      <RemindersViewModelContext.Provider
-        value={remindersViewModelDependencies}
-      />,
       <CategorizedRemindersViewModelContext.Provider
         value={categorizedRemindersViewModelDependencies}
       />,
