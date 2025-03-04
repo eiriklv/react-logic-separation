@@ -5,7 +5,6 @@ import {
   RemindersContext,
   RemindersContextInterface,
 } from "./Reminders.view.context";
-import { SelectedCategoryModel } from "../../models/selected-category.model";
 
 describe("Reminders Component", () => {
   it("Renders correctly", () => {
@@ -22,11 +21,9 @@ describe("Reminders Component", () => {
       ReminderItem: () => <></>,
     };
 
-    const selectedCategoryModel = {} as SelectedCategoryModel;
-
     render(
       <RemindersContext.Provider value={dependencies}>
-        <Reminders selectedCategoryModel={selectedCategoryModel} />
+        <Reminders />
       </RemindersContext.Provider>,
     );
 
@@ -50,11 +47,9 @@ describe("Reminders Component", () => {
       ReminderItem: () => <></>,
     };
 
-    const selectedCategoryModel = {} as SelectedCategoryModel;
-
     render(
       <RemindersContext.Provider value={dependencies}>
-        <Reminders selectedCategoryModel={selectedCategoryModel} />
+        <Reminders />
       </RemindersContext.Provider>,
     );
 

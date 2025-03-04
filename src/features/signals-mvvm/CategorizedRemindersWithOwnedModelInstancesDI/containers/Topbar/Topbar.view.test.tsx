@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Topbar } from "./Topbar.view";
 import { TopbarContext, TopbarContextInterface } from "./Topbar.view.context";
-import { SelectedCategoryModel } from "../../models/selected-category.model";
 
 describe("Topbar Component", () => {
   it("Renders correctly", () => {
@@ -15,11 +14,9 @@ describe("Topbar Component", () => {
       })),
     };
 
-    const selectedCategoryModel = {} as SelectedCategoryModel;
-
     render(
       <TopbarContext.Provider value={dependencies}>
-        <Topbar selectedCategoryModel={selectedCategoryModel} />
+        <Topbar />
       </TopbarContext.Provider>,
     );
 
@@ -42,11 +39,9 @@ describe("Topbar Component", () => {
       })),
     };
 
-    const selectedCategoryModel = {} as SelectedCategoryModel;
-
     render(
       <TopbarContext.Provider value={dependencies}>
-        <Topbar selectedCategoryModel={selectedCategoryModel} />
+        <Topbar />
       </TopbarContext.Provider>,
     );
 

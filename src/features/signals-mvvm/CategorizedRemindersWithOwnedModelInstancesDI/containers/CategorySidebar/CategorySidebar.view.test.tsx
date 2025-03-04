@@ -5,7 +5,6 @@ import {
   CategorySidebarContext,
   CategorySidebarContextInterface,
 } from "./CategorySidebar.view.context";
-import { SelectedCategoryModel } from "../../models/selected-category.model";
 
 describe("CategorySidebar Component", () => {
   it("Renders correctly", () => {
@@ -18,11 +17,9 @@ describe("CategorySidebar Component", () => {
       })),
     };
 
-    const selectedCategoryModel = {} as SelectedCategoryModel;
-
     render(
       <CategorySidebarContext.Provider value={dependencies}>
-        <CategorySidebar selectedCategoryModel={selectedCategoryModel} />
+        <CategorySidebar />
       </CategorySidebarContext.Provider>,
     );
 
@@ -46,12 +43,9 @@ describe("CategorySidebar Component", () => {
       })),
     };
 
-    const SelectedCategoryModelMock = vi.mocked(SelectedCategoryModel);
-    const selectedCategoryModelMock = new SelectedCategoryModelMock();
-
     render(
       <CategorySidebarContext.Provider value={dependencies}>
-        <CategorySidebar selectedCategoryModel={selectedCategoryModelMock} />
+        <CategorySidebar />
       </CategorySidebarContext.Provider>,
     );
 
