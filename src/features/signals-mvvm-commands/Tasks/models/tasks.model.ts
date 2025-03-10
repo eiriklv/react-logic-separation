@@ -98,7 +98,8 @@ export class TasksModel {
     return computed(() => {
       const selectedOwnerIdValue = selectedOwnerId.value;
       return this._tasksQuery.value.data?.filter(
-        (task) => task.ownerId === selectedOwnerIdValue,
+        (task) =>
+          !selectedOwnerIdValue || task.ownerId === selectedOwnerIdValue,
       );
     });
   }
@@ -114,7 +115,8 @@ export class TasksModel {
       const selectedOwnerIdValue = selectedOwnerId.value;
       return (
         this._tasksQuery.value.data?.filter(
-          (task) => task.ownerId === selectedOwnerIdValue,
+          (task) =>
+            !selectedOwnerIdValue || task.ownerId === selectedOwnerIdValue,
         ).length || 0
       );
     });

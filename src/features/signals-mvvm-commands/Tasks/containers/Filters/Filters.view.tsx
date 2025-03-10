@@ -20,11 +20,11 @@ export function Filters() {
   );
 
   const userOptions = [
-    <option selected={selectedOwnerId === ""} key={"all"}>
+    <option key={"all"} value={""}>
       All
     </option>,
     ...users.map((user) => (
-      <option selected={selectedOwnerId === user.id} key={user.id}>
+      <option key={user.id} value={user.id}>
         {user.name}
       </option>
     )),
@@ -36,7 +36,9 @@ export function Filters() {
       <div>
         <label>
           Owner:
-          <select onChange={handleChangeSelectedUser}>{userOptions}</select>
+          <select value={selectedOwnerId} onChange={handleChangeSelectedUser}>
+            {userOptions}
+          </select>
         </label>
       </div>
     </div>

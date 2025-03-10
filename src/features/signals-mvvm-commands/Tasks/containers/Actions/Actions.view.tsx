@@ -30,11 +30,16 @@ export function Actions() {
     setTaskText("");
   }, [addTask, selectedUserId, taskText]);
 
-  const userOptions = users.map((user) => (
-    <option selected={selectedUserId === user.id} key={user.id}>
-      {user.name}
-    </option>
-  ));
+  const userOptions = [
+    <option disabled value={""}>
+      Select a user
+    </option>,
+    ...users.map((user) => (
+      <option key={user.id} value={user.id}>
+        {user.name}
+      </option>
+    )),
+  ];
 
   return (
     <div>
@@ -46,7 +51,9 @@ export function Actions() {
         </label>
         <label>
           Owner:
-          <select onChange={handleChangeUser}>{userOptions}</select>
+          <select value={selectedUserId} onChange={handleChangeUser}>
+            {userOptions}
+          </select>
         </label>
         <button onClick={handleSubmitTask}>+</button>
       </div>
