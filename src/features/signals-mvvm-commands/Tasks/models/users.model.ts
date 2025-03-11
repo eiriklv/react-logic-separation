@@ -21,7 +21,7 @@ export class UsersModel {
   private _queryClient: QueryClient;
 
   // Queries
-  private _userQuery: SignalQuery<User[]>;
+  private _usersQuery: SignalQuery<User[]>;
 
   // Constructor
   constructor(
@@ -32,25 +32,26 @@ export class UsersModel {
     this._dependencies = dependencies;
 
     // Queries
-    this._userQuery = query<User[]>(
+    this._usersQuery = query<User[]>(
       () => ({
         queryKey: ["users"],
         queryFn: () => this._dependencies.listUsersCommand(),
+        retry: false,
       }),
       () => this._queryClient,
     );
   }
 
   public get users(): ReadonlySignal<User[] | undefined> {
-    return computed(() => this._userQuery.value.data);
+    return computed(() => this._usersQuery.value.data);
   }
 
   public get isLoading(): ReadonlySignal<boolean> {
-    return computed(() => this._userQuery.value.isLoading);
+    return computed(() => this._usersQuery.value.isLoading);
   }
 
   public get error(): ReadonlySignal<Error | null> {
-    return computed(() => this._userQuery.value.error);
+    return computed(() => this._usersQuery.value.error);
   }
 }
 
