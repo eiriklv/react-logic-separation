@@ -36,7 +36,11 @@ export class UserModel {
     this._userQuery = query<User | undefined>(
       () => ({
         queryKey: ["user", userId],
-        queryFn: () => this._dependencies.getUserCommand(userId),
+        queryFn: () => {
+          console.log("hei", Date.now());
+          return this._dependencies.getUserCommand(userId);
+        },
+        retry: false,
       }),
       () => this._queryClient,
     );
