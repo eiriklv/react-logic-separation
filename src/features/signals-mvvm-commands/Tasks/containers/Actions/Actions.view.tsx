@@ -8,6 +8,7 @@ export function Actions() {
   // Use view model
   const { addTask, users = [] } = useActionsViewModel();
 
+  // Create local view state
   const [selectedUserId, setSelectedUserId] = useState("");
   const [taskText, setTaskText] = useState("");
 
@@ -31,7 +32,7 @@ export function Actions() {
   }, [addTask, selectedUserId, taskText]);
 
   const userOptions = [
-    <option disabled value={""}>
+    <option key={"no-selection"} disabled value={""}>
       Select a user
     </option>,
     ...users.map((user) => (
