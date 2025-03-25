@@ -51,7 +51,7 @@ export function Actions() {
           <input type="text" value={taskText} onChange={handleChangeTaskText} />
         </label>
         <label>
-          Owner:
+          User:
           <select value={selectedUserId} onChange={handleChangeUser}>
             {userOptions}
           </select>

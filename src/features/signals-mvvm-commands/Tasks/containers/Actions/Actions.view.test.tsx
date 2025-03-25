@@ -54,7 +54,10 @@ describe("Actions Component", () => {
 
     // act
     await userEvent.type(screen.getByLabelText("Add task"), "Paint house");
-    await userEvent.selectOptions(screen.getByRole("combobox"), "John Doe");
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "User:" }),
+      "John Doe",
+    );
     await userEvent.click(screen.getByRole("button", { name: "+" }));
 
     // assert

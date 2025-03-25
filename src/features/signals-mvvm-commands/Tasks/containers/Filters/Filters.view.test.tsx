@@ -75,7 +75,10 @@ describe("Filters Component", () => {
     expect(screen.getByText(/Jane Doe/)).toBeInTheDocument();
 
     // act
-    await userEvent.selectOptions(screen.getByRole("combobox"), "John Doe");
+    await userEvent.selectOptions(
+      screen.getByRole("combobox", { name: "Owner:" }),
+      "John Doe",
+    );
 
     // assert
     expect(setSelectedOwnerId).toHaveBeenCalledWith("user-1");
