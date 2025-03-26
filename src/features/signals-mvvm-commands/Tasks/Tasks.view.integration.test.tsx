@@ -261,8 +261,6 @@ describe("Tasks Integration (all dependencies explicit)", () => {
       tasksModel,
     };
 
-    // Create fake user
-
     // Create dependencies for UserModel
     const userModelDependencies: UserModelDependencies = {
       getUserCommand: async (userId) => {
