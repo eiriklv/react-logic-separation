@@ -28,7 +28,6 @@ export function TaskList() {
 
   return (
     <div>
-      <pre>signals-mvvm-commands</pre>
       <h3>
         Tasks <span>{isSaving && "(saving...)"}</span>
       </h3>

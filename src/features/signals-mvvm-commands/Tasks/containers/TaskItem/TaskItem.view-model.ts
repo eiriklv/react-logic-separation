@@ -30,7 +30,7 @@ export const useTaskItemViewModel = ({ task }: TaskItemViewModelProps) => {
     [createUserModel, task.ownerId],
   );
 
-  const deleteTask = useCallback(async () => {
+  const deleteTask = useCallback(() => {
     return tasksModel.deleteTask(task.id);
   }, [task.id, tasksModel]);
 
