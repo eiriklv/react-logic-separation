@@ -10,32 +10,38 @@ import { Task } from "../types";
  * testing a service will often involve either using a mock for the SDK,
  * or things like mock-service-worker or nock (mocking the network layer)
  */
+const defaultTasks: Task[] = [
+  { id: "1", text: "Write self reflection", ownerId: "user-1" },
+  { id: "2", text: "Fix that bug", ownerId: "user-2" },
+];
 
 const defaultDependencies = {
   generateId,
+  delay: 1000,
 };
 
 export type TasksServiceDependencies = typeof defaultDependencies;
 
 export class TasksService {
-  private _tasks: Task[] = [
-    { id: "1", text: "Write self reflection", ownerId: "user-1" },
-    { id: "2", text: "Fix that bug", ownerId: "user-2" },
-  ];
+  private _tasks: Task[];
 
   private _dependencies: TasksServiceDependencies;
 
-  constructor(dependencies: TasksServiceDependencies = defaultDependencies) {
+  constructor(
+    dependencies: TasksServiceDependencies = defaultDependencies,
+    initialTasks: Task[] = defaultTasks,
+  ) {
     this._dependencies = dependencies;
+    this._tasks = initialTasks;
   }
 
   public async listTasks() {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
     return this._tasks.slice();
   }
 
   public async addTask(text: string, ownerId: string) {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
 
     const newTask = {
       id: this._dependencies.generateId(),
@@ -49,7 +55,7 @@ export class TasksService {
   }
 
   public async deleteTask(taskId: string) {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
 
     this._tasks.splice(
       0,

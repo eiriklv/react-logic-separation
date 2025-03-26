@@ -29,6 +29,7 @@ describe("TasksModel", () => {
 
     // check that the tasks were loaded
     expect(model.tasks.value).toEqual([]);
+    expect(model.tasksCount.value).toEqual(0);
 
     // add some tasks
     await model.addTask("Solve some hard bug", "user-1");
@@ -41,6 +42,7 @@ describe("TasksModel", () => {
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(fakeTaskMocks[1]);
+    expect(model.tasksCount.value).toEqual(1);
   });
 
   it("should work as expected when adding multiple tasks", async () => {
@@ -91,6 +93,89 @@ describe("TasksModel", () => {
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(fakeTaskMocks[3]);
+    expect(model.tasksCount.value).toEqual(3);
+  });
+
+  it("should work as expected when deleting a task", async () => {
+    // arrange
+    let count = 0;
+    const fakeTaskMocks: Task[][] = [
+      [{ id: "1", text: "Fake 1", ownerId: "user-1" }],
+      [],
+    ];
+
+    const mockDependencies: TasksModelDependencies = {
+      addTaskCommand: vi.fn(async (reminder) => reminder),
+      deleteTaskCommand: vi.fn(),
+      listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
+    };
+
+    const queryClient = new QueryClient();
+    const model = new TasksModel(queryClient, mockDependencies);
+
+    // check that the tasks load initially
+    expect(model.isLoading.value).toEqual(true);
+
+    // wait for the loading to finish
+    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+
+    // check that the tasks were loaded
+    expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
+    expect(model.tasksCount.value).toEqual(1);
+
+    // add some tasks
+    await model.deleteTask("1");
+
+    // check that the tasks were added the correct amount of times
+    expect(mockDependencies.deleteTaskCommand).toHaveBeenCalledTimes(1);
+
+    // check that the tasks were re-fetched the correct amount of times
+    expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(2);
+
+    // check that the list of tasks is correct
+    expect(model.tasks.value).toEqual(fakeTaskMocks[1]);
+    expect(model.tasksCount.value).toEqual(0);
+  });
+
+  it("should not perform deletion if no task id is provided", async () => {
+    // arrange
+    let count = 0;
+    const fakeTaskMocks: Task[][] = [
+      [{ id: "1", text: "Fake 1", ownerId: "user-1" }],
+      [],
+    ];
+
+    const mockDependencies: TasksModelDependencies = {
+      addTaskCommand: vi.fn(async (reminder) => reminder),
+      deleteTaskCommand: vi.fn(),
+      listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
+    };
+
+    const queryClient = new QueryClient();
+    const model = new TasksModel(queryClient, mockDependencies);
+
+    // check that the tasks load initially
+    expect(model.isLoading.value).toEqual(true);
+
+    // wait for the loading to finish
+    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+
+    // check that the tasks were loaded
+    expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
+    expect(model.tasksCount.value).toEqual(1);
+
+    // add some tasks
+    await model.deleteTask("");
+
+    // check that the tasks were added the correct amount of times
+    expect(mockDependencies.deleteTaskCommand).toHaveBeenCalledTimes(0);
+
+    // check that the tasks were re-fetched the correct amount of times
+    expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(1);
+
+    // check that the list of tasks is correct
+    expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
+    expect(model.tasksCount.value).toEqual(1);
   });
 
   it("should fail validation when adding empty reminder", async () => {
