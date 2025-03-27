@@ -13,9 +13,9 @@ import { tasksServiceSingleton } from "../services/tasks.service";
 
 // Dependencies to be injected
 const defaultDependencies = {
-  listTasks: tasksServiceSingleton.listTasks,
-  addTask: tasksServiceSingleton.addTask,
-  deleteTask: tasksServiceSingleton.deleteTask,
+  listTasks: tasksServiceSingleton.listTasks.bind(tasksServiceSingleton),
+  addTask: tasksServiceSingleton.addTask.bind(tasksServiceSingleton),
+  deleteTask: tasksServiceSingleton.deleteTask.bind(tasksServiceSingleton),
 };
 
 // Types and interfaces

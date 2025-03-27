@@ -7,7 +7,7 @@ import { usersServiceSingleton } from "../services/users.service";
 
 // Dependencies to be injected
 const defaultDependencies = {
-  listUsers: usersServiceSingleton.listUsers,
+  listUsers: usersServiceSingleton.listUsers.bind(usersServiceSingleton),
 };
 
 // Types and interfaces
