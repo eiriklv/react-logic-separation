@@ -28,7 +28,7 @@ describe("GetUserCommand", () => {
     // get the user by id
     const user = await getUserCommand.invoke(mockUser.id);
 
-    // check that the reminders were given as a result
+    // check that the users were given as a result
     expect(user).toEqual(mockUser);
 
     // check that the underlying service was called

@@ -63,7 +63,7 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTaskCommand: vi.fn(async (reminder) => reminder),
+      addTaskCommand: vi.fn(async (task) => task),
       deleteTaskCommand: vi.fn(),
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
@@ -105,7 +105,7 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTaskCommand: vi.fn(async (reminder) => reminder),
+      addTaskCommand: vi.fn(async (task) => task),
       deleteTaskCommand: vi.fn(),
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
@@ -146,7 +146,7 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTaskCommand: vi.fn(async (reminder) => reminder),
+      addTaskCommand: vi.fn(async (task) => task),
       deleteTaskCommand: vi.fn(),
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
@@ -178,7 +178,7 @@ describe("TasksModel", () => {
     expect(model.tasksCount.value).toEqual(1);
   });
 
-  it("should fail validation when adding empty reminder", async () => {
+  it("should fail validation when adding empty task", async () => {
     // arrange
     let count = 0;
     const fakeTaskMocks: Task[][] = [
@@ -205,13 +205,13 @@ describe("TasksModel", () => {
     // check that the tasks were loaded
     expect(model.tasks.value).toEqual([]);
 
-    // add a reminder without a category
+    // add a task without a category
     await model.addTask("Thing", "");
 
-    // add a reminder without text
+    // add a task without text
     await model.addTask("", "user-1");
 
-    // check that it never added a reminder
+    // check that it never added a task
     expect(mockDependencies.addTaskCommand).not.toHaveBeenCalled();
 
     // check that it did not refetch the tasks

@@ -15,12 +15,12 @@ describe("DeleteTaskCommand", () => {
 
     const mockTaskId = "task-1";
 
-    const fetchRemindersCommand = new DeleteTaskCommand(
+    const deleteTaskCommand = new DeleteTaskCommand(
       mockDependencies as DeleteTaskCommandDependencies,
     );
 
     // delete the task
-    await fetchRemindersCommand.invoke(mockTaskId);
+    await deleteTaskCommand.invoke(mockTaskId);
 
     // check that the underlying service was called
     expect(mockDependencies.tasksService?.deleteTask).toHaveBeenCalledWith(

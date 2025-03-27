@@ -14,7 +14,7 @@ describe("AddTaskCommand", () => {
       mockDependencies as AddTaskCommandDependencies,
     );
 
-    // add a reminder
+    // add a task
     await addTaskCommand.invoke("Paint house", "user-1");
 
     // check that the underlying service was called
