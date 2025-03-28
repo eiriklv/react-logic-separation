@@ -10,18 +10,25 @@ import { User } from "../types";
  * testing a service will often involve either using a mock for the SDK,
  * or things like mock-service-worker or nock (mocking the network layer)
  */
+export interface IUsersService {
+  listUsers(): Promise<User[]>;
+  getUserById(userId: string): Promise<User | undefined>;
+}
+
+export type UsersServiceDependencies = {
+  delay: number;
+};
+
+const defaultDependencies: UsersServiceDependencies = {
+  delay: 1000,
+};
+
 const defaultUsers: User[] = [
   { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },
   { id: "user-2", name: "Jane Johnson", profileImageUrl: "/img/user-2.jpg" },
 ];
 
-const defaultDependencies = {
-  delay: 1000,
-};
-
-export type UsersServiceDependencies = typeof defaultDependencies;
-
-export class UsersService {
+export class UsersService implements IUsersService {
   private _users: User[];
 
   private _dependencies: UsersServiceDependencies;
@@ -45,4 +52,4 @@ export class UsersService {
   }
 }
 
-export const usersServiceSingleton = new UsersService();
+export const usersServiceSingleton: IUsersService = new UsersService();

@@ -6,14 +6,13 @@ import {
 } from "./Filters.view-model.context";
 import { useFiltersViewModel } from "./Filters.view-model";
 import { signal } from "@preact/signals-core";
-import { PartialDeep } from "type-fest";
 
 describe("useFiltersViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const setSelectedOwnerId = vi.fn();
 
-    const mockDependencies: PartialDeep<FiltersViewModelContextInterface> = {
+    const mockDependencies: FiltersViewModelContextInterface = {
       usersModel: {
         users: signal([]),
       },
@@ -26,9 +25,7 @@ describe("useFiltersViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <FiltersViewModelContext.Provider
-        value={mockDependencies as FiltersViewModelContextInterface}
-      >
+      <FiltersViewModelContext.Provider value={mockDependencies}>
         {children}
       </FiltersViewModelContext.Provider>
     );

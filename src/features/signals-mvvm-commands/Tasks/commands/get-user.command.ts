@@ -1,4 +1,8 @@
-import { usersServiceSingleton } from "../services/users.service";
+import {
+  IUsersService,
+  usersServiceSingleton,
+} from "../services/users.service";
+import { User } from "../types";
 
 /**
  * Commands are meant to be single purpose operations that
@@ -12,13 +16,23 @@ import { usersServiceSingleton } from "../services/users.service";
  * do not have to be tested through the model or the UI
  */
 
-const defaultDependencies = {
+export interface IGetUserCommandInvocation {
+  (userId: string): Promise<User | undefined>;
+}
+
+interface IGetUserCommand {
+  invoke: IGetUserCommandInvocation;
+}
+
+export type GetUserCommandDependencies = {
+  usersService: Pick<IUsersService, "getUserById">;
+};
+
+const defaultDependencies: GetUserCommandDependencies = {
   usersService: usersServiceSingleton,
 };
 
-export type GetUserCommandDependencies = typeof defaultDependencies;
-
-export class GetUserCommand {
+export class GetUserCommand implements IGetUserCommand {
   private _dependencies: GetUserCommandDependencies;
 
   public invoke = (userId: string) => {
@@ -30,4 +44,5 @@ export class GetUserCommand {
   }
 }
 
-export const getUserCommand = new GetUserCommand().invoke;
+export const getUserCommand: IGetUserCommandInvocation = new GetUserCommand()
+  .invoke;

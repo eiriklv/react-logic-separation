@@ -5,6 +5,12 @@ import { QueryClient } from "@tanstack/query-core";
 import { User } from "../types";
 import { listUsersCommand } from "../commands/list-users.command";
 
+export interface IUsersModel {
+  users: ReadonlySignal<User[] | undefined>;
+  isLoading: ReadonlySignal<boolean>;
+  error: ReadonlySignal<Error | null>;
+}
+
 // Dependencies to be injected
 const defaultDependencies = {
   listUsersCommand,
@@ -13,7 +19,7 @@ const defaultDependencies = {
 // Types and interfaces
 export type UsersModelDependencies = typeof defaultDependencies;
 
-export class UsersModel {
+export class UsersModel implements IUsersModel {
   // Dependencies
   private _dependencies: UsersModelDependencies;
 
@@ -55,4 +61,4 @@ export class UsersModel {
   }
 }
 
-export const usersModelSingleton = new UsersModel();
+export const usersModelSingleton: IUsersModel = new UsersModel();

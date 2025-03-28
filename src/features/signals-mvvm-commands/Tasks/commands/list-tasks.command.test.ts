@@ -2,20 +2,17 @@ import {
   ListTasksCommand,
   ListTasksCommandDependencies,
 } from "./list-tasks.command";
-import type { PartialDeep } from "type-fest";
 
 describe("ListTasksCommand", () => {
   it("should work as expected when listing tasks", async () => {
     // arrange
-    const mockDependencies: PartialDeep<ListTasksCommandDependencies> = {
+    const mockDependencies: ListTasksCommandDependencies = {
       tasksService: {
         listTasks: vi.fn(async () => []),
       },
     };
 
-    const listTasksCommand = new ListTasksCommand(
-      mockDependencies as ListTasksCommandDependencies,
-    );
+    const listTasksCommand = new ListTasksCommand(mockDependencies);
 
     // fetch the tasks
     const tasks = await listTasksCommand.invoke();

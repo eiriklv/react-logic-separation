@@ -1,4 +1,8 @@
-import { tasksServiceSingleton } from "../services/tasks.service";
+import {
+  ITasksService,
+  tasksServiceSingleton,
+} from "../services/tasks.service";
+import { Task } from "../types";
 
 /**
  * Commands are meant to be single purpose operations that
@@ -12,13 +16,23 @@ import { tasksServiceSingleton } from "../services/tasks.service";
  * do not have to be tested through the model or the UI
  */
 
-const defaultDependencies = {
+export interface IAddTaskCommandInvocation {
+  (text: string, ownerId: string): Promise<Task>;
+}
+
+interface IAddTaskCommand {
+  invoke: IAddTaskCommandInvocation;
+}
+
+export type AddTaskCommandDependencies = {
+  tasksService: Pick<ITasksService, "addTask">;
+};
+
+const defaultDependencies: AddTaskCommandDependencies = {
   tasksService: tasksServiceSingleton,
 };
 
-export type AddTaskCommandDependencies = typeof defaultDependencies;
-
-export class AddTaskCommand {
+export class AddTaskCommand implements IAddTaskCommand {
   private _dependencies: AddTaskCommandDependencies;
 
   public invoke = (text: string, ownerId: string) => {
@@ -38,4 +52,5 @@ export class AddTaskCommand {
   }
 }
 
-export const addTaskCommand = new AddTaskCommand().invoke;
+export const addTaskCommand: IAddTaskCommandInvocation = new AddTaskCommand()
+  .invoke;

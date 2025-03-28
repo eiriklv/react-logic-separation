@@ -1,4 +1,7 @@
-import { tasksServiceSingleton } from "../services/tasks.service";
+import {
+  ITasksService,
+  tasksServiceSingleton,
+} from "../services/tasks.service";
 
 /**
  * Commands are meant to be single purpose operations that
@@ -12,13 +15,23 @@ import { tasksServiceSingleton } from "../services/tasks.service";
  * do not have to be tested through the model or the UI
  */
 
-const defaultDependencies = {
+export interface IDeleteTaskCommandInvocation {
+  (taskId: string): Promise<void>;
+}
+
+interface IDeleteTaskCommand {
+  invoke: IDeleteTaskCommandInvocation;
+}
+
+export type DeleteTaskCommandDependencies = {
+  tasksService: Pick<ITasksService, "deleteTask">;
+};
+
+const defaultDependencies: DeleteTaskCommandDependencies = {
   tasksService: tasksServiceSingleton,
 };
 
-export type DeleteTaskCommandDependencies = typeof defaultDependencies;
-
-export class DeleteTaskCommand {
+export class DeleteTaskCommand implements IDeleteTaskCommand {
   private _dependencies: DeleteTaskCommandDependencies;
 
   public invoke = (taskId: string) => {
@@ -32,4 +45,5 @@ export class DeleteTaskCommand {
   }
 }
 
-export const deleteTaskCommand = new DeleteTaskCommand().invoke;
+export const deleteTaskCommand: IDeleteTaskCommandInvocation =
+  new DeleteTaskCommand().invoke;

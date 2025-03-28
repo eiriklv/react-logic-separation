@@ -2,12 +2,11 @@ import {
   DeleteTaskCommand,
   DeleteTaskCommandDependencies,
 } from "./delete-task.command";
-import type { PartialDeep } from "type-fest";
 
 describe("DeleteTaskCommand", () => {
   it("should work as expected when deleting a task", async () => {
     // arrange
-    const mockDependencies: PartialDeep<DeleteTaskCommandDependencies> = {
+    const mockDependencies: DeleteTaskCommandDependencies = {
       tasksService: {
         deleteTask: vi.fn(async () => {}),
       },
@@ -15,9 +14,7 @@ describe("DeleteTaskCommand", () => {
 
     const mockTaskId = "task-1";
 
-    const deleteTaskCommand = new DeleteTaskCommand(
-      mockDependencies as DeleteTaskCommandDependencies,
-    );
+    const deleteTaskCommand = new DeleteTaskCommand(mockDependencies);
 
     // delete the task
     await deleteTaskCommand.invoke(mockTaskId);

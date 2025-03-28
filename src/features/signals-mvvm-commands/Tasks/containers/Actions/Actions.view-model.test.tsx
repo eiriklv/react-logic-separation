@@ -6,14 +6,13 @@ import {
 } from "./Actions.view-model.context";
 import { useActionsViewModel } from "./Actions.view-model";
 import { signal } from "@preact/signals-core";
-import { PartialDeep } from "type-fest";
 
 describe("useActionsViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const addTask = vi.fn();
 
-    const mockDependencies: PartialDeep<ActionsViewModelContextInterface> = {
+    const mockDependencies: ActionsViewModelContextInterface = {
       tasksModel: {
         addTask,
       },
@@ -25,9 +24,7 @@ describe("useActionsViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <ActionsViewModelContext.Provider
-        value={mockDependencies as ActionsViewModelContextInterface}
-      >
+      <ActionsViewModelContext.Provider value={mockDependencies}>
         {children}
       </ActionsViewModelContext.Provider>
     );

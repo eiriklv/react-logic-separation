@@ -1,6 +1,9 @@
 import React from "react";
-import { selectedFiltersModelSingleton } from "../../models/selected-filters.model";
-import { tasksModelSingleton } from "../../models/tasks.model";
+import {
+  ISelectedFiltersModel,
+  selectedFiltersModelSingleton,
+} from "../../models/selected-filters.model";
+import { ITasksModel, tasksModelSingleton } from "../../models/tasks.model";
 
 /**
  * The context can be used to inject any kind of
@@ -20,8 +23,16 @@ import { tasksModelSingleton } from "../../models/tasks.model";
  */
 
 export interface TaskListViewModelContextInterface {
-  selectedFiltersModel: typeof selectedFiltersModelSingleton;
-  tasksModel: typeof tasksModelSingleton;
+  selectedFiltersModel: ISelectedFiltersModel;
+  tasksModel: Pick<
+    ITasksModel,
+    | "getTasksByOwnerId"
+    | "getTasksCountByOwnerId"
+    | "addTask"
+    | "isFetching"
+    | "isLoading"
+    | "isSaving"
+  >;
 }
 
 export const defaultValue: TaskListViewModelContextInterface = {

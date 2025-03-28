@@ -10,19 +10,28 @@ import { Task } from "../types";
  * testing a service will often involve either using a mock for the SDK,
  * or things like mock-service-worker or nock (mocking the network layer)
  */
+export interface ITasksService {
+  listTasks(): Promise<Task[]>;
+  addTask(text: string, ownerId: string): Promise<Task>;
+  deleteTask(taskId: string): Promise<void>;
+}
+
+export type TasksServiceDependencies = {
+  generateId: () => string;
+  delay: number;
+};
+
+const defaultDependencies: TasksServiceDependencies = {
+  generateId,
+  delay: 1000,
+};
+
 const defaultTasks: Task[] = [
   { id: "1", text: "Write self reflection", ownerId: "user-1" },
   { id: "2", text: "Fix that bug", ownerId: "user-2" },
 ];
 
-const defaultDependencies = {
-  generateId,
-  delay: 1000,
-};
-
-export type TasksServiceDependencies = typeof defaultDependencies;
-
-export class TasksService {
+export class TasksService implements ITasksService {
   private _tasks: Task[];
 
   private _dependencies: TasksServiceDependencies;
@@ -65,4 +74,4 @@ export class TasksService {
   }
 }
 
-export const tasksServiceSingleton = new TasksService();
+export const tasksServiceSingleton: ITasksService = new TasksService();

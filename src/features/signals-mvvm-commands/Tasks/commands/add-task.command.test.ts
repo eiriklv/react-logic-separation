@@ -1,18 +1,15 @@
 import { AddTaskCommand, AddTaskCommandDependencies } from "./add-task.command";
-import type { PartialDeep } from "type-fest";
 
 describe("AddTaskCommand", () => {
   it("should work as expected when adding a task", async () => {
     // arrange
-    const mockDependencies: PartialDeep<AddTaskCommandDependencies> = {
+    const mockDependencies: AddTaskCommandDependencies = {
       tasksService: {
         addTask: vi.fn(),
       },
     };
 
-    const addTaskCommand = new AddTaskCommand(
-      mockDependencies as AddTaskCommandDependencies,
-    );
+    const addTaskCommand = new AddTaskCommand(mockDependencies);
 
     // add a task
     await addTaskCommand.invoke("Paint house", "user-1");

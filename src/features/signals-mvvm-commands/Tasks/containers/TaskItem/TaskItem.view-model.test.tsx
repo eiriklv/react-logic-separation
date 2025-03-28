@@ -6,28 +6,24 @@ import {
 } from "./TaskItem.view-model.context";
 import { useTaskItemViewModel } from "./TaskItem.view-model";
 import { signal } from "@preact/signals-core";
-import { PartialDeep } from "type-fest";
 import { Task } from "../../types";
-import { UserModel } from "../../models/user.model";
 
 describe("useTaskItemViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const deleteTask = vi.fn();
 
-    const userModel: PartialDeep<UserModel> = {
-      user: signal({
-        id: "user-1",
-        name: "John Doe",
-        profileImageUrl: "./src/image.png",
-      }),
-    };
-
-    const mockDependencies: PartialDeep<TaskItemViewModelContextInterface> = {
+    const mockDependencies: TaskItemViewModelContextInterface = {
       tasksModel: {
         deleteTask,
       },
-      createUserModel: () => userModel as UserModel,
+      createUserModel: () => ({
+        user: signal({
+          id: "user-1",
+          name: "John Doe",
+          profileImageUrl: "./src/image.png",
+        }),
+      }),
     };
 
     const task: Task = {
@@ -39,9 +35,7 @@ describe("useTaskItemViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <TaskItemViewModelContext.Provider
-        value={mockDependencies as TaskItemViewModelContextInterface}
-      >
+      <TaskItemViewModelContext.Provider value={mockDependencies}>
         {children}
       </TaskItemViewModelContext.Provider>
     );
