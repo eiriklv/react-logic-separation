@@ -13,9 +13,11 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTask: vi.fn(),
-      deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      tasksService: {
+        addTask: vi.fn(),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      },
     };
 
     const queryClient = new QueryClient();
@@ -35,10 +37,10 @@ describe("TasksModel", () => {
     await model.addTask("Solve some hard bug", "user-1");
 
     // check that the tasks were added the correct amount of times
-    expect(mockDependencies.addTask).toHaveBeenCalledOnce();
+    expect(mockDependencies.tasksService.addTask).toHaveBeenCalledOnce();
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasks).toHaveBeenCalledTimes(2);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(fakeTaskMocks[1]);
@@ -63,9 +65,11 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTask: vi.fn(async (task) => task),
-      deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      tasksService: {
+        addTask: vi.fn(async (task) => task),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      },
     };
 
     const queryClient = new QueryClient();
@@ -86,10 +90,10 @@ describe("TasksModel", () => {
     await model.addTask("Wash car", "user-1");
 
     // check that the tasks were added the correct amount of times
-    expect(mockDependencies.addTask).toHaveBeenCalledTimes(3);
+    expect(mockDependencies.tasksService.addTask).toHaveBeenCalledTimes(3);
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasks).toHaveBeenCalledTimes(4);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(4);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(fakeTaskMocks[3]);
@@ -105,9 +109,11 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTask: vi.fn(async (task) => task),
-      deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      tasksService: {
+        addTask: vi.fn(async (task) => task),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      },
     };
 
     const queryClient = new QueryClient();
@@ -127,10 +133,10 @@ describe("TasksModel", () => {
     await model.deleteTask("1");
 
     // check that the tasks were added the correct amount of times
-    expect(mockDependencies.deleteTask).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.tasksService.deleteTask).toHaveBeenCalledTimes(1);
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasks).toHaveBeenCalledTimes(2);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(fakeTaskMocks[1]);
@@ -146,9 +152,11 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTask: vi.fn(async (task) => task),
-      deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      tasksService: {
+        addTask: vi.fn(async (task) => task),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      },
     };
 
     const queryClient = new QueryClient();
@@ -168,10 +176,10 @@ describe("TasksModel", () => {
     await model.deleteTask("");
 
     // check that the tasks were added the correct amount of times
-    expect(mockDependencies.deleteTask).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.tasksService.deleteTask).toHaveBeenCalledTimes(0);
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasks).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(1);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
@@ -188,9 +196,11 @@ describe("TasksModel", () => {
 
     // arrange
     const mockDependencies: TasksModelDependencies = {
-      addTask: vi.fn(),
-      deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      tasksService: {
+        addTask: vi.fn(),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => fakeTaskMocks[count++]),
+      },
     };
 
     const queryClient = new QueryClient();
@@ -212,10 +222,10 @@ describe("TasksModel", () => {
     await model.addTask("", "user-1");
 
     // check that it never added a task
-    expect(mockDependencies.addTask).not.toHaveBeenCalled();
+    expect(mockDependencies.tasksService.addTask).not.toHaveBeenCalled();
 
     // check that it did not refetch the tasks
-    expect(mockDependencies.listTasks).toHaveBeenCalledOnce();
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledOnce();
 
     // check that the list of tasks is still the same as before
     expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
@@ -231,9 +241,11 @@ describe("TasksModel", () => {
     ];
 
     const mockDependencies: TasksModelDependencies = {
-      addTask: vi.fn(),
-      deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => fakeTasks),
+      tasksService: {
+        addTask: vi.fn(),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => fakeTasks),
+      },
     };
 
     const queryClient = new QueryClient();

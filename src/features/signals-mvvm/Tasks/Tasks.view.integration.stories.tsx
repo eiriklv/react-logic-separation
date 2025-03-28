@@ -39,13 +39,15 @@ const meta = {
 
       // Create tasks model dependencies
       const tasksModelDependencies: TasksModelDependencies = {
-        listTasksCommand: async () => mockTasks,
-        addTaskCommand: async () => ({
-          id: "1",
-          text: "task",
-          ownerId: "user-1",
-        }),
-        deleteTaskCommand: async () => {},
+        tasksService: {
+          listTasks: async () => mockTasks,
+          addTask: async () => ({
+            id: "1",
+            text: "task",
+            ownerId: "user-1",
+          }),
+          deleteTask: async () => {},
+        },
       };
 
       // Create tasks model
@@ -53,7 +55,7 @@ const meta = {
 
       // Create users model dependencies
       const usersModelDependencies: UsersModelDependencies = {
-        listUsersCommand: async () => mockUsers,
+        listUsers: async () => mockUsers,
       };
 
       // Create users model
@@ -82,8 +84,11 @@ const meta = {
 
       // Create dependencies for UserModel
       const userModelDependencies: UserModelDependencies = {
-        getUserCommand: async (userId) => {
-          return mockUsers.find((user) => user.id === userId);
+        usersService: {
+          listUsers: vi.fn(),
+          getUserById: async (userId) => {
+            return mockUsers.find((user) => user.id === userId);
+          },
         },
       };
 

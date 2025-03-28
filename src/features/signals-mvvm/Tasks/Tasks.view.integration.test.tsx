@@ -70,13 +70,15 @@ describe("Tasks Integration (only necessary dependencies)", () => {
 
     // Create tasks model dependencies
     const tasksModelDependencies: TasksModelDependencies = {
-      listTasks: async () => mockTasks,
-      addTask: async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      }),
-      deleteTask: async () => {},
+      tasksService: {
+        listTasks: async () => mockTasks,
+        addTask: async () => ({
+          id: "1",
+          text: "task",
+          ownerId: "user-1",
+        }),
+        deleteTask: async () => {},
+      },
     };
 
     // Create tasks model
@@ -115,8 +117,11 @@ describe("Tasks Integration (only necessary dependencies)", () => {
 
     // Create dependencies for UserModel
     const userModelDependencies: UserModelDependencies = {
-      getUser: async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
+      usersService: {
+        listUsers: vi.fn(),
+        getUserById: async (userId) => {
+          return mockUsers.find((user) => user.id === userId);
+        },
       },
     };
 
@@ -220,13 +225,15 @@ describe("Tasks Integration (all dependencies explicit)", () => {
 
     // Create tasks model dependencies
     const tasksModelDependencies: TasksModelDependencies = {
-      listTasks: async () => mockTasks,
-      addTask: async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      }),
-      deleteTask: async () => {},
+      tasksService: {
+        listTasks: async () => mockTasks,
+        addTask: async () => ({
+          id: "1",
+          text: "task",
+          ownerId: "user-1",
+        }),
+        deleteTask: async () => {},
+      },
     };
 
     // Create tasks model
@@ -263,8 +270,11 @@ describe("Tasks Integration (all dependencies explicit)", () => {
 
     // Create dependencies for UserModel
     const userModelDependencies: UserModelDependencies = {
-      getUser: async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
+      usersService: {
+        listUsers: vi.fn(),
+        getUserById: async (userId) => {
+          return mockUsers.find((user) => user.id === userId);
+        },
       },
     };
 

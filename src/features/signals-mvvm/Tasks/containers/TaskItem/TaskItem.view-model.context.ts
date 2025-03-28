@@ -1,5 +1,5 @@
 import React from "react";
-import { tasksModelSingleton } from "../../models/tasks.model";
+import { ITasksModel, tasksModelSingleton } from "../../models/tasks.model";
 import { createUserModel } from "../../models/user.model";
 
 /**
@@ -20,7 +20,7 @@ import { createUserModel } from "../../models/user.model";
  */
 
 export interface TaskItemViewModelContextInterface {
-  tasksModel: typeof tasksModelSingleton;
+  tasksModel: ITasksModel;
   createUserModel: typeof createUserModel;
 }
 

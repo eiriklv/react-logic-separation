@@ -3,17 +3,28 @@ import { computed, ReadonlySignal } from "@preact/signals-core";
 import { defaultQueryClient, query, SignalQuery } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { User } from "../types";
-import { usersServiceSingleton } from "../services/users.service";
+import {
+  IUsersService,
+  usersServiceSingleton,
+} from "../services/users.service";
 
-// Dependencies to be injected
-const defaultDependencies = {
-  getUser: usersServiceSingleton.getUserById.bind(usersServiceSingleton),
-};
+export interface IUserModel {
+  user: ReadonlySignal<User | undefined>;
+  isLoading: ReadonlySignal<boolean>;
+  error: ReadonlySignal<Error | null>;
+}
 
 // Types and interfaces
-export type UserModelDependencies = typeof defaultDependencies;
+export type UserModelDependencies = {
+  usersService: IUsersService;
+};
 
-export class UserModel {
+// Dependencies to be injected
+const defaultDependencies: UserModelDependencies = {
+  usersService: usersServiceSingleton,
+};
+
+export class UserModel implements IUserModel {
   // Dependencies
   private _dependencies: UserModelDependencies;
 
@@ -36,7 +47,7 @@ export class UserModel {
     this._userQuery = query<User | undefined>(
       () => ({
         queryKey: ["user", userId],
-        queryFn: () => this._dependencies.getUser(userId),
+        queryFn: () => this._dependencies.usersService.getUserById(userId),
         retry: false,
       }),
       () => this._queryClient,
@@ -59,4 +70,4 @@ export class UserModel {
 // Model factory
 export const createUserModel = (
   ...args: ConstructorParameters<typeof UserModel>
-) => new UserModel(...args);
+): IUserModel => new UserModel(...args);

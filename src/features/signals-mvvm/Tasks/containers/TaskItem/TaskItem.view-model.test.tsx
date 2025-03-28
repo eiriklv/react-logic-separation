@@ -6,28 +6,38 @@ import {
 } from "./TaskItem.view-model.context";
 import { useTaskItemViewModel } from "./TaskItem.view-model";
 import { signal } from "@preact/signals-core";
-import { PartialDeep } from "type-fest";
 import { Task } from "../../types";
-import { UserModel } from "../../models/user.model";
+import { IUserModel } from "../../models/user.model";
+import { ITasksModel } from "../../models/tasks.model";
 
 describe("useTaskItemViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
-    const deleteTask = vi.fn();
-
-    const userModel: PartialDeep<UserModel> = {
+    const userModel: IUserModel = {
       user: signal({
         id: "user-1",
         name: "John Doe",
         profileImageUrl: "./src/image.png",
       }),
+      isLoading: signal(false),
+      error: signal(null),
     };
 
-    const mockDependencies: PartialDeep<TaskItemViewModelContextInterface> = {
-      tasksModel: {
-        deleteTask,
-      },
-      createUserModel: () => userModel as UserModel,
+    const tasksModel: ITasksModel = {
+      tasks: signal([]),
+      tasksCount: signal(0),
+      addTask: vi.fn(),
+      deleteTask: vi.fn(),
+      getTasksByOwnerId: vi.fn(),
+      getTasksCountByOwnerId: vi.fn(),
+      isFetching: signal(false),
+      isLoading: signal(false),
+      isSaving: signal(false),
+    };
+
+    const mockDependencies: TaskItemViewModelContextInterface = {
+      tasksModel,
+      createUserModel: () => userModel,
     };
 
     const task: Task = {
@@ -39,9 +49,7 @@ describe("useTaskItemViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <TaskItemViewModelContext.Provider
-        value={mockDependencies as TaskItemViewModelContextInterface}
-      >
+      <TaskItemViewModelContext.Provider value={mockDependencies}>
         {children}
       </TaskItemViewModelContext.Provider>
     );
@@ -61,6 +69,6 @@ describe("useTaskItemViewModel", () => {
     await act(() => result.current.deleteTask());
 
     // assert
-    expect(deleteTask).toBeCalledWith(task.id);
+    expect(tasksModel.deleteTask).toBeCalledWith(task.id);
   });
 });

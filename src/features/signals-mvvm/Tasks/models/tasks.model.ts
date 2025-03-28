@@ -9,19 +9,41 @@ import {
 } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { Task } from "../types";
-import { tasksServiceSingleton } from "../services/tasks.service";
+import {
+  ITasksService,
+  tasksServiceSingleton,
+} from "../services/tasks.service";
 
-// Dependencies to be injected
-const defaultDependencies = {
-  listTasks: tasksServiceSingleton.listTasks.bind(tasksServiceSingleton),
-  addTask: tasksServiceSingleton.addTask.bind(tasksServiceSingleton),
-  deleteTask: tasksServiceSingleton.deleteTask.bind(tasksServiceSingleton),
-};
+export interface ITasksModel {
+  tasks: ReadonlySignal<Task[] | undefined>;
+  tasksCount: ReadonlySignal<number>;
+  isLoading: ReadonlySignal<boolean>;
+  isFetching: ReadonlySignal<boolean>;
+  isSaving: ReadonlySignal<boolean>;
+
+  getTasksByOwnerId(
+    selectedOwnerId: ReadonlySignal<string>,
+  ): ReadonlySignal<Task[] | undefined>;
+
+  getTasksCountByOwnerId(
+    selectedOwnerId: ReadonlySignal<string>,
+  ): ReadonlySignal<number>;
+
+  addTask(text: string, ownerId: string): Promise<void>;
+  deleteTask(taskId: string): Promise<void>;
+}
 
 // Types and interfaces
-export type TasksModelDependencies = typeof defaultDependencies;
+export type TasksModelDependencies = {
+  tasksService: ITasksService;
+};
 
-export class TasksModel {
+// Dependencies to be injected
+const defaultDependencies: TasksModelDependencies = {
+  tasksService: tasksServiceSingleton,
+};
+
+export class TasksModel implements ITasksModel {
   // Dependencies
   private _dependencies: TasksModelDependencies;
 
@@ -60,7 +82,7 @@ export class TasksModel {
     this._tasksQuery = query<Task[]>(
       () => ({
         queryKey: ["tasks"],
-        queryFn: () => this._dependencies.listTasks(),
+        queryFn: () => this._dependencies.tasksService.listTasks(),
       }),
       () => this._queryClient,
     );
@@ -69,7 +91,7 @@ export class TasksModel {
     this._addTaskMutation = mutation(
       () => ({
         mutationFn: ({ text, ownerId }: { text: string; ownerId: string }) =>
-          this._dependencies.addTask(text, ownerId),
+          this._dependencies.tasksService.addTask(text, ownerId),
         onSuccess: () => {
           this._queryClient.invalidateQueries({ queryKey: ["tasks"] });
         },
@@ -80,7 +102,7 @@ export class TasksModel {
     this._deleteTaskMutation = mutation(
       () => ({
         mutationFn: ({ taskId }: { taskId: string }) =>
-          this._dependencies.deleteTask(taskId),
+          this._dependencies.tasksService.deleteTask(taskId),
         onSuccess: () => {
           this._queryClient.invalidateQueries({ queryKey: ["tasks"] });
         },
