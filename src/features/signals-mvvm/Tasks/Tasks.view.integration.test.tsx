@@ -86,7 +86,10 @@ describe("Tasks Integration (only necessary dependencies)", () => {
 
     // Create users model dependencies
     const usersModelDependencies: UsersModelDependencies = {
-      listUsers: async () => mockUsers,
+      usersService: {
+        listUsers: async () => mockUsers,
+        getUserById: vi.fn(),
+      },
     };
 
     // Create users model
@@ -241,7 +244,10 @@ describe("Tasks Integration (all dependencies explicit)", () => {
 
     // Create users model dependencies
     const usersModelDependencies: UsersModelDependencies = {
-      listUsers: async () => mockUsers,
+      usersService: {
+        listUsers: async () => mockUsers,
+        getUserById: vi.fn(),
+      },
     };
 
     // Create users model

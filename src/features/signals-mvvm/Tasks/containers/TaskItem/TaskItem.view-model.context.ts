@@ -1,6 +1,6 @@
 import React from "react";
 import { ITasksModel, tasksModelSingleton } from "../../models/tasks.model";
-import { createUserModel } from "../../models/user.model";
+import { createUserModel, IUserModel } from "../../models/user.model";
 
 /**
  * The context can be used to inject any kind of
@@ -21,7 +21,7 @@ import { createUserModel } from "../../models/user.model";
 
 export interface TaskItemViewModelContextInterface {
   tasksModel: ITasksModel;
-  createUserModel: typeof createUserModel;
+  createUserModel: (userId: string) => IUserModel;
 }
 
 export const defaultValue: TaskItemViewModelContextInterface = {

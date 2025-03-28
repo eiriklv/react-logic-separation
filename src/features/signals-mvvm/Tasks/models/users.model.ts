@@ -3,17 +3,28 @@ import { computed, ReadonlySignal } from "@preact/signals-core";
 import { defaultQueryClient, query, SignalQuery } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { User } from "../types";
-import { usersServiceSingleton } from "../services/users.service";
+import {
+  IUsersService,
+  usersServiceSingleton,
+} from "../services/users.service";
 
-// Dependencies to be injected
-const defaultDependencies = {
-  listUsers: usersServiceSingleton.listUsers.bind(usersServiceSingleton),
-};
+export interface IUsersModel {
+  users: ReadonlySignal<User[] | undefined>;
+  isLoading: ReadonlySignal<boolean>;
+  error: ReadonlySignal<Error | null>;
+}
 
 // Types and interfaces
-export type UsersModelDependencies = typeof defaultDependencies;
+export type UsersModelDependencies = {
+  usersService: IUsersService;
+};
 
-export class UsersModel {
+// Dependencies to be injected
+const defaultDependencies: UsersModelDependencies = {
+  usersService: usersServiceSingleton,
+};
+
+export class UsersModel implements IUsersModel {
   // Dependencies
   private _dependencies: UsersModelDependencies;
 
@@ -35,7 +46,7 @@ export class UsersModel {
     this._usersQuery = query<User[]>(
       () => ({
         queryKey: ["users"],
-        queryFn: () => this._dependencies.listUsers(),
+        queryFn: () => this._dependencies.usersService.listUsers(),
         retry: false,
       }),
       () => this._queryClient,
