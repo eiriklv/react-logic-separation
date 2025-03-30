@@ -23,10 +23,11 @@ import {
 } from "./containers/TaskItem/TaskItem.view-model.context";
 import { createUserModel, UserModelDependencies } from "./models/user.model";
 import userEvent from "@testing-library/user-event";
-import { TasksContext, TasksContextInterface } from "./Tasks.view.context";
-import { Actions } from "./containers/Actions/Actions.view";
-import { Filters } from "./containers/Filters/Filters.view";
-import { TaskList } from "./containers/TaskList/TaskList.view";
+import {
+  defaultValue as defaultTasksDependencies,
+  TasksContext,
+  TasksContextInterface,
+} from "./Tasks.view.context";
 import {
   ActionsContext,
   ActionsContextInterface,
@@ -294,9 +295,9 @@ describe("Tasks Integration (all dependencies explicit)", () => {
 
     // Create dependencies for Tasks
     const tasksDependencies: TasksContextInterface = {
-      Actions,
-      Filters,
-      TaskList,
+      Actions: defaultTasksDependencies.Actions,
+      Filters: defaultTasksDependencies.Filters,
+      TaskList: defaultTasksDependencies.TaskList,
     };
 
     /**
