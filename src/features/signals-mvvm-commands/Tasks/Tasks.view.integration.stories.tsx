@@ -22,6 +22,7 @@ import { TasksModel, TasksModelDependencies } from "./models/tasks.model";
 import { UsersModel, UsersModelDependencies } from "./models/users.model";
 import { SelectedFiltersModel } from "./models/selected-filters.model";
 import { createUserModel, UserModelDependencies } from "./models/user.model";
+import { createProviderTree } from "../../../lib/create-provider-tree";
 
 const meta = {
   component: Tasks,
@@ -95,25 +96,23 @@ const meta = {
         },
       };
 
-      return (
+      // Create provider tree for dependencies
+      const Providers = createProviderTree([
         <TaskItemViewModelContext.Provider
           value={taskItemViewModelDependencies}
-        >
-          <TaskListViewModelContext.Provider
-            value={taskListViewModelDependencies}
-          >
-            <FiltersViewModelContext.Provider
-              value={filtersViewModelDependencies}
-            >
-              <ActionsViewModelContext.Provider
-                value={actionsViewModelDependencies}
-              >
-                {story()}
-              </ActionsViewModelContext.Provider>
-            </FiltersViewModelContext.Provider>
-          </TaskListViewModelContext.Provider>
-        </TaskItemViewModelContext.Provider>
-      );
+        />,
+        <TaskListViewModelContext.Provider
+          value={taskListViewModelDependencies}
+        />,
+        <FiltersViewModelContext.Provider
+          value={filtersViewModelDependencies}
+        />,
+        <ActionsViewModelContext.Provider
+          value={actionsViewModelDependencies}
+        />,
+      ]);
+
+      return <Providers>{story()}</Providers>;
     },
   ],
   tags: ["autodocs"],
