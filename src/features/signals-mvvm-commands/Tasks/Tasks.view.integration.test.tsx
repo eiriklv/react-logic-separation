@@ -44,6 +44,7 @@ import {
 } from "./containers/TaskList/TaskList.view.context";
 import { TaskItem } from "./containers/TaskItem/TaskItem.view";
 import { useTaskListViewModel } from "./containers/TaskList/TaskList.view-model";
+import { createProviderTree } from "../../../lib/create-provider-tree";
 
 /**
  * This one actually catches more integration errors than
@@ -129,26 +130,26 @@ describe("Tasks Integration (only necessary dependencies)", () => {
       },
     };
 
+    // Create provider tree for dependencies
+    const Providers = createProviderTree([
+      <TaskItemViewModelContext.Provider
+        value={taskItemViewModelDependencies}
+      />,
+      <TaskListViewModelContext.Provider
+        value={taskListViewModelDependencies}
+      />,
+      <FiltersViewModelContext.Provider value={filtersViewModelDependencies} />,
+      <ActionsViewModelContext.Provider value={actionsViewModelDependencies} />,
+    ]);
+
     /**
      * Render a version that injects all the dependencies
      * we created further up so that we can test our integration
      */
     render(
-      <TaskItemViewModelContext.Provider value={taskItemViewModelDependencies}>
-        <TaskListViewModelContext.Provider
-          value={taskListViewModelDependencies}
-        >
-          <FiltersViewModelContext.Provider
-            value={filtersViewModelDependencies}
-          >
-            <ActionsViewModelContext.Provider
-              value={actionsViewModelDependencies}
-            >
-              <Tasks />
-            </ActionsViewModelContext.Provider>
-          </FiltersViewModelContext.Provider>
-        </TaskListViewModelContext.Provider>
-      </TaskItemViewModelContext.Provider>,
+      <Providers>
+        <Tasks />
+      </Providers>,
     );
 
     // wait for loading to finish
@@ -300,34 +301,30 @@ describe("Tasks Integration (all dependencies explicit)", () => {
       TaskList: defaultTasksDependencies.TaskList,
     };
 
+    // Create provider tree for dependencies
+    const Providers = createProviderTree([
+      <TaskItemViewModelContext.Provider
+        value={taskItemViewModelDependencies}
+      />,
+      <TaskListViewModelContext.Provider
+        value={taskListViewModelDependencies}
+      />,
+      <FiltersViewModelContext.Provider value={filtersViewModelDependencies} />,
+      <ActionsViewModelContext.Provider value={actionsViewModelDependencies} />,
+      <TaskListContext.Provider value={taskListDependencies} />,
+      <FiltersContext.Provider value={filtersDependencies} />,
+      <ActionsContext.Provider value={actionsDependencies} />,
+      <TasksContext.Provider value={tasksDependencies} />,
+    ]);
+
     /**
      * Render a version that injects all the dependencies
      * we created further up so that we can test our integration
      */
     render(
-      <TaskItemViewModelContext.Provider value={taskItemViewModelDependencies}>
-        <TaskListViewModelContext.Provider
-          value={taskListViewModelDependencies}
-        >
-          <FiltersViewModelContext.Provider
-            value={filtersViewModelDependencies}
-          >
-            <ActionsViewModelContext.Provider
-              value={actionsViewModelDependencies}
-            >
-              <TaskListContext.Provider value={taskListDependencies}>
-                <FiltersContext.Provider value={filtersDependencies}>
-                  <ActionsContext.Provider value={actionsDependencies}>
-                    <TasksContext.Provider value={tasksDependencies}>
-                      <Tasks />
-                    </TasksContext.Provider>
-                  </ActionsContext.Provider>
-                </FiltersContext.Provider>
-              </TaskListContext.Provider>
-            </ActionsViewModelContext.Provider>
-          </FiltersViewModelContext.Provider>
-        </TaskListViewModelContext.Provider>
-      </TaskItemViewModelContext.Provider>,
+      <Providers>
+        <Tasks />
+      </Providers>,
     );
 
     // wait for loading to finish
