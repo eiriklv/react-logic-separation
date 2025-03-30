@@ -3,15 +3,16 @@ import { CategorizedReminders } from "./CategorizedReminders.view";
 import {
   CategorizedRemindersContext,
   CategorizedRemindersContextInterface,
+  defaultValue as defaultCategorizedRemindersDependencies,
 } from "./CategorizedReminders.view.context";
 import { Topbar } from "./containers/Topbar/Topbar.view";
 import { CategorySidebar } from "./containers/CategorySidebar/CategorySidebar.view";
 import { Reminders } from "./containers/Reminders/Reminders.view";
 import {
+  defaultValue as defaultTopbarDependencies,
   TopbarContext,
   TopbarContextInterface,
 } from "./containers/Topbar/Topbar.view.context";
-import { useTopbarViewModel } from "./containers/Topbar/Topbar.view-model";
 import { SelectedCategoryModel } from "./models/selected-category.model";
 import {
   RemindersModel,
@@ -22,20 +23,18 @@ import { Reminder } from "./types";
 import {
   CategorySidebarContext,
   CategorySidebarContextInterface,
+  defaultValue as defaultCategorySidebarDependencies,
 } from "./containers/CategorySidebar/CategorySidebar.view.context";
-import { useCategorySidebarViewModel } from "./containers/CategorySidebar/CategorySidebar.view-model";
 import userEvent from "@testing-library/user-event";
 import {
+  defaultValue as defaultRemindersDependencies,
   RemindersContext,
   RemindersContextInterface,
 } from "./containers/Reminders/Reminders.view.context";
-import { useRemindersViewModel } from "./containers/Reminders/Reminders.view-model";
-import { ReminderItem } from "./components/ReminderItem";
 import {
   CategorizedRemindersViewModelContext,
   CategorizedRemindersViewModelContextInterface,
 } from "./CategorizedReminders.view-model.context";
-import { useCategorizedRemindersViewModel } from "./CategorizedReminders.view-model";
 import { createProviderTree } from "../../../lib/create-provider-tree";
 import {
   TopbarViewModelContext,
@@ -119,10 +118,12 @@ describe("CategorizedReminders Integration (only necessary dependencies)", () =>
         /**
          * Use the real implementations of all the sub-containers
          */
-        useCategorizedRemindersViewModel,
-        Topbar,
-        CategorySidebar,
-        Reminders,
+        useCategorizedRemindersViewModel:
+          defaultCategorizedRemindersDependencies.useCategorizedRemindersViewModel,
+        Topbar: defaultCategorizedRemindersDependencies.Topbar,
+        CategorySidebar:
+          defaultCategorizedRemindersDependencies.CategorySidebar,
+        Reminders: defaultCategorizedRemindersDependencies.Reminders,
       };
 
     // create provider tree stack
@@ -273,7 +274,7 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
        * Use the real viewmodel hook since it's
        * part of the integration we want to test
        */
-      useTopbarViewModel,
+      useTopbarViewModel: defaultTopbarDependencies.useTopbarViewModel,
     };
 
     // create the dependencies for the category sidebar container
@@ -282,7 +283,8 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
        * Use the real viewmodel hook since it's
        * part of the integration we want to test
        */
-      useCategorySidebarViewModel,
+      useCategorySidebarViewModel:
+        defaultCategorySidebarDependencies.useCategorySidebarViewModel,
     };
 
     // create the dependencies for the reminders container
@@ -291,13 +293,13 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
        * Use the real view model hook since it's
        * part of the integration we want to test
        */
-      useRemindersViewModel,
+      useRemindersViewModel: defaultRemindersDependencies.useRemindersViewModel,
       /**
        * Use the real implementation of the
        * reminder item component, since it's
        * part of the integration we want to test
        */
-      ReminderItem,
+      ReminderItem: defaultRemindersDependencies.ReminderItem,
     };
 
     // create the dependencies for the categorized reminders container
@@ -306,10 +308,12 @@ describe("CategorizedReminders Integration (all dependencies explicit)", () => {
         /**
          * Use the real implementations of all the sub-containers
          */
-        useCategorizedRemindersViewModel,
-        Topbar,
-        CategorySidebar,
-        Reminders,
+        useCategorizedRemindersViewModel:
+          defaultCategorizedRemindersDependencies.useCategorizedRemindersViewModel,
+        Topbar: defaultCategorizedRemindersDependencies.Topbar,
+        CategorySidebar:
+          defaultCategorizedRemindersDependencies.CategorySidebar,
+        Reminders: defaultCategorizedRemindersDependencies.Reminders,
       };
 
     // create the dependencies for the categorized reminders view model
@@ -484,7 +488,7 @@ describe("CategorizedReminders Integration (all dependencies explicit - overridi
        * Use the real viewmodel hook since it's
        * part of the integration we want to test
        */
-      useTopbarViewModel,
+      useTopbarViewModel: defaultTopbarDependencies.useTopbarViewModel,
     };
 
     // create the dependencies for the category sidebar container
@@ -493,7 +497,8 @@ describe("CategorizedReminders Integration (all dependencies explicit - overridi
        * Use the real viewmodel hook since it's
        * part of the integration we want to test
        */
-      useCategorySidebarViewModel,
+      useCategorySidebarViewModel:
+        defaultCategorySidebarDependencies.useCategorySidebarViewModel,
     };
 
     // create the dependencies for the reminders container
@@ -502,13 +507,13 @@ describe("CategorizedReminders Integration (all dependencies explicit - overridi
        * Use the real view model hook since it's
        * part of the integration we want to test
        */
-      useRemindersViewModel,
+      useRemindersViewModel: defaultRemindersDependencies.useRemindersViewModel,
       /**
        * Use the real implementation of the
        * reminder item component, since it's
        * part of the integration we want to test
        */
-      ReminderItem,
+      ReminderItem: defaultRemindersDependencies.ReminderItem,
     };
 
     // create the dependencies for the categorized reminders container
@@ -693,7 +698,7 @@ describe("CategorizedReminders Integration (all dependencies explicit - overridi
        * Use the real viewmodel hook since it's
        * part of the integration we want to test
        */
-      useTopbarViewModel,
+      useTopbarViewModel: defaultTopbarDependencies.useTopbarViewModel,
     };
 
     // create the dependencies for the Topbar view model
@@ -708,7 +713,8 @@ describe("CategorizedReminders Integration (all dependencies explicit - overridi
        * Use the real viewmodel hook since it's
        * part of the integration we want to test
        */
-      useCategorySidebarViewModel,
+      useCategorySidebarViewModel:
+        defaultCategorySidebarDependencies.useCategorySidebarViewModel,
     };
 
     // create the dependencies for the category sidebar view model
@@ -724,13 +730,13 @@ describe("CategorizedReminders Integration (all dependencies explicit - overridi
        * Use the real view model hook since it's
        * part of the integration we want to test
        */
-      useRemindersViewModel,
+      useRemindersViewModel: defaultRemindersDependencies.useRemindersViewModel,
       /**
        * Use the real implementation of the
        * reminder item component, since it's
        * part of the integration we want to test
        */
-      ReminderItem,
+      ReminderItem: defaultRemindersDependencies.ReminderItem,
     };
 
     // create the dependencies for the category sidebar view model
@@ -745,7 +751,8 @@ describe("CategorizedReminders Integration (all dependencies explicit - overridi
         /**
          * Use the real implementations of all the sub-containers
          */
-        useCategorizedRemindersViewModel,
+        useCategorizedRemindersViewModel:
+          defaultCategorizedRemindersDependencies.useCategorizedRemindersViewModel,
         Topbar: () => (
           <TopbarViewModelContext.Provider value={topbarViewModelDependencies}>
             <TopbarContext.Provider value={topbarDependencies}>
