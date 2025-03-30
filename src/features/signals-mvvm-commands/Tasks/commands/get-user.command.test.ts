@@ -1,6 +1,5 @@
 import { User } from "../types";
 import { GetUserCommand, GetUserCommandDependencies } from "./get-user.command";
-import type { PartialDeep } from "type-fest";
 
 describe("GetUserCommand", () => {
   it("should work as expected when getting a user by id", async () => {
@@ -11,7 +10,7 @@ describe("GetUserCommand", () => {
       profileImageUrl: "./src/image.png",
     };
 
-    const mockDependencies: PartialDeep<GetUserCommandDependencies> = {
+    const mockDependencies: GetUserCommandDependencies = {
       usersService: {
         getUserById: vi.fn(async () => ({
           id: "user-1",
@@ -21,14 +20,12 @@ describe("GetUserCommand", () => {
       },
     };
 
-    const getUserCommand = new GetUserCommand(
-      mockDependencies as GetUserCommandDependencies,
-    );
+    const getUserCommand = new GetUserCommand(mockDependencies);
 
     // get the user by id
     const user = await getUserCommand.invoke(mockUser.id);
 
-    // check that the reminders were given as a result
+    // check that the users were given as a result
     expect(user).toEqual(mockUser);
 
     // check that the underlying service was called

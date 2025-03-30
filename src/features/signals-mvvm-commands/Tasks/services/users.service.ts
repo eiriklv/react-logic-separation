@@ -10,22 +10,46 @@ import { User } from "../types";
  * testing a service will often involve either using a mock for the SDK,
  * or things like mock-service-worker or nock (mocking the network layer)
  */
+export interface IUsersService {
+  listUsers(): Promise<User[]>;
+  getUserById(userId: string): Promise<User | undefined>;
+}
 
-export class UsersService {
-  private _users: User[] = [
-    { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },
-    { id: "user-2", name: "Jane Johnson", profileImageUrl: "/img/user-2.jpg" },
-  ];
+export type UsersServiceDependencies = {
+  delay: number;
+};
+
+const defaultDependencies: UsersServiceDependencies = {
+  delay: 1000,
+};
+
+const defaultUsers: User[] = [
+  { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },
+  { id: "user-2", name: "Jane Johnson", profileImageUrl: "/img/user-2.jpg" },
+];
+
+export class UsersService implements IUsersService {
+  private _users: User[];
+
+  private _dependencies: UsersServiceDependencies;
+
+  constructor(
+    dependencies: UsersServiceDependencies = defaultDependencies,
+    initialUsers: User[] = defaultUsers,
+  ) {
+    this._dependencies = dependencies;
+    this._users = initialUsers;
+  }
 
   public async listUsers() {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
     return this._users.slice();
   }
 
   public async getUserById(userId: string) {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
     return this._users.find((user) => user.id === userId);
   }
 }
 
-export const usersServiceSingleton = new UsersService();
+export const usersServiceSingleton: IUsersService = new UsersService();

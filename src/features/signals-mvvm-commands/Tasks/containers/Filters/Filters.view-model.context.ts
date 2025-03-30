@@ -1,6 +1,9 @@
 import React from "react";
-import { selectedFiltersModelSingleton } from "../../models/selected-filters.model";
-import { usersModelSingleton } from "../../models/users.model";
+import {
+  ISelectedFiltersModel,
+  selectedFiltersModelSingleton,
+} from "../../models/selected-filters.model";
+import { IUsersModel, usersModelSingleton } from "../../models/users.model";
 
 /**
  * The context can be used to inject any kind of
@@ -20,8 +23,8 @@ import { usersModelSingleton } from "../../models/users.model";
  */
 
 export interface FiltersViewModelContextInterface {
-  selectedFiltersModel: typeof selectedFiltersModelSingleton;
-  usersModel: typeof usersModelSingleton;
+  selectedFiltersModel: ISelectedFiltersModel;
+  usersModel: Pick<IUsersModel, "users">;
 }
 
 export const defaultValue: FiltersViewModelContextInterface = {

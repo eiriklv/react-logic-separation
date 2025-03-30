@@ -6,7 +6,6 @@ import {
 } from "./TaskList.view-model.context";
 import { useTaskListViewModel } from "./TaskList.view-model";
 import { signal } from "@preact/signals-core";
-import { PartialDeep } from "type-fest";
 import { Task } from "../../types";
 
 describe("useTaskListViewModel", () => {
@@ -15,7 +14,7 @@ describe("useTaskListViewModel", () => {
     const mockTaskListCount = 0;
 
     // arrange
-    const mockDependencies: PartialDeep<TaskListViewModelContextInterface> = {
+    const mockDependencies: TaskListViewModelContextInterface = {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
@@ -33,9 +32,7 @@ describe("useTaskListViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <TaskListViewModelContext.Provider
-        value={mockDependencies as TaskListViewModelContextInterface}
-      >
+      <TaskListViewModelContext.Provider value={mockDependencies}>
         {children}
       </TaskListViewModelContext.Provider>
     );

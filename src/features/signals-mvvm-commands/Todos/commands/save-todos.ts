@@ -6,7 +6,7 @@ import { Todo } from "../types";
  * wrap around one or more services and methods.
  *
  * Command handle things like validation, transformation, error mapping, etc
- * - so that the consumer can use it with a much ease as possible
+ * - so that the consumer can use it with as much ease as possible
  *
  * Commands should be fully tested to ensure that all validation
  * and error handling logic is solid, and so that the same things

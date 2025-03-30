@@ -10,32 +10,47 @@ import { Task } from "../types";
  * testing a service will often involve either using a mock for the SDK,
  * or things like mock-service-worker or nock (mocking the network layer)
  */
+export interface ITasksService {
+  listTasks(): Promise<Task[]>;
+  addTask(text: string, ownerId: string): Promise<Task>;
+  deleteTask(taskId: string): Promise<void>;
+}
 
-const defaultDependencies = {
-  generateId,
+export type TasksServiceDependencies = {
+  generateId: () => string;
+  delay: number;
 };
 
-export type TasksServiceDependencies = typeof defaultDependencies;
+const defaultDependencies: TasksServiceDependencies = {
+  generateId,
+  delay: 1000,
+};
 
-export class TasksService {
-  private _tasks: Task[] = [
-    { id: "1", text: "Write self reflection", ownerId: "user-1" },
-    { id: "2", text: "Fix that bug", ownerId: "user-2" },
-  ];
+const defaultTasks: Task[] = [
+  { id: "1", text: "Write self reflection", ownerId: "user-1" },
+  { id: "2", text: "Fix that bug", ownerId: "user-2" },
+];
+
+export class TasksService implements ITasksService {
+  private _tasks: Task[];
 
   private _dependencies: TasksServiceDependencies;
 
-  constructor(dependencies: TasksServiceDependencies = defaultDependencies) {
+  constructor(
+    dependencies: TasksServiceDependencies = defaultDependencies,
+    initialTasks: Task[] = defaultTasks,
+  ) {
     this._dependencies = dependencies;
+    this._tasks = initialTasks;
   }
 
   public async listTasks() {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
     return this._tasks.slice();
   }
 
   public async addTask(text: string, ownerId: string) {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
 
     const newTask = {
       id: this._dependencies.generateId(),
@@ -49,7 +64,7 @@ export class TasksService {
   }
 
   public async deleteTask(taskId: string) {
-    await sleep(1000);
+    await sleep(this._dependencies.delay);
 
     this._tasks.splice(
       0,
@@ -59,4 +74,4 @@ export class TasksService {
   }
 }
 
-export const tasksServiceSingleton = new TasksService();
+export const tasksServiceSingleton: ITasksService = new TasksService();

@@ -1,6 +1,11 @@
 import { ReadonlySignal, signal } from "@preact/signals-core";
 
-export class SelectedFiltersModel {
+export interface ISelectedFiltersModel {
+  selectedOwnerId: ReadonlySignal<string>;
+  setSelectedOwnerId(newSelectedOwner: string): void;
+}
+
+export class SelectedFiltersModel implements ISelectedFiltersModel {
   // State
   private _selectedOwnerId = signal<string>("");
 
@@ -10,10 +15,11 @@ export class SelectedFiltersModel {
   }
 
   // Commands
-  public setSelectedOwnerId = async (newSelectedOwner: string) => {
+  public setSelectedOwnerId = (newSelectedOwner: string) => {
     this._selectedOwnerId.value = newSelectedOwner;
   };
 }
 
 // Model singleton
-export const selectedFiltersModelSingleton = new SelectedFiltersModel();
+export const selectedFiltersModelSingleton: ISelectedFiltersModel =
+  new SelectedFiltersModel();

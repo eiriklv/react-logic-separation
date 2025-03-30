@@ -13,6 +13,25 @@ import { listTasksCommand } from "../commands/list-tasks.command";
 import { addTaskCommand } from "../commands/add-task.command";
 import { deleteTaskCommand } from "../commands/delete-task.command";
 
+export interface ITasksModel {
+  tasks: ReadonlySignal<Task[] | undefined>;
+  tasksCount: ReadonlySignal<number>;
+  isLoading: ReadonlySignal<boolean>;
+  isFetching: ReadonlySignal<boolean>;
+  isSaving: ReadonlySignal<boolean>;
+
+  getTasksByOwnerId(
+    selectedOwnerId: ReadonlySignal<string>,
+  ): ReadonlySignal<Task[] | undefined>;
+
+  getTasksCountByOwnerId(
+    selectedOwnerId: ReadonlySignal<string>,
+  ): ReadonlySignal<number>;
+
+  addTask(text: string, ownerId: string): Promise<void>;
+  deleteTask(taskId: string): Promise<void>;
+}
+
 // Dependencies to be injected
 const defaultDependencies = {
   listTasksCommand,
@@ -23,7 +42,7 @@ const defaultDependencies = {
 // Types and interfaces
 export type TasksModelDependencies = typeof defaultDependencies;
 
-export class TasksModel {
+export class TasksModel implements ITasksModel {
   // Dependencies
   private _dependencies: TasksModelDependencies;
 
@@ -159,4 +178,4 @@ export class TasksModel {
 }
 
 // Model singleton
-export const tasksModelSingleton = new TasksModel();
+export const tasksModelSingleton: ITasksModel = new TasksModel();
