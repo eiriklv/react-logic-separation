@@ -155,7 +155,6 @@ export function derived<T>(
       abortController.abort();
       isCancelled = true;
 
-      data.value = undefined;
       isLoading.value = true;
       error.value = null;
     };

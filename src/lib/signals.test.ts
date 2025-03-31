@@ -621,7 +621,7 @@ describe("derived", () => {
     mySignal.value = 20;
 
     expect(myDerived.isLoading.value).toBe(true);
-    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.data.value).toEqual(10);
     expect(myDerived.error.value).toEqual(null);
 
     await vi.advanceTimersToNextTimerAsync();
@@ -661,7 +661,7 @@ describe("derived", () => {
     mySignal.value = 20;
 
     expect(myDerived.isLoading.value).toBe(true);
-    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.data.value).toEqual(10);
     expect(myDerived.error.value).toEqual(null);
     expect(abort).toBeCalledTimes(0);
 
@@ -675,21 +675,21 @@ describe("derived", () => {
     mySignal.value = 30;
 
     expect(myDerived.isLoading.value).toBe(true);
-    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.data.value).toEqual(20);
     expect(myDerived.error.value).toEqual(null);
     expect(abort).toBeCalledTimes(0);
 
     mySignal.value = 40;
 
     expect(myDerived.isLoading.value).toBe(true);
-    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.data.value).toEqual(20);
     expect(myDerived.error.value).toEqual(null);
     expect(abort).toBeCalledTimes(0);
 
     await vi.advanceTimersToNextTimerAsync();
 
     expect(myDerived.isLoading.value).toBe(true);
-    expect(myDerived.data.value).toEqual(undefined);
+    expect(myDerived.data.value).toEqual(20);
     expect(myDerived.error.value).toEqual(null);
     expect(abort).toBeCalledTimes(1);
 
