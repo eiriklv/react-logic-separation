@@ -7,7 +7,7 @@ import { ConditionalTimer } from "./ConditionalTimer.view";
 
 const meta = {
   component: ConditionalTimer,
-  title: "Timer",
+
   decorators: [
     (story, { parameters }) => {
       return (

@@ -25,7 +25,7 @@ import { createUserModel, UserModelDependencies } from "./models/user.model";
 
 const meta = {
   component: Tasks,
-  title: "Tasks",
+
   decorators: [
     (story, { parameters }) => {
       // create query client for test

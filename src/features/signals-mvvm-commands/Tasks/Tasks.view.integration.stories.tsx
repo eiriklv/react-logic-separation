@@ -25,96 +25,92 @@ import { createUserModel, UserModelDependencies } from "./models/user.model";
 import { createProviderTree } from "../../../lib/create-provider-tree";
 
 const meta = {
-  component: Tasks,
-  title: "Tasks",
-  decorators: [
-    (story, { parameters }) => {
-      // create query client for test
-      const queryClient = new QueryClient();
+  render: (_, { parameters }) => {
+    // create query client for test
+    const queryClient = new QueryClient();
 
-      // create mock tasks
-      const mockTasks: Task[] = parameters.tasks;
+    // create mock tasks
+    const mockTasks: Task[] = parameters.tasks;
 
-      // create mock users
-      const mockUsers: User[] = parameters.users;
+    // create mock users
+    const mockUsers: User[] = parameters.users;
 
-      // Create tasks model dependencies
-      const tasksModelDependencies: TasksModelDependencies = {
-        listTasksCommand: async () => mockTasks,
-        addTaskCommand: async () => ({
-          id: "1",
-          text: "task",
-          ownerId: "user-1",
-        }),
-        deleteTaskCommand: async () => {},
-      };
+    // Create tasks model dependencies
+    const tasksModelDependencies: TasksModelDependencies = {
+      listTasksCommand: async () => mockTasks,
+      addTaskCommand: async () => ({
+        id: "1",
+        text: "task",
+        ownerId: "user-1",
+      }),
+      deleteTaskCommand: async () => {},
+    };
 
-      // Create tasks model
-      const tasksModel = new TasksModel(queryClient, tasksModelDependencies);
+    // Create tasks model
+    const tasksModel = new TasksModel(queryClient, tasksModelDependencies);
 
-      // Create users model dependencies
-      const usersModelDependencies: UsersModelDependencies = {
-        listUsersCommand: async () => mockUsers,
-      };
+    // Create users model dependencies
+    const usersModelDependencies: UsersModelDependencies = {
+      listUsersCommand: async () => mockUsers,
+    };
 
-      // Create users model
-      const usersModel = new UsersModel(queryClient, usersModelDependencies);
+    // Create users model
+    const usersModel = new UsersModel(queryClient, usersModelDependencies);
 
-      // Create selected filters model
-      const selectedFiltersModel = new SelectedFiltersModel();
+    // Create selected filters model
+    const selectedFiltersModel = new SelectedFiltersModel();
 
-      // Create dependencies for ActionsViewModel
-      const actionsViewModelDependencies: ActionsViewModelContextInterface = {
-        tasksModel,
-        usersModel,
-      };
+    // Create dependencies for ActionsViewModel
+    const actionsViewModelDependencies: ActionsViewModelContextInterface = {
+      tasksModel,
+      usersModel,
+    };
 
-      // Create dependencies for FiltersViewModel
-      const filtersViewModelDependencies: FiltersViewModelContextInterface = {
-        selectedFiltersModel,
-        usersModel,
-      };
+    // Create dependencies for FiltersViewModel
+    const filtersViewModelDependencies: FiltersViewModelContextInterface = {
+      selectedFiltersModel,
+      usersModel,
+    };
 
-      // Create dependencies for TaskListViewModel
-      const taskListViewModelDependencies: TaskListViewModelContextInterface = {
-        selectedFiltersModel,
-        tasksModel,
-      };
+    // Create dependencies for TaskListViewModel
+    const taskListViewModelDependencies: TaskListViewModelContextInterface = {
+      selectedFiltersModel,
+      tasksModel,
+    };
 
-      // Create dependencies for UserModel
-      const userModelDependencies: UserModelDependencies = {
-        getUserCommand: async (userId) => {
-          return mockUsers.find((user) => user.id === userId);
-        },
-      };
+    // Create dependencies for UserModel
+    const userModelDependencies: UserModelDependencies = {
+      getUserCommand: async (userId) => {
+        return mockUsers.find((user) => user.id === userId);
+      },
+    };
 
-      // Create dependencies for TaskItemViewModel
-      const taskItemViewModelDependencies: TaskItemViewModelContextInterface = {
-        tasksModel,
-        createUserModel: (userId) => {
-          return createUserModel(userId, queryClient, userModelDependencies);
-        },
-      };
+    // Create dependencies for TaskItemViewModel
+    const taskItemViewModelDependencies: TaskItemViewModelContextInterface = {
+      tasksModel,
+      createUserModel: (userId) => {
+        return createUserModel(userId, queryClient, userModelDependencies);
+      },
+    };
 
-      // Create provider tree for dependencies
-      const Providers = createProviderTree([
-        <TaskItemViewModelContext.Provider
-          value={taskItemViewModelDependencies}
-        />,
-        <TaskListViewModelContext.Provider
-          value={taskListViewModelDependencies}
-        />,
-        <FiltersViewModelContext.Provider
-          value={filtersViewModelDependencies}
-        />,
-        <ActionsViewModelContext.Provider
-          value={actionsViewModelDependencies}
-        />,
-      ]);
+    // Create provider tree for dependencies
+    const Providers = createProviderTree([
+      <TaskItemViewModelContext.Provider
+        value={taskItemViewModelDependencies}
+      />,
+      <TaskListViewModelContext.Provider
+        value={taskListViewModelDependencies}
+      />,
+      <FiltersViewModelContext.Provider value={filtersViewModelDependencies} />,
+      <ActionsViewModelContext.Provider value={actionsViewModelDependencies} />,
+    ]);
 
-      return <Providers>{story()}</Providers>;
-    },
-  ],
+    return (
+      <Providers>
+        <Tasks />
+      </Providers>
+    );
+  },
   tags: ["autodocs"],
 } satisfies Meta<typeof Tasks>;
 

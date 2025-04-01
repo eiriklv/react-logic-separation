@@ -7,7 +7,7 @@ import { TaskItem } from "./TaskItem.view";
 
 const meta = {
   component: TaskItem,
-  title: "TaskItem",
+
   decorators: [
     (story, { parameters }) => {
       return (

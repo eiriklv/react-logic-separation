@@ -7,7 +7,7 @@ import { CategorizedReminders } from "./CategorizedReminders.view";
 
 const meta = {
   component: CategorizedReminders,
-  title: "CategorizedReminders",
+
   decorators: [
     (story, { parameters }) => {
       return (

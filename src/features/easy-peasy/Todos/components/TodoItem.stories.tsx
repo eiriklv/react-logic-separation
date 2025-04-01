@@ -3,7 +3,6 @@ import { TodoItem } from "./TodoItem";
 
 const meta = {
   component: TodoItem,
-  title: "TodoItem",
   tags: ["autodocs"],
 } satisfies Meta<typeof TodoItem>;
 

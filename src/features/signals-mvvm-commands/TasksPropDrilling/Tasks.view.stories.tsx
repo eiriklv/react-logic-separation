@@ -3,7 +3,6 @@ import { Tasks } from "./Tasks.view";
 
 const meta = {
   component: Tasks,
-  title: "Tasks",
   tags: ["autodocs"],
 } satisfies Meta<typeof Tasks>;
 

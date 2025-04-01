@@ -3,7 +3,7 @@ import { Timer, TimerContextInterface, TimerContext } from "./Timer";
 
 const meta = {
   component: Timer,
-  title: "Timer",
+
   decorators: [
     (story, { parameters }) => {
       return (

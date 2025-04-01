@@ -7,7 +7,7 @@ import { Filters } from "./Filters.view";
 
 const meta = {
   component: Filters,
-  title: "Filters",
+
   decorators: [
     (story, { parameters }) => {
       return (

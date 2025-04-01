@@ -3,7 +3,7 @@ import { TaskItem } from "./TaskItem.view";
 
 const meta = {
   component: TaskItem,
-  title: "TaskItem",
+
   tags: ["autodocs"],
 } satisfies Meta<typeof TaskItem>;
 

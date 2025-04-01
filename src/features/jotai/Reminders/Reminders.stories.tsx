@@ -7,7 +7,6 @@ import { Reminders } from "./Reminders";
 
 const meta = {
   component: Reminders,
-  title: "Reminders",
   decorators: [
     (story, { parameters }) => {
       return (

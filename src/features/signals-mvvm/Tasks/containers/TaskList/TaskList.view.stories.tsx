@@ -7,7 +7,7 @@ import { TaskList } from "./TaskList.view";
 
 const meta = {
   component: TaskList,
-  title: "TaskList",
+
   decorators: [
     (story, { parameters }) => {
       return (

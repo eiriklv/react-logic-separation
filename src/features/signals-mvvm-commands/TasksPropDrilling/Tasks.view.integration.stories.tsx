@@ -31,7 +31,7 @@ import {
   TaskList,
   TaskListDependencies,
 } from "./containers/TaskList/TaskList.view";
-import { ComponentProps, ComponentType } from "react";
+import { ComponentProps } from "react";
 import {
   Filters,
   FiltersDependencies,
@@ -41,143 +41,126 @@ import {
   ActionsDependencies,
 } from "./containers/Actions/Actions.view";
 
-type Props = {
-  children?: JSX.Element;
-};
-
-const Container: ComponentType<Props> = ({ children }) => {
-  return <>{children}</>;
-};
-
 const meta = {
-  component: Container,
-  title: "Tasks",
-  decorators: [
-    (Story, { parameters }) => {
-      // create query client for test
-      const queryClient = new QueryClient();
+  render: (_, { parameters }) => {
+    // create query client for test
+    const queryClient = new QueryClient();
 
-      // create mock tasks
-      const mockTasks: Task[] = parameters.tasks;
+    // create mock tasks
+    const mockTasks: Task[] = parameters.tasks;
 
-      // create mock users
-      const mockUsers: User[] = parameters.users;
+    // create mock users
+    const mockUsers: User[] = parameters.users;
 
-      // Create tasks model dependencies
-      const tasksModelDependencies: TasksModelDependencies = {
-        listTasksCommand: async () => mockTasks,
-        addTaskCommand: async () => ({
-          id: "1",
-          text: "task",
-          ownerId: "user-1",
+    // Create tasks model dependencies
+    const tasksModelDependencies: TasksModelDependencies = {
+      listTasksCommand: async () => mockTasks,
+      addTaskCommand: async () => ({
+        id: "1",
+        text: "task",
+        ownerId: "user-1",
+      }),
+      deleteTaskCommand: async () => {},
+    };
+
+    // Create tasks model
+    const tasksModel = new TasksModel(queryClient, tasksModelDependencies);
+
+    // Create users model dependencies
+    const usersModelDependencies: UsersModelDependencies = {
+      listUsersCommand: async () => mockUsers,
+    };
+
+    // Create users model
+    const usersModel = new UsersModel(queryClient, usersModelDependencies);
+
+    // Create selected filters model
+    const selectedFiltersModel = new SelectedFiltersModel();
+
+    // Create dependencies for ActionsViewModel
+    const actionsViewModelDependencies: ActionsViewModelDependencies = {
+      tasksModel,
+      usersModel,
+    };
+
+    // Create dependencies for FiltersViewModel
+    const filtersViewModelDependencies: FiltersViewModelDependencies = {
+      selectedFiltersModel,
+      usersModel,
+    };
+
+    // Create dependencies for TaskListViewModel
+    const taskListViewModelDependencies: TaskListViewModelDependencies = {
+      selectedFiltersModel,
+      tasksModel,
+    };
+
+    // Create dependencies for UserModel
+    const userModelDependencies: UserModelDependencies = {
+      getUserCommand: async (userId) => {
+        return mockUsers.find((user) => user.id === userId);
+      },
+    };
+
+    // Create dependencies for TaskItemViewModel
+    const taskItemViewModelDependencies: TaskItemViewModelDependencies = {
+      tasksModel,
+      createUserModel: (userId) => {
+        return createUserModel(userId, queryClient, userModelDependencies);
+      },
+    };
+
+    // Create dependencies for TaskItem
+    const taskItemDependencies: TaskItemDependencies = {
+      useTaskItemViewModel: (props: TaskItemViewModelProps) =>
+        useTaskItemViewModel({
+          dependencies: taskItemViewModelDependencies,
+          ...props,
         }),
-        deleteTaskCommand: async () => {},
-      };
+    };
 
-      // Create tasks model
-      const tasksModel = new TasksModel(queryClient, tasksModelDependencies);
+    // Create dependencies for TaskList
+    const taskListDependencies: TaskListDependencies = {
+      TaskItem: (props: ComponentProps<typeof TaskItem>) => (
+        <TaskItem dependencies={taskItemDependencies} {...props} />
+      ),
+      useTaskListViewModel: () =>
+        useTaskListViewModel({ dependencies: taskListViewModelDependencies }),
+    };
 
-      // Create users model dependencies
-      const usersModelDependencies: UsersModelDependencies = {
-        listUsersCommand: async () => mockUsers,
-      };
+    // Create dependencies for Filters
+    const filtersDependencies: FiltersDependencies = {
+      useFiltersViewModel: () =>
+        useFiltersViewModel({ dependencies: filtersViewModelDependencies }),
+    };
 
-      // Create users model
-      const usersModel = new UsersModel(queryClient, usersModelDependencies);
+    // Create dependencies for Actions
+    const actionsDependencies: ActionsDependencies = {
+      useActionsViewModel: () =>
+        useActionsViewModel({ dependencies: actionsViewModelDependencies }),
+    };
 
-      // Create selected filters model
-      const selectedFiltersModel = new SelectedFiltersModel();
+    // Create dependencies for Tasks
+    const tasksDependencies: TasksDependencies = {
+      Actions: () => <Actions dependencies={actionsDependencies} />,
+      Filters: () => <Filters dependencies={filtersDependencies} />,
+      TaskList: () => <TaskList dependencies={taskListDependencies} />,
+    };
 
-      // Create dependencies for ActionsViewModel
-      const actionsViewModelDependencies: ActionsViewModelDependencies = {
-        tasksModel,
-        usersModel,
-      };
-
-      // Create dependencies for FiltersViewModel
-      const filtersViewModelDependencies: FiltersViewModelDependencies = {
-        selectedFiltersModel,
-        usersModel,
-      };
-
-      // Create dependencies for TaskListViewModel
-      const taskListViewModelDependencies: TaskListViewModelDependencies = {
-        selectedFiltersModel,
-        tasksModel,
-      };
-
-      // Create dependencies for UserModel
-      const userModelDependencies: UserModelDependencies = {
-        getUserCommand: async (userId) => {
-          return mockUsers.find((user) => user.id === userId);
-        },
-      };
-
-      // Create dependencies for TaskItemViewModel
-      const taskItemViewModelDependencies: TaskItemViewModelDependencies = {
-        tasksModel,
-        createUserModel: (userId) => {
-          return createUserModel(userId, queryClient, userModelDependencies);
-        },
-      };
-
-      // Create dependencies for TaskItem
-      const taskItemDependencies: TaskItemDependencies = {
-        useTaskItemViewModel: (props: TaskItemViewModelProps) =>
-          useTaskItemViewModel({
-            dependencies: taskItemViewModelDependencies,
-            ...props,
-          }),
-      };
-
-      // Create dependencies for TaskList
-      const taskListDependencies: TaskListDependencies = {
-        TaskItem: (props: ComponentProps<typeof TaskItem>) => (
-          <TaskItem dependencies={taskItemDependencies} {...props} />
-        ),
-        useTaskListViewModel: () =>
-          useTaskListViewModel({ dependencies: taskListViewModelDependencies }),
-      };
-
-      // Create dependencies for Filters
-      const filtersDependencies: FiltersDependencies = {
-        useFiltersViewModel: () =>
-          useFiltersViewModel({ dependencies: filtersViewModelDependencies }),
-      };
-
-      // Create dependencies for Actions
-      const actionsDependencies: ActionsDependencies = {
-        useActionsViewModel: () =>
-          useActionsViewModel({ dependencies: actionsViewModelDependencies }),
-      };
-
-      // Create dependencies for Tasks
-      const tasksDependencies: TasksDependencies = {
-        Actions: () => <Actions dependencies={actionsDependencies} />,
-        Filters: () => <Filters dependencies={filtersDependencies} />,
-        TaskList: () => <TaskList dependencies={taskListDependencies} />,
-      };
-
-      /**
-       * Render a version that injects all the dependencies
-       * we created further up so that we can test our integration
-       */
-      return (
-        <Story>
-          <Tasks dependencies={tasksDependencies} />
-        </Story>
-      );
-    },
-  ],
+    /**
+     * Render a version that injects all the dependencies
+     * we created further up so that we can test our integration
+     */
+    return <Tasks dependencies={tasksDependencies} />;
+  },
   tags: ["autodocs"],
-} satisfies Meta<typeof Container>;
+} satisfies Meta<typeof Tasks>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
   parameters: {
     tasks: [
       { id: "1", text: "Task 1", ownerId: "user-1" },
@@ -193,7 +176,6 @@ export const Default: Story = {
 };
 
 export const NoTasksNoUsers: Story = {
-  args: {},
   parameters: {
     tasks: [] satisfies Task[],
     users: [] satisfies User[],

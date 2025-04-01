@@ -3,7 +3,7 @@ import { Actions } from "./Actions.view";
 
 const meta = {
   component: Actions,
-  title: "Actions",
+
   tags: ["autodocs"],
 } satisfies Meta<typeof Actions>;
 

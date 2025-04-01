@@ -7,7 +7,7 @@ import {
 
 const meta = {
   component: ConditionalTimer,
-  title: "Timer",
+
   decorators: [
     (story, { parameters }) => {
       return (

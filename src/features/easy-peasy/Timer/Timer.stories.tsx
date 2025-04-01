@@ -4,7 +4,6 @@ import { Timer } from "./Timer";
 
 const meta = {
   component: Timer,
-  title: "Timer",
   decorators: [
     (story, { parameters }) => {
       return (

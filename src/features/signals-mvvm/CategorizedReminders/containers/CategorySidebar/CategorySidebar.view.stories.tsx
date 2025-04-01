@@ -7,7 +7,7 @@ import { CategorySidebar } from "./CategorySidebar.view";
 
 const meta = {
   component: CategorySidebar,
-  title: "CategorySidebar",
+
   decorators: [
     (story, { parameters }) => {
       return (

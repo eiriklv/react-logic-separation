@@ -7,7 +7,7 @@ import { Actions } from "./Actions.view";
 
 const meta = {
   component: Actions,
-  title: "Actions",
+
   decorators: [
     (story, { parameters }) => {
       return (

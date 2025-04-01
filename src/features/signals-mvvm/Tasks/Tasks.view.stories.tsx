@@ -4,7 +4,7 @@ import { Tasks } from "./Tasks.view";
 
 const meta = {
   component: Tasks,
-  title: "Tasks",
+
   decorators: [
     (story, { parameters }) => {
       return (

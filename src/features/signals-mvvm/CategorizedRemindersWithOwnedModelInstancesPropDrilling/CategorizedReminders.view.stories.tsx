@@ -8,7 +8,7 @@ import { SelectedCategoryModel } from "./models/selected-category.model";
 
 const meta = {
   component: CategorizedReminders,
-  title: "CategorizedReminders",
+
   decorators: [
     (story, { parameters }) => {
       return (

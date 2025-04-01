@@ -3,7 +3,7 @@ import { Todos, TodosContextInterface, TodosContext } from "./Todos";
 
 const meta = {
   component: Todos,
-  title: "Todos",
+
   decorators: [
     (story, { parameters }) => {
       return (

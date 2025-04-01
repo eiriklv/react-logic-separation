@@ -9,7 +9,7 @@ import { RemindersModel } from "./models/reminders.model";
 
 const meta = {
   component: CategorizedReminders,
-  title: "CategorizedReminders",
+
   decorators: [
     (story, { parameters }) => {
       return (

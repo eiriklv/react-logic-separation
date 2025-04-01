@@ -4,7 +4,7 @@ import { Todos } from "./Todos.view";
 
 const meta = {
   component: Todos,
-  title: "Todos",
+
   decorators: [
     (story, { parameters }) => {
       return (

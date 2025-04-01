@@ -8,7 +8,7 @@ import { SelectedCategoryModel } from "../../models/selected-category.model";
 
 const meta = {
   component: CategorySidebar,
-  title: "CategorySidebar",
+
   decorators: [
     (story, { parameters }) => {
       return (

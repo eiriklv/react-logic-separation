@@ -3,7 +3,7 @@ import { ReminderItem } from "./ReminderItem";
 
 const meta = {
   component: ReminderItem,
-  title: "ReminderItem",
+
   tags: ["autodocs"],
 } satisfies Meta<typeof ReminderItem>;
 

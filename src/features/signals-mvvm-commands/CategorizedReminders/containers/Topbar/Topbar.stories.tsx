@@ -4,7 +4,7 @@ import { Topbar } from "./Topbar";
 
 const meta = {
   component: Topbar,
-  title: "Topbar",
+
   decorators: [
     (story, { parameters }) => {
       return (
