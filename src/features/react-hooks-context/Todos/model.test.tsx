@@ -61,11 +61,14 @@ describe("Add todos (command)", () => {
 
     // assert
     expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
-    expect(result.current.todos).toEqual([
-      { id: "abc", text: "Paint house" },
-      { id: "abc", text: "Buy milk" },
-      { id: "abc", text: "Wash car" },
-    ]);
+
+    await waitFor(() =>
+      expect(result.current.todos).toEqual([
+        { id: "abc", text: "Paint house" },
+        { id: "abc", text: "Buy milk" },
+        { id: "abc", text: "Wash car" },
+      ]),
+    );
   });
 
   it("should fail validation when adding empty todo", async () => {
