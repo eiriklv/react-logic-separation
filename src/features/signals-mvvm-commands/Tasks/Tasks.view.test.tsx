@@ -6,9 +6,9 @@ describe("Tasks", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: TasksContextInterface = {
-      Actions: () => <>Actions</>,
-      Filters: () => <>Filters</>,
-      TaskList: () => <>TaskList</>,
+      Actions: () => <div data-testid="Actions" />,
+      Filters: () => <div data-testid="Filters" />,
+      TaskList: () => <div data-testid="TaskList" />,
     };
 
     render(
@@ -18,8 +18,8 @@ describe("Tasks", () => {
     );
 
     // assert
-    expect(screen.getByText(/Actions/)).toBeInTheDocument();
-    expect(screen.getByText(/Filters/)).toBeInTheDocument();
-    expect(screen.getByText(/TaskList/)).toBeInTheDocument();
+    expect(screen.getByTestId("Actions")).toBeInTheDocument();
+    expect(screen.getByTestId("Filters")).toBeInTheDocument();
+    expect(screen.getByTestId("TaskList")).toBeInTheDocument();
   });
 });
