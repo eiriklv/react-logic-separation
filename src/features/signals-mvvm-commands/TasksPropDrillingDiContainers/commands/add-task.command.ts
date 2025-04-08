@@ -55,4 +55,4 @@ export class AddTaskCommand implements IAddTaskCommand {
 // Command factory
 export const createAddTaskCommand = (
   ...args: ConstructorParameters<typeof AddTaskCommand>
-): IAddTaskCommand => new AddTaskCommand(...args);
+): IAddTaskCommandInvocation => new AddTaskCommand(...args).invoke;

@@ -89,23 +89,23 @@ export const useRootViewModel = ({
    * Create the commands
    */
   const addTaskCommand = useMemo(
-    () => createAddTaskCommand().invoke,
+    () => createAddTaskCommand(),
     [createAddTaskCommand],
   );
   const deleteTaskCommand = useMemo(
-    () => createDeleteTaskCommand().invoke,
+    () => createDeleteTaskCommand(),
     [createDeleteTaskCommand],
   );
   const getUserCommand = useMemo(
-    () => createGetUserCommand().invoke,
+    () => createGetUserCommand(),
     [createGetUserCommand],
   );
   const listTasksCommand = useMemo(
-    () => createListTasksCommand().invoke,
+    () => createListTasksCommand(),
     [createListTasksCommand],
   );
   const listUsersCommand = useMemo(
-    () => createListUsersCommand().invoke,
+    () => createListUsersCommand(),
     [createListUsersCommand],
   );
 

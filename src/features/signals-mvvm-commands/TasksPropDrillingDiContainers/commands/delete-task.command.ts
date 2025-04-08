@@ -48,4 +48,4 @@ export class DeleteTaskCommand implements IDeleteTaskCommand {
 // Command factory
 export const createDeleteTaskCommand = (
   ...args: ConstructorParameters<typeof DeleteTaskCommand>
-): IDeleteTaskCommand => new DeleteTaskCommand(...args);
+): IDeleteTaskCommandInvocation => new DeleteTaskCommand(...args).invoke;

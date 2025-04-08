@@ -49,4 +49,4 @@ export class ListUsersCommand implements IListUsersCommand {
 // Command factory
 export const createListUsersCommand = (
   ...args: ConstructorParameters<typeof ListUsersCommand>
-): IListUsersCommand => new ListUsersCommand(...args);
+): IListUsersCommandInvocation => new ListUsersCommand(...args).invoke;

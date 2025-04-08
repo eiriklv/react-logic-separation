@@ -47,4 +47,4 @@ export class GetUserCommand implements IGetUserCommand {
 // Command factory
 export const createGetUserCommand = (
   ...args: ConstructorParameters<typeof GetUserCommand>
-): IGetUserCommand => new GetUserCommand(...args);
+): IGetUserCommandInvocation => new GetUserCommand(...args).invoke;

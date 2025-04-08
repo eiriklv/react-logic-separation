@@ -49,4 +49,4 @@ export class ListTasksCommand implements IListTasksCommand {
 // Command factory
 export const createListTasksCommand = (
   ...args: ConstructorParameters<typeof ListTasksCommand>
-): IListTasksCommand => new ListTasksCommand(...args);
+): IListTasksCommandInvocation => new ListTasksCommand(...args).invoke;
