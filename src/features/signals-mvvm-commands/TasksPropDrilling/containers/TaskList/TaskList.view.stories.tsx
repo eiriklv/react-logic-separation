@@ -1,8 +1,4 @@
 import { Meta, StoryObj } from "@storybook/react";
-import {
-  TaskListContextInterface,
-  TaskListContext,
-} from "./TaskList.view.context";
 import { TaskList } from "./TaskList.view";
 
 const meta = {
@@ -43,7 +39,7 @@ export const EmptyList: Story = {
         isFetching: false,
       }),
       TaskItem: ({ task }) => <li>{task.text}</li>,
-    } satisfies TaskListContextInterface,
+    },
   },
 };
 
