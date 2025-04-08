@@ -4,20 +4,14 @@ import { ITasksModel } from "../models/tasks.model";
 import { PartialDeep } from "type-fest";
 
 /**
- * The context can be used to inject any kind of
- * dependency, but mainly hooks and components/containers.
+ * The purpose of this context is to be able to
+ * share models throughout the application,
+ * and that any layer can be the provider of
+ * those models.
  *
- * The main purpose is to facilitate testing
- * and storybooking without having to make complex mocks
- * - and to keep the components as simple as possible.
- *
- * Can be used for integrating 3rd party libraries and
- * components into your application
- *
- * The other purpose is to completely avoid prop drilling,
- * which reduces the amount of indirection in components.
- *
- * The interfaces of the components also become much simpler.
+ * The consumers of the models should not need
+ * to care about where the models where provided,
+ * just that they are available
  */
 
 export interface ModelsContextInterface {

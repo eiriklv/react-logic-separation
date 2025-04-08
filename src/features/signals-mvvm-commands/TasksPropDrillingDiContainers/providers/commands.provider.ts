@@ -7,20 +7,14 @@ import { IListUsersCommandInvocation } from "../commands/list-users.command";
 import { PartialDeep } from "type-fest";
 
 /**
- * The context can be used to inject any kind of
- * dependency, but mainly hooks and components/containers.
+ * The purpose of this context is to be able to
+ * share the commands throughout the application,
+ * and that any layer can be the provider of
+ * those commands.
  *
- * The main purpose is to facilitate testing
- * and storybooking without having to make complex mocks
- * - and to keep the components as simple as possible.
- *
- * Can be used for integrating 3rd party libraries and
- * components into your application
- *
- * The other purpose is to completely avoid prop drilling,
- * which reduces the amount of indirection in components.
- *
- * The interfaces of the components also become much simpler.
+ * The consumers of the commands should not need
+ * to care about where the commands where provided,
+ * just that they are available
  */
 
 export interface CommandsContextInterface {
