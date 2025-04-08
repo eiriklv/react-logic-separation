@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
-import { useActionsViewModel as _useActionsViewModel } from "./Actions.view-model";
+import { useActionsViewModel } from "./Actions.view-model";
 
 export type ActionsDependencies = {
-  useActionsViewModel: typeof _useActionsViewModel;
+  useActionsViewModel: typeof useActionsViewModel;
 };
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export function Actions({
-  dependencies = { useActionsViewModel: _useActionsViewModel },
+  dependencies = { useActionsViewModel },
 }: Props = {}) {
   // Get dependencies
   const { useActionsViewModel } = dependencies;
