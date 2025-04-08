@@ -1,5 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import {
+  CommandsDependencies,
   ModelsDependencies,
   TaskItemViewModelDependencies,
   useTaskItemViewModel,
@@ -7,11 +8,16 @@ import {
 import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
 import { ModelsContext } from "../../providers/models.provider";
+import { CommandsContext } from "../../providers/commands.provider";
+import { QueryClient } from "@tanstack/query-core";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 describe("useTaskItemViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const deleteTask = vi.fn();
+
+    const queryClient = new QueryClient();
 
     const dependencies: TaskItemViewModelDependencies = {
       createUserModel: () => ({
@@ -21,6 +27,10 @@ describe("useTaskItemViewModel", () => {
           profileImageUrl: "./src/image.png",
         }),
       }),
+    };
+
+    const mockCommands: CommandsDependencies = {
+      getUserCommand: vi.fn(),
     };
 
     const mockModels: ModelsDependencies = {
@@ -38,9 +48,13 @@ describe("useTaskItemViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <ModelsContext.Provider value={mockModels}>
-        {children}
-      </ModelsContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <CommandsContext.Provider value={mockCommands}>
+          <ModelsContext.Provider value={mockModels}>
+            {children}
+          </ModelsContext.Provider>
+        </CommandsContext.Provider>
+      </QueryClientProvider>
     );
 
     const { result } = renderHook(
