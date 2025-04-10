@@ -19,12 +19,6 @@ import { ITasksModel } from "../../models/tasks.model";
  * the custom hooks into it
  */
 
-// export type ActionsViewModelDependencies = {};
-
-// type Props = {
-//   dependencies?: ActionsViewModelDependencies;
-// };
-
 export interface ModelsDependencies {
   usersModel: Pick<IUsersModel, "users">;
   tasksModel: Pick<ITasksModel, "addTask">;
