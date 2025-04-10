@@ -1,9 +1,22 @@
 import { Meta, StoryObj } from "@storybook/react";
+import {
+  FiltersContextInterface,
+  FiltersContext,
+} from "./Filters.view.context";
 import { Filters } from "./Filters.view";
 
 const meta = {
   component: Filters,
-  title: "Filters",
+
+  decorators: [
+    (story, { parameters }) => {
+      return (
+        <FiltersContext.Provider value={parameters.dependencies}>
+          {story()}
+        </FiltersContext.Provider>
+      );
+    },
+  ],
   tags: ["autodocs"],
 } satisfies Meta<typeof Filters>;
 
@@ -12,31 +25,34 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const NoFilterOptions: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useFiltersViewModel: () => ({
         users: [],
         selectedOwnerId: "",
         setSelectedOwnerId: async () => {},
       }),
-    },
+    } satisfies FiltersContextInterface,
   },
 };
 
 export const NoFilterSelected: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useFiltersViewModel: () => ({
         users: [],
         selectedOwnerId: "",
         setSelectedOwnerId: async () => {},
       }),
-    },
+    } satisfies FiltersContextInterface,
   },
 };
 
 export const UserFilterSelected: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useFiltersViewModel: () => ({
         users: [
@@ -54,6 +70,6 @@ export const UserFilterSelected: Story = {
         selectedOwnerId: "user-1",
         setSelectedOwnerId: async () => {},
       }),
-    },
+    } satisfies FiltersContextInterface,
   },
 };

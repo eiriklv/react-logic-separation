@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { Root } from "./Root.view";
 import { useRootViewModel } from "./Root.view-model";
-import { QueryClient } from "@tanstack/query-core";
 import { RootContext, RootContextInterface } from "./Root.view.context";
+import { createQueryClient } from "../../utils/create-query-client";
 
 describe("Root", () => {
   it("Renders correctly", () => {
@@ -11,7 +11,7 @@ describe("Root", () => {
       useRootViewModel: () =>
         ({
           commands: {},
-          queryClient: new QueryClient(),
+          queryClient: createQueryClient(),
         }) as ReturnType<typeof useRootViewModel>,
       App: () => <div data-testid="App" />,
     };

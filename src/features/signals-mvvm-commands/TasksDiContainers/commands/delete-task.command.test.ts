@@ -1,5 +1,5 @@
 import {
-  DeleteTaskCommand,
+  createDeleteTaskCommand,
   DeleteTaskCommandDependencies,
 } from "./delete-task.command";
 
@@ -14,10 +14,10 @@ describe("DeleteTaskCommand", () => {
 
     const mockTaskId = "task-1";
 
-    const deleteTaskCommand = new DeleteTaskCommand(mockDependencies);
+    const deleteTaskCommand = createDeleteTaskCommand(mockDependencies);
 
     // delete the task
-    await deleteTaskCommand.invoke(mockTaskId);
+    await deleteTaskCommand(mockTaskId);
 
     // check that the underlying service was called
     expect(mockDependencies.tasksService?.deleteTask).toHaveBeenCalledWith(

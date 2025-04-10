@@ -1,5 +1,8 @@
 import { User } from "../types";
-import { GetUserCommand, GetUserCommandDependencies } from "./get-user.command";
+import {
+  createGetUserCommand,
+  GetUserCommandDependencies,
+} from "./get-user.command";
 
 describe("GetUserCommand", () => {
   it("should work as expected when getting a user by id", async () => {
@@ -20,10 +23,10 @@ describe("GetUserCommand", () => {
       },
     };
 
-    const getUserCommand = new GetUserCommand(mockDependencies);
+    const getUserCommand = createGetUserCommand(mockDependencies);
 
     // get the user by id
-    const user = await getUserCommand.invoke(mockUser.id);
+    const user = await getUserCommand(mockUser.id);
 
     // check that the users were given as a result
     expect(user).toEqual(mockUser);

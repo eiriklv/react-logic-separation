@@ -1,19 +1,9 @@
-import { useCallback, useState } from "react";
-import { useActionsViewModel as _useActionsViewModel } from "./Actions.view-model";
+import { useCallback, useContext, useState } from "react";
+import { ActionsContext } from "./Actions.view.context";
 
-export type ActionsDependencies = {
-  useActionsViewModel: typeof _useActionsViewModel;
-};
-
-type Props = {
-  dependencies?: ActionsDependencies;
-};
-
-export function Actions({
-  dependencies = { useActionsViewModel: _useActionsViewModel },
-}: Props = {}) {
+export function Actions() {
   // Get dependencies
-  const { useActionsViewModel } = dependencies;
+  const { useActionsViewModel } = useContext(ActionsContext);
 
   // Use view model
   const { addTask, users = [] } = useActionsViewModel();

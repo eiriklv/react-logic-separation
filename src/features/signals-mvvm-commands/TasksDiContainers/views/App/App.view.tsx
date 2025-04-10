@@ -1,19 +1,6 @@
+import { useContext } from "react";
 import { ModelsContext } from "../../providers/models.provider";
-import { Actions } from "../Actions/Actions.view";
-import { Filters } from "../Filters/Filters.view";
-import { TaskList } from "../TaskList/TaskList.view";
-import { useAppViewModel } from "./App.view-model";
-
-export type AppDependencies = {
-  useAppViewModel: typeof useAppViewModel;
-  Actions: typeof Actions;
-  Filters: typeof Filters;
-  TaskList: typeof TaskList;
-};
-
-type Props = {
-  dependencies?: AppDependencies;
-};
+import { AppContext } from "./App.view.context";
 
 /**
  * TODO: Move this into the containers folder,
@@ -22,16 +9,10 @@ type Props = {
  *
  * index.tsx should render the root only
  */
-export function App({
-  dependencies = {
-    useAppViewModel,
-    Actions,
-    Filters,
-    TaskList,
-  },
-}: Props = {}) {
+export function App() {
   // Get dependencies
-  const { useAppViewModel, Actions, Filters, TaskList } = dependencies;
+  const { useAppViewModel, Actions, Filters, TaskList } =
+    useContext(AppContext);
 
   /**
    * The app view owns the tasks and users models,

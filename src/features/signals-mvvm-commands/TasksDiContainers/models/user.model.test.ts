@@ -1,6 +1,6 @@
 import { User } from "../types";
-import { QueryClient } from "@tanstack/query-core";
 import { UserModel, UserModelDependencies } from "./user.model";
+import { createQueryClient } from "../utils/create-query-client";
 
 describe("UserModel", () => {
   it("should initialize correctly", async () => {
@@ -15,7 +15,7 @@ describe("UserModel", () => {
       getUserCommand: vi.fn(async () => mockUser),
     };
 
-    const mockQueryClient = new QueryClient();
+    const mockQueryClient = createQueryClient();
     const mockUserId = "user-1";
 
     const userModel = new UserModel(
@@ -36,7 +36,7 @@ describe("UserModel", () => {
       getUserCommand: vi.fn(async () => Promise.reject(new Error("Failed"))),
     };
 
-    const mockQueryClient = new QueryClient();
+    const mockQueryClient = createQueryClient();
     const mockUserId = "user-1";
 
     const userModel = new UserModel(

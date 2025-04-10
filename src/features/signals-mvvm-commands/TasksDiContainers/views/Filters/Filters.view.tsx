@@ -1,19 +1,9 @@
-import { useCallback } from "react";
-import { useFiltersViewModel } from "./Filters.view-model";
+import { useCallback, useContext } from "react";
+import { FiltersContext } from "./Filters.view.context";
 
-export type FiltersDependencies = {
-  useFiltersViewModel: typeof useFiltersViewModel;
-};
-
-type Props = {
-  dependencies?: FiltersDependencies;
-};
-
-export function Filters({
-  dependencies = { useFiltersViewModel },
-}: Props = {}) {
+export function Filters() {
   // Get dependencies
-  const { useFiltersViewModel } = dependencies;
+  const { useFiltersViewModel } = useContext(FiltersContext);
 
   // Use view model
   const {

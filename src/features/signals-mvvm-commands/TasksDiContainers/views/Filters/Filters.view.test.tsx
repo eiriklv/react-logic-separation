@@ -1,11 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { FiltersDependencies, Filters } from "./Filters.view";
+import { Filters } from "./Filters.view";
+import {
+  FiltersContext,
+  FiltersContextInterface,
+} from "./Filters.view.context";
 
 describe("Filters Component", () => {
   it("Renders correctly", () => {
     // arrange
-    const dependencies: FiltersDependencies = {
+    const dependencies: FiltersContextInterface = {
       useFiltersViewModel: vi.fn(() => ({
         users: [
           {
@@ -24,7 +28,11 @@ describe("Filters Component", () => {
       })),
     };
 
-    render(<Filters dependencies={dependencies} />);
+    render(
+      <FiltersContext.Provider value={dependencies}>
+        <Filters />
+      </FiltersContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText("Filters")).toBeInTheDocument();
@@ -36,7 +44,7 @@ describe("Filters Component", () => {
     // arrange
     const setSelectedOwnerId = vi.fn();
 
-    const dependencies: FiltersDependencies = {
+    const dependencies: FiltersContextInterface = {
       useFiltersViewModel: vi.fn(() => ({
         users: [
           {
@@ -55,7 +63,11 @@ describe("Filters Component", () => {
       })),
     };
 
-    render(<Filters dependencies={dependencies} />);
+    render(
+      <FiltersContext.Provider value={dependencies}>
+        <Filters />
+      </FiltersContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText("Filters")).toBeInTheDocument();

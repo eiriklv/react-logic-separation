@@ -1,9 +1,22 @@
 import { Meta, StoryObj } from "@storybook/react";
+import {
+  TaskItemContext,
+  TaskItemContextInterface,
+} from "./TaskItem.view.context";
 import { TaskItem } from "./TaskItem.view";
 
 const meta = {
   component: TaskItem,
-  title: "TaskItem",
+
+  decorators: [
+    (story, { parameters }) => {
+      return (
+        <TaskItemContext.Provider value={parameters.dependencies}>
+          {story()}
+        </TaskItemContext.Provider>
+      );
+    },
+  ],
   tags: ["autodocs"],
 } satisfies Meta<typeof TaskItem>;
 
@@ -13,17 +26,19 @@ type Story = StoryObj<typeof meta>;
 
 export const EmptyTask: Story = {
   args: {
-    dependencies: {
-      useTaskItemViewModel: () => ({
-        user: undefined,
-        deleteTask: async () => {},
-      }),
-    },
     task: {
       id: "",
       text: "",
       ownerId: "",
     },
+  },
+  parameters: {
+    dependencies: {
+      useTaskItemViewModel: () => ({
+        user: undefined,
+        deleteTask: async () => {},
+      }),
+    } satisfies TaskItemContextInterface,
   },
 };
 
@@ -34,12 +49,14 @@ export const LoadingUser: Story = {
       text: "Task 1",
       ownerId: "user-1",
     },
+  },
+  parameters: {
     dependencies: {
       useTaskItemViewModel: () => ({
         user: undefined,
         deleteTask: async () => {},
       }),
-    },
+    } satisfies TaskItemContextInterface,
   },
 };
 
@@ -50,6 +67,8 @@ export const LoadedUser: Story = {
       text: "Task 1",
       ownerId: "user-1",
     },
+  },
+  parameters: {
     dependencies: {
       useTaskItemViewModel: () => ({
         user: {
@@ -59,6 +78,6 @@ export const LoadedUser: Story = {
         },
         deleteTask: async () => {},
       }),
-    },
+    } satisfies TaskItemContextInterface,
   },
 };

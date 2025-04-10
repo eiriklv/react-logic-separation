@@ -1,23 +1,14 @@
+import { useContext } from "react";
 import { Task } from "../../types";
-import { useTaskItemViewModel } from "./TaskItem.view-model";
-
-export type TaskItemDependencies = {
-  useTaskItemViewModel: typeof useTaskItemViewModel;
-};
+import { TaskItemContext } from "./TaskItem.view.context";
 
 type Props = {
-  dependencies?: TaskItemDependencies;
   task: Task;
 };
 
-export function TaskItem({
-  dependencies = {
-    useTaskItemViewModel,
-  },
-  task,
-}: Props) {
+export function TaskItem({ task }: Props) {
   // Get dependencies
-  const { useTaskItemViewModel } = dependencies;
+  const { useTaskItemViewModel } = useContext(TaskItemContext);
 
   const { user, deleteTask } = useTaskItemViewModel({ task });
 

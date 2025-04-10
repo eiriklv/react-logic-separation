@@ -1,11 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import { TaskList } from "./TaskList.view";
-import { TaskListDependencies } from "./TaskList.view";
+import {
+  TaskListContext,
+  TaskListContextInterface,
+} from "./TaskList.view.context";
 
 describe("TaskList Component", () => {
   it("Renders correctly when loading", () => {
     // arrange
-    const dependencies: TaskListDependencies = {
+    const dependencies: TaskListContextInterface = {
       useTaskListViewModel: vi.fn(() => ({
         tasks: [],
         tasksCount: 0,
@@ -17,7 +20,11 @@ describe("TaskList Component", () => {
       TaskItem: () => <></>,
     };
 
-    render(<TaskList dependencies={dependencies} />);
+    render(
+      <TaskListContext.Provider value={dependencies}>
+        <TaskList />
+      </TaskListContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText(/Loading/)).toBeInTheDocument();
@@ -25,7 +32,7 @@ describe("TaskList Component", () => {
 
   it("Renders correctly when saving and refetching", () => {
     // arrange
-    const dependencies: TaskListDependencies = {
+    const dependencies: TaskListContextInterface = {
       useTaskListViewModel: vi.fn(() => ({
         tasks: [],
         tasksCount: 0,
@@ -37,7 +44,11 @@ describe("TaskList Component", () => {
       TaskItem: () => <></>,
     };
 
-    render(<TaskList dependencies={dependencies} />);
+    render(
+      <TaskListContext.Provider value={dependencies}>
+        <TaskList />
+      </TaskListContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText(/saving/)).toBeInTheDocument();
@@ -46,7 +57,7 @@ describe("TaskList Component", () => {
 
   it("Renders correctly with no tasks", () => {
     // arrange
-    const dependencies: TaskListDependencies = {
+    const dependencies: TaskListContextInterface = {
       useTaskListViewModel: vi.fn(() => ({
         tasks: [],
         tasksCount: 0,
@@ -58,7 +69,11 @@ describe("TaskList Component", () => {
       TaskItem: () => <></>,
     };
 
-    render(<TaskList dependencies={dependencies} />);
+    render(
+      <TaskListContext.Provider value={dependencies}>
+        <TaskList />
+      </TaskListContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText("Tasks")).toBeInTheDocument();
@@ -66,7 +81,7 @@ describe("TaskList Component", () => {
 
   it("Renders correctly with multiple tasks", () => {
     // arrange
-    const dependencies: TaskListDependencies = {
+    const dependencies: TaskListContextInterface = {
       useTaskListViewModel: vi.fn(() => ({
         tasks: [
           {
@@ -89,7 +104,11 @@ describe("TaskList Component", () => {
       TaskItem: () => <div>TaskItem</div>,
     };
 
-    render(<TaskList dependencies={dependencies} />);
+    render(
+      <TaskListContext.Provider value={dependencies}>
+        <TaskList />
+      </TaskListContext.Provider>,
+    );
 
     // assert
     expect(screen.getAllByText("TaskItem").length).toEqual(2);

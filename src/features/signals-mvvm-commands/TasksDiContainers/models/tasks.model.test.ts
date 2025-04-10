@@ -1,7 +1,7 @@
 import { signal } from "@preact/signals-core";
 import { Task } from "../types";
 import { TasksModelDependencies, TasksModel } from "./tasks.model";
-import { QueryClient } from "@tanstack/query-core";
+import { createQueryClient } from "../utils/create-query-client";
 
 describe("TasksModel", () => {
   it("should work as expected when adding a single task", async () => {
@@ -18,7 +18,7 @@ describe("TasksModel", () => {
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     const model = new TasksModel(queryClient, mockDependencies);
 
     // check that the tasks load initially
@@ -68,7 +68,7 @@ describe("TasksModel", () => {
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     const model = new TasksModel(queryClient, mockDependencies);
 
     // check that the tasks load initially
@@ -110,7 +110,7 @@ describe("TasksModel", () => {
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     const model = new TasksModel(queryClient, mockDependencies);
 
     // check that the tasks load initially
@@ -151,7 +151,7 @@ describe("TasksModel", () => {
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     const model = new TasksModel(queryClient, mockDependencies);
 
     // check that the tasks load initially
@@ -193,7 +193,7 @@ describe("TasksModel", () => {
       listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
     };
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     const model = new TasksModel(queryClient, mockDependencies);
 
     // check that the tasks load initially
@@ -236,7 +236,7 @@ describe("TasksModel", () => {
       listTasksCommand: vi.fn(async () => fakeTasks),
     };
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     const model = new TasksModel(queryClient, mockDependencies);
     const selectedOwnerId = signal("user-1");
 

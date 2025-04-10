@@ -1,13 +1,11 @@
-import { useMemo } from "react";
-import { createTasksModel } from "../../models/tasks.model";
-import { createUsersModel } from "../../models/users.model";
+import { useContext, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCommands } from "../../providers/commands.provider";
 import { IAddTaskCommandInvocation } from "../../commands/add-task.command";
 import { IDeleteTaskCommandInvocation } from "../../commands/delete-task.command";
 import { IListTasksCommandInvocation } from "../../commands/list-tasks.command";
 import { IListUsersCommandInvocation } from "../../commands/list-users.command";
-import { createSelectedFiltersModel } from "../../models/selected-filters.model";
+import { AppViewModelContext } from "./App.view-model.context";
 
 /**
  * The main purpose of this file is to
@@ -25,16 +23,6 @@ import { createSelectedFiltersModel } from "../../models/selected-filters.model"
  * the custom hooks into it
  */
 
-export type AppViewModelDependencies = {
-  createTasksModel: typeof createTasksModel;
-  createUsersModel: typeof createUsersModel;
-  createSelectedFiltersModel: typeof createSelectedFiltersModel;
-};
-
-type Props = {
-  dependencies?: AppViewModelDependencies;
-};
-
 export interface CommandsDependencies {
   addTaskCommand: IAddTaskCommandInvocation;
   deleteTaskCommand: IDeleteTaskCommandInvocation;
@@ -43,34 +31,24 @@ export interface CommandsDependencies {
 }
 
 /**
- * TODO: Here is where the global providers
- * need to be initialized (potentially in the view model of this)
+ * Note: The <App> owns some of the shared domain models,
+ * so it has the responsibility of creating the instances
+ * and exposing them to the rest of the tree below.
  *
- * - Models
- * - Commands
- * - Flags
- * - Etc..
+ * To do this it consumes the shared commands that
+ * have been initialized and provider from further
+ * up in the tree (owned by <Root>)
  */
-export const useAppViewModel = ({
-  dependencies = {
-    createTasksModel,
-    createUsersModel,
-    createSelectedFiltersModel,
-  },
-}: Props = {}) => {
+export const useAppViewModel = () => {
   // Get dependencies
   const { createTasksModel, createUsersModel, createSelectedFiltersModel } =
-    dependencies;
+    useContext(AppViewModelContext);
 
   // Get the query client from the context
   const queryClient = useQueryClient();
 
   // Get commands from the command provider context
   const commands = useCommands<CommandsDependencies>();
-
-  if (!commands) {
-    throw new Error("Commands must be provided");
-  }
 
   const {
     addTaskCommand,
@@ -80,21 +58,7 @@ export const useAppViewModel = ({
   } = commands;
 
   /**
-   * TODO: Create all the commands first, and then let
-   * them be injected into the models.
-   *
-   * It has to be possible to just replace the command
-   * layer dependencies in the tree and then the models
-   * would work against fake commands.
-   *
-   * Where should the injection of the commands happen?
-   * One layer further up and then this view model
-   * will depend on that context and then inject
-   * them into the models?
-   */
-
-  /**
-   * Create the models
+   * Create the model instances
    */
   const usersModel = useMemo(
     () =>
@@ -126,7 +90,7 @@ export const useAppViewModel = ({
   );
 
   /**
-   * Package the models in an object
+   * Package the model instances in a memoized object
    */
   const models = useMemo(
     () => ({

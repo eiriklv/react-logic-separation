@@ -1,15 +1,15 @@
 import { renderHook } from "@testing-library/react";
 import { useRootViewModel } from "./Root.view-model";
-import { QueryClient } from "@tanstack/query-core";
 import {
   RootViewModelContext,
   RootViewModelContextInterface,
 } from "./Root.view-model.context";
+import { createQueryClient } from "../../utils/create-query-client";
 
 describe("useRootViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
     const addTaskCommand = vi.fn();
     const deleteTaskCommand = vi.fn();
     const getUserCommand = vi.fn();

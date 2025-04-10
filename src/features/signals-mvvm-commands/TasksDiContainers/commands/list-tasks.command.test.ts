@@ -1,5 +1,5 @@
 import {
-  ListTasksCommand,
+  createListTasksCommand,
   ListTasksCommandDependencies,
 } from "./list-tasks.command";
 
@@ -12,10 +12,10 @@ describe("ListTasksCommand", () => {
       },
     };
 
-    const listTasksCommand = new ListTasksCommand(mockDependencies);
+    const listTasksCommand = createListTasksCommand(mockDependencies);
 
     // fetch the tasks
-    const tasks = await listTasksCommand.invoke();
+    const tasks = await listTasksCommand();
 
     // check that the tasks were given as a result
     expect(tasks).toEqual([]);

@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/react";
-import { TaskItem, TaskItemDependencies } from "./TaskItem.view";
+import { TaskItem } from "./TaskItem.view";
 import { Task } from "../../types";
 import userEvent from "@testing-library/user-event";
+import {
+  TaskItemContext,
+  TaskItemContextInterface,
+} from "./TaskItem.view.context";
 
 describe("TaskItem", () => {
   it("Renders correctly when user is loaded", () => {
@@ -12,7 +16,7 @@ describe("TaskItem", () => {
       ownerId: "user-1",
     };
 
-    const taskItemDependencies: TaskItemDependencies = {
+    const taskItemDependencies: TaskItemContextInterface = {
       useTaskItemViewModel: () => ({
         user: {
           id: "user-1",
@@ -23,7 +27,11 @@ describe("TaskItem", () => {
       }),
     };
 
-    render(<TaskItem dependencies={taskItemDependencies} task={task} />);
+    render(
+      <TaskItemContext.Provider value={taskItemDependencies}>
+        <TaskItem task={task} />
+      </TaskItemContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText(/Write self reflection/)).toBeInTheDocument();
@@ -38,14 +46,18 @@ describe("TaskItem", () => {
       ownerId: "user-1",
     };
 
-    const taskItemDependencies: TaskItemDependencies = {
+    const taskItemDependencies: TaskItemContextInterface = {
       useTaskItemViewModel: () => ({
         user: undefined,
         deleteTask: vi.fn(),
       }),
     };
 
-    render(<TaskItem dependencies={taskItemDependencies} task={task} />);
+    render(
+      <TaskItemContext.Provider value={taskItemDependencies}>
+        <TaskItem task={task} />
+      </TaskItemContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText(/Write self reflection/)).toBeInTheDocument();
@@ -62,7 +74,7 @@ describe("TaskItem", () => {
       ownerId: "user-1",
     };
 
-    const taskItemDependencies: TaskItemDependencies = {
+    const taskItemDependencies: TaskItemContextInterface = {
       useTaskItemViewModel: () => ({
         user: {
           id: "user-1",
@@ -73,7 +85,11 @@ describe("TaskItem", () => {
       }),
     };
 
-    render(<TaskItem dependencies={taskItemDependencies} task={task} />);
+    render(
+      <TaskItemContext.Provider value={taskItemDependencies}>
+        <TaskItem task={task} />
+      </TaskItemContext.Provider>,
+    );
 
     // act
     await userEvent.click(screen.getByRole("button", { name: "X" }));

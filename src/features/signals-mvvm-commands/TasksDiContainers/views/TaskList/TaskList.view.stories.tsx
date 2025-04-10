@@ -1,9 +1,22 @@
 import { Meta, StoryObj } from "@storybook/react";
+import {
+  TaskListContextInterface,
+  TaskListContext,
+} from "./TaskList.view.context";
 import { TaskList } from "./TaskList.view";
 
 const meta = {
   component: TaskList,
-  title: "TaskList",
+
+  decorators: [
+    (story, { parameters }) => {
+      return (
+        <TaskListContext.Provider value={parameters.dependencies}>
+          {story()}
+        </TaskListContext.Provider>
+      );
+    },
+  ],
   tags: ["autodocs"],
 } satisfies Meta<typeof TaskList>;
 
@@ -12,7 +25,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Loading: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useTaskListViewModel: () => ({
         tasks: [],
@@ -23,12 +37,13 @@ export const Loading: Story = {
         isFetching: false,
       }),
       TaskItem: ({ task }) => <li>{task.text}</li>,
-    },
+    } satisfies TaskListContextInterface,
   },
 };
 
 export const EmptyList: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useTaskListViewModel: () => ({
         tasks: [],
@@ -39,12 +54,13 @@ export const EmptyList: Story = {
         isFetching: false,
       }),
       TaskItem: ({ task }) => <li>{task.text}</li>,
-    },
+    } satisfies TaskListContextInterface,
   },
 };
 
 export const WithTasks: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useTaskListViewModel: () => ({
         tasks: [
@@ -58,12 +74,13 @@ export const WithTasks: Story = {
         isFetching: false,
       }),
       TaskItem: ({ task }) => <li>{task.text}</li>,
-    },
+    } satisfies TaskListContextInterface,
   },
 };
 
 export const Saving: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useTaskListViewModel: () => ({
         tasks: [
@@ -77,12 +94,13 @@ export const Saving: Story = {
         isFetching: false,
       }),
       TaskItem: ({ task }) => <li>{task.text}</li>,
-    },
+    } satisfies TaskListContextInterface,
   },
 };
 
 export const Refetching: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useTaskListViewModel: () => ({
         tasks: [
@@ -96,6 +114,6 @@ export const Refetching: Story = {
         isFetching: true,
       }),
       TaskItem: ({ task }) => <li>{task.text}</li>,
-    },
+    } satisfies TaskListContextInterface,
   },
 };

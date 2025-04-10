@@ -1,12 +1,12 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { useSignalValue } from "../../../../../lib/use-signal-value";
 import { Task } from "../../types";
 import { ITasksModel } from "../../models/tasks.model";
-import { createUserModel, IUserModel } from "../../models/user.model";
 import { useModels } from "../../providers/models.provider";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCommands } from "../../providers/commands.provider";
 import { IGetUserCommandInvocation } from "../../commands/get-user.command";
+import { TaskItemViewModelContext } from "./TaskItem.view-model.context";
 
 /**
  * The main purpose of this file is to
@@ -24,14 +24,7 @@ import { IGetUserCommandInvocation } from "../../commands/get-user.command";
  * the custom hooks into it
  */
 
-export type TaskItemViewModelDependencies = {
-  createUserModel: (
-    ...args: Parameters<typeof createUserModel>
-  ) => Pick<IUserModel, "user">;
-};
-
 export type TaskItemViewModelProps = {
-  dependencies?: TaskItemViewModelDependencies;
   task: Task;
 };
 
@@ -43,14 +36,9 @@ export interface CommandsDependencies {
   getUserCommand: IGetUserCommandInvocation;
 }
 
-export const useTaskItemViewModel = ({
-  dependencies = {
-    createUserModel,
-  },
-  task,
-}: TaskItemViewModelProps) => {
+export const useTaskItemViewModel = ({ task }: TaskItemViewModelProps) => {
   // Get dependencies
-  const { createUserModel } = dependencies;
+  const { createUserModel } = useContext(TaskItemViewModelContext);
 
   // Get commands from the shared command provider
   const commands = useCommands<CommandsDependencies>();
@@ -67,6 +55,7 @@ export const useTaskItemViewModel = ({
   // Pull out the stuff we need from the shared commands
   const { getUserCommand } = commands;
 
+  // Create the user model instance (per view)
   const userModel = useMemo(
     () => createUserModel(task.ownerId, queryClient, { getUserCommand }),
     [createUserModel, getUserCommand, queryClient, task.ownerId],

@@ -1,4 +1,7 @@
-import { AddTaskCommand, AddTaskCommandDependencies } from "./add-task.command";
+import {
+  AddTaskCommandDependencies,
+  createAddTaskCommand,
+} from "./add-task.command";
 
 describe("AddTaskCommand", () => {
   it("should work as expected when adding a task", async () => {
@@ -9,10 +12,10 @@ describe("AddTaskCommand", () => {
       },
     };
 
-    const addTaskCommand = new AddTaskCommand(mockDependencies);
+    const addTaskCommand = createAddTaskCommand(mockDependencies);
 
     // add a task
-    await addTaskCommand.invoke("Paint house", "user-1");
+    await addTaskCommand("Paint house", "user-1");
 
     // check that the underlying service was called
     expect(mockDependencies.tasksService?.addTask).toHaveBeenCalledWith(
@@ -21,12 +24,10 @@ describe("AddTaskCommand", () => {
     );
 
     // check that error is thrown if text is missing
-    expect(() => addTaskCommand.invoke("", "")).toThrowError(
-      "Task text is missing",
-    );
+    expect(() => addTaskCommand("", "")).toThrowError("Task text is missing");
 
     // check that error is thrown if category is missing
-    expect(() => addTaskCommand.invoke("Do something", "")).toThrowError(
+    expect(() => addTaskCommand("Do something", "")).toThrowError(
       "Owner id for task is missing",
     );
   });

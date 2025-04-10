@@ -2,24 +2,27 @@ import { renderHook, act } from "@testing-library/react";
 import {
   CommandsDependencies,
   ModelsDependencies,
-  TaskItemViewModelDependencies,
   useTaskItemViewModel,
 } from "./TaskItem.view-model";
 import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
 import { ModelsContext } from "../../providers/models.provider";
 import { CommandsContext } from "../../providers/commands.provider";
-import { QueryClient } from "@tanstack/query-core";
 import { QueryClientProvider } from "@tanstack/react-query";
+import {
+  TaskItemViewModelContext,
+  TaskItemViewModelContextInterface,
+} from "./TaskItem.view-model.context";
+import { createQueryClient } from "../../utils/create-query-client";
 
 describe("useTaskItemViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const deleteTask = vi.fn();
 
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
 
-    const dependencies: TaskItemViewModelDependencies = {
+    const dependencies: TaskItemViewModelContextInterface = {
       createUserModel: () => ({
         user: signal({
           id: "user-1",
@@ -51,16 +54,17 @@ describe("useTaskItemViewModel", () => {
       <QueryClientProvider client={queryClient}>
         <CommandsContext.Provider value={mockCommands}>
           <ModelsContext.Provider value={mockModels}>
-            {children}
+            <TaskItemViewModelContext.Provider value={dependencies}>
+              {children}
+            </TaskItemViewModelContext.Provider>
           </ModelsContext.Provider>
         </CommandsContext.Provider>
       </QueryClientProvider>
     );
 
-    const { result } = renderHook(
-      () => useTaskItemViewModel({ dependencies, task }),
-      { wrapper },
-    );
+    const { result } = renderHook(() => useTaskItemViewModel({ task }), {
+      wrapper,
+    });
 
     // assert
     expect(result.current.user).toEqual({

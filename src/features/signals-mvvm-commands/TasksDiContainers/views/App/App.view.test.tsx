@@ -1,11 +1,12 @@
 import { render, screen } from "@testing-library/react";
-import { AppDependencies, App } from "./App.view";
+import { App } from "./App.view";
 import { useAppViewModel } from "./App.view-model";
+import { AppContext, AppContextInterface } from "./App.view.context";
 
 describe("App", () => {
   it("Renders correctly", () => {
     // arrange
-    const dependencies: AppDependencies = {
+    const dependencies: AppContextInterface = {
       useAppViewModel: () =>
         ({
           models: {},
@@ -15,7 +16,11 @@ describe("App", () => {
       TaskList: () => <div data-testid="TaskList" />,
     };
 
-    render(<App dependencies={dependencies} />);
+    render(
+      <AppContext.Provider value={dependencies}>
+        <App />
+      </AppContext.Provider>,
+    );
 
     // assert
     expect(screen.getByTestId("Actions")).toBeInTheDocument();

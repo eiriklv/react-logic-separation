@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { App } from "./App.view";
-import { QueryClient } from "@tanstack/query-core";
 import { Task, User } from "../../types";
 import { ComponentType } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -9,6 +8,7 @@ import {
   CommandsContextInterface,
 } from "../../providers/commands.provider";
 import { createProviderTree } from "../../../../../lib/create-provider-tree";
+import { createQueryClient } from "../../utils/create-query-client";
 
 type Props = {
   children?: JSX.Element;
@@ -20,11 +20,10 @@ const Container: ComponentType<Props> = ({ children }) => {
 
 const meta = {
   component: Container,
-  title: "Tasks",
   decorators: [
     (Story, { parameters }) => {
       // create query client for test
-      const queryClient = new QueryClient();
+      const queryClient = createQueryClient();
 
       // create mock tasks
       const mockTasks: Task[] = parameters.tasks;
@@ -91,7 +90,7 @@ export const Default: Story = {
   },
 };
 
-export const NoTasksNoUsers: Story = {
+export const NoAppNoUsers: Story = {
   args: {},
   parameters: {
     tasks: [] satisfies Task[],

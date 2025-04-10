@@ -1,23 +1,9 @@
-import { useTaskListViewModel } from "./TaskList.view-model";
-import { TaskItem } from "../TaskItem/TaskItem.view";
+import { useContext } from "react";
+import { TaskListContext } from "./TaskList.view.context";
 
-export type TaskListDependencies = {
-  useTaskListViewModel: typeof useTaskListViewModel;
-  TaskItem: typeof TaskItem;
-};
-
-type Props = {
-  dependencies?: TaskListDependencies;
-};
-
-export function TaskList({
-  dependencies = {
-    useTaskListViewModel,
-    TaskItem,
-  },
-}: Props = {}) {
+export function TaskList() {
   // Get dependencies
-  const { useTaskListViewModel, TaskItem } = dependencies;
+  const { useTaskListViewModel, TaskItem } = useContext(TaskListContext);
 
   // Use the view model (state and commands)
   const {

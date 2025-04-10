@@ -1,18 +1,26 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Actions, ActionsDependencies } from "./Actions.view";
+import { Actions } from "./Actions.view";
+import {
+  ActionsContext,
+  ActionsContextInterface,
+} from "./Actions.view.context";
 
 describe("Actions Component", () => {
   it("Renders correctly", () => {
     // arrange
-    const mockDependencies: ActionsDependencies = {
+    const mockDependencies: ActionsContextInterface = {
       useActionsViewModel: vi.fn(() => ({
         users: [],
         addTask: vi.fn(),
       })),
     };
 
-    render(<Actions dependencies={mockDependencies} />);
+    render(
+      <ActionsContext.Provider value={mockDependencies}>
+        <Actions />
+      </ActionsContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText("Actions")).toBeInTheDocument();
@@ -21,7 +29,7 @@ describe("Actions Component", () => {
   it("Calls the correct handler when adding a task", async () => {
     // arrange
     const addTask = vi.fn();
-    const mockDependencies: ActionsDependencies = {
+    const mockDependencies: ActionsContextInterface = {
       useActionsViewModel: vi.fn(() => ({
         users: [
           {
@@ -35,7 +43,11 @@ describe("Actions Component", () => {
     };
 
     // act
-    render(<Actions dependencies={mockDependencies} />);
+    render(
+      <ActionsContext.Provider value={mockDependencies}>
+        <Actions />
+      </ActionsContext.Provider>,
+    );
 
     // assert
     expect(screen.getByText("Actions")).toBeInTheDocument();

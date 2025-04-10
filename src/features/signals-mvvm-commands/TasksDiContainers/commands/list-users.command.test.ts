@@ -1,5 +1,5 @@
 import {
-  ListUsersCommand,
+  createListUsersCommand,
   ListUsersCommandDependencies,
 } from "./list-users.command";
 
@@ -12,10 +12,10 @@ describe("ListUsersCommand", () => {
       },
     };
 
-    const listUsersCommand = new ListUsersCommand(mockDependencies);
+    const listUsersCommand = createListUsersCommand(mockDependencies);
 
     // fetch the users
-    const users = await listUsersCommand.invoke();
+    const users = await listUsersCommand();
 
     // check that the users were given as a result
     expect(users).toEqual([]);

@@ -1,10 +1,19 @@
 import { Meta, StoryObj } from "@storybook/react";
+import { AppContextInterface, AppContext } from "./App.view.context";
 import { App } from "./App.view";
 import { useAppViewModel } from "./App.view-model";
 
 const meta = {
   component: App,
-  title: "App",
+  decorators: [
+    (story, { parameters }) => {
+      return (
+        <AppContext.Provider value={parameters.dependencies}>
+          {story()}
+        </AppContext.Provider>
+      );
+    },
+  ],
   tags: ["autodocs"],
 } satisfies Meta<typeof App>;
 
@@ -13,7 +22,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
+  args: {},
+  parameters: {
     dependencies: {
       useAppViewModel: () =>
         ({
@@ -22,6 +32,6 @@ export const Default: Story = {
       Actions: () => <>Actions</>,
       Filters: () => <>Filters</>,
       TaskList: () => <>TaskList</>,
-    },
+    } satisfies AppContextInterface,
   },
 };
