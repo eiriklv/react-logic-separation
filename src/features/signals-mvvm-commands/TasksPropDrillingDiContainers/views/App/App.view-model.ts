@@ -68,10 +68,6 @@ export const useAppViewModel = ({
   // Get commands from the command provider context
   const commands = useCommands<CommandsDependencies>();
 
-  if (!commands) {
-    throw new Error("Commands must be provided");
-  }
-
   const {
     addTaskCommand,
     deleteTaskCommand,
