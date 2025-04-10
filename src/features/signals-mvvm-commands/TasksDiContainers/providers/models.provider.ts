@@ -10,7 +10,7 @@ import { PartialDeep } from "type-fest";
  * those models.
  *
  * The consumers of the models should not need
- * to care about where the models where provided,
+ * to care about where the models were provided,
  * just that they are available
  */
 
