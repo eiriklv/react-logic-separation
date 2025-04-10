@@ -17,15 +17,6 @@ import { RootViewModelContext } from "./Root.view-model.context";
  * the custom hooks into it
  */
 
-/**
- * TODO: Here is where the global providers
- * need to be initialized (potentially in the view model of this)
- *
- * - Models
- * - Commands
- * - Flags
- * - Etc..
- */
 export const useRootViewModel = () => {
   // Get dependencies
   const {
@@ -36,22 +27,6 @@ export const useRootViewModel = () => {
     createListTasksCommand,
     createListUsersCommand,
   } = useContext(RootViewModelContext);
-
-  // Get commands from the command provider context
-
-  /**
-   * TODO: Create all the commands first, and then let
-   * them be injected into the models.
-   *
-   * It has to be possible to just replace the command
-   * layer dependencies in the tree and then the models
-   * would work against fake commands.
-   *
-   * Where should the injection of the commands happen?
-   * One layer further up and then this view model
-   * will depend on that context and then inject
-   * them into the models?
-   */
 
   /**
    * Create the query client

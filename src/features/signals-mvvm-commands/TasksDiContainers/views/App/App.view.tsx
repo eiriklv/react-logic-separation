@@ -3,11 +3,11 @@ import { ModelsContext } from "../../providers/models.provider";
 import { AppContext } from "./App.view.context";
 
 /**
- * TODO: Move this into the containers folder,
- * and let the Root component live in the root folder instead
- * (and also give it a view model)
+ * App container
  *
- * index.tsx should render the root only
+ * In this case the App is the owner of the some of shared model instances,
+ * which makes it responsible for both constructing them
+ * and providing them to the rest of the tree below
  */
 export function App() {
   // Get dependencies
