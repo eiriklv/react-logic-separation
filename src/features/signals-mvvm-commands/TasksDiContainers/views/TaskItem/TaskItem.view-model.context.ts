@@ -1,5 +1,6 @@
 import React from "react";
-import { createUserModel, IUserModel } from "../../models/user.model";
+import { IUserModel } from "../../models/user.model";
+import * as defaultDependencies from "./TaskItem.view-model.dependencies";
 
 /**
  * The context can be used to inject any kind of
@@ -20,13 +21,12 @@ import { createUserModel, IUserModel } from "../../models/user.model";
 
 export interface TaskItemViewModelContextInterface {
   createUserModel: (
-    ...args: Parameters<typeof createUserModel>
+    ...args: Parameters<typeof defaultDependencies.createUserModel>
   ) => Pick<IUserModel, "user">;
 }
 
-export const defaultValue: TaskItemViewModelContextInterface = {
-  createUserModel,
-};
+export const defaultValue: TaskItemViewModelContextInterface =
+  defaultDependencies;
 
 export const TaskItemViewModelContext =
   React.createContext<TaskItemViewModelContextInterface>(defaultValue);

@@ -15,7 +15,12 @@ import {
 } from "./TaskItem.view-model.context";
 import { createQueryClient } from "../../utils/create-query-client";
 
-describe("useTaskItemViewModel", () => {
+/**
+ * Remove default dependencies to decrease collect-time
+ */
+vi.mock("./TaskItem.view-model.dependencies.ts", () => ({}));
+
+describe.only("useTaskItemViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const deleteTask = vi.fn();
