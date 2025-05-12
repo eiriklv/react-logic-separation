@@ -20,7 +20,7 @@ import { createQueryClient } from "../../utils/create-query-client";
  */
 vi.mock("./TaskItem.view-model.dependencies.ts", () => ({}));
 
-describe.only("useTaskItemViewModel", () => {
+describe("useTaskItemViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const deleteTask = vi.fn();
