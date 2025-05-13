@@ -1,10 +1,6 @@
 import { useContext } from "react";
 import { TaskListContext } from "./TaskList.view.context";
 
-/**
- * Same as Todos, except stored on the server
- * and using query + mutation (cache invalidation)
- */
 export function TaskList() {
   // Get dependencies
   const { useTaskListViewModel, TaskItem } = useContext(TaskListContext);
