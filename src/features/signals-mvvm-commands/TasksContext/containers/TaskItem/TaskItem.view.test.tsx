@@ -1,11 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { TaskItem } from "./TaskItem.view";
 import { Task } from "../../types";
-import {
-  TaskItemContext,
-  TaskItemContextInterface,
-} from "./TaskItem.view.context";
+import { TaskItemContext } from "./TaskItem.view.context";
 import userEvent from "@testing-library/user-event";
+import { TaskItemDependencies } from "./TaskItem.view.dependencies";
+
+/**
+ * Remove default dependencies to avoid unnecessary collect-time
+ * and other side-effects caused from importing them
+ */
+vi.mock("./TaskItem.view.dependencies", () => ({ default: {} }));
 
 describe("TaskItem", () => {
   it("Renders correctly when user is loaded", () => {
@@ -16,7 +20,7 @@ describe("TaskItem", () => {
       ownerId: "user-1",
     };
 
-    const taskItemDependencies: TaskItemContextInterface = {
+    const taskItemDependencies: TaskItemDependencies = {
       useTaskItemViewModel: () => ({
         user: {
           id: "user-1",
@@ -46,7 +50,7 @@ describe("TaskItem", () => {
       ownerId: "user-1",
     };
 
-    const taskItemDependencies: TaskItemContextInterface = {
+    const taskItemDependencies: TaskItemDependencies = {
       useTaskItemViewModel: () => ({
         user: undefined,
         deleteTask: vi.fn(),
@@ -74,7 +78,7 @@ describe("TaskItem", () => {
       ownerId: "user-1",
     };
 
-    const taskItemDependencies: TaskItemContextInterface = {
+    const taskItemDependencies: TaskItemDependencies = {
       useTaskItemViewModel: () => ({
         user: {
           id: "user-1",
