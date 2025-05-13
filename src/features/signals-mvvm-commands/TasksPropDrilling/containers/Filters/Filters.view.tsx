@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import { useFiltersViewModel as _useFiltersViewModel } from "./Filters.view-model";
+import { useFiltersViewModel } from "./Filters.view-model";
 
 export type FiltersDependencies = {
-  useFiltersViewModel: typeof _useFiltersViewModel;
+  useFiltersViewModel: typeof useFiltersViewModel;
 };
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export function Filters({
-  dependencies = { useFiltersViewModel: _useFiltersViewModel },
+  dependencies = { useFiltersViewModel },
 }: Props = {}) {
   // Get dependencies
   const { useFiltersViewModel } = dependencies;

@@ -1,11 +1,11 @@
-import { Actions as _Actions } from "./containers/Actions/Actions.view";
-import { Filters as _Filters } from "./containers/Filters/Filters.view";
-import { TaskList as _TaskList } from "./containers/TaskList/TaskList.view";
+import { Actions } from "./containers/Actions/Actions.view";
+import { Filters } from "./containers/Filters/Filters.view";
+import { TaskList } from "./containers/TaskList/TaskList.view";
 
 export type TasksDependencies = {
-  Actions: typeof _Actions;
-  Filters: typeof _Filters;
-  TaskList: typeof _TaskList;
+  Actions: typeof Actions;
+  Filters: typeof Filters;
+  TaskList: typeof TaskList;
 };
 
 type Props = {
@@ -14,9 +14,9 @@ type Props = {
 
 export function Tasks({
   dependencies = {
-    Actions: _Actions,
-    Filters: _Filters,
-    TaskList: _TaskList,
+    Actions,
+    Filters,
+    TaskList,
   },
 }: Props = {}) {
   // Get dependencies

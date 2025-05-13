@@ -1,9 +1,9 @@
-import { useTaskListViewModel as _useTaskListViewModel } from "./TaskList.view-model";
-import { TaskItem as _TaskItem } from "../TaskItem/TaskItem.view";
+import { useTaskListViewModel } from "./TaskList.view-model";
+import { TaskItem } from "../TaskItem/TaskItem.view";
 
 export type TaskListDependencies = {
-  useTaskListViewModel: typeof _useTaskListViewModel;
-  TaskItem: typeof _TaskItem;
+  useTaskListViewModel: typeof useTaskListViewModel;
+  TaskItem: typeof TaskItem;
 };
 
 type Props = {
@@ -12,8 +12,8 @@ type Props = {
 
 export function TaskList({
   dependencies = {
-    useTaskListViewModel: _useTaskListViewModel,
-    TaskItem: _TaskItem,
+    useTaskListViewModel,
+    TaskItem,
   },
 }: Props = {}) {
   // Get dependencies

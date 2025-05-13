@@ -1,8 +1,8 @@
 import { Task } from "../../types";
-import { useTaskItemViewModel as _useTaskItemViewModel } from "./TaskItem.view-model";
+import { useTaskItemViewModel } from "./TaskItem.view-model";
 
 export type TaskItemDependencies = {
-  useTaskItemViewModel: typeof _useTaskItemViewModel;
+  useTaskItemViewModel: typeof useTaskItemViewModel;
 };
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 
 export function TaskItem({
   dependencies = {
-    useTaskItemViewModel: _useTaskItemViewModel,
+    useTaskItemViewModel,
   },
   task,
 }: Props) {
