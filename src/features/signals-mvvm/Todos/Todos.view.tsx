@@ -9,7 +9,7 @@ export function Todos() {
   const { isInitialized, isSaving, todos, todosCount, addTodo } =
     useTodosViewModel();
 
-  // Create local view state for form/input
+  // Local view state for form/input
   const [todoInputText, setTodoInputText] = useState("");
 
   // Create local view event handler for form

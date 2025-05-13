@@ -19,7 +19,7 @@ export function Reminders() {
     addReminder,
   } = useRemindersModel();
 
-  // Create local view state for form/input
+  // Local view state for form/input
   const [reminderInputText, setReminderInputText] = useState("");
 
   // Create local view event handler for form

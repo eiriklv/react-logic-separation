@@ -19,7 +19,7 @@ export function Todos() {
   const todosCount = useTodosCount();
   const addTodo = useAddTodo();
 
-  // Create local view state for form/input
+  // Local view state for form/input
   const [todoInputText, setTodoInputText] = useState("");
 
   // Create local view event handler for form

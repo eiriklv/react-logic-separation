@@ -8,7 +8,7 @@ export function Actions() {
   // Use view model
   const { addTask, users = [] } = useActionsViewModel();
 
-  // Create local view state
+  // Local view state
   const [selectedUserId, setSelectedUserId] = useState("");
   const [taskText, setTaskText] = useState("");
 

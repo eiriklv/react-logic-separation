@@ -24,7 +24,7 @@ export function Reminders({ selectedCategoryModel }: Props) {
     addReminder,
   } = useRemindersViewModel({ selectedCategoryModel });
 
-  // Create local view state for form/input
+  // Local view state for form/input
   const [reminderInputText, setReminderInputText] = useState("");
   const [categoryInputText, setCategoryInputText] = useState("");
 

@@ -33,7 +33,7 @@ export function Todos(): ContainerElement {
   // (no need to wrap this in an effect because this function only runs once)
   initializeTodos();
 
-  // Create local view state for form/input
+  // Local view state for form/input
   const todoInputText = signal("");
 
   // Create local view event handler for form

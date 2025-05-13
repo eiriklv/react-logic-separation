@@ -25,7 +25,7 @@ export function Reminders() {
   const remindersCount = useRemindersCount();
   const addReminder = useAddReminder();
 
-  // Create local view state for form/input
+  // Local view state for form/input
   const [reminderInputText, setReminderInputText] = useState("");
 
   // Create local view event handler for form
