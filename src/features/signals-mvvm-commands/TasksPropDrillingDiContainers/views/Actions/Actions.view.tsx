@@ -9,9 +9,7 @@ type Props = {
   dependencies?: ActionsDependencies;
 };
 
-export function Actions({
-  dependencies = { useActionsViewModel },
-}: Props = {}) {
+export function Actions({ dependencies = { useActionsViewModel } }: Props) {
   // Get dependencies
   const { useActionsViewModel } = dependencies;
 

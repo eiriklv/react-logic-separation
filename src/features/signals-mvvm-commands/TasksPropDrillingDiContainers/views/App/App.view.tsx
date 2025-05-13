@@ -29,7 +29,7 @@ export function App({
     Filters,
     TaskList,
   },
-}: Props = {}) {
+}: Props) {
   // Get dependencies
   const { useAppViewModel, Actions, Filters, TaskList } = dependencies;
 

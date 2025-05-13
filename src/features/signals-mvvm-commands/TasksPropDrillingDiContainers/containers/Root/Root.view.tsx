@@ -26,7 +26,7 @@ export function Root({
     useRootViewModel,
     App,
   },
-}: Props = {}) {
+}: Props) {
   // Get dependencies
   const { useRootViewModel, App } = dependencies;
 

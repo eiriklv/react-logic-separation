@@ -18,7 +18,7 @@ export function Tasks({
     Filters,
     TaskList,
   },
-}: Props = {}) {
+}: Props) {
   // Get dependencies
   const { Actions, Filters, TaskList } = dependencies;
 

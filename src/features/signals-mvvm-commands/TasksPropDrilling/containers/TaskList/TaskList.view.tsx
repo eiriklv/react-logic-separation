@@ -15,7 +15,7 @@ export function TaskList({
     useTaskListViewModel,
     TaskItem,
   },
-}: Props = {}) {
+}: Props) {
   // Get dependencies
   const { useTaskListViewModel, TaskItem } = dependencies;
 

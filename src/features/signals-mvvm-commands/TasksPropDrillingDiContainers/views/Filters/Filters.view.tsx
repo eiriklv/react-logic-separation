@@ -9,9 +9,7 @@ type Props = {
   dependencies?: FiltersDependencies;
 };
 
-export function Filters({
-  dependencies = { useFiltersViewModel },
-}: Props = {}) {
+export function Filters({ dependencies = { useFiltersViewModel } }: Props) {
   // Get dependencies
   const { useFiltersViewModel } = dependencies;
 
