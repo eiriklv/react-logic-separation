@@ -1,5 +1,5 @@
 import { Task } from "../types";
-import { TasksService, TasksServiceDependencies } from "./tasks.service";
+import { createTasksService, TasksServiceDependencies } from "./tasks.service";
 
 describe("Tasks Service", () => {
   it("should reflect the initial value", async () => {
@@ -11,7 +11,7 @@ describe("Tasks Service", () => {
       delay: 0,
     };
 
-    const tasksService = new TasksService(
+    const tasksService = createTasksService(
       tasksServiceDependencies,
       initialTasks,
     );
@@ -32,7 +32,7 @@ describe("Tasks Service", () => {
       delay: 0,
     };
 
-    const tasksService = new TasksService(
+    const tasksService = createTasksService(
       tasksServiceDependencies,
       initialTasks,
     );
@@ -56,7 +56,7 @@ describe("Tasks Service", () => {
       delay: 0,
     };
 
-    const tasksService = new TasksService(
+    const tasksService = createTasksService(
       tasksServiceDependencies,
       initialTasks,
     );

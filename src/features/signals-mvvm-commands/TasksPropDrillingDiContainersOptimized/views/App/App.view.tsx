@@ -1,15 +1,6 @@
 import { ModelsContext } from "../../providers/models.provider";
-import { Actions } from "../Actions/Actions.view";
-import { Filters } from "../Filters/Filters.view";
-import { TaskList } from "../TaskList/TaskList.view";
-import { useAppViewModel } from "./App.view-model";
-
-export type AppDependencies = {
-  useAppViewModel: typeof useAppViewModel;
-  Actions: typeof Actions;
-  Filters: typeof Filters;
-  TaskList: typeof TaskList;
-};
+import defaultDependencies from "./App.view.dependencies";
+import { AppDependencies } from "./App.view.dependencies";
 
 type Props = {
   dependencies?: AppDependencies;
@@ -22,14 +13,7 @@ type Props = {
  *
  * index.tsx should render the root only
  */
-export function App({
-  dependencies = {
-    useAppViewModel,
-    Actions,
-    Filters,
-    TaskList,
-  },
-}: Props) {
+export function App({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
   const { useAppViewModel, Actions, Filters, TaskList } = dependencies;
 

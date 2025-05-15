@@ -1,14 +1,13 @@
 import { useMemo } from "react";
-import { createTasksModel } from "../../models/tasks.model";
-import { createUsersModel } from "../../models/users.model";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCommands } from "../../providers/commands.provider";
 import { IAddTaskCommandInvocation } from "../../commands/add-task.command";
 import { IDeleteTaskCommandInvocation } from "../../commands/delete-task.command";
 import { IListTasksCommandInvocation } from "../../commands/list-tasks.command";
 import { IListUsersCommandInvocation } from "../../commands/list-users.command";
-import { createSelectedFiltersModel } from "../../models/selected-filters.model";
-import { AppViewModelDependencies } from "./App.view-model.dependencies";
+import defaultDependencies, {
+  AppViewModelDependencies,
+} from "./App.view-model.dependencies";
 
 /**
  * The main purpose of this file is to
@@ -43,11 +42,7 @@ export interface CommandsDependencies {
  * to the rest of the tree for consumption
  */
 export const useAppViewModel = ({
-  dependencies = {
-    createTasksModel,
-    createUsersModel,
-    createSelectedFiltersModel,
-  },
+  dependencies = defaultDependencies,
 }: Props = {}) => {
   // Get dependencies
   const { createTasksModel, createUsersModel, createSelectedFiltersModel } =

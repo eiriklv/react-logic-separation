@@ -1,5 +1,5 @@
 import { User } from "../types";
-import { UsersService, UsersServiceDependencies } from "./users.service";
+import { createUsersService, UsersServiceDependencies } from "./users.service";
 
 describe("Users Service", () => {
   it("should list users correctly", async () => {
@@ -10,7 +10,7 @@ describe("Users Service", () => {
       delay: 0,
     };
 
-    const usersService = new UsersService(
+    const usersService = createUsersService(
       usersServiceDependencies,
       initialUsers,
     );
@@ -32,7 +32,7 @@ describe("Users Service", () => {
       delay: 0,
     };
 
-    const usersService = new UsersService(
+    const usersService = createUsersService(
       usersServiceDependencies,
       initialUsers,
     );

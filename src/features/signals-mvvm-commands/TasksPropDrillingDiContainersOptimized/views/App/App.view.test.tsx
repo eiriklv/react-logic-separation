@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { AppDependencies, App } from "./App.view";
+import { App } from "./App.view";
 import { useAppViewModel } from "./App.view-model";
+import { AppDependencies } from "./App.view.dependencies";
 
 /**
  * Remove the default dependencies from the test

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import defaultDependencies, {
   RootViewModelDependencies,
 } from "./Root.view-model.dependencies";
+import { CommandsContextInterface } from "../../providers/commands.provider";
 
 /**
  * The main purpose of this file is to
@@ -100,7 +101,7 @@ export const useRootViewModel = ({
   /**
    * Package the commands in an object
    */
-  const commands = useMemo(
+  const commands: CommandsContextInterface = useMemo(
     () => ({
       addTaskCommand,
       deleteTaskCommand,
