@@ -1,4 +1,3 @@
-import { QueryClient } from "@tanstack/query-core";
 import { render, screen, waitFor } from "@testing-library/react";
 import { App } from "./App.view";
 import { Task, User } from "../../types";
@@ -37,11 +36,12 @@ import { TaskItemDependencies } from "../TaskItem/TaskItem.view.dependencies";
 import { TaskListDependencies } from "../TaskList/TaskList.view.dependencies";
 import { FiltersDependencies } from "../Filters/Filters.view.dependencies";
 import { AppDependencies } from "./App.view.dependencies";
+import { createQueryClient } from "../../utils/create-query-client";
 
 describe("App Integration (only command layer mocked)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
 
     // create mock tasks
     const mockTasks: Task[] = [
@@ -142,7 +142,7 @@ describe("App Integration (only command layer mocked)", () => {
 describe("App Integration (all dependencies explicit)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
 
     // create mock tasks
     const mockTasks: Task[] = [

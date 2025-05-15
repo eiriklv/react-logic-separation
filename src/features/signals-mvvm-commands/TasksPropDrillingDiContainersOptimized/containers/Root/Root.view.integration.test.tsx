@@ -1,4 +1,3 @@
-import { QueryClient } from "@tanstack/query-core";
 import { render, screen, waitFor } from "@testing-library/react";
 
 import { Task, User } from "../../types";
@@ -10,11 +9,12 @@ import defaultDependencies, {
 } from "./Root.view.dependencies";
 import { ITasksService } from "../../services/tasks.service";
 import { IUsersService } from "../../services/users.service";
+import { createQueryClient } from "../../utils/create-query-client";
 
 describe("Root Integration (view-model layer)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
 
     // create mock tasks
     const mockTasks: Task[] = [
@@ -121,7 +121,7 @@ describe("Root Integration (view-model layer)", () => {
 describe("Root Integration (view layer)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
-    const queryClient = new QueryClient();
+    const queryClient = createQueryClient();
 
     // create mock tasks
     const mockTasks: Task[] = [
