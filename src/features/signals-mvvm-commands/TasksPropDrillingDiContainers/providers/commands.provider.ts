@@ -13,7 +13,7 @@ import { PartialDeep } from "type-fest";
  * those commands.
  *
  * The consumers of the commands should not need
- * to care about where the commands where provided,
+ * to care about where the commands were provided,
  * just that they are available
  */
 

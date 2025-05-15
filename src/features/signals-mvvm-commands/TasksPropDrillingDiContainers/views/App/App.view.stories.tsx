@@ -15,10 +15,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     dependencies: {
-      useAppViewModel: () =>
-        ({
-          models: {},
-        }) as ReturnType<typeof useAppViewModel>,
+      useAppViewModel: () => ({
+        models: {} as ReturnType<typeof useAppViewModel>["models"],
+      }),
       Actions: () => <>Actions</>,
       Filters: () => <>Filters</>,
       TaskList: () => <>TaskList</>,
