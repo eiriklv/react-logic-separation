@@ -1,15 +1,18 @@
 import { renderHook } from "@testing-library/react";
-import {
-  AppViewModelDependencies,
-  CommandsDependencies,
-  useAppViewModel,
-} from "./App.view-model";
+import { CommandsDependencies, useAppViewModel } from "./App.view-model";
 import { QueryClient } from "@tanstack/query-core";
 import { ISelectedFiltersModel } from "../../models/selected-filters.model";
 import { ITasksModel } from "../../models/tasks.model";
 import { IUsersModel } from "../../models/users.model";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { CommandsContext } from "../../providers/commands.provider";
+import { AppViewModelDependencies } from "./App.view-model.dependencies";
+
+/**
+ * Remove the default dependencies from the test
+ * so that we avoid the unnecessary collect-time
+ */
+vi.mock("./App.view-model.dependencies", () => ({ default: {} }));
 
 describe("useAppViewModel", () => {
   it("should map domain models correctly to view model", async () => {

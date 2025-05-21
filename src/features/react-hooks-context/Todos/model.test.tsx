@@ -29,8 +29,13 @@ describe("Add todos (command)", () => {
     await waitFor(() => result.current.addTodo("Paint house"));
 
     // assert
+    await waitFor(() =>
+      expect(result.current.todos).toEqual([
+        { id: "abc", text: "Paint house" },
+      ]),
+    );
+
     expect(mockDependencies.generateId).toHaveBeenCalledOnce();
-    expect(result.current.todos).toEqual([{ id: "abc", text: "Paint house" }]);
   });
 
   it("should work as expected when adding multiple todos", async () => {
@@ -60,8 +65,6 @@ describe("Add todos (command)", () => {
     await waitFor(() => result.current.addTodo("Wash car"));
 
     // assert
-    expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
-
     await waitFor(() =>
       expect(result.current.todos).toEqual([
         { id: "abc", text: "Paint house" },
@@ -69,6 +72,8 @@ describe("Add todos (command)", () => {
         { id: "abc", text: "Wash car" },
       ]),
     );
+
+    expect(mockDependencies.generateId).toHaveBeenCalledTimes(3);
   });
 
   it("should fail validation when adding empty todo", async () => {
@@ -96,8 +101,8 @@ describe("Add todos (command)", () => {
     await waitFor(() => result.current.addTodo(""));
 
     // assert
+    await waitFor(() => expect(result.current.todos).toEqual([]));
     expect(mockDependencies.generateId).not.toHaveBeenCalled();
-    expect(result.current.todos).toEqual([]);
   });
 });
 

@@ -32,8 +32,12 @@ describe("Add todos (command)", () => {
     await waitFor(() => result.current.addTodo("Paint house"));
 
     // assert
+    await waitFor(() =>
+      expect(result.current.todos).toEqual([
+        { id: "abc", text: "Paint house" },
+      ]),
+    );
     expect(mockDependencies.generateId).toHaveBeenCalledOnce();
-    expect(result.current.todos).toEqual([{ id: "abc", text: "Paint house" }]);
   });
 
   it("should work as expected when adding multiple todos", async () => {
