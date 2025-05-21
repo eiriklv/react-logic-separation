@@ -1,8 +1,5 @@
 import React from "react";
-
-import defaultDependencies, {
-  TaskItemDependencies,
-} from "./TaskItem.view.dependencies";
+import { useTaskItemViewModel } from "./TaskItem.view-model";
 
 /**
  * The context can be used to inject any kind of
@@ -21,7 +18,13 @@ import defaultDependencies, {
  * The interfaces of the components also become much simpler.
  */
 
-export const defaultValue: TaskItemDependencies = { ...defaultDependencies };
+export interface TaskItemContextInterface {
+  useTaskItemViewModel: typeof useTaskItemViewModel;
+}
+
+export const defaultValue: TaskItemContextInterface = {
+  useTaskItemViewModel,
+};
 
 export const TaskItemContext =
-  React.createContext<TaskItemDependencies>(defaultValue);
+  React.createContext<TaskItemContextInterface>(defaultValue);
