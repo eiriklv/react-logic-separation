@@ -8,11 +8,10 @@ describe("Root", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: RootContextInterface = {
-      useRootViewModel: () =>
-        ({
-          commands: {},
-          queryClient: createQueryClient(),
-        }) as ReturnType<typeof useRootViewModel>,
+      useRootViewModel: () => ({
+        commands: {} as ReturnType<typeof useRootViewModel>["commands"],
+        queryClient: createQueryClient(),
+      }),
       App: () => <div data-testid="App" />,
     };
 

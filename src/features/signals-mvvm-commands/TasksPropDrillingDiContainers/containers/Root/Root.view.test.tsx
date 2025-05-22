@@ -7,11 +7,10 @@ describe("Root", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: RootDependencies = {
-      useRootViewModel: () =>
-        ({
-          commands: {},
-          queryClient: new QueryClient(),
-        }) as ReturnType<typeof useRootViewModel>,
+      useRootViewModel: () => ({
+        commands: {} as ReturnType<typeof useRootViewModel>["commands"],
+        queryClient: new QueryClient(),
+      }),
       App: () => <div data-testid="App" />,
     };
 
