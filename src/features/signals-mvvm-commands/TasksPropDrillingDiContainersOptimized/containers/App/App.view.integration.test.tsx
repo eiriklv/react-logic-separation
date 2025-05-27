@@ -10,18 +10,18 @@ import {
 } from "../../providers/commands.provider";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useAppViewModel } from "./App.view-model";
-import { Actions } from "../Actions/Actions.view";
-import { Filters } from "../Filters/Filters.view";
-import { TaskList } from "../TaskList/TaskList.view";
-import { useActionsViewModel } from "../Actions/Actions.view-model";
-import { useFiltersViewModel } from "../Filters/Filters.view-model";
-import { useTaskListViewModel } from "../TaskList/TaskList.view-model";
+import { Actions } from "../../views/Actions/Actions.view";
+import { Filters } from "../../views/Filters/Filters.view";
+import { TaskList } from "../../views/TaskList/TaskList.view";
+import { useActionsViewModel } from "../../views/Actions/Actions.view-model";
+import { useFiltersViewModel } from "../../views/Filters/Filters.view-model";
+import { useTaskListViewModel } from "../../views/TaskList/TaskList.view-model";
 import { ComponentProps } from "react";
-import { TaskItem } from "../TaskItem/TaskItem.view";
+import { TaskItem } from "../../views/TaskItem/TaskItem.view";
 import {
   TaskItemViewModelProps,
   useTaskItemViewModel,
-} from "../TaskItem/TaskItem.view-model";
+} from "../../views/TaskItem/TaskItem.view-model";
 import {
   createUserModel,
   UserModelDependencies,
@@ -29,12 +29,12 @@ import {
 import { SelectedFiltersModel } from "../../models/selected-filters.model";
 import { UsersModel, UsersModelDependencies } from "../../models/users.model";
 import { TasksModel, TasksModelDependencies } from "../../models/tasks.model";
-import { ActionsDependencies } from "../Actions/Actions.view.dependencies";
+import { ActionsDependencies } from "../../views/Actions/Actions.view.dependencies";
 import { AppViewModelDependencies } from "./App.view-model.dependencies";
-import { TaskItemViewModelDependencies } from "../TaskItem/TaskItem.view-model.dependencies";
-import { TaskItemDependencies } from "../TaskItem/TaskItem.view.dependencies";
-import { TaskListDependencies } from "../TaskList/TaskList.view.dependencies";
-import { FiltersDependencies } from "../Filters/Filters.view.dependencies";
+import { TaskItemViewModelDependencies } from "../../views/TaskItem/TaskItem.view-model.dependencies";
+import { TaskItemDependencies } from "../../views/TaskItem/TaskItem.view.dependencies";
+import { TaskListDependencies } from "../../views/TaskList/TaskList.view.dependencies";
+import { FiltersDependencies } from "../../views/Filters/Filters.view.dependencies";
 import { AppDependencies } from "./App.view.dependencies";
 import { createQueryClient } from "../../utils/create-query-client";
 

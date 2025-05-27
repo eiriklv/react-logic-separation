@@ -1,5 +1,5 @@
+import { App } from "../App/App.view";
 import { useRootViewModel } from "./Root.view-model";
-import { App } from "../../views/App/App.view";
 
 /**
  * This file contains the interface of the
