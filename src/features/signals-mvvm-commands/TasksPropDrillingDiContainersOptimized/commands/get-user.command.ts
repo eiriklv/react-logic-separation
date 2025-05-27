@@ -13,7 +13,7 @@ import type { User } from "../types";
  * do not have to be tested through the model or the UI
  */
 
-export interface IGetUserCommandInvocation {
+export interface IGetUserCommand {
   (userId: string): Promise<User | undefined>;
 }
 
@@ -23,7 +23,7 @@ export type GetUserCommandDependencies = {
 
 export const createGetUserCommand = (
   dependencies: GetUserCommandDependencies,
-): IGetUserCommandInvocation => {
+): IGetUserCommand => {
   return (userId: string) => {
     return dependencies.usersService.getUserById(userId);
   };

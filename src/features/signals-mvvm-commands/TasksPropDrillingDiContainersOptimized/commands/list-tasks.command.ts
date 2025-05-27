@@ -13,7 +13,7 @@ import type { Task } from "../types";
  * do not have to be tested through the model or the UI
  */
 
-export interface IListTasksCommandInvocation {
+export interface IListTasksCommand {
   (): Promise<Task[]>;
 }
 
@@ -24,7 +24,7 @@ export type ListTasksCommandDependencies = {
 // Command factory
 export const createListTasksCommand = (
   dependencies: ListTasksCommandDependencies,
-): IListTasksCommandInvocation => {
+): IListTasksCommand => {
   return () => {
     return dependencies.tasksService.listTasks();
   };

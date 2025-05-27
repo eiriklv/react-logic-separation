@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { IAddTaskCommandInvocation } from "../commands/add-task.command";
-import { IDeleteTaskCommandInvocation } from "../commands/delete-task.command";
-import { IGetUserCommandInvocation } from "../commands/get-user.command";
-import { IListTasksCommandInvocation } from "../commands/list-tasks.command";
-import { IListUsersCommandInvocation } from "../commands/list-users.command";
+import { IAddTaskCommand } from "../commands/add-task.command";
+import { IDeleteTaskCommand } from "../commands/delete-task.command";
+import { IGetUserCommand } from "../commands/get-user.command";
+import { IListTasksCommand } from "../commands/list-tasks.command";
+import { IListUsersCommand } from "../commands/list-users.command";
 import { PartialDeep } from "type-fest";
 
 /**
@@ -18,11 +18,11 @@ import { PartialDeep } from "type-fest";
  */
 
 export interface CommandsContextInterface {
-  addTaskCommand: IAddTaskCommandInvocation;
-  deleteTaskCommand: IDeleteTaskCommandInvocation;
-  getUserCommand: IGetUserCommandInvocation;
-  listTasksCommand: IListTasksCommandInvocation;
-  listUsersCommand: IListUsersCommandInvocation;
+  addTaskCommand: IAddTaskCommand;
+  deleteTaskCommand: IDeleteTaskCommand;
+  getUserCommand: IGetUserCommand;
+  listTasksCommand: IListTasksCommand;
+  listUsersCommand: IListUsersCommand;
 }
 
 export type CommandsContextType = PartialDeep<CommandsContextInterface>;

@@ -13,7 +13,7 @@ import type { User } from "../types";
  * do not have to be tested through the model or the UI
  */
 
-export interface IListUsersCommandInvocation {
+export interface IListUsersCommand {
   (): Promise<User[]>;
 }
 
@@ -24,7 +24,7 @@ export type ListUsersCommandDependencies = {
 // Command factory
 export const createListUsersCommand = (
   dependencies: ListUsersCommandDependencies,
-): IListUsersCommandInvocation => {
+): IListUsersCommand => {
   return () => {
     return dependencies.usersService.listUsers();
   };

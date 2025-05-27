@@ -5,7 +5,7 @@ import { ITasksModel } from "../../models/tasks.model";
 import { useModels } from "../../providers/models.provider";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCommands } from "../../providers/commands.provider";
-import { IGetUserCommandInvocation } from "../../commands/get-user.command";
+import { IGetUserCommand } from "../../commands/get-user.command";
 import defaultDependencies, {
   TaskItemViewModelDependencies,
 } from "./TaskItem.view-model.dependencies";
@@ -36,7 +36,7 @@ export interface ModelsDependencies {
 }
 
 export interface CommandsDependencies {
-  getUserCommand: IGetUserCommandInvocation;
+  getUserCommand: IGetUserCommand;
 }
 
 export const useTaskItemViewModel = ({

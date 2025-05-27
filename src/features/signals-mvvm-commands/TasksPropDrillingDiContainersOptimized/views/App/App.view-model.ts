@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCommands } from "../../providers/commands.provider";
-import { IAddTaskCommandInvocation } from "../../commands/add-task.command";
-import { IDeleteTaskCommandInvocation } from "../../commands/delete-task.command";
-import { IListTasksCommandInvocation } from "../../commands/list-tasks.command";
-import { IListUsersCommandInvocation } from "../../commands/list-users.command";
+import { IAddTaskCommand } from "../../commands/add-task.command";
+import { IDeleteTaskCommand } from "../../commands/delete-task.command";
+import { IListTasksCommand } from "../../commands/list-tasks.command";
+import { IListUsersCommand } from "../../commands/list-users.command";
 import defaultDependencies, {
   AppViewModelDependencies,
 } from "./App.view-model.dependencies";
@@ -30,10 +30,10 @@ type Props = {
 };
 
 export interface CommandsDependencies {
-  addTaskCommand: IAddTaskCommandInvocation;
-  deleteTaskCommand: IDeleteTaskCommandInvocation;
-  listTasksCommand: IListTasksCommandInvocation;
-  listUsersCommand: IListUsersCommandInvocation;
+  addTaskCommand: IAddTaskCommand;
+  deleteTaskCommand: IDeleteTaskCommand;
+  listTasksCommand: IListTasksCommand;
+  listUsersCommand: IListUsersCommand;
 }
 
 /**

@@ -12,7 +12,7 @@ import { ITasksService } from "../services/tasks.service";
  * do not have to be tested through the model or the UI
  */
 
-export interface IDeleteTaskCommandInvocation {
+export interface IDeleteTaskCommand {
   (taskId: string): Promise<void>;
 }
 
@@ -22,7 +22,7 @@ export type DeleteTaskCommandDependencies = {
 
 export const createDeleteTaskCommand = (
   dependencies: DeleteTaskCommandDependencies,
-): IDeleteTaskCommandInvocation => {
+): IDeleteTaskCommand => {
   return (taskId: string) => {
     return dependencies.tasksService.deleteTask(taskId);
   };

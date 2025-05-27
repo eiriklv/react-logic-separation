@@ -3,7 +3,7 @@ import { computed, ReadonlySignal } from "@preact/signals-core";
 import { query, SignalQuery } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { User } from "../types";
-import { IGetUserCommandInvocation } from "../commands/get-user.command";
+import { IGetUserCommand } from "../commands/get-user.command";
 
 export interface IUserModel {
   user: ReadonlySignal<User | undefined>;
@@ -13,7 +13,7 @@ export interface IUserModel {
 
 // Types and interfaces
 export type UserModelDependencies = {
-  getUserCommand: IGetUserCommandInvocation;
+  getUserCommand: IGetUserCommand;
 };
 
 export class UserModel implements IUserModel {

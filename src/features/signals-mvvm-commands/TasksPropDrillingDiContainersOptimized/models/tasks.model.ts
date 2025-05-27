@@ -8,9 +8,9 @@ import {
 } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { Task } from "../types";
-import { IListTasksCommandInvocation } from "../commands/list-tasks.command";
-import { IAddTaskCommandInvocation } from "../commands/add-task.command";
-import { IDeleteTaskCommandInvocation } from "../commands/delete-task.command";
+import { IListTasksCommand } from "../commands/list-tasks.command";
+import { IAddTaskCommand } from "../commands/add-task.command";
+import { IDeleteTaskCommand } from "../commands/delete-task.command";
 
 export interface ITasksModel {
   tasks: ReadonlySignal<Task[] | undefined>;
@@ -33,9 +33,9 @@ export interface ITasksModel {
 
 // Types and interfaces
 export type TasksModelDependencies = {
-  listTasksCommand: IListTasksCommandInvocation;
-  addTaskCommand: IAddTaskCommandInvocation;
-  deleteTaskCommand: IDeleteTaskCommandInvocation;
+  listTasksCommand: IListTasksCommand;
+  addTaskCommand: IAddTaskCommand;
+  deleteTaskCommand: IDeleteTaskCommand;
 };
 
 export class TasksModel implements ITasksModel {

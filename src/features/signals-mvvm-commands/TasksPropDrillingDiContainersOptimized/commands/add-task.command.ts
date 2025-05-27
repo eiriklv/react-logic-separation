@@ -13,7 +13,7 @@ import type { Task } from "../types";
  * do not have to be tested through the model or the UI
  */
 
-export interface IAddTaskCommandInvocation {
+export interface IAddTaskCommand {
   (text: string, ownerId: string): Promise<Task>;
 }
 
@@ -23,7 +23,7 @@ export type AddTaskCommandDependencies = {
 
 export const createAddTaskCommand = (
   dependencies: AddTaskCommandDependencies,
-): IAddTaskCommandInvocation => {
+): IAddTaskCommand => {
   return (text: string, ownerId: string) => {
     if (!text) {
       throw new Error("Task text is missing");
