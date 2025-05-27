@@ -16,13 +16,11 @@ describe("useRootViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const queryClient = createQueryClient();
-    // TODO: Use type from RootViewModelDependencies instead of direct
     const tasksService: ITasksService = {
       listTasks: vi.fn(),
       addTask: vi.fn(),
       deleteTask: vi.fn(),
     };
-    // TODO: Use type from RootViewModelDependencies instead of direct
     const usersService: IUsersService = {
       getUserById: vi.fn(),
       listUsers: vi.fn(),
