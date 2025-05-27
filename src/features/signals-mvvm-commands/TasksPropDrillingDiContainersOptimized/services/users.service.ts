@@ -1,5 +1,8 @@
 import { sleep } from "../../../../lib/utils";
 import { User } from "../types";
+import defaultDependencies, {
+  UsersServiceDependencies,
+} from "./users.service.dependencies";
 
 /**
  * Services are typically things like SDKs, APIs or other classes that
@@ -14,14 +17,6 @@ export interface IUsersService {
   listUsers(): Promise<User[]>;
   getUserById(userId: string): Promise<User | undefined>;
 }
-
-export type UsersServiceDependencies = {
-  delay: number;
-};
-
-const defaultDependencies: UsersServiceDependencies = {
-  delay: 1000,
-};
 
 const defaultUsers: User[] = [
   { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },

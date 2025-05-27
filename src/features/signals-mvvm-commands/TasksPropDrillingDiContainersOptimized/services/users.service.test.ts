@@ -1,5 +1,6 @@
 import { User } from "../types";
-import { createUsersService, UsersServiceDependencies } from "./users.service";
+import { createUsersService } from "./users.service";
+import { UsersServiceDependencies } from "./users.service.dependencies";
 
 describe("Users Service", () => {
   it("should list users correctly", async () => {

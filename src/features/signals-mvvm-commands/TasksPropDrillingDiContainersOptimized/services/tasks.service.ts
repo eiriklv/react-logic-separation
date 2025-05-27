@@ -1,5 +1,8 @@
-import { generateId, sleep } from "../../../../lib/utils";
+import { sleep } from "../../../../lib/utils";
 import { Task } from "../types";
+import defaultDependencies, {
+  TasksServiceDependencies,
+} from "./tasks.service.dependencies";
 
 /**
  * Services are typically things like SDKs, APIs or other classes that
@@ -15,16 +18,6 @@ export interface ITasksService {
   addTask(text: string, ownerId: string): Promise<Task>;
   deleteTask(taskId: string): Promise<void>;
 }
-
-export type TasksServiceDependencies = {
-  generateId: () => string;
-  delay: number;
-};
-
-const defaultDependencies: TasksServiceDependencies = {
-  generateId,
-  delay: 1000,
-};
 
 const defaultTasks: Task[] = [
   { id: "1", text: "Write self reflection", ownerId: "user-1" },
