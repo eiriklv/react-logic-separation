@@ -16,15 +16,8 @@ describe("useRootViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const queryClient = createQueryClient();
-    const tasksService: ITasksService = {
-      listTasks: vi.fn(),
-      addTask: vi.fn(),
-      deleteTask: vi.fn(),
-    };
-    const usersService: IUsersService = {
-      getUserById: vi.fn(),
-      listUsers: vi.fn(),
-    };
+    const tasksService = {} as ITasksService;
+    const usersService = {} as IUsersService;
     const addTaskCommand = vi.fn();
     const deleteTaskCommand = vi.fn();
     const getUserCommand = vi.fn();
