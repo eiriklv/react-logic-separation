@@ -4,6 +4,22 @@ import { useContext } from "react";
 import { RootContext } from "./Root.view.context";
 
 /**
+ * Here's where we wrap all the top level providers
+ * that should be available to the entire app tree.
+ *
+ * Things like:
+ * - Query client
+ * - Commands
+ * - Authentication
+ * - Services
+ * - Flags
+ * - Metrics
+ * - Internationalization
+ *
+ * TODO: Provide everything as commands?
+ */
+
+/**
  * Root container, where all global providers are added
  *
  * In this case the Root is the owner of the commands,

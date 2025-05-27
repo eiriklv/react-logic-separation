@@ -18,7 +18,7 @@ export function App({ dependencies = defaultDependencies }: Props) {
   const { useAppViewModel, Actions, Filters, TaskList } = dependencies;
 
   /**
-   * The app view owns the tasks and users models,
+   * The app container owns the tasks and users models,
    * which is then provided via context for consumption
    * futher down the tree.
    */
