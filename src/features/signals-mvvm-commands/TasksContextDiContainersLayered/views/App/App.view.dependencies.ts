@@ -1,6 +1,6 @@
-import { Actions } from "../../views/Actions/Actions.view";
-import { Filters } from "../../views/Filters/Filters.view";
-import { TaskList } from "../../views/TaskList/TaskList.view";
+import { Actions } from "../Actions/Actions.view";
+import { Filters } from "../Filters/Filters.view";
+import { TaskList } from "../TaskList/TaskList.view";
 import { useAppViewModel } from "./App.view-model";
 
 /**
@@ -9,12 +9,12 @@ import { useAppViewModel } from "./App.view-model";
  * to the defaults for those dependencies
  */
 
-export type AppDependencies = {
+export interface AppDependencies {
   useAppViewModel: typeof useAppViewModel;
   Actions: typeof Actions;
   Filters: typeof Filters;
   TaskList: typeof TaskList;
-};
+}
 
 const defaultDependencies: AppDependencies = {
   useAppViewModel,

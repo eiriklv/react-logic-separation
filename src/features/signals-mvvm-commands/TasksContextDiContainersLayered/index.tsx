@@ -1,8 +1,6 @@
-import { Root } from "./containers/Root/Root.view";
+import { Root } from "./views/Root/Root.view";
 
 /**
  * Entry point to the feature
  */
-export function TasksFeature() {
-  return <Root />;
-}
+export default Root;
