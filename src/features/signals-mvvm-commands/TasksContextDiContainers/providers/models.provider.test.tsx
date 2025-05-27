@@ -4,16 +4,11 @@ import {
   ModelsContextInterface,
   useModels,
 } from "./models.provider";
-import { ITasksModel } from "../models/tasks.model";
-import { IUsersModel } from "../models/users.model";
 
 describe("useModels", () => {
   it("should work if models are provided", async () => {
     // arrange
-    const models: ModelsContextInterface = {
-      tasksModel: {} as ITasksModel,
-      usersModel: {} as IUsersModel,
-    };
+    const models = {} as ModelsContextInterface;
 
     const wrapper: React.FC<{
       children?: React.ReactNode;

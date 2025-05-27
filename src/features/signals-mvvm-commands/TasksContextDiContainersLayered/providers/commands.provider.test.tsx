@@ -8,13 +8,7 @@ import {
 describe("useCommands", () => {
   it("should work if commands are provided", async () => {
     // arrange
-    const commands: CommandsContextInterface = {
-      addTaskCommand: vi.fn(),
-      deleteTaskCommand: vi.fn(),
-      getUserCommand: vi.fn(),
-      listTasksCommand: vi.fn(),
-      listUsersCommand: vi.fn(),
-    };
+    const commands = {} as CommandsContextInterface;
 
     const wrapper: React.FC<{
       children?: React.ReactNode;
