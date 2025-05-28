@@ -5,7 +5,7 @@ import type { Task } from "../types";
  * Commands are meant to be single purpose operations that
  * wrap around one or more services and methods.
  *
- * Command handle things like validation, transformations, error mapping, etc
+ * Commands handle things like validation, transformations, error mapping, etc
  * - so that the consumer can use it with as much ease as possible
  *
  * Commands should be fully tested to ensure that all validation
