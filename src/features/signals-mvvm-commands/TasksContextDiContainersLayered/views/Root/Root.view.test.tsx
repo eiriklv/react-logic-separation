@@ -6,7 +6,7 @@ import { createQueryClient } from "../../utils/create-query-client";
 import { RootDependencies } from "./Root.view.dependencies";
 
 /**
- * Remove the default dependencies from the test
+ * Optional: Remove the default dependencies from the test
  * so that we avoid the unnecessary collect-time
  */
 vi.mock("./Root.view.dependencies", () => ({ default: {} }));

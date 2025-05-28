@@ -4,7 +4,7 @@ import {
 } from "./list-tasks.command";
 
 /**
- * This removes unnecessary collect-time for default dependencies
+ * Optional: This removes unnecessary collect-time for default dependencies
  */
 vi.mock("./list-tasks.command.dependencies", () => ({ default: {} }));
 

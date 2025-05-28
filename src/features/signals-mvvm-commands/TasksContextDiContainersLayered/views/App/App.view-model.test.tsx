@@ -10,7 +10,7 @@ import { createQueryClient } from "../../utils/create-query-client";
 import { AppViewModelDependencies } from "./App.view-model.dependencies";
 
 /**
- * Remove the default dependencies from the test
+ * Optional: Remove the default dependencies from the test
  * so that we avoid the unnecessary collect-time
  */
 vi.mock("./App.view-model.dependencies", () => ({ default: {} }));

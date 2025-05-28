@@ -47,10 +47,8 @@ export const useRootViewModel = ({
     createListUsersCommand,
   } = dependencies;
 
-  // Get commands from the command provider context
-
   /**
-   * TODO: Create all the commands first, and then let
+   * NOTE: Create all the commands first, and then let
    * them be injected into the models.
    *
    * It has to be possible to just replace the command

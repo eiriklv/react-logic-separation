@@ -5,7 +5,7 @@ import {
 } from "./get-user.command";
 
 /**
- * This removes unnecessary collect-time for default dependencies
+ * Optional: This removes unnecessary collect-time for default dependencies
  */
 vi.mock("./get-user.command.dependencies", () => ({ default: {} }));
 

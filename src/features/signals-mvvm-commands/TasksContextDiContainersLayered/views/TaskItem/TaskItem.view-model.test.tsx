@@ -14,7 +14,7 @@ import { createQueryClient } from "../../utils/create-query-client";
 import { TaskItemViewModelDependencies } from "./TaskItem.view-model.dependencies";
 
 /**
- * Remove the default dependencies from the test
+ * Optional: Remove the default dependencies from the test
  * so that we avoid the unnecessary collect-time
  */
 vi.mock("./TaskItem.view-model.dependencies", () => ({ default: {} }));
