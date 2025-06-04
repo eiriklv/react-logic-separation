@@ -6,7 +6,6 @@ import { createProviderTree } from "../../../../../lib/create-provider-tree";
 import {
   CommandsContext,
   CommandsContextInterface,
-  CommandsContextType,
 } from "../../providers/commands.provider";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useAppViewModel } from "./App.view-model";
@@ -241,7 +240,7 @@ describe("App Integration (all dependencies explicit)", () => {
     };
 
     // Create fake commands to inject
-    const commands: CommandsContextType = {};
+    const commands = {} as CommandsContextInterface;
 
     /**
      * Render a version that injects all the dependencies
