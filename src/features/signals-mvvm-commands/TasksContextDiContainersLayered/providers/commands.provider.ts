@@ -25,13 +25,13 @@ export interface CommandsContextInterface {
   listUsersCommand: IListUsersCommand;
 }
 
-export type CommandsContextType = PartialDeep<CommandsContextInterface>;
-
 export const CommandsContext = React.createContext<
-  CommandsContextType | undefined
+  CommandsContextInterface | undefined
 >(undefined);
 
-export const useCommands = <T extends CommandsContextType>() => {
+export const useCommands = <
+  T extends PartialDeep<CommandsContextInterface>,
+>() => {
   const commands = useContext(CommandsContext);
 
   if (!commands) {

@@ -1,7 +1,9 @@
 import { useSignalValue } from "../../../../../lib/use-signal-value";
-import { ITasksModel } from "../../models/tasks.model";
-import { ISelectedFiltersModel } from "../../models/selected-filters.model";
-import { useModels } from "../../providers/models.provider";
+import {
+  ModelsContextInterface,
+  useModels,
+} from "../../providers/models.provider";
+import { PickDeep } from "type-fest";
 
 /**
  * The main purpose of this file is to
@@ -19,22 +21,20 @@ import { useModels } from "../../providers/models.provider";
  * the custom hooks into it
  */
 
-export type ModelDependencies = {
-  selectedFiltersModel: ISelectedFiltersModel;
-  tasksModel: Pick<
-    ITasksModel,
-    | "getTasksByOwnerId"
-    | "getTasksCountByOwnerId"
-    | "addTask"
-    | "isFetching"
-    | "isLoading"
-    | "isSaving"
-  >;
-};
+export type ModelsDependencies = PickDeep<
+  ModelsContextInterface,
+  | "selectedFiltersModel"
+  | "tasksModel.getTasksByOwnerId"
+  | "tasksModel.getTasksCountByOwnerId"
+  | "tasksModel.addTask"
+  | "tasksModel.isFetching"
+  | "tasksModel.isLoading"
+  | "tasksModel.isSaving"
+>;
 
 export const useTaskListViewModel = () => {
   // Get models from the shared models provider
-  const models = useModels<ModelDependencies>();
+  const models = useModels<ModelsDependencies>();
 
   // Pull out what we need from the models
   const { tasksModel, selectedFiltersModel } = models;

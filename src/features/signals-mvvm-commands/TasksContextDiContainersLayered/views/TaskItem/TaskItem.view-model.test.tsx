@@ -6,8 +6,14 @@ import {
 } from "./TaskItem.view-model";
 import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
-import { ModelsContext } from "../../providers/models.provider";
-import { CommandsContext } from "../../providers/commands.provider";
+import {
+  ModelsContext,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
+import {
+  CommandsContext,
+  CommandsContextInterface,
+} from "../../providers/commands.provider";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { TaskItemViewModelContext } from "./TaskItem.view-model.context";
 import { createQueryClient } from "../../utils/create-query-client";
@@ -56,8 +62,10 @@ describe("useTaskItemViewModel", () => {
       children?: React.ReactNode;
     }> = ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <CommandsContext.Provider value={mockCommands}>
-          <ModelsContext.Provider value={mockModels}>
+        <CommandsContext.Provider
+          value={mockCommands as CommandsContextInterface}
+        >
+          <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
             <TaskItemViewModelContext.Provider value={dependencies}>
               {children}
             </TaskItemViewModelContext.Provider>

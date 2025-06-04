@@ -1,7 +1,10 @@
 import { renderHook } from "@testing-library/react";
 import { ModelsDependencies, useActionsViewModel } from "./Actions.view-model";
 import { signal } from "@preact/signals-core";
-import { ModelsContext } from "../../providers/models.provider";
+import {
+  ModelsContext,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
 
 describe("useActionsViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -20,7 +23,7 @@ describe("useActionsViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <ModelsContext.Provider value={mockModels}>
+      <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
         {children}
       </ModelsContext.Provider>
     );

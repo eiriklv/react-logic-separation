@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { IUsersModel } from "../models/users.model";
 import { ITasksModel } from "../models/tasks.model";
 import { PartialDeep } from "type-fest";
+import { ISelectedFiltersModel } from "../models/selected-filters.model";
 
 /**
  * The purpose of this context is to be able to
@@ -17,15 +18,14 @@ import { PartialDeep } from "type-fest";
 export interface ModelsContextInterface {
   tasksModel: ITasksModel;
   usersModel: IUsersModel;
+  selectedFiltersModel: ISelectedFiltersModel;
 }
 
-export type ModelsContextType = PartialDeep<ModelsContextInterface>;
+export const ModelsContext = React.createContext<
+  ModelsContextInterface | undefined
+>(undefined);
 
-export const ModelsContext = React.createContext<ModelsContextType | undefined>(
-  undefined,
-);
-
-export const useModels = <T extends ModelsContextType>() => {
+export const useModels = <T extends PartialDeep<ModelsContextInterface>>() => {
   const models = useContext(ModelsContext);
 
   if (!models) {

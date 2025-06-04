@@ -1,8 +1,14 @@
 import { renderHook } from "@testing-library/react";
-import { ModelDependencies, useTaskListViewModel } from "./TaskList.view-model";
+import {
+  ModelsDependencies,
+  useTaskListViewModel,
+} from "./TaskList.view-model";
 import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
-import { ModelsContext } from "../../providers/models.provider";
+import {
+  ModelsContext,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
 
 describe("useTaskListViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -10,7 +16,7 @@ describe("useTaskListViewModel", () => {
     const mockTaskListCount = 0;
 
     // arrange
-    const mockModels: ModelDependencies = {
+    const mockModels: ModelsDependencies = {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
@@ -28,7 +34,7 @@ describe("useTaskListViewModel", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <ModelsContext.Provider value={mockModels}>
+      <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
         {children}
       </ModelsContext.Provider>
     );
