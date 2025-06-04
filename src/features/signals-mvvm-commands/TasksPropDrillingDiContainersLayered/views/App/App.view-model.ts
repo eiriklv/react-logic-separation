@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCommands } from "../../providers/commands.provider";
-import { IAddTaskCommand } from "../../commands/add-task.command";
-import { IDeleteTaskCommand } from "../../commands/delete-task.command";
-import { IListTasksCommand } from "../../commands/list-tasks.command";
-import { IListUsersCommand } from "../../commands/list-users.command";
+import {
+  CommandsContextInterface,
+  useCommands,
+} from "../../providers/commands.provider";
 import defaultDependencies, {
   AppViewModelDependencies,
 } from "./App.view-model.dependencies";
+import { ModelsContextInterface } from "../../providers/models.provider";
 
 /**
  * The main purpose of this file is to
@@ -29,12 +29,19 @@ type Props = {
   dependencies?: AppViewModelDependencies;
 };
 
-export interface CommandsDependencies {
-  addTaskCommand: IAddTaskCommand;
-  deleteTaskCommand: IDeleteTaskCommand;
-  listTasksCommand: IListTasksCommand;
-  listUsersCommand: IListUsersCommand;
-}
+/**
+ * Specify which of the commands from the
+ * command provider we want to subscribe
+ * to (just the ones we use), to avoid
+ * having to subscribe to all of them
+ */
+export type CommandsDependencies = Pick<
+  CommandsContextInterface,
+  | "addTaskCommand"
+  | "deleteTaskCommand"
+  | "listTasksCommand"
+  | "listUsersCommand"
+>;
 
 /**
  * This is where the shared/global models
@@ -110,7 +117,7 @@ export const useAppViewModel = ({
   /**
    * Package the models in an object
    */
-  const models = useMemo(
+  const models: ModelsContextInterface = useMemo(
     () => ({
       usersModel,
       tasksModel,

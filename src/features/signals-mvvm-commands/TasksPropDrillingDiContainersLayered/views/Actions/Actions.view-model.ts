@@ -1,7 +1,9 @@
+import { PickDeep } from "type-fest";
 import { useSignalValue } from "../../../../../lib/use-signal-value";
-import { useModels } from "../../providers/models.provider";
-import { IUsersModel } from "../../models/users.model";
-import { ITasksModel } from "../../models/tasks.model";
+import {
+  useModels,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
 
 /**
  * The main purpose of this file is to
@@ -19,10 +21,10 @@ import { ITasksModel } from "../../models/tasks.model";
  * the custom hooks into it
  */
 
-export interface ModelsDependencies {
-  usersModel: Pick<IUsersModel, "users">;
-  tasksModel: Pick<ITasksModel, "addTask">;
-}
+export type ModelsDependencies = PickDeep<
+  ModelsContextInterface,
+  "tasksModel.addTask" | "usersModel.users"
+>;
 
 export const useActionsViewModel = () => {
   // Get models from models provider

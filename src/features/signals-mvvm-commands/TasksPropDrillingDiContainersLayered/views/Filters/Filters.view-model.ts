@@ -1,7 +1,9 @@
+import { PickDeep } from "type-fest";
 import { useSignalValue } from "../../../../../lib/use-signal-value";
-import { ISelectedFiltersModel } from "../../models/selected-filters.model";
-import { IUsersModel } from "../../models/users.model";
-import { useModels } from "../../providers/models.provider";
+import {
+  ModelsContextInterface,
+  useModels,
+} from "../../providers/models.provider";
 
 /**
  * The main purpose of this file is to
@@ -19,13 +21,12 @@ import { useModels } from "../../providers/models.provider";
  * the custom hooks into it
  */
 
-export interface ModelsDependencies {
-  usersModel: Pick<IUsersModel, "users">;
-  selectedFiltersModel: Pick<
-    ISelectedFiltersModel,
-    "selectedOwnerId" | "setSelectedOwnerId"
-  >;
-}
+export type ModelsDependencies = PickDeep<
+  ModelsContextInterface,
+  | "usersModel.users"
+  | "selectedFiltersModel.selectedOwnerId"
+  | "selectedFiltersModel.setSelectedOwnerId"
+>;
 
 export const useFiltersViewModel = () => {
   // Get models from models provider

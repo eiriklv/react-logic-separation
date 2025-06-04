@@ -5,7 +5,10 @@ import { ISelectedFiltersModel } from "../../models/selected-filters.model";
 import { ITasksModel } from "../../models/tasks.model";
 import { IUsersModel } from "../../models/users.model";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { CommandsContext } from "../../providers/commands.provider";
+import {
+  CommandsContext,
+  CommandsContextInterface,
+} from "../../providers/commands.provider";
 import { AppViewModelDependencies } from "./App.view-model.dependencies";
 
 /**
@@ -40,7 +43,7 @@ describe("useAppViewModel", () => {
       children?: React.ReactNode;
     }> = ({ children }) => (
       <QueryClientProvider client={queryClient}>
-        <CommandsContext.Provider value={commands}>
+        <CommandsContext.Provider value={commands as CommandsContextInterface}>
           {children}
         </CommandsContext.Provider>
       </QueryClientProvider>
