@@ -33,11 +33,19 @@ export type TaskItemViewModelProps = {
   task: Task;
 };
 
+/**
+ * Specify which subset of models
+ * we depend on in this module
+ */
 export type ModelsDependencies = PickDeep<
   ModelsContextInterface,
   "tasksModel.deleteTask"
 >;
 
+/**
+ * Specify which subset of commands
+ * we depend on in this module
+ */
 export type CommandsDependencies = PickDeep<
   CommandsContextInterface,
   "getUserCommand"

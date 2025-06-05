@@ -30,10 +30,8 @@ type Props = {
 };
 
 /**
- * Specify which of the commands from the
- * command provider we want to subscribe
- * to (just the ones we use), to avoid
- * having to subscribe to all of them
+ * Specify which subset of commands
+ * we depend on in this module
  */
 export type CommandsDependencies = Pick<
   CommandsContextInterface,

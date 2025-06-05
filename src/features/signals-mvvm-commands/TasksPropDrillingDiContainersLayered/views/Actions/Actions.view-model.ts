@@ -21,6 +21,10 @@ import {
  * the custom hooks into it
  */
 
+/**
+ * Specify which subset of models
+ * we depend on in this module
+ */
 export type ModelsDependencies = PickDeep<
   ModelsContextInterface,
   "tasksModel.addTask" | "usersModel.users"
