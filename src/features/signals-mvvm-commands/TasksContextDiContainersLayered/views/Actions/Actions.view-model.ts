@@ -1,9 +1,7 @@
 import { useSignalValue } from "../../../../../lib/use-signal-value";
-import {
-  ModelsContextInterface,
-  useModels,
-} from "../../providers/models.provider";
-import { PickDeep } from "type-fest";
+import { useModels } from "../../providers/models.provider";
+import { IUsersModel } from "../../models/users.model";
+import { ITasksModel } from "../../models/tasks.model";
 
 /**
  * The main purpose of this file is to
@@ -25,14 +23,14 @@ import { PickDeep } from "type-fest";
  * Specify which subset of models
  * we depend on in this module
  */
-export type ModelsDependencies = PickDeep<
-  ModelsContextInterface,
-  "tasksModel.addTask" | "usersModel.users"
->;
+export type ModelsDependencies = {
+  usersModel: Pick<IUsersModel, "users">;
+  tasksModel: Pick<ITasksModel, "addTask">;
+};
 
 export const useActionsViewModel = () => {
   // Get models from models provider
-  const models = useModels<ModelsDependencies>();
+  const models: ModelsDependencies = useModels();
 
   // Pull out the stuff we want from the shared models
   const { usersModel, tasksModel } = models;

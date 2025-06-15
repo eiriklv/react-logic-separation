@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { PartialDeep } from "type-fest";
 import { IUsersModel } from "../models/users.model";
 import { ITasksModel } from "../models/tasks.model";
 import { ISelectedFiltersModel } from "../models/selected-filters.model";
@@ -25,12 +24,12 @@ export const ModelsContext = React.createContext<
   ModelsContextInterface | undefined
 >(undefined);
 
-export const useModels = <T extends PartialDeep<ModelsContextInterface>>() => {
+export const useModels = () => {
   const models = useContext(ModelsContext);
 
   if (!models) {
     throw new Error("Models must be provided");
   }
 
-  return models as T;
+  return models;
 };

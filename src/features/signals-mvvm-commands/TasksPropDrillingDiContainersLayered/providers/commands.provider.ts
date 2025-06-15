@@ -4,7 +4,6 @@ import { IDeleteTaskCommand } from "../commands/delete-task.command";
 import { IGetUserCommand } from "../commands/get-user.command";
 import { IListTasksCommand } from "../commands/list-tasks.command";
 import { IListUsersCommand } from "../commands/list-users.command";
-import { PartialDeep } from "type-fest";
 
 /**
  * The purpose of this context is to be able to
@@ -29,14 +28,12 @@ export const CommandsContext = React.createContext<
   CommandsContextInterface | undefined
 >(undefined);
 
-export const useCommands = <
-  T extends PartialDeep<CommandsContextInterface>,
->() => {
+export const useCommands = () => {
   const commands = useContext(CommandsContext);
 
   if (!commands) {
     throw new Error("Commands must be provided");
   }
 
-  return commands as T;
+  return commands;
 };

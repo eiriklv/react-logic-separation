@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  CommandsContextInterface,
-  useCommands,
-} from "../../providers/commands.provider";
+import { useCommands } from "../../providers/commands.provider";
 import defaultDependencies, {
   AppViewModelDependencies,
 } from "./App.view-model.dependencies";
 import { ModelsContextInterface } from "../../providers/models.provider";
+import { IAddTaskCommand } from "../../commands/add-task.command";
+import { IDeleteTaskCommand } from "../../commands/delete-task.command";
+import { IListTasksCommand } from "../../commands/list-tasks.command";
+import { IListUsersCommand } from "../../commands/list-users.command";
 
 /**
  * The main purpose of this file is to
@@ -33,13 +34,12 @@ type Props = {
  * Specify which subset of commands
  * we depend on in this module
  */
-export type CommandsDependencies = Pick<
-  CommandsContextInterface,
-  | "addTaskCommand"
-  | "deleteTaskCommand"
-  | "listTasksCommand"
-  | "listUsersCommand"
->;
+export type CommandsDependencies = {
+  addTaskCommand: IAddTaskCommand;
+  deleteTaskCommand: IDeleteTaskCommand;
+  listTasksCommand: IListTasksCommand;
+  listUsersCommand: IListUsersCommand;
+};
 
 /**
  * This is where the shared/global models
@@ -57,7 +57,7 @@ export const useAppViewModel = ({
   const queryClient = useQueryClient();
 
   // Get commands from the command provider context
-  const commands = useCommands<CommandsDependencies>();
+  const commands: CommandsDependencies = useCommands();
 
   const {
     addTaskCommand,

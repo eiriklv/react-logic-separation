@@ -1,19 +1,14 @@
 import { useCallback, useMemo } from "react";
 import { useSignalValue } from "../../../../../lib/use-signal-value";
 import { Task } from "../../types";
-import {
-  ModelsContextInterface,
-  useModels,
-} from "../../providers/models.provider";
+import { useModels } from "../../providers/models.provider";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  CommandsContextInterface,
-  useCommands,
-} from "../../providers/commands.provider";
+import { useCommands } from "../../providers/commands.provider";
 import defaultDependencies, {
   TaskItemViewModelDependencies,
 } from "./TaskItem.view-model.dependencies";
-import { PickDeep } from "type-fest";
+import { ITasksModel } from "../../models/tasks.model";
+import { IGetUserCommand } from "../../commands/get-user.command";
 
 /**
  * The main purpose of this file is to
@@ -40,19 +35,17 @@ export type TaskItemViewModelProps = {
  * Specify which subset of models
  * we depend on in this module
  */
-export type ModelsDependencies = PickDeep<
-  ModelsContextInterface,
-  "tasksModel.deleteTask"
->;
+export type ModelsDependencies = {
+  tasksModel: Pick<ITasksModel, "deleteTask">;
+};
 
 /**
  * Specify which subset of commands
  * we depend on in this module
  */
-export type CommandsDependencies = PickDeep<
-  CommandsContextInterface,
-  "getUserCommand"
->;
+export type CommandsDependencies = {
+  getUserCommand: IGetUserCommand;
+};
 
 export const useTaskItemViewModel = ({
   dependencies = defaultDependencies,
@@ -62,10 +55,10 @@ export const useTaskItemViewModel = ({
   const { createUserModel } = dependencies;
 
   // Get commands from the shared command provider
-  const commands = useCommands<CommandsDependencies>();
+  const commands: CommandsDependencies = useCommands();
 
   // Get models from the shared models provider
-  const models = useModels<ModelsDependencies>();
+  const models: ModelsDependencies = useModels();
 
   // Get the query client
   const queryClient = useQueryClient();
