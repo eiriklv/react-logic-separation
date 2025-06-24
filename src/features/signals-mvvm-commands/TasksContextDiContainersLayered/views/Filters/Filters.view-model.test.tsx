@@ -1,10 +1,17 @@
 import { renderHook } from "@testing-library/react";
-import { ModelsDependencies, useFiltersViewModel } from "./Filters.view-model";
+import { useFiltersViewModel } from "./Filters.view-model";
 import { signal } from "@preact/signals-core";
+import { FiltersViewModelContext } from "./Filters.view-model.context";
 import {
-  ModelsContext,
-  ModelsContextInterface,
-} from "../../providers/models.provider";
+  FiltersViewModelDependencies,
+  ModelsDependencies,
+} from "./Filters.view-model.dependencies";
+
+/**
+ * Optional: Remove the default dependencies from the test
+ * so that we avoid the unnecessary collect-time
+ */
+vi.mock("./Filters.view-model.dependencies", () => ({ default: {} }));
 
 describe("useFiltersViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -21,12 +28,16 @@ describe("useFiltersViewModel", () => {
       },
     };
 
+    const dependencies: FiltersViewModelDependencies = {
+      useModels: vi.fn(() => mockModels),
+    };
+
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
+      <FiltersViewModelContext.Provider value={dependencies}>
         {children}
-      </ModelsContext.Provider>
+      </FiltersViewModelContext.Provider>
     );
 
     const { result } = renderHook(() => useFiltersViewModel(), { wrapper });

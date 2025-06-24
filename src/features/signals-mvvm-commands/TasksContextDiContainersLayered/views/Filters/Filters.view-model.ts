@@ -1,7 +1,6 @@
 import { useSignalValue } from "../../../../../lib/use-signal-value";
-import { useModels } from "../../providers/models.provider";
-import { IUsersModel } from "../../models/users.model";
-import { ISelectedFiltersModel } from "../../models/selected-filters.model";
+import { useContext } from "react";
+import { FiltersViewModelContext } from "./Filters.view-model.context";
 
 /**
  * The main purpose of this file is to
@@ -19,18 +18,12 @@ import { ISelectedFiltersModel } from "../../models/selected-filters.model";
  * the custom hooks into it
  */
 
-/**
- * Specify which subset of models
- * we depend on in this module
- */
-export type ModelsDependencies = {
-  usersModel: Pick<IUsersModel, "users">;
-  selectedFiltersModel: ISelectedFiltersModel;
-};
-
 export const useFiltersViewModel = () => {
+  // Get dependencies
+  const { useModels } = useContext(FiltersViewModelContext);
+
   // Get models from models provider
-  const models: ModelsDependencies = useModels();
+  const models = useModels();
 
   // Pull out the stuff we want from the shared models
   const { usersModel, selectedFiltersModel } = models;
