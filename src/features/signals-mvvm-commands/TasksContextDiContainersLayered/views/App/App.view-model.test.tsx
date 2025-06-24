@@ -1,16 +1,14 @@
 import { renderHook } from "@testing-library/react";
-import { CommandsDependencies, useAppViewModel } from "./App.view-model";
+import { useAppViewModel } from "./App.view-model";
 import { AppViewModelContext } from "./App.view-model.context";
 import { ISelectedFiltersModel } from "../../models/selected-filters.model";
 import { ITasksModel } from "../../models/tasks.model";
 import { IUsersModel } from "../../models/users.model";
-import { QueryClientProvider } from "@tanstack/react-query";
-import {
-  CommandsContext,
-  CommandsContextInterface,
-} from "../../providers/commands.provider";
 import { createQueryClient } from "../../utils/create-query-client";
-import { AppViewModelDependencies } from "./App.view-model.dependencies";
+import {
+  AppViewModelDependencies,
+  CommandsDependencies,
+} from "./App.view-model.dependencies";
 
 /**
  * Optional: Remove the default dependencies from the test
@@ -27,12 +25,6 @@ describe("useAppViewModel", () => {
     const tasksModel = {} as ITasksModel;
     const usersModel = {} as IUsersModel;
 
-    const dependencies: AppViewModelDependencies = {
-      createSelectedFiltersModel: vi.fn(() => selectedFiltersModel),
-      createTasksModel: vi.fn(() => tasksModel),
-      createUsersModel: vi.fn(() => usersModel),
-    };
-
     const commands: CommandsDependencies = {
       addTaskCommand: vi.fn(),
       deleteTaskCommand: vi.fn(),
@@ -40,16 +32,20 @@ describe("useAppViewModel", () => {
       listUsersCommand: vi.fn(),
     };
 
+    const dependencies: AppViewModelDependencies = {
+      createSelectedFiltersModel: vi.fn(() => selectedFiltersModel),
+      createTasksModel: vi.fn(() => tasksModel),
+      createUsersModel: vi.fn(() => usersModel),
+      useQueryClient: vi.fn(() => queryClient),
+      useCommands: vi.fn(() => commands),
+    };
+
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <QueryClientProvider client={queryClient}>
-        <CommandsContext.Provider value={commands as CommandsContextInterface}>
-          <AppViewModelContext.Provider value={dependencies}>
-            {children}
-          </AppViewModelContext.Provider>
-        </CommandsContext.Provider>
-      </QueryClientProvider>
+      <AppViewModelContext.Provider value={dependencies}>
+        {children}
+      </AppViewModelContext.Provider>
     );
 
     const { result } = renderHook(() => useAppViewModel(), { wrapper });

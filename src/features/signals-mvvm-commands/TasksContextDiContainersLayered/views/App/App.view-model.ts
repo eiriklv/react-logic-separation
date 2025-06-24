@@ -1,12 +1,6 @@
 import { useContext, useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCommands } from "../../providers/commands.provider";
 import { AppViewModelContext } from "./App.view-model.context";
 import { ModelsContextInterface } from "../../providers/models.provider";
-import { IAddTaskCommand } from "../../commands/add-task.command";
-import { IDeleteTaskCommand } from "../../commands/delete-task.command";
-import { IListTasksCommand } from "../../commands/list-tasks.command";
-import { IListUsersCommand } from "../../commands/list-users.command";
 
 /**
  * The main purpose of this file is to
@@ -25,17 +19,6 @@ import { IListUsersCommand } from "../../commands/list-users.command";
  */
 
 /**
- * Specify which subset of commands
- * we depend on in this module
- */
-export type CommandsDependencies = {
-  addTaskCommand: IAddTaskCommand;
-  deleteTaskCommand: IDeleteTaskCommand;
-  listTasksCommand: IListTasksCommand;
-  listUsersCommand: IListUsersCommand;
-};
-
-/**
  * Note: The <App> owns some of the shared domain models,
  * so it has the responsibility of creating the instances
  * and exposing them to the rest of the tree below.
@@ -46,14 +29,19 @@ export type CommandsDependencies = {
  */
 export const useAppViewModel = () => {
   // Get dependencies
-  const { createTasksModel, createUsersModel, createSelectedFiltersModel } =
-    useContext(AppViewModelContext);
+  const {
+    createTasksModel,
+    createUsersModel,
+    createSelectedFiltersModel,
+    useQueryClient,
+    useCommands,
+  } = useContext(AppViewModelContext);
 
   // Get the query client from the context
   const queryClient = useQueryClient();
 
   // Get commands from the command provider context
-  const commands: CommandsDependencies = useCommands();
+  const commands = useCommands();
 
   const {
     addTaskCommand,
