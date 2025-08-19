@@ -334,7 +334,7 @@ import { render, screen } from "@testing-library/react";
  * because this dependency/path is no longer being used in the module under test.
  * This means that the real unmocked module is being used during testing.
  *
- * Similarly - it we made changes to the useTasks dependency,
+ * Similarly - if we made changes to the useTasks dependency,
  * those changes would be enforced by typing in the module itself,
  * while there would be nothing in the test telling you that something
  * is wrong - except for the test failing for non-obvious reasons
@@ -526,7 +526,7 @@ type Props = {
   deps?: Deps;
 };
 
-export const Tasks: React.FC = ({
+export const Tasks: React.FC<Props> = ({
   deps = {
     useTasks: useTasksImpl,
   },
