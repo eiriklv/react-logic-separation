@@ -69,6 +69,12 @@ Model:
 - Contains the domain/business logic
 - Exposes properties and commands that can be consumed
 
+Code Example:
+
+```ts
+// TODO
+```
+
 ### MVVM
 
 ![MVVM](../assets/mvvm.png)
@@ -94,6 +100,12 @@ Model:
 
 - Contains the domain/business logic
 - Exposes properties and commands that can be consumed
+
+Code Example:
+
+```ts
+// TODO
+```
 
 ## References
 
