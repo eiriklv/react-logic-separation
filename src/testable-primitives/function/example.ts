@@ -4,14 +4,7 @@ const defaultDependencies = {
 
 export type Dependencies = typeof defaultDependencies;
 
-// This is imported and tested in the test
-export const createExample = (
-  dependencies: Dependencies = defaultDependencies,
-) => {
-  return function example() {
-    dependencies.exampleService();
-  };
+// This is imported both in the app and in the test
+export const example = (dependencies: Dependencies = defaultDependencies) => {
+  dependencies.exampleService();
 };
-
-// This imported and used in the app
-export const exampleSingleton = createExample();
