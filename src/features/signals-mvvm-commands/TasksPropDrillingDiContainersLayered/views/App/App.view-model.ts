@@ -1,14 +1,8 @@
 import { useMemo } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCommands } from "../../providers/commands.provider";
 import defaultDependencies, {
   AppViewModelDependencies,
 } from "./App.view-model.dependencies";
 import { ModelsContextInterface } from "../../providers/models.provider";
-import { IAddTaskCommand } from "../../commands/add-task.command";
-import { IDeleteTaskCommand } from "../../commands/delete-task.command";
-import { IListTasksCommand } from "../../commands/list-tasks.command";
-import { IListUsersCommand } from "../../commands/list-users.command";
 
 /**
  * The main purpose of this file is to
@@ -31,17 +25,6 @@ type Props = {
 };
 
 /**
- * Specify which subset of commands
- * we depend on in this module
- */
-export type CommandsDependencies = {
-  addTaskCommand: IAddTaskCommand;
-  deleteTaskCommand: IDeleteTaskCommand;
-  listTasksCommand: IListTasksCommand;
-  listUsersCommand: IListUsersCommand;
-};
-
-/**
  * This is where the shared/global models
  * will be initialized and provided
  * to the rest of the tree for consumption
@@ -50,14 +33,19 @@ export const useAppViewModel = ({
   dependencies = defaultDependencies,
 }: Props = {}) => {
   // Get dependencies
-  const { createTasksModel, createUsersModel, createSelectedFiltersModel } =
-    dependencies;
+  const {
+    useCommands,
+    useQueryClient,
+    createTasksModel,
+    createUsersModel,
+    createSelectedFiltersModel,
+  } = dependencies;
 
   // Get the query client from the context
   const queryClient = useQueryClient();
 
   // Get commands from the command provider context
-  const commands: CommandsDependencies = useCommands();
+  const commands = useCommands();
 
   const {
     addTaskCommand,

@@ -1,22 +1,13 @@
 import { renderHook, act } from "@testing-library/react";
+import { useTaskItemViewModel } from "./TaskItem.view-model";
+import { signal } from "@preact/signals-core";
+import { Task } from "../../types";
+import { QueryClient } from "@tanstack/query-core";
 import {
   CommandsDependencies,
   ModelsDependencies,
-  useTaskItemViewModel,
-} from "./TaskItem.view-model";
-import { signal } from "@preact/signals-core";
-import { Task } from "../../types";
-import {
-  ModelsContext,
-  ModelsContextInterface,
-} from "../../providers/models.provider";
-import {
-  CommandsContext,
-  CommandsContextInterface,
-} from "../../providers/commands.provider";
-import { QueryClient } from "@tanstack/query-core";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { TaskItemViewModelDependencies } from "./TaskItem.view-model.dependencies";
+  TaskItemViewModelDependencies,
+} from "./TaskItem.view-model.dependencies";
 
 /**
  * Remove the default dependencies from the test
@@ -31,6 +22,16 @@ describe("useTaskItemViewModel", () => {
 
     const queryClient = new QueryClient();
 
+    const commands: CommandsDependencies = {
+      getUserCommand: vi.fn(),
+    };
+
+    const models: ModelsDependencies = {
+      tasksModel: {
+        deleteTask,
+      },
+    };
+
     const dependencies: TaskItemViewModelDependencies = {
       createUserModel: () => ({
         user: signal({
@@ -39,16 +40,9 @@ describe("useTaskItemViewModel", () => {
           profileImageUrl: "./src/image.png",
         }),
       }),
-    };
-
-    const mockCommands: CommandsDependencies = {
-      getUserCommand: vi.fn(),
-    };
-
-    const mockModels: ModelsDependencies = {
-      tasksModel: {
-        deleteTask,
-      },
+      useCommands: () => commands,
+      useModels: () => models,
+      useQueryClient: () => queryClient,
     };
 
     const task: Task = {
@@ -57,23 +51,8 @@ describe("useTaskItemViewModel", () => {
       ownerId: "user-1",
     };
 
-    const wrapper: React.FC<{
-      children?: React.ReactNode;
-    }> = ({ children }) => (
-      <QueryClientProvider client={queryClient}>
-        <CommandsContext.Provider
-          value={mockCommands as CommandsContextInterface}
-        >
-          <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
-            {children}
-          </ModelsContext.Provider>
-        </CommandsContext.Provider>
-      </QueryClientProvider>
-    );
-
-    const { result } = renderHook(
-      () => useTaskItemViewModel({ dependencies, task }),
-      { wrapper },
+    const { result } = renderHook(() =>
+      useTaskItemViewModel({ dependencies, task }),
     );
 
     // assert

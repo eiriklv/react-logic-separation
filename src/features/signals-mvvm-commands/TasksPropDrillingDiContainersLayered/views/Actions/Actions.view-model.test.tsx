@@ -1,17 +1,17 @@
 import { renderHook } from "@testing-library/react";
-import { ModelsDependencies, useActionsViewModel } from "./Actions.view-model";
 import { signal } from "@preact/signals-core";
+import { useActionsViewModel } from "./Actions.view-model";
 import {
-  ModelsContext,
-  ModelsContextInterface,
-} from "../../providers/models.provider";
+  ActionsViewModelDependencies,
+  ModelsDependencies,
+} from "./Actions.view-model.dependencies";
 
 describe("useActionsViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const addTask = vi.fn();
 
-    const mockModels: ModelsDependencies = {
+    const models: ModelsDependencies = {
       tasksModel: {
         addTask,
       },
@@ -20,15 +20,11 @@ describe("useActionsViewModel", () => {
       },
     };
 
-    const wrapper: React.FC<{
-      children?: React.ReactNode;
-    }> = ({ children }) => (
-      <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
-        {children}
-      </ModelsContext.Provider>
-    );
+    const dependencies: ActionsViewModelDependencies = {
+      useModels: () => models,
+    };
 
-    const { result } = renderHook(() => useActionsViewModel(), { wrapper });
+    const { result } = renderHook(() => useActionsViewModel({ dependencies }));
 
     expect(result.current).toEqual({
       users: [],

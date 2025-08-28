@@ -1,17 +1,17 @@
 import { renderHook } from "@testing-library/react";
-import { ModelsDependencies, useFiltersViewModel } from "./Filters.view-model";
+import { useFiltersViewModel } from "./Filters.view-model";
 import { signal } from "@preact/signals-core";
 import {
-  ModelsContext,
-  ModelsContextInterface,
-} from "../../providers/models.provider";
+  FiltersViewModelDependencies,
+  ModelsDependencies,
+} from "./Filters.view-model.dependencies";
 
 describe("useFiltersViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const setSelectedOwnerId = vi.fn();
 
-    const mockModels: ModelsDependencies = {
+    const models: ModelsDependencies = {
       usersModel: {
         users: signal([]),
       },
@@ -21,15 +21,11 @@ describe("useFiltersViewModel", () => {
       },
     };
 
-    const wrapper: React.FC<{
-      children?: React.ReactNode;
-    }> = ({ children }) => (
-      <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
-        {children}
-      </ModelsContext.Provider>
-    );
+    const dependencies: FiltersViewModelDependencies = {
+      useModels: () => models,
+    };
 
-    const { result } = renderHook(() => useFiltersViewModel(), { wrapper });
+    const { result } = renderHook(() => useFiltersViewModel({ dependencies }));
 
     expect(result.current).toEqual({
       users: [],

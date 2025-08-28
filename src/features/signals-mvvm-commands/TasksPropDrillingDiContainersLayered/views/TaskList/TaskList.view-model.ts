@@ -1,7 +1,7 @@
 import { useSignalValue } from "../../../../../lib/use-signal-value";
-import { ISelectedFiltersModel } from "../../models/selected-filters.model";
-import { ITasksModel } from "../../models/tasks.model";
-import { useModels } from "../../providers/models.provider";
+import defaultDependencies, {
+  TaskListViewModelDependencies,
+} from "./TaskList.view-model.dependencies";
 
 /**
  * The main purpose of this file is to
@@ -19,26 +19,18 @@ import { useModels } from "../../providers/models.provider";
  * the custom hooks into it
  */
 
-/**
- * Specify which subset of models
- * we depend on in this module
- */
-export type ModelsDependencies = {
-  selectedFiltersModel: ISelectedFiltersModel;
-  tasksModel: Pick<
-    ITasksModel,
-    | "getTasksByOwnerId"
-    | "getTasksCountByOwnerId"
-    | "addTask"
-    | "isFetching"
-    | "isLoading"
-    | "isSaving"
-  >;
+type Props = {
+  dependencies?: TaskListViewModelDependencies;
 };
 
-export const useTaskListViewModel = () => {
+export const useTaskListViewModel = ({
+  dependencies = defaultDependencies,
+}: Props = {}) => {
+  // Get dependencies
+  const { useModels } = dependencies;
+
   // Get models from the shared models provider
-  const models: ModelsDependencies = useModels();
+  const models = useModels();
 
   // Pull out what we need from the models
   const { tasksModel, selectedFiltersModel } = models;

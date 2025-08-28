@@ -1,14 +1,11 @@
 import { renderHook } from "@testing-library/react";
-import {
-  ModelsDependencies,
-  useTaskListViewModel,
-} from "./TaskList.view-model";
+import { useTaskListViewModel } from "./TaskList.view-model";
 import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
 import {
-  ModelsContext,
-  ModelsContextInterface,
-} from "../../providers/models.provider";
+  ModelsDependencies,
+  TaskListViewModelDependencies,
+} from "./TaskList.view-model.dependencies";
 
 describe("useTaskListViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -16,7 +13,7 @@ describe("useTaskListViewModel", () => {
     const mockTaskListCount = 0;
 
     // arrange
-    const mockModels: ModelsDependencies = {
+    const models: ModelsDependencies = {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
@@ -31,15 +28,11 @@ describe("useTaskListViewModel", () => {
       },
     };
 
-    const wrapper: React.FC<{
-      children?: React.ReactNode;
-    }> = ({ children }) => (
-      <ModelsContext.Provider value={mockModels as ModelsContextInterface}>
-        {children}
-      </ModelsContext.Provider>
-    );
+    const dependencies: TaskListViewModelDependencies = {
+      useModels: () => models,
+    };
 
-    const { result } = renderHook(() => useTaskListViewModel(), { wrapper });
+    const { result } = renderHook(() => useTaskListViewModel({ dependencies }));
 
     // assert
     expect(result.current).toEqual({
@@ -48,7 +41,7 @@ describe("useTaskListViewModel", () => {
       isLoading: false,
       isFetching: false,
       isSaving: false,
-      addTask: mockModels.tasksModel?.addTask,
+      addTask: models.tasksModel?.addTask,
     });
   });
 });

@@ -8,19 +8,14 @@ import {
   CommandsContextInterface,
 } from "../../providers/commands.provider";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { useAppViewModel } from "./App.view-model";
 import { Actions } from "../Actions/Actions.view";
 import { Filters } from "../Filters/Filters.view";
 import { TaskList } from "../TaskList/TaskList.view";
 import { useActionsViewModel } from "../Actions/Actions.view-model";
 import { useFiltersViewModel } from "../Filters/Filters.view-model";
 import { useTaskListViewModel } from "../TaskList/TaskList.view-model";
-import { ComponentProps } from "react";
 import { TaskItem } from "../TaskItem/TaskItem.view";
-import {
-  TaskItemViewModelProps,
-  useTaskItemViewModel,
-} from "../TaskItem/TaskItem.view-model";
+import { useTaskItemViewModel } from "../TaskItem/TaskItem.view-model";
 import {
   createUserModel,
   UserModelDependencies,
@@ -29,13 +24,16 @@ import { SelectedFiltersModel } from "../../models/selected-filters.model";
 import { UsersModel, UsersModelDependencies } from "../../models/users.model";
 import { TasksModel, TasksModelDependencies } from "../../models/tasks.model";
 import { ActionsDependencies } from "../Actions/Actions.view.dependencies";
-import { AppViewModelDependencies } from "./App.view-model.dependencies";
 import { TaskItemViewModelDependencies } from "../TaskItem/TaskItem.view-model.dependencies";
 import { TaskItemDependencies } from "../TaskItem/TaskItem.view.dependencies";
 import { TaskListDependencies } from "../TaskList/TaskList.view.dependencies";
 import { FiltersDependencies } from "../Filters/Filters.view.dependencies";
 import { AppDependencies } from "./App.view.dependencies";
 import { createQueryClient } from "../../utils/create-query-client";
+import { FiltersViewModelDependencies } from "../Filters/Filters.view-model.dependencies";
+import { ModelsContextInterface } from "../../providers/models.provider";
+import { ActionsViewModelDependencies } from "../Actions/Actions.view-model.dependencies";
+import { TaskListViewModelDependencies } from "../TaskList/TaskList.view-model.dependencies";
 
 describe("App Integration (only command layer mocked)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
@@ -143,6 +141,9 @@ describe("App Integration (all dependencies explicit)", () => {
     // create query client for test
     const queryClient = createQueryClient();
 
+    // Create fake commands to inject, as these won't actually be used anywhere
+    const commands = {} as CommandsContextInterface;
+
     // create mock tasks
     const mockTasks: Task[] = [
       { id: "1", text: "Task 1", ownerId: "user-1" },
@@ -182,6 +183,13 @@ describe("App Integration (all dependencies explicit)", () => {
     // Create selected filters model
     const selectedFiltersModel = new SelectedFiltersModel();
 
+    // Create shared models container
+    const models: ModelsContextInterface = {
+      selectedFiltersModel,
+      tasksModel,
+      usersModel,
+    };
+
     // Create dependencies for UserModel
     const userModelDependencies: UserModelDependencies = {
       getUserCommand: async (userId) => {
@@ -194,65 +202,69 @@ describe("App Integration (all dependencies explicit)", () => {
       createUserModel: (userId) => {
         return createUserModel(userId, queryClient, userModelDependencies);
       },
+      useCommands: () => commands,
+      useModels: () => models,
+      useQueryClient: () => queryClient,
     };
 
     // Create dependencies for TaskItem
     const taskItemDependencies: TaskItemDependencies = {
-      useTaskItemViewModel: (props: TaskItemViewModelProps) =>
+      useTaskItemViewModel: (props) =>
         useTaskItemViewModel({
           ...props,
           dependencies: taskItemViewModelDependencies,
         }),
     };
 
+    // Create dependencies for TaskListViewModel
+    const taskListViewModelDependencies: TaskListViewModelDependencies = {
+      useModels: () => models,
+    };
+
     // Create dependencies for TaskList
     const taskListDependencies: TaskListDependencies = {
-      TaskItem: (props: ComponentProps<typeof TaskItem>) => (
+      TaskItem: (props) => (
         <TaskItem {...props} dependencies={taskItemDependencies} />
       ),
-      useTaskListViewModel,
+      useTaskListViewModel: () =>
+        useTaskListViewModel({ dependencies: taskListViewModelDependencies }),
+    };
+
+    // Create dependencies for FiltersViewModel
+    const filtersViewModelDependencies: FiltersViewModelDependencies = {
+      useModels: () => models,
     };
 
     // Create dependencies for Filters
     const filtersDependencies: FiltersDependencies = {
-      useFiltersViewModel,
+      useFiltersViewModel: () =>
+        useFiltersViewModel({ dependencies: filtersViewModelDependencies }),
+    };
+
+    // Create dependencies for ActionsViewModel
+    const actionsViewModelDependencies: ActionsViewModelDependencies = {
+      useModels: () => models,
     };
 
     // Create dependencies for Actions
     const actionsDependencies: ActionsDependencies = {
-      useActionsViewModel,
+      useActionsViewModel: () =>
+        useActionsViewModel({ dependencies: actionsViewModelDependencies }),
     };
 
-    // Create app view model dependencies
-    const appViewModelDependencies: AppViewModelDependencies = {
-      createSelectedFiltersModel: () => selectedFiltersModel,
-      createTasksModel: () => tasksModel,
-      createUsersModel: () => usersModel,
-    };
-
-    // Create dependencies for Tasks
+    // Create dependencies for App
     const appDependencies: AppDependencies = {
-      useAppViewModel: () =>
-        useAppViewModel({ dependencies: appViewModelDependencies }),
+      useAppViewModel: () => ({ models }),
       Actions: () => <Actions dependencies={actionsDependencies} />,
       Filters: () => <Filters dependencies={filtersDependencies} />,
       TaskList: () => <TaskList dependencies={taskListDependencies} />,
     };
 
-    // Create fake commands to inject
-    const commands = {} as CommandsContextInterface;
-
     /**
      * Render a version that injects all the dependencies
      * we created further up so that we can test our integration
      */
-    render(
-      <QueryClientProvider client={queryClient}>
-        <CommandsContext.Provider value={commands}>
-          <App dependencies={appDependencies} />
-        </CommandsContext.Provider>
-      </QueryClientProvider>,
-    );
+    render(<App dependencies={appDependencies} />);
 
     // wait for loading to finish
     await waitFor(() =>

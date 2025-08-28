@@ -1,7 +1,6 @@
 import { useSignalValue } from "../../../../../lib/use-signal-value";
-import { useModels } from "../../providers/models.provider";
-import { ITasksModel } from "../../models/tasks.model";
-import { IUsersModel } from "../../models/users.model";
+import { ActionsViewModelDependencies } from "./Actions.view-model.dependencies";
+import defaultDependencies from "./Actions.view-model.dependencies";
 
 /**
  * The main purpose of this file is to
@@ -19,18 +18,18 @@ import { IUsersModel } from "../../models/users.model";
  * the custom hooks into it
  */
 
-/**
- * Specify which subset of models
- * we depend on in this module
- */
-export type ModelsDependencies = {
-  tasksModel: Pick<ITasksModel, "addTask">;
-  usersModel: Pick<IUsersModel, "users">;
+type Props = {
+  dependencies?: ActionsViewModelDependencies;
 };
 
-export const useActionsViewModel = () => {
+export const useActionsViewModel = ({
+  dependencies = defaultDependencies,
+}: Props = {}) => {
+  // Get dependencies
+  const { useModels } = dependencies;
+
   // Get models from models provider
-  const models: ModelsDependencies = useModels();
+  const models = useModels();
 
   // Pull out the stuff we want from the shared models
   const { usersModel, tasksModel } = models;
