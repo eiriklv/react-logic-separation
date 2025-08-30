@@ -22,7 +22,7 @@ export type FiltersViewModelDependencies = {
 };
 
 const defaultDependencies: FiltersViewModelDependencies = {
-  useModels: useModels,
+  useModels,
 };
 
 export default defaultDependencies;
