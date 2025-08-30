@@ -1,6 +1,6 @@
-# TODO
+# Domain models and business logic
 
-Domain models and business logic
+TODO
 
 - Models
 - Repositories
