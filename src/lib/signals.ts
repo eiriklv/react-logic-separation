@@ -117,6 +117,12 @@ export function previous<T>(
   return readOnlyPreviousSignal;
 }
 
+/**
+ * TODO: Create a version of this with a nice
+ * semantic for chaining, so that you get a
+ * chain for loading and error that can
+ * propagate to the leafs
+ */
 export function derived<T>(
   getPromise: (abortSignal: AbortSignal) => Promise<T>,
 ) {
