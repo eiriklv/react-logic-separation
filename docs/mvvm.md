@@ -188,7 +188,7 @@ Code Examples:
 
 ## Collaboration
 
-Since MVVM creates a much clearer separation between the view layer and business logic layer it increases the possibility work in parallel. Agreeing on the interface returned by the view models is suffucient for working on both the view and the business logic in parallel. The views can be tested with mocked out view models following the interface, while the view model and business logic underneath can be tested separately according to agreed upon interface/contract.
+Since MVVM creates a much clearer separation between the view layer and business logic layer it increases the possibility to work in parallel. Agreeing on the interface returned by the view models is sufficient for working on both the view and the business logic in parallel. The views can be tested with mocked out view models following the interface, while the view model and business logic underneath can be tested separately according to agreed upon interface/contract.
 
 Code Example:
 
