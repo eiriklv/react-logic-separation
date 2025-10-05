@@ -1,9 +1,9 @@
-import { SelectedFiltersModel } from "./selected-filters.model";
+import { createSelectedFiltersModel } from "./selected-filters.model";
 
 describe("SelectedFiltersModel", () => {
   it("should reflect current selected owner id and handle updates to it", async () => {
     // arrange
-    const model = new SelectedFiltersModel();
+    const model = createSelectedFiltersModel();
 
     // check that the category is empty initially
     expect(model.selectedOwnerId.value).toEqual("");

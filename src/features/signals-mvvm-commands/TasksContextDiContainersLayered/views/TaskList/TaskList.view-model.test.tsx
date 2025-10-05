@@ -8,6 +8,12 @@ import {
   TaskListViewModelDependencies,
 } from "./TaskList.view-model.dependencies";
 
+/**
+ * Optional: Remove the default dependencies from the test
+ * so that we avoid the unnecessary collect-time
+ */
+vi.mock("./TaskList.view-model.dependencies", () => ({ default: {} }));
+
 describe("useTaskListViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
