@@ -20,7 +20,7 @@ describe("useCommands", () => {
 
     const { result } = renderHook(() => useCommands(), { wrapper });
 
-    expect(result.current).toEqual(commands);
+    expect(result.current).toBe(commands);
   });
 
   it("should fail if commands are not provided", async () => {

@@ -18,7 +18,7 @@ describe("useModels", () => {
 
     const { result } = renderHook(() => useModels(), { wrapper });
 
-    expect(result.current).toEqual(models);
+    expect(result.current).toBe(models);
   });
 
   it("should fail if models are not provided", async () => {
