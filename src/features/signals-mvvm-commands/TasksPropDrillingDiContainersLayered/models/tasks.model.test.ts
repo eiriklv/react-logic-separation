@@ -6,16 +6,18 @@ import { createQueryClient } from "../utils/create-query-client";
 describe("TasksModel", () => {
   it("should work as expected when adding a single task", async () => {
     // arrange
-    let count = 0;
-    const fakeTaskMocks: Task[][] = [
-      [],
-      [{ id: "1", text: "Solve some hard bug", ownerId: "user-1" }],
+    const initialMockedTasks: Task[] = [];
+    const mockedTasksAfterAdd: Task[] = [
+      { id: "1", text: "Solve some hard bug", ownerId: "user-1" },
     ];
 
     const mockDependencies: TasksModelDependencies = {
       addTaskCommand: vi.fn(),
       deleteTaskCommand: vi.fn(),
-      listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
+      listTasksCommand: vi
+        .fn<TasksModelDependencies["listTasksCommand"]>()
+        .mockResolvedValueOnce(initialMockedTasks)
+        .mockResolvedValueOnce(mockedTasksAfterAdd),
     };
 
     const queryClient = createQueryClient();
@@ -28,7 +30,7 @@ describe("TasksModel", () => {
     await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual([]);
+    expect(model.tasks.value).toEqual(initialMockedTasks);
     expect(model.tasksCount.value).toEqual(0);
 
     // add some tasks
@@ -41,31 +43,38 @@ describe("TasksModel", () => {
     expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(fakeTaskMocks[1]);
+    expect(model.tasks.value).toEqual(mockedTasksAfterAdd);
     expect(model.tasksCount.value).toEqual(1);
   });
 
   it("should work as expected when adding multiple tasks", async () => {
     // arrange
-    let count = 0;
-    const fakeTaskMocks: Task[][] = [
-      [],
-      [{ id: "1", text: "Fake 1", ownerId: "user-1" }],
-      [
-        { id: "1", text: "Fake 1", ownerId: "user-1" },
-        { id: "2", text: "Fake 2", ownerId: "user-2" },
-      ],
-      [
-        { id: "1", text: "Fake 1", ownerId: "user-1" },
-        { id: "2", text: "Fake 2", ownerId: "user-2" },
-        { id: "3", text: "Fake 3", ownerId: "user-3" },
-      ],
+    const initialMockedTasks: Task[] = [];
+
+    const mockedTasksAfterFirstAdd: Task[] = [
+      { id: "1", text: "Fake 1", ownerId: "user-1" },
+    ];
+
+    const mockedTasksAfterSecondAdd: Task[] = [
+      { id: "1", text: "Fake 1", ownerId: "user-1" },
+      { id: "2", text: "Fake 2", ownerId: "user-2" },
+    ];
+
+    const mockedTasksAfterThirdAdd: Task[] = [
+      { id: "1", text: "Fake 1", ownerId: "user-1" },
+      { id: "2", text: "Fake 2", ownerId: "user-2" },
+      { id: "3", text: "Fake 3", ownerId: "user-3" },
     ];
 
     const mockDependencies: TasksModelDependencies = {
       addTaskCommand: vi.fn(async (task) => task),
       deleteTaskCommand: vi.fn(),
-      listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
+      listTasksCommand: vi
+        .fn<TasksModelDependencies["listTasksCommand"]>()
+        .mockResolvedValueOnce(initialMockedTasks)
+        .mockResolvedValueOnce(mockedTasksAfterFirstAdd)
+        .mockResolvedValueOnce(mockedTasksAfterSecondAdd)
+        .mockResolvedValueOnce(mockedTasksAfterThirdAdd),
     };
 
     const queryClient = createQueryClient();
@@ -78,7 +87,7 @@ describe("TasksModel", () => {
     await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual([]);
+    expect(model.tasks.value).toEqual(initialMockedTasks);
 
     // add some tasks
     await model.addTask("Paint house", "user-1");
@@ -92,22 +101,24 @@ describe("TasksModel", () => {
     expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(4);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(fakeTaskMocks[3]);
+    expect(model.tasks.value).toEqual(mockedTasksAfterThirdAdd);
     expect(model.tasksCount.value).toEqual(3);
   });
 
   it("should work as expected when deleting a task", async () => {
     // arrange
-    let count = 0;
-    const fakeTaskMocks: Task[][] = [
-      [{ id: "1", text: "Fake 1", ownerId: "user-1" }],
-      [],
+    const initialMockedTasks: Task[] = [
+      { id: "1", text: "Fake 1", ownerId: "user-1" },
     ];
+    const mockedTasksAfterDelete: Task[] = [];
 
     const mockDependencies: TasksModelDependencies = {
       addTaskCommand: vi.fn(async (task) => task),
       deleteTaskCommand: vi.fn(),
-      listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
+      listTasksCommand: vi
+        .fn<TasksModelDependencies["listTasksCommand"]>()
+        .mockResolvedValueOnce(initialMockedTasks)
+        .mockResolvedValueOnce(mockedTasksAfterDelete),
     };
 
     const queryClient = createQueryClient();
@@ -120,7 +131,7 @@ describe("TasksModel", () => {
     await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
+    expect(model.tasks.value).toEqual(initialMockedTasks);
     expect(model.tasksCount.value).toEqual(1);
 
     // add some tasks
@@ -133,22 +144,22 @@ describe("TasksModel", () => {
     expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(fakeTaskMocks[1]);
+    expect(model.tasks.value).toEqual(mockedTasksAfterDelete);
     expect(model.tasksCount.value).toEqual(0);
   });
 
   it("should not perform deletion if no task id is provided", async () => {
     // arrange
-    let count = 0;
-    const fakeTaskMocks: Task[][] = [
-      [{ id: "1", text: "Fake 1", ownerId: "user-1" }],
-      [],
+    const initialMockedTasks: Task[] = [
+      { id: "1", text: "Fake 1", ownerId: "user-1" },
     ];
 
     const mockDependencies: TasksModelDependencies = {
       addTaskCommand: vi.fn(async (task) => task),
       deleteTaskCommand: vi.fn(),
-      listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
+      listTasksCommand: vi
+        .fn<TasksModelDependencies["listTasksCommand"]>()
+        .mockResolvedValueOnce(initialMockedTasks),
     };
 
     const queryClient = createQueryClient();
@@ -161,7 +172,7 @@ describe("TasksModel", () => {
     await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
+    expect(model.tasks.value).toEqual(initialMockedTasks);
     expect(model.tasksCount.value).toEqual(1);
 
     // add some tasks
@@ -174,23 +185,20 @@ describe("TasksModel", () => {
     expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(1);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
+    expect(model.tasks.value).toEqual(initialMockedTasks);
     expect(model.tasksCount.value).toEqual(1);
   });
 
   it("should fail validation when adding empty task", async () => {
     // arrange
-    let count = 0;
-    const fakeTaskMocks: Task[][] = [
-      [],
-      [{ id: "1", text: "Fake 1", ownerId: "user-1" }],
-    ];
+    const initialMockedTasks: Task[] = [];
 
-    // arrange
     const mockDependencies: TasksModelDependencies = {
-      addTaskCommand: vi.fn(),
+      addTaskCommand: vi.fn(async (task) => task),
       deleteTaskCommand: vi.fn(),
-      listTasksCommand: vi.fn(async () => fakeTaskMocks[count++]),
+      listTasksCommand: vi
+        .fn<TasksModelDependencies["listTasksCommand"]>()
+        .mockResolvedValueOnce(initialMockedTasks),
     };
 
     const queryClient = createQueryClient();
@@ -203,7 +211,7 @@ describe("TasksModel", () => {
     await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual([]);
+    expect(model.tasks.value).toEqual(initialMockedTasks);
 
     // add a task without a category
     await model.addTask("Thing", "");
@@ -218,7 +226,7 @@ describe("TasksModel", () => {
     expect(mockDependencies.listTasksCommand).toHaveBeenCalledOnce();
 
     // check that the list of tasks is still the same as before
-    expect(model.tasks.value).toEqual(fakeTaskMocks[0]);
+    expect(model.tasks.value).toEqual(initialMockedTasks);
   });
 
   it("should provide tasks and counts filtered by category correctly", async () => {
