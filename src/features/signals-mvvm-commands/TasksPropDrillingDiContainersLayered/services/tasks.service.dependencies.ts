@@ -8,12 +8,10 @@ import { generateId } from "../../../../lib/utils";
 
 export type TasksServiceDependencies = {
   generateId: () => string;
-  delay: number;
 };
 
 const defaultDependencies: TasksServiceDependencies = {
   generateId,
-  delay: 1000,
 };
 
 export default defaultDependencies;

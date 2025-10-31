@@ -1,8 +1,10 @@
 import { sleep } from "../../../../lib/utils";
 import { User } from "../types";
-import defaultDependencies, {
-  UsersServiceDependencies,
-} from "./users.service.dependencies";
+
+/**
+ * Fake delay
+ */
+const serviceDelayInMs = 1000;
 
 /**
  * Services are typically things like SDKs, APIs or other classes that
@@ -26,23 +28,17 @@ const defaultUsers: User[] = [
 export class UsersService implements IUsersService {
   private _users: User[];
 
-  private _dependencies: UsersServiceDependencies;
-
-  constructor(
-    dependencies: UsersServiceDependencies = defaultDependencies,
-    initialUsers: User[] = defaultUsers,
-  ) {
-    this._dependencies = dependencies;
+  constructor(initialUsers: User[] = defaultUsers) {
     this._users = initialUsers;
   }
 
   public async listUsers() {
-    await sleep(this._dependencies.delay);
+    await sleep(serviceDelayInMs);
     return this._users.slice();
   }
 
   public async getUserById(userId: string) {
-    await sleep(this._dependencies.delay);
+    await sleep(serviceDelayInMs);
     return this._users.find((user) => user.id === userId);
   }
 }

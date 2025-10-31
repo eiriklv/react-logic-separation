@@ -5,6 +5,11 @@ import defaultDependencies, {
 } from "./tasks.service.dependencies";
 
 /**
+ * Fake delay
+ */
+const serviceDelayInMs = 1000;
+
+/**
  * Services are typically things like SDKs, APIs or other classes that
  * expose a bunch of methods to interact with some internal state,
  * which might reside on the client and/or the server through some network layer
@@ -38,12 +43,12 @@ export class TasksService implements ITasksService {
   }
 
   public async listTasks() {
-    await sleep(this._dependencies.delay);
+    await sleep(serviceDelayInMs);
     return this._tasks.slice();
   }
 
   public async addTask(text: string, ownerId: string) {
-    await sleep(this._dependencies.delay);
+    await sleep(serviceDelayInMs);
 
     const newTask = {
       id: this._dependencies.generateId(),
@@ -57,7 +62,7 @@ export class TasksService implements ITasksService {
   }
 
   public async deleteTask(taskId: string) {
-    await sleep(this._dependencies.delay);
+    await sleep(serviceDelayInMs);
 
     this._tasks.splice(
       0,

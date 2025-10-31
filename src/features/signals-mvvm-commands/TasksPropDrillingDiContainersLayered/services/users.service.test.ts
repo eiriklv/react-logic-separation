@@ -1,23 +1,25 @@
 import { User } from "../types";
 import { createUsersService } from "./users.service";
-import { UsersServiceDependencies } from "./users.service.dependencies";
 
 describe("Users Service", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("should list users correctly", async () => {
     // arrange
     const initialUsers: User[] = [];
 
-    const usersServiceDependencies: UsersServiceDependencies = {
-      delay: 0,
-    };
-
-    const usersService = createUsersService(
-      usersServiceDependencies,
-      initialUsers,
-    );
+    const usersService = createUsersService(initialUsers);
 
     // act
-    const users = await usersService.listUsers();
+    const usersPromise = usersService.listUsers();
+    await vi.runAllTimersAsync();
+    const users = await usersPromise;
 
     // assert
     expect(users).toEqual(initialUsers);
@@ -29,17 +31,12 @@ describe("Users Service", () => {
       { id: "user-1", name: "User 1", profileImageUrl: "/src/img.png" },
     ];
 
-    const usersServiceDependencies: UsersServiceDependencies = {
-      delay: 0,
-    };
-
-    const usersService = createUsersService(
-      usersServiceDependencies,
-      initialUsers,
-    );
+    const usersService = createUsersService(initialUsers);
 
     // act
-    const user = await usersService.getUserById("user-1");
+    const userPromise = usersService.getUserById("user-1");
+    await vi.runAllTimersAsync();
+    const user = await userPromise;
 
     // assert
     expect(user).toEqual({

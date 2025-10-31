@@ -9,7 +9,7 @@ import {
 
 /**
  * Optional: Remove the default dependencies from the test
- * so that we avoid the unnecessary collect-time
+ * so that we avoid the unnecessary collect-time and side-effects
  */
 vi.mock("./Filters.view-model.dependencies", () => ({ default: {} }));
 

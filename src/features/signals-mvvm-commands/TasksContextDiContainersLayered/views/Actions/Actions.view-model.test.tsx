@@ -9,7 +9,7 @@ import { ActionsViewModelContext } from "./Actions.view-model.context";
 
 /**
  * Optional: Remove the default dependencies from the test
- * so that we avoid the unnecessary collect-time
+ * so that we avoid the unnecessary collect-time and side-effects
  */
 vi.mock("./Actions.view-model.dependencies", () => ({ default: {} }));
 
