@@ -25,11 +25,7 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create mock tasks service
     const tasksService: ITasksService = {
-      addTask: vi.fn(async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      })),
+      addTask: vi.fn(),
       deleteTask: vi.fn(),
       listTasks: vi.fn(async () => mockTasks),
     };
@@ -54,7 +50,13 @@ describe("Root Integration (view-model layer services)", () => {
       useRootViewModel: () =>
         defaultDependencies.useRootViewModel({
           dependencies: {
+            /**
+             * Use the real dependencies
+             */
             ...rootViewModelDefaultDependencies,
+            /**
+             * ... Except for the services
+             */
             createTasksService: () => tasksService,
             createUsersService: () => usersService,
           },
@@ -118,9 +120,6 @@ describe("Root Integration (view-model layer services)", () => {
 
 describe("Root Integration (view-model layer commands)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
-    // create query client for test
-    const queryClient = createQueryClient();
-
     // create mock tasks
     const mockTasks: Task[] = [
       { id: "1", text: "Task 1", ownerId: "user-1" },
@@ -137,17 +136,13 @@ describe("Root Integration (view-model layer commands)", () => {
 
     // create mock commands
     const commands: CommandsContextInterface = {
-      addTaskCommand: async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      }),
-      listTasksCommand: async () => mockTasks,
-      deleteTaskCommand: async () => {},
-      getUserCommand: async (userId) => {
+      addTaskCommand: vi.fn(),
+      listTasksCommand: vi.fn(async () => mockTasks),
+      deleteTaskCommand: vi.fn(),
+      getUserCommand: vi.fn(async (userId) => {
         return mockUsers.find((user) => user.id === userId);
-      },
-      listUsersCommand: async () => mockUsers,
+      }),
+      listUsersCommand: vi.fn(async () => mockUsers),
     };
 
     // create root dependencies
@@ -156,14 +151,18 @@ describe("Root Integration (view-model layer commands)", () => {
       useRootViewModel: () =>
         defaultDependencies.useRootViewModel({
           dependencies: {
+            /**
+             * Use the real dependencies
+             */
+            ...rootViewModelDefaultDependencies,
+            /**
+             * ... Except for the commands
+             */
             createAddTaskCommand: () => commands.addTaskCommand,
             createDeleteTaskCommand: () => commands.deleteTaskCommand,
             createGetUserCommand: () => commands.getUserCommand,
             createListTasksCommand: () => commands.listTasksCommand,
             createListUsersCommand: () => commands.listUsersCommand,
-            createQueryClient: () => queryClient,
-            createTasksService: () => ({}) as ITasksService,
-            createUsersService: () => ({}) as IUsersService,
           },
         }),
     };
@@ -244,17 +243,13 @@ describe("Root Integration (view layer commands)", () => {
 
     // create mock commands
     const commands: CommandsContextInterface = {
-      addTaskCommand: async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      }),
-      listTasksCommand: async () => mockTasks,
-      deleteTaskCommand: async () => {},
-      getUserCommand: async (userId) => {
+      addTaskCommand: vi.fn(),
+      listTasksCommand: vi.fn(async () => mockTasks),
+      deleteTaskCommand: vi.fn(),
+      getUserCommand: vi.fn(async (userId) => {
         return mockUsers.find((user) => user.id === userId);
-      },
-      listUsersCommand: async () => mockUsers,
+      }),
+      listUsersCommand: vi.fn(async () => mockUsers),
     };
 
     // create root dependencies
