@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import defaultDependencies, {
   RootViewModelDependencies,
 } from "./Root.view-model.dependencies";
-import { CommandsContextInterface } from "../../providers/commands.provider";
 import { ServicesContextInterface } from "../../providers/services.provider";
 
 /**
@@ -29,7 +28,7 @@ type Props = {
  * need to be initialized (potentially in the view model of this)
  *
  * - Models
- * - Commands
+ * - Services
  * - Flags
  * - Etc..
  */
@@ -37,23 +36,18 @@ export const useRootViewModel = ({
   dependencies = defaultDependencies,
 }: Props = {}) => {
   // Get dependencies
-  const {
-    createQueryClient,
-    createTasksService,
-    createUsersService,
-    createListTasksCommand,
-    createListUsersCommand,
-  } = dependencies;
+  const { createQueryClient, createTasksService, createUsersService } =
+    dependencies;
 
   /**
-   * NOTE: Create all the commands first, and then let
+   * NOTE: Create all the services first, and then let
    * them be injected into the models.
    *
-   * It has to be possible to just replace the command
+   * It has to be possible to just replace the service
    * layer dependencies in the tree and then the models
-   * would work against fake commands.
+   * would work against fake services.
    *
-   * Where should the injection of the commands happen?
+   * Where should the injection of the services happen?
    * One layer further up and then this view model
    * will depend on that context and then inject
    * them into the models?
@@ -86,32 +80,8 @@ export const useRootViewModel = ({
     [tasksService, usersService],
   );
 
-  /**
-   * Create the commands
-   */
-  const listTasksCommand = useMemo(
-    () => createListTasksCommand({ tasksService }),
-    [createListTasksCommand, tasksService],
-  );
-  const listUsersCommand = useMemo(
-    () => createListUsersCommand({ usersService }),
-    [createListUsersCommand, usersService],
-  );
-
-  /**
-   * Package the commands in an object
-   */
-  const commands: CommandsContextInterface = useMemo(
-    () => ({
-      listTasksCommand,
-      listUsersCommand,
-    }),
-    [listTasksCommand, listUsersCommand],
-  );
-
   return {
     queryClient,
-    commands,
     services,
   };
 };

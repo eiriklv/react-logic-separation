@@ -34,7 +34,7 @@ export const useTaskItemViewModel = ({
   const { createUserModel, useServices, useModels, useQueryClient } =
     dependencies;
 
-  // Get services from the shared command provider
+  // Get services from the shared services provider
   const services = useServices();
 
   // Get models from the shared models provider

@@ -1,5 +1,4 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { CommandsContext } from "../../providers/commands.provider";
 import defaultDependencies, {
   RootDependencies,
 } from "./Root.view.dependencies";
@@ -11,14 +10,14 @@ import { ServicesContext } from "../../providers/services.provider";
  *
  * Things like:
  * - Query client
- * - Commands
+ * - Services
  * - Authentication
  * - Services
  * - Flags
  * - Metrics
  * - Internationalization
  *
- * TODO: Provide everything as commands?
+ * TODO: Provide everything as services?
  */
 
 type Props = {
@@ -28,7 +27,7 @@ type Props = {
 /**
  * Root container, where all global providers are added
  *
- * In this case the Root is the owner of the commands,
+ * In this case the Root is the owner of the services,
  * which makes it responsible for both constructing them
  * and providing them to the rest of the tree below
  */
@@ -36,14 +35,12 @@ export function Root({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
   const { useRootViewModel, App } = dependencies;
 
-  const { queryClient, commands, services } = useRootViewModel();
+  const { queryClient, services } = useRootViewModel();
 
   return (
     <QueryClientProvider client={queryClient}>
       <ServicesContext.Provider value={services}>
-        <CommandsContext.Provider value={commands}>
-          <App />
-        </CommandsContext.Provider>
+        <App />
       </ServicesContext.Provider>
     </QueryClientProvider>
   );

@@ -3,10 +3,6 @@ import { App } from "./App.view";
 import { QueryClient } from "@tanstack/query-core";
 import { Task, User } from "../../types";
 import { QueryClientProvider } from "@tanstack/react-query";
-import {
-  CommandsContext,
-  CommandsContextInterface,
-} from "../../providers/commands.provider";
 import { createProviderTree } from "../../../../../lib/create-provider-tree";
 import {
   ServicesContext,
@@ -43,18 +39,12 @@ const meta = {
       },
     };
 
-    // create mock commands
-    const commands: CommandsContextInterface = {
-      listUsersCommand: async () => mockUsers,
-    };
-
     /**
      * Create provider tree
      */
     const Providers = createProviderTree([
       <QueryClientProvider client={queryClient} />,
       <ServicesContext.Provider value={services} />,
-      <CommandsContext.Provider value={commands} />,
     ]);
 
     /**

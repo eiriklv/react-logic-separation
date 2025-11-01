@@ -16,7 +16,6 @@ describe("Root", () => {
     const dependencies: RootDependencies = {
       useRootViewModel: () => ({
         queryClient: new QueryClient(),
-        commands: {} as ReturnType<typeof useRootViewModel>["commands"],
         services: {} as ReturnType<typeof useRootViewModel>["services"],
       }),
       App: () => <div data-testid="App" />,

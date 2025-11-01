@@ -34,7 +34,6 @@ export const useAppViewModel = ({
 }: Props = {}) => {
   // Get dependencies
   const {
-    useCommands,
     useServices,
     useQueryClient,
     createTasksModel,
@@ -45,29 +44,10 @@ export const useAppViewModel = ({
   // Get the query client from the context
   const queryClient = useQueryClient();
 
-  // Get commands from the command provider context
-  const commands = useCommands();
-
-  const { listUsersCommand } = commands;
-
-  // Get commands from the command provider context
+  // Get services from the services provider context
   const services = useServices();
 
-  const { tasksService } = services;
-
-  /**
-   * TODO: Create all the commands first, and then let
-   * them be injected into the models.
-   *
-   * It has to be possible to just replace the command
-   * layer dependencies in the tree and then the models
-   * would work against fake commands.
-   *
-   * Where should the injection of the commands happen?
-   * One layer further up and then this view model
-   * will depend on that context and then inject
-   * them into the models?
-   */
+  const { tasksService, usersService } = services;
 
   /**
    * Create the models
@@ -75,9 +55,9 @@ export const useAppViewModel = ({
   const usersModel = useMemo(
     () =>
       createUsersModel(queryClient, {
-        listUsersCommand,
+        usersService,
       }),
-    [createUsersModel, listUsersCommand, queryClient],
+    [createUsersModel, queryClient, usersService],
   );
 
   const tasksModel = useMemo(

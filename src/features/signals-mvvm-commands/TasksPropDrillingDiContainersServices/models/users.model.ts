@@ -3,7 +3,7 @@ import { computed, ReadonlySignal } from "@preact/signals-core";
 import { query, SignalQuery } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { User } from "../types";
-import { IListUsersCommand } from "../commands/list-users.command";
+import { IUsersService } from "../services/users.service";
 
 export interface IUsersModel {
   users: ReadonlySignal<User[] | undefined>;
@@ -13,7 +13,7 @@ export interface IUsersModel {
 
 // Types and interfaces
 export type UsersModelDependencies = {
-  listUsersCommand: IListUsersCommand;
+  usersService: Pick<IUsersService, "listUsers">;
 };
 
 export class UsersModel implements IUsersModel {
@@ -35,7 +35,7 @@ export class UsersModel implements IUsersModel {
     this._usersQuery = query<User[]>(
       () => ({
         queryKey: ["users"],
-        queryFn: () => this._dependencies.listUsersCommand(),
+        queryFn: () => this._dependencies.usersService.listUsers(),
         retry: false,
       }),
       () => this._queryClient,

@@ -17,15 +17,11 @@ describe("useRootViewModel", () => {
     const queryClient = new QueryClient();
     const tasksService = {} as ITasksService;
     const usersService = {} as IUsersService;
-    const listTasksCommand = vi.fn();
-    const listUsersCommand = vi.fn();
 
     const dependencies: RootViewModelDependencies = {
       createQueryClient: vi.fn(() => queryClient),
       createTasksService: vi.fn(() => tasksService),
       createUsersService: vi.fn(() => usersService),
-      createListTasksCommand: vi.fn(() => listTasksCommand),
-      createListUsersCommand: vi.fn(() => listUsersCommand),
     };
 
     const { result } = renderHook(() => useRootViewModel({ dependencies }));
@@ -34,10 +30,6 @@ describe("useRootViewModel", () => {
       services: {
         tasksService,
         usersService,
-      },
-      commands: {
-        listTasksCommand,
-        listUsersCommand,
       },
       queryClient,
     });

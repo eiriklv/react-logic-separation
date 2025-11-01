@@ -2,7 +2,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 
 import { Task, User } from "../../types";
 import userEvent from "@testing-library/user-event";
-import { CommandsContextInterface } from "../../providers/commands.provider";
 import { Root } from "./Root.view";
 import defaultDependencies, {
   RootDependencies,
@@ -266,7 +265,7 @@ describe("Root Integration (view-model layer services)", () => {
   });
 });
 
-describe("Root Integration (view layer commands)", () => {
+describe("Root Integration (view layer services)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
     const queryClient = createQueryClient();
@@ -315,17 +314,11 @@ describe("Root Integration (view layer commands)", () => {
       usersService,
     };
 
-    // create mock commands
-    const commands: CommandsContextInterface = {
-      listUsersCommand: vi.fn(async () => mockUsers),
-    };
-
     // create root dependencies
     const rootDependencies: RootDependencies = {
       App: defaultDependencies.App,
       useRootViewModel: () => ({
         services,
-        commands,
         queryClient,
       }),
     };

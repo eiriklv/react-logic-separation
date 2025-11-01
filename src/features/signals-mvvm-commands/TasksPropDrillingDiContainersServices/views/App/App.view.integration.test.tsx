@@ -3,10 +3,6 @@ import { App } from "./App.view";
 import { Task, User } from "../../types";
 import userEvent from "@testing-library/user-event";
 import { createProviderTree } from "../../../../../lib/create-provider-tree";
-import {
-  CommandsContext,
-  CommandsContextInterface,
-} from "../../providers/commands.provider";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Actions } from "../Actions/Actions.view";
 import { Filters } from "../Filters/Filters.view";
@@ -39,7 +35,7 @@ import {
   ServicesContextInterface,
 } from "../../providers/services.provider";
 
-describe("App Integration (only command layer mocked)", () => {
+describe("App Integration (only service layer mocked)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
     const queryClient = createQueryClient();
@@ -69,13 +65,8 @@ describe("App Integration (only command layer mocked)", () => {
         getUserById: vi.fn(async (userId) => {
           return mockUsers.find((user) => user.id === userId);
         }),
-        listUsers: vi.fn(),
+        listUsers: vi.fn(async () => mockUsers),
       },
-    };
-
-    // create mock commands
-    const commands: CommandsContextInterface = {
-      listUsersCommand: async () => mockUsers,
     };
 
     /**
@@ -84,7 +75,6 @@ describe("App Integration (only command layer mocked)", () => {
     const Providers = createProviderTree([
       <QueryClientProvider client={queryClient} />,
       <ServicesContext.Provider value={services} />,
-      <CommandsContext.Provider value={commands} />,
     ]);
 
     /**
@@ -151,7 +141,7 @@ describe("App Integration (all dependencies explicit)", () => {
     // create query client for test
     const queryClient = createQueryClient();
 
-    // Create fake commands to inject, as these won't actually be used anywhere
+    // Create fake services to inject, as these won't actually be used anywhere
     const services = {} as ServicesContextInterface;
 
     // create mock tasks
@@ -186,7 +176,9 @@ describe("App Integration (all dependencies explicit)", () => {
 
     // Create users model dependencies
     const usersModelDependencies: UsersModelDependencies = {
-      listUsersCommand: async () => mockUsers,
+      usersService: {
+        listUsers: vi.fn(async () => mockUsers),
+      },
     };
 
     // Create users model

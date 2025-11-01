@@ -20,7 +20,7 @@ export type ModelsDependencies = {
 };
 
 /**
- * Specify which subset of commands
+ * Specify which subset of services
  * we depend on in this module
  */
 export type ServicesDependencies = {
