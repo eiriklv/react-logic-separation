@@ -17,7 +17,6 @@ describe("useRootViewModel", () => {
     const queryClient = new QueryClient();
     const tasksService = {} as ITasksService;
     const usersService = {} as IUsersService;
-    const addTaskCommand = vi.fn();
     const deleteTaskCommand = vi.fn();
     const getUserCommand = vi.fn();
     const listTasksCommand = vi.fn();
@@ -27,7 +26,6 @@ describe("useRootViewModel", () => {
       createQueryClient: vi.fn(() => queryClient),
       createTasksService: vi.fn(() => tasksService),
       createUsersService: vi.fn(() => usersService),
-      createAddTaskCommand: vi.fn(() => addTaskCommand),
       createDeleteTaskCommand: vi.fn(() => deleteTaskCommand),
       createGetUserCommand: vi.fn(() => getUserCommand),
       createListTasksCommand: vi.fn(() => listTasksCommand),
@@ -37,8 +35,11 @@ describe("useRootViewModel", () => {
     const { result } = renderHook(() => useRootViewModel({ dependencies }));
 
     expect(result.current).toEqual({
+      services: {
+        tasksService,
+        usersService,
+      },
       commands: {
-        addTaskCommand,
         deleteTaskCommand,
         getUserCommand,
         listTasksCommand,

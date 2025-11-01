@@ -1,4 +1,3 @@
-import { createAddTaskCommand } from "../../commands/add-task.command";
 import { createDeleteTaskCommand } from "../../commands/delete-task.command";
 import { createGetUserCommand } from "../../commands/get-user.command";
 import { createListTasksCommand } from "../../commands/list-tasks.command";
@@ -17,7 +16,6 @@ export type RootViewModelDependencies = {
   createQueryClient: typeof createQueryClient;
   createTasksService: typeof createTasksService;
   createUsersService: typeof createUsersService;
-  createAddTaskCommand: typeof createAddTaskCommand;
   createDeleteTaskCommand: typeof createDeleteTaskCommand;
   createGetUserCommand: typeof createGetUserCommand;
   createListTasksCommand: typeof createListTasksCommand;
@@ -28,7 +26,6 @@ const defaultDependencies: RootViewModelDependencies = {
   createQueryClient,
   createTasksService,
   createUsersService,
-  createAddTaskCommand,
   createDeleteTaskCommand,
   createGetUserCommand,
   createListTasksCommand,

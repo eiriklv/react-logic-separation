@@ -3,6 +3,7 @@ import defaultDependencies, {
   RootViewModelDependencies,
 } from "./Root.view-model.dependencies";
 import { CommandsContextInterface } from "../../providers/commands.provider";
+import { ServicesContextInterface } from "../../providers/services.provider";
 
 /**
  * The main purpose of this file is to
@@ -40,7 +41,6 @@ export const useRootViewModel = ({
     createQueryClient,
     createTasksService,
     createUsersService,
-    createAddTaskCommand,
     createDeleteTaskCommand,
     createGetUserCommand,
     createListTasksCommand,
@@ -67,18 +67,30 @@ export const useRootViewModel = ({
   const queryClient = createQueryClient();
 
   /**
-   * Create SDK instances
+   * TODO(eirikv): Here is where we would need to initialize
+   * any SDK instances that would be dependencies for the services
+   */
+
+  /**
+   * Create service instances
    */
   const tasksService = createTasksService();
   const usersService = createUsersService();
 
   /**
+   * Package the services in an object
+   */
+  const services: ServicesContextInterface = useMemo(
+    () => ({
+      tasksService,
+      usersService,
+    }),
+    [tasksService, usersService],
+  );
+
+  /**
    * Create the commands
    */
-  const addTaskCommand = useMemo(
-    () => createAddTaskCommand({ tasksService }),
-    [createAddTaskCommand, tasksService],
-  );
   const deleteTaskCommand = useMemo(
     () => createDeleteTaskCommand({ tasksService }),
     [createDeleteTaskCommand, tasksService],
@@ -101,23 +113,17 @@ export const useRootViewModel = ({
    */
   const commands: CommandsContextInterface = useMemo(
     () => ({
-      addTaskCommand,
       deleteTaskCommand,
       getUserCommand,
       listTasksCommand,
       listUsersCommand,
     }),
-    [
-      addTaskCommand,
-      deleteTaskCommand,
-      getUserCommand,
-      listTasksCommand,
-      listUsersCommand,
-    ],
+    [deleteTaskCommand, getUserCommand, listTasksCommand, listUsersCommand],
   );
 
   return {
     queryClient,
     commands,
+    services,
   };
 };

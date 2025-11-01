@@ -2,11 +2,13 @@ import { createTasksModel } from "../../models/tasks.model";
 import { createUsersModel } from "../../models/users.model";
 import { createSelectedFiltersModel } from "../../models/selected-filters.model";
 import { useQueryClient } from "@tanstack/react-query";
-import { IAddTaskCommand } from "../../commands/add-task.command";
 import { IDeleteTaskCommand } from "../../commands/delete-task.command";
 import { IListTasksCommand } from "../../commands/list-tasks.command";
 import { IListUsersCommand } from "../../commands/list-users.command";
 import { useCommands } from "../../providers/commands.provider";
+import { ITasksService } from "../../services/tasks.service";
+import { IUsersService } from "../../services/users.service";
+import { useServices } from "../../providers/services.provider";
 
 /**
  * This file contains the interface of the
@@ -19,10 +21,18 @@ import { useCommands } from "../../providers/commands.provider";
  * we depend on in this module
  */
 export type CommandsDependencies = {
-  addTaskCommand: IAddTaskCommand;
   deleteTaskCommand: IDeleteTaskCommand;
   listTasksCommand: IListTasksCommand;
   listUsersCommand: IListUsersCommand;
+};
+
+/**
+ * Specify which subset of services
+ * we depend on in this module
+ */
+export type ServicesDependencies = {
+  tasksService: ITasksService;
+  usersService: IUsersService;
 };
 
 export type AppViewModelDependencies = {
@@ -31,6 +41,7 @@ export type AppViewModelDependencies = {
   createSelectedFiltersModel: typeof createSelectedFiltersModel;
   useQueryClient: typeof useQueryClient;
   useCommands: () => CommandsDependencies;
+  useServices: () => ServicesDependencies;
 };
 
 const defaultDependencies: AppViewModelDependencies = {
@@ -39,6 +50,7 @@ const defaultDependencies: AppViewModelDependencies = {
   createSelectedFiltersModel,
   useQueryClient,
   useCommands,
+  useServices,
 };
 
 export default defaultDependencies;

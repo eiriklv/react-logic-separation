@@ -35,6 +35,7 @@ export const useAppViewModel = ({
   // Get dependencies
   const {
     useCommands,
+    useServices,
     useQueryClient,
     createTasksModel,
     createUsersModel,
@@ -47,12 +48,12 @@ export const useAppViewModel = ({
   // Get commands from the command provider context
   const commands = useCommands();
 
-  const {
-    addTaskCommand,
-    deleteTaskCommand,
-    listTasksCommand,
-    listUsersCommand,
-  } = commands;
+  const { deleteTaskCommand, listTasksCommand, listUsersCommand } = commands;
+
+  // Get commands from the command provider context
+  const services = useServices();
+
+  const { tasksService } = services;
 
   /**
    * TODO: Create all the commands first, and then let
@@ -82,16 +83,16 @@ export const useAppViewModel = ({
   const tasksModel = useMemo(
     () =>
       createTasksModel(queryClient, {
-        addTaskCommand,
+        tasksService,
         deleteTaskCommand,
         listTasksCommand,
       }),
     [
-      addTaskCommand,
       createTasksModel,
       deleteTaskCommand,
       listTasksCommand,
       queryClient,
+      tasksService,
     ],
   );
 

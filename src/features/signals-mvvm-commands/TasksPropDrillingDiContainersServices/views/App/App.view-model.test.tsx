@@ -6,8 +6,11 @@ import { IUsersModel } from "../../models/users.model";
 import {
   AppViewModelDependencies,
   CommandsDependencies,
+  ServicesDependencies,
 } from "./App.view-model.dependencies";
 import { createQueryClient } from "../../utils/create-query-client";
+import { ITasksService } from "../../services/tasks.service";
+import { IUsersService } from "../../services/users.service";
 
 /**
  * Remove the default dependencies from the test
@@ -24,8 +27,12 @@ describe("useAppViewModel", () => {
     const tasksModel = {} as ITasksModel;
     const usersModel = {} as IUsersModel;
 
+    const services: ServicesDependencies = {
+      tasksService: {} as ITasksService,
+      usersService: {} as IUsersService,
+    };
+
     const commands: CommandsDependencies = {
-      addTaskCommand: vi.fn(),
       deleteTaskCommand: vi.fn(),
       listTasksCommand: vi.fn(),
       listUsersCommand: vi.fn(),
@@ -37,6 +44,7 @@ describe("useAppViewModel", () => {
       createUsersModel: vi.fn(() => usersModel),
       useQueryClient: vi.fn(() => queryClient),
       useCommands: vi.fn(() => commands),
+      useServices: vi.fn(() => services),
     };
 
     const { result } = renderHook(() => useAppViewModel({ dependencies }));

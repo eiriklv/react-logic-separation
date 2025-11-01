@@ -34,6 +34,10 @@ import { FiltersViewModelDependencies } from "../Filters/Filters.view-model.depe
 import { ModelsContextInterface } from "../../providers/models.provider";
 import { ActionsViewModelDependencies } from "../Actions/Actions.view-model.dependencies";
 import { TaskListViewModelDependencies } from "../TaskList/TaskList.view-model.dependencies";
+import {
+  ServicesContext,
+  ServicesContextInterface,
+} from "../../providers/services.provider";
 
 describe("App Integration (only command layer mocked)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
@@ -54,14 +58,22 @@ describe("App Integration (only command layer mocked)", () => {
       { id: "user-2", name: "User 2", profileImageUrl: "./src/user-2" },
     ];
 
+    // create mock services
+    const services: ServicesContextInterface = {
+      tasksService: {
+        addTask: vi.fn(),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(),
+      },
+      usersService: {
+        getUserById: vi.fn(),
+        listUsers: vi.fn(),
+      },
+    };
+
     // create mock commands
     const commands: CommandsContextInterface = {
       listTasksCommand: async () => mockTasks,
-      addTaskCommand: async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      }),
       deleteTaskCommand: async () => {},
       getUserCommand: async (userId) => {
         return mockUsers.find((user) => user.id === userId);
@@ -74,6 +86,7 @@ describe("App Integration (only command layer mocked)", () => {
      */
     const Providers = createProviderTree([
       <QueryClientProvider client={queryClient} />,
+      <ServicesContext.Provider value={services} />,
       <CommandsContext.Provider value={commands} />,
     ]);
 
@@ -161,11 +174,13 @@ describe("App Integration (all dependencies explicit)", () => {
     // Create tasks model dependencies
     const tasksModelDependencies: TasksModelDependencies = {
       listTasksCommand: async () => mockTasks,
-      addTaskCommand: async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      }),
+      tasksService: {
+        addTask: async () => ({
+          id: "1",
+          text: "task",
+          ownerId: "user-1",
+        }),
+      },
       deleteTaskCommand: async () => {},
     };
 
