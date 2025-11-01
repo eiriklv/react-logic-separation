@@ -17,7 +17,6 @@ describe("useRootViewModel", () => {
     const queryClient = new QueryClient();
     const tasksService = {} as ITasksService;
     const usersService = {} as IUsersService;
-    const getUserCommand = vi.fn();
     const listTasksCommand = vi.fn();
     const listUsersCommand = vi.fn();
 
@@ -25,7 +24,6 @@ describe("useRootViewModel", () => {
       createQueryClient: vi.fn(() => queryClient),
       createTasksService: vi.fn(() => tasksService),
       createUsersService: vi.fn(() => usersService),
-      createGetUserCommand: vi.fn(() => getUserCommand),
       createListTasksCommand: vi.fn(() => listTasksCommand),
       createListUsersCommand: vi.fn(() => listUsersCommand),
     };
@@ -38,7 +36,6 @@ describe("useRootViewModel", () => {
         usersService,
       },
       commands: {
-        getUserCommand,
         listTasksCommand,
         listUsersCommand,
       },

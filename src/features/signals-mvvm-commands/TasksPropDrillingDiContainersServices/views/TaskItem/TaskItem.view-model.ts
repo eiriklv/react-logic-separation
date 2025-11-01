@@ -31,11 +31,11 @@ export const useTaskItemViewModel = ({
   task,
 }: TaskItemViewModelProps) => {
   // Get dependencies
-  const { createUserModel, useCommands, useModels, useQueryClient } =
+  const { createUserModel, useServices, useModels, useQueryClient } =
     dependencies;
 
-  // Get commands from the shared command provider
-  const commands = useCommands();
+  // Get services from the shared command provider
+  const services = useServices();
 
   // Get models from the shared models provider
   const models = useModels();
@@ -46,12 +46,12 @@ export const useTaskItemViewModel = ({
   // Pull out the stuff we want from the shared models
   const { tasksModel } = models;
 
-  // Pull out the stuff we need from the shared commands
-  const { getUserCommand } = commands;
+  // Pull out the stuff we need from the shared services
+  const { usersService } = services;
 
   const userModel = useMemo(
-    () => createUserModel(task.ownerId, queryClient, { getUserCommand }),
-    [createUserModel, getUserCommand, queryClient, task.ownerId],
+    () => createUserModel(task.ownerId, queryClient, { usersService }),
+    [createUserModel, usersService, queryClient, task.ownerId],
   );
 
   const deleteTask = useCallback(() => {

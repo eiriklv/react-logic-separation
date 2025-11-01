@@ -12,7 +12,9 @@ describe("UserModel", () => {
     };
 
     const mockUserModelDependencies: UserModelDependencies = {
-      getUserCommand: vi.fn(async () => mockUser),
+      usersService: {
+        getUserById: vi.fn(async () => mockUser),
+      },
     };
 
     const mockQueryClient = createQueryClient();
@@ -33,7 +35,9 @@ describe("UserModel", () => {
   it("should expose error if initialization fails", async () => {
     // arrange
     const mockUserModelDependencies: UserModelDependencies = {
-      getUserCommand: vi.fn(async () => Promise.reject(new Error("Failed"))),
+      usersService: {
+        getUserById: vi.fn(async () => Promise.reject(new Error("Failed"))),
+      },
     };
 
     const mockQueryClient = createQueryClient();

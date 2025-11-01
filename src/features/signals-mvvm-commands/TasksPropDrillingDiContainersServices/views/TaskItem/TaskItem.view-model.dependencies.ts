@@ -1,9 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { IGetUserCommand } from "../../commands/get-user.command";
 import { ITasksModel } from "../../models/tasks.model";
 import { createUserModel, IUserModel } from "../../models/user.model";
-import { useCommands } from "../../providers/commands.provider";
 import { useModels } from "../../providers/models.provider";
+import { IUsersService } from "../../services/users.service";
+import { useServices } from "../../providers/services.provider";
 
 /**
  * This file contains the interface of the
@@ -23,8 +23,8 @@ export type ModelsDependencies = {
  * Specify which subset of commands
  * we depend on in this module
  */
-export type CommandsDependencies = {
-  getUserCommand: IGetUserCommand;
+export type ServicesDependencies = {
+  usersService: Pick<IUsersService, "getUserById">;
 };
 
 export type TaskItemViewModelDependencies = {
@@ -32,14 +32,14 @@ export type TaskItemViewModelDependencies = {
     ...args: Parameters<typeof createUserModel>
   ) => Pick<IUserModel, "user">;
   useModels: () => ModelsDependencies;
-  useCommands: () => CommandsDependencies;
+  useServices: () => ServicesDependencies;
   useQueryClient: typeof useQueryClient;
 };
 
 const defaultDependencies: TaskItemViewModelDependencies = {
   createUserModel,
   useModels,
-  useCommands,
+  useServices,
   useQueryClient,
 };
 

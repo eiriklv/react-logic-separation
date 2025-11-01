@@ -41,7 +41,6 @@ export const useRootViewModel = ({
     createQueryClient,
     createTasksService,
     createUsersService,
-    createGetUserCommand,
     createListTasksCommand,
     createListUsersCommand,
   } = dependencies;
@@ -90,10 +89,6 @@ export const useRootViewModel = ({
   /**
    * Create the commands
    */
-  const getUserCommand = useMemo(
-    () => createGetUserCommand({ usersService }),
-    [createGetUserCommand, usersService],
-  );
   const listTasksCommand = useMemo(
     () => createListTasksCommand({ tasksService }),
     [createListTasksCommand, tasksService],
@@ -108,11 +103,10 @@ export const useRootViewModel = ({
    */
   const commands: CommandsContextInterface = useMemo(
     () => ({
-      getUserCommand,
       listTasksCommand,
       listUsersCommand,
     }),
-    [getUserCommand, listTasksCommand, listUsersCommand],
+    [listTasksCommand, listUsersCommand],
   );
 
   return {

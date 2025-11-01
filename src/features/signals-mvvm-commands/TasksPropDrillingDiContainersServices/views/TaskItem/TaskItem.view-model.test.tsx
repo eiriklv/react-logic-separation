@@ -4,8 +4,8 @@ import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
 import { QueryClient } from "@tanstack/query-core";
 import {
-  CommandsDependencies,
   ModelsDependencies,
+  ServicesDependencies,
   TaskItemViewModelDependencies,
 } from "./TaskItem.view-model.dependencies";
 
@@ -22,8 +22,10 @@ describe("useTaskItemViewModel", () => {
 
     const queryClient = new QueryClient();
 
-    const commands: CommandsDependencies = {
-      getUserCommand: vi.fn(),
+    const services: ServicesDependencies = {
+      usersService: {
+        getUserById: vi.fn(),
+      },
     };
 
     const models: ModelsDependencies = {
@@ -40,7 +42,7 @@ describe("useTaskItemViewModel", () => {
           profileImageUrl: "./src/image.png",
         }),
       }),
-      useCommands: () => commands,
+      useServices: () => services,
       useModels: () => models,
       useQueryClient: () => queryClient,
     };

@@ -66,7 +66,9 @@ describe("App Integration (only command layer mocked)", () => {
         listTasks: vi.fn(),
       },
       usersService: {
-        getUserById: vi.fn(),
+        getUserById: vi.fn(async (userId) => {
+          return mockUsers.find((user) => user.id === userId);
+        }),
         listUsers: vi.fn(),
       },
     };
@@ -74,9 +76,6 @@ describe("App Integration (only command layer mocked)", () => {
     // create mock commands
     const commands: CommandsContextInterface = {
       listTasksCommand: async () => mockTasks,
-      getUserCommand: async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
-      },
       listUsersCommand: async () => mockUsers,
     };
 
@@ -154,7 +153,7 @@ describe("App Integration (all dependencies explicit)", () => {
     const queryClient = createQueryClient();
 
     // Create fake commands to inject, as these won't actually be used anywhere
-    const commands = {} as CommandsContextInterface;
+    const services = {} as ServicesContextInterface;
 
     // create mock tasks
     const mockTasks: Task[] = [
@@ -206,8 +205,10 @@ describe("App Integration (all dependencies explicit)", () => {
 
     // Create dependencies for UserModel
     const userModelDependencies: UserModelDependencies = {
-      getUserCommand: async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
+      usersService: {
+        getUserById: vi.fn(async (userId) => {
+          return mockUsers.find((user) => user.id === userId);
+        }),
       },
     };
 
@@ -216,7 +217,7 @@ describe("App Integration (all dependencies explicit)", () => {
       createUserModel: (userId) => {
         return createUserModel(userId, queryClient, userModelDependencies);
       },
-      useCommands: () => commands,
+      useServices: () => services,
       useModels: () => models,
       useQueryClient: () => queryClient,
     };
