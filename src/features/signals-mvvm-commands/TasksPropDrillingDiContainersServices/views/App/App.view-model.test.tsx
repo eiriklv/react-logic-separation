@@ -3,14 +3,10 @@ import { useAppViewModel } from "./App.view-model";
 import { ISelectedFiltersModel } from "../../models/selected-filters.model";
 import { ITasksModel } from "../../models/tasks.model";
 import { IUsersModel } from "../../models/users.model";
-import {
-  AppViewModelDependencies,
-  CommandsDependencies,
-  ServicesDependencies,
-} from "./App.view-model.dependencies";
+import { AppViewModelDependencies } from "./App.view-model.dependencies";
 import { createQueryClient } from "../../utils/create-query-client";
-import { ITasksService } from "../../services/tasks.service";
-import { IUsersService } from "../../services/users.service";
+import { ServicesContextInterface } from "../../providers/services.provider";
+import { CommandsContextInterface } from "../../providers/commands.provider";
 
 /**
  * Remove the default dependencies from the test
@@ -22,21 +18,12 @@ describe("useAppViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const queryClient = createQueryClient();
+    const services = {} as ServicesContextInterface;
+    const commands = {} as CommandsContextInterface;
 
     const selectedFiltersModel = {} as ISelectedFiltersModel;
     const tasksModel = {} as ITasksModel;
     const usersModel = {} as IUsersModel;
-
-    const services: ServicesDependencies = {
-      tasksService: {} as ITasksService,
-      usersService: {} as IUsersService,
-    };
-
-    const commands: CommandsDependencies = {
-      deleteTaskCommand: vi.fn(),
-      listTasksCommand: vi.fn(),
-      listUsersCommand: vi.fn(),
-    };
 
     const dependencies: AppViewModelDependencies = {
       createSelectedFiltersModel: vi.fn(() => selectedFiltersModel),
