@@ -45,7 +45,6 @@ const meta = {
 
     // create mock commands
     const commands: CommandsContextInterface = {
-      listTasksCommand: async () => mockTasks,
       listUsersCommand: async () => mockUsers,
     };
 

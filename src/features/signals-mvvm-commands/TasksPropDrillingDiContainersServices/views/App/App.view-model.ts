@@ -48,7 +48,7 @@ export const useAppViewModel = ({
   // Get commands from the command provider context
   const commands = useCommands();
 
-  const { listTasksCommand, listUsersCommand } = commands;
+  const { listUsersCommand } = commands;
 
   // Get commands from the command provider context
   const services = useServices();
@@ -84,9 +84,8 @@ export const useAppViewModel = ({
     () =>
       createTasksModel(queryClient, {
         tasksService,
-        listTasksCommand,
       }),
-    [createTasksModel, listTasksCommand, queryClient, tasksService],
+    [createTasksModel, queryClient, tasksService],
   );
 
   const selectedFiltersModel = useMemo(

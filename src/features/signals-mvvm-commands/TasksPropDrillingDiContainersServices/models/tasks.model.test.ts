@@ -15,11 +15,11 @@ describe("TasksModel", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
+        listTasks: vi
+          .fn<TasksModelDependencies["tasksService"]["listTasks"]>()
+          .mockResolvedValueOnce(initialMockedTasks)
+          .mockResolvedValueOnce(mockedTasksAfterAdd),
       },
-      listTasksCommand: vi
-        .fn<TasksModelDependencies["listTasksCommand"]>()
-        .mockResolvedValueOnce(initialMockedTasks)
-        .mockResolvedValueOnce(mockedTasksAfterAdd),
     };
 
     const queryClient = createQueryClient();
@@ -42,7 +42,7 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.addTask).toHaveBeenCalledOnce();
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(2);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(mockedTasksAfterAdd);
@@ -72,13 +72,13 @@ describe("TasksModel", () => {
       tasksService: {
         addTask: vi.fn(async (task) => task),
         deleteTask: vi.fn(),
+        listTasks: vi
+          .fn<TasksModelDependencies["tasksService"]["listTasks"]>()
+          .mockResolvedValueOnce(initialMockedTasks)
+          .mockResolvedValueOnce(mockedTasksAfterFirstAdd)
+          .mockResolvedValueOnce(mockedTasksAfterSecondAdd)
+          .mockResolvedValueOnce(mockedTasksAfterThirdAdd),
       },
-      listTasksCommand: vi
-        .fn<TasksModelDependencies["listTasksCommand"]>()
-        .mockResolvedValueOnce(initialMockedTasks)
-        .mockResolvedValueOnce(mockedTasksAfterFirstAdd)
-        .mockResolvedValueOnce(mockedTasksAfterSecondAdd)
-        .mockResolvedValueOnce(mockedTasksAfterThirdAdd),
     };
 
     const queryClient = createQueryClient();
@@ -102,7 +102,7 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.addTask).toHaveBeenCalledTimes(3);
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(4);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(4);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(mockedTasksAfterThirdAdd);
@@ -120,11 +120,11 @@ describe("TasksModel", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
+        listTasks: vi
+          .fn<TasksModelDependencies["tasksService"]["listTasks"]>()
+          .mockResolvedValueOnce(initialMockedTasks)
+          .mockResolvedValueOnce(mockedTasksAfterDelete),
       },
-      listTasksCommand: vi
-        .fn<TasksModelDependencies["listTasksCommand"]>()
-        .mockResolvedValueOnce(initialMockedTasks)
-        .mockResolvedValueOnce(mockedTasksAfterDelete),
     };
 
     const queryClient = createQueryClient();
@@ -147,7 +147,7 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.deleteTask).toHaveBeenCalledTimes(1);
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(2);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(mockedTasksAfterDelete);
@@ -164,10 +164,10 @@ describe("TasksModel", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
+        listTasks: vi
+          .fn<TasksModelDependencies["tasksService"]["listTasks"]>()
+          .mockResolvedValueOnce(initialMockedTasks),
       },
-      listTasksCommand: vi
-        .fn<TasksModelDependencies["listTasksCommand"]>()
-        .mockResolvedValueOnce(initialMockedTasks),
     };
 
     const queryClient = createQueryClient();
@@ -192,7 +192,7 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.deleteTask).toHaveBeenCalledTimes(0);
 
     // check that the tasks were re-fetched the correct amount of times
-    expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(1);
 
     // check that the list of tasks is correct
     expect(model.tasks.value).toEqual(initialMockedTasks);
@@ -207,10 +207,10 @@ describe("TasksModel", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
+        listTasks: vi
+          .fn<TasksModelDependencies["tasksService"]["listTasks"]>()
+          .mockResolvedValueOnce(initialMockedTasks),
       },
-      listTasksCommand: vi
-        .fn<TasksModelDependencies["listTasksCommand"]>()
-        .mockResolvedValueOnce(initialMockedTasks),
     };
 
     const queryClient = createQueryClient();
@@ -239,7 +239,7 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.addTask).not.toHaveBeenCalled();
 
     // check that it did not refetch the tasks
-    expect(mockDependencies.listTasksCommand).toHaveBeenCalledOnce();
+    expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledOnce();
 
     // check that the list of tasks is still the same as before
     expect(model.tasks.value).toEqual(initialMockedTasks);
@@ -258,8 +258,8 @@ describe("TasksModel", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => fakeTasks),
       },
-      listTasksCommand: vi.fn(async () => fakeTasks),
     };
 
     const queryClient = createQueryClient();

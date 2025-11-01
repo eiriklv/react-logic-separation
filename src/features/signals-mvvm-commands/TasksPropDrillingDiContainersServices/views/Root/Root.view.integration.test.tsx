@@ -266,108 +266,6 @@ describe("Root Integration (view-model layer services)", () => {
   });
 });
 
-describe("Root Integration (view-model layer commands)", () => {
-  it("should reflect changes in filters in all applicable views", async () => {
-    // create mock tasks
-    const mockTasks: Task[] = [
-      { id: "1", text: "Task 1", ownerId: "user-1" },
-      { id: "2", text: "Task 2", ownerId: "user-1" },
-      { id: "3", text: "Task 3", ownerId: "user-2" },
-      { id: "4", text: "Task 4", ownerId: "user-2" },
-    ];
-
-    // create mock users
-    const mockUsers: User[] = [
-      { id: "user-1", name: "User 1", profileImageUrl: "./src/user-1" },
-      { id: "user-2", name: "User 2", profileImageUrl: "./src/user-2" },
-    ];
-
-    // create mock commands
-    const commands: CommandsContextInterface = {
-      listTasksCommand: vi.fn(async () => mockTasks),
-      deleteTaskCommand: vi.fn(),
-      getUserCommand: vi.fn(async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
-      }),
-      listUsersCommand: vi.fn(async () => mockUsers),
-    };
-
-    // create root dependencies
-    const rootDependencies: RootDependencies = {
-      App: defaultDependencies.App,
-      useRootViewModel: () =>
-        defaultDependencies.useRootViewModel({
-          dependencies: {
-            /**
-             * Use the real dependencies
-             */
-            ...rootViewModelDefaultDependencies,
-            /**
-             * ... Except for the commands
-             */
-            createDeleteTaskCommand: () => commands.deleteTaskCommand,
-            createGetUserCommand: () => commands.getUserCommand,
-            createListTasksCommand: () => commands.listTasksCommand,
-            createListUsersCommand: () => commands.listUsersCommand,
-          },
-        }),
-    };
-
-    /**
-     * Render a version that injects all the dependencies
-     * we created further up so that we can test our integration
-     */
-    render(<Root dependencies={rootDependencies} />);
-
-    // wait for loading to finish
-    await waitFor(() =>
-      expect(screen.queryByText(/Loading/)).not.toBeInTheDocument(),
-    );
-
-    // assert
-    expect(screen.getByText(/Task 1/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 2/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 3/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 4/)).toBeInTheDocument();
-    expect(screen.getByText(/Count: 4/)).toBeInTheDocument();
-
-    // act
-    await userEvent.selectOptions(
-      screen.getByRole("combobox", { name: "Owner:" }),
-      "User 1",
-    );
-
-    // assert
-    expect(screen.getByText(/Task 1/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 2/)).toBeInTheDocument();
-    expect(screen.getByText(/Count: 2/)).toBeInTheDocument();
-
-    // act
-    await userEvent.selectOptions(
-      screen.getByRole("combobox", { name: "Owner:" }),
-      "User 2",
-    );
-
-    // assert
-    expect(screen.getByText(/Task 3/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 4/)).toBeInTheDocument();
-    expect(screen.getByText(/Count: 2/)).toBeInTheDocument();
-
-    // act
-    await userEvent.selectOptions(
-      screen.getByRole("combobox", { name: "Owner:" }),
-      "All",
-    );
-
-    // assert
-    expect(screen.getByText(/Task 1/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 2/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 3/)).toBeInTheDocument();
-    expect(screen.getByText(/Task 4/)).toBeInTheDocument();
-    expect(screen.getByText(/Count: 4/)).toBeInTheDocument();
-  });
-});
-
 describe("Root Integration (view layer commands)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
@@ -419,11 +317,6 @@ describe("Root Integration (view layer commands)", () => {
 
     // create mock commands
     const commands: CommandsContextInterface = {
-      listTasksCommand: vi.fn(async () => mockTasks),
-      deleteTaskCommand: vi.fn(),
-      getUserCommand: vi.fn(async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
-      }),
       listUsersCommand: vi.fn(async () => mockUsers),
     };
 

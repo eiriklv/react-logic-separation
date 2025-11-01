@@ -8,7 +8,6 @@ import {
 } from "../../../../lib/query";
 import { QueryClient } from "@tanstack/query-core";
 import { Task } from "../types";
-import { IListTasksCommand } from "../commands/list-tasks.command";
 import { ITasksService } from "../services/tasks.service";
 
 export interface ITasksModel {
@@ -32,8 +31,7 @@ export interface ITasksModel {
 
 // Types and interfaces
 export type TasksModelDependencies = {
-  listTasksCommand: IListTasksCommand;
-  tasksService: Pick<ITasksService, "addTask" | "deleteTask">;
+  tasksService: Pick<ITasksService, "addTask" | "deleteTask" | "listTasks">;
 };
 
 export class TasksModel implements ITasksModel {
@@ -72,7 +70,7 @@ export class TasksModel implements ITasksModel {
     this._tasksQuery = query<Task[]>(
       () => ({
         queryKey: ["tasks"],
-        queryFn: () => this._dependencies.listTasksCommand(),
+        queryFn: () => this._dependencies.tasksService.listTasks(),
       }),
       () => this._queryClient,
     );

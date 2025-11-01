@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { IListTasksCommand } from "../commands/list-tasks.command";
 import { IListUsersCommand } from "../commands/list-users.command";
 
 /**
@@ -14,7 +13,6 @@ import { IListUsersCommand } from "../commands/list-users.command";
  */
 
 export interface CommandsContextInterface {
-  listTasksCommand: IListTasksCommand;
   listUsersCommand: IListUsersCommand;
 }
 

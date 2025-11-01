@@ -63,7 +63,7 @@ describe("App Integration (only command layer mocked)", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
-        listTasks: vi.fn(),
+        listTasks: vi.fn(async () => mockTasks),
       },
       usersService: {
         getUserById: vi.fn(async (userId) => {
@@ -75,7 +75,6 @@ describe("App Integration (only command layer mocked)", () => {
 
     // create mock commands
     const commands: CommandsContextInterface = {
-      listTasksCommand: async () => mockTasks,
       listUsersCommand: async () => mockUsers,
     };
 
@@ -171,7 +170,6 @@ describe("App Integration (all dependencies explicit)", () => {
 
     // Create tasks model dependencies
     const tasksModelDependencies: TasksModelDependencies = {
-      listTasksCommand: async () => mockTasks,
       tasksService: {
         addTask: async () => ({
           id: "1",
@@ -179,6 +177,7 @@ describe("App Integration (all dependencies explicit)", () => {
           ownerId: "user-1",
         }),
         deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => mockTasks),
       },
     };
 
