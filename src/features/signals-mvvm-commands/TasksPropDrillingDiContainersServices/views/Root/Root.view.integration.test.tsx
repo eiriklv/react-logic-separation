@@ -13,9 +13,6 @@ import { createQueryClient } from "../../utils/create-query-client";
 import rootViewModelDefaultDependencies from "./Root.view-model.dependencies";
 import { ServicesContextInterface } from "../../providers/services.provider";
 import { ModelsContextInterface } from "../../providers/models.provider";
-import { TasksModel } from "../../models/tasks.model";
-import { UsersModel } from "../../models/users.model";
-import { SelectedFiltersModel } from "../../models/selected-filters.model";
 
 describe("Root Integration (view-model layer services)", () => {
   it("should reflect changes when deleting a task in all applicable views", async () => {
@@ -315,9 +312,16 @@ describe("Root Integration (view layer services and models)", () => {
 
     // create mock models
     const models: ModelsContextInterface = {
-      tasksModel: new TasksModel(queryClient, services),
-      usersModel: new UsersModel(queryClient, services),
-      selectedFiltersModel: new SelectedFiltersModel(),
+      tasksModel: rootViewModelDefaultDependencies.createTasksModel(
+        queryClient,
+        services,
+      ),
+      usersModel: rootViewModelDefaultDependencies.createUsersModel(
+        queryClient,
+        services,
+      ),
+      selectedFiltersModel:
+        rootViewModelDefaultDependencies.createSelectedFiltersModel(),
     };
 
     // create root dependencies
