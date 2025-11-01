@@ -9,7 +9,6 @@ import {
 import { QueryClient } from "@tanstack/query-core";
 import { Task } from "../types";
 import { IListTasksCommand } from "../commands/list-tasks.command";
-import { IDeleteTaskCommand } from "../commands/delete-task.command";
 import { ITasksService } from "../services/tasks.service";
 
 export interface ITasksModel {
@@ -34,8 +33,7 @@ export interface ITasksModel {
 // Types and interfaces
 export type TasksModelDependencies = {
   listTasksCommand: IListTasksCommand;
-  tasksService: Pick<ITasksService, "addTask">;
-  deleteTaskCommand: IDeleteTaskCommand;
+  tasksService: Pick<ITasksService, "addTask" | "deleteTask">;
 };
 
 export class TasksModel implements ITasksModel {
@@ -94,7 +92,7 @@ export class TasksModel implements ITasksModel {
     this._deleteTaskMutation = mutation(
       () => ({
         mutationFn: ({ taskId }: { taskId: string }) =>
-          this._dependencies.deleteTaskCommand(taskId),
+          this._dependencies.tasksService.deleteTask(taskId),
         onSuccess: () => {
           this._queryClient.invalidateQueries({ queryKey: ["tasks"] });
         },
@@ -167,7 +165,7 @@ export class TasksModel implements ITasksModel {
   public deleteTask = async (taskId: string) => {
     // Validation
     if (!taskId) {
-      return;
+      throw new Error("Task id must be provided");
     }
 
     await this._deleteTaskMutation.value.mutate({ taskId });

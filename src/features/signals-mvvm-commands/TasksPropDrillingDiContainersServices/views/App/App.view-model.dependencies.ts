@@ -2,7 +2,6 @@ import { createTasksModel } from "../../models/tasks.model";
 import { createUsersModel } from "../../models/users.model";
 import { createSelectedFiltersModel } from "../../models/selected-filters.model";
 import { useQueryClient } from "@tanstack/react-query";
-import { IDeleteTaskCommand } from "../../commands/delete-task.command";
 import { IListTasksCommand } from "../../commands/list-tasks.command";
 import { IListUsersCommand } from "../../commands/list-users.command";
 import { useCommands } from "../../providers/commands.provider";
@@ -21,7 +20,6 @@ import { useServices } from "../../providers/services.provider";
  * we depend on in this module
  */
 export type CommandsDependencies = {
-  deleteTaskCommand: IDeleteTaskCommand;
   listTasksCommand: IListTasksCommand;
   listUsersCommand: IListUsersCommand;
 };

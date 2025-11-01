@@ -8,6 +8,10 @@ import {
   CommandsContextInterface,
 } from "../../providers/commands.provider";
 import { createProviderTree } from "../../../../../lib/create-provider-tree";
+import {
+  ServicesContext,
+  ServicesContextInterface,
+} from "../../providers/services.provider";
 
 const meta = {
   render: (_, { parameters }) => {
@@ -20,15 +24,28 @@ const meta = {
     // create mock users
     const mockUsers: User[] = parameters.users;
 
+    // create mock services
+    const services: ServicesContextInterface = {
+      tasksService: {
+        addTask: vi.fn(async () => ({
+          id: "1",
+          text: "task",
+          ownerId: "user-1",
+        })),
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => mockTasks),
+      },
+      usersService: {
+        getUserById: vi.fn(async (userId) => {
+          return mockUsers.find((user) => user.id === userId);
+        }),
+        listUsers: vi.fn(async () => mockUsers),
+      },
+    };
+
     // create mock commands
     const commands: CommandsContextInterface = {
       listTasksCommand: async () => mockTasks,
-      addTaskCommand: async () => ({
-        id: "1",
-        text: "task",
-        ownerId: "user-1",
-      }),
-      deleteTaskCommand: async () => {},
       getUserCommand: async (userId) => {
         return mockUsers.find((user) => user.id === userId);
       },
@@ -40,6 +57,7 @@ const meta = {
      */
     const Providers = createProviderTree([
       <QueryClientProvider client={queryClient} />,
+      <ServicesContext.Provider value={services} />,
       <CommandsContext.Provider value={commands} />,
     ]);
 

@@ -14,8 +14,8 @@ describe("TasksModel", () => {
     const mockDependencies: TasksModelDependencies = {
       tasksService: {
         addTask: vi.fn(),
+        deleteTask: vi.fn(),
       },
-      deleteTaskCommand: vi.fn(),
       listTasksCommand: vi
         .fn<TasksModelDependencies["listTasksCommand"]>()
         .mockResolvedValueOnce(initialMockedTasks)
@@ -71,8 +71,8 @@ describe("TasksModel", () => {
     const mockDependencies: TasksModelDependencies = {
       tasksService: {
         addTask: vi.fn(async (task) => task),
+        deleteTask: vi.fn(),
       },
-      deleteTaskCommand: vi.fn(),
       listTasksCommand: vi
         .fn<TasksModelDependencies["listTasksCommand"]>()
         .mockResolvedValueOnce(initialMockedTasks)
@@ -119,8 +119,8 @@ describe("TasksModel", () => {
     const mockDependencies: TasksModelDependencies = {
       tasksService: {
         addTask: vi.fn(),
+        deleteTask: vi.fn(),
       },
-      deleteTaskCommand: vi.fn(),
       listTasksCommand: vi
         .fn<TasksModelDependencies["listTasksCommand"]>()
         .mockResolvedValueOnce(initialMockedTasks)
@@ -144,7 +144,7 @@ describe("TasksModel", () => {
     await model.deleteTask("1");
 
     // check that the tasks were added the correct amount of times
-    expect(mockDependencies.deleteTaskCommand).toHaveBeenCalledTimes(1);
+    expect(mockDependencies.tasksService.deleteTask).toHaveBeenCalledTimes(1);
 
     // check that the tasks were re-fetched the correct amount of times
     expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(2);
@@ -163,8 +163,8 @@ describe("TasksModel", () => {
     const mockDependencies: TasksModelDependencies = {
       tasksService: {
         addTask: vi.fn(),
+        deleteTask: vi.fn(),
       },
-      deleteTaskCommand: vi.fn(),
       listTasksCommand: vi
         .fn<TasksModelDependencies["listTasksCommand"]>()
         .mockResolvedValueOnce(initialMockedTasks),
@@ -184,10 +184,12 @@ describe("TasksModel", () => {
     expect(model.tasksCount.value).toEqual(1);
 
     // add some tasks
-    await model.deleteTask("");
+    expect(() => model.deleteTask("")).rejects.toThrowError(
+      "Task id must be provided",
+    );
 
     // check that the tasks were added the correct amount of times
-    expect(mockDependencies.deleteTaskCommand).toHaveBeenCalledTimes(0);
+    expect(mockDependencies.tasksService.deleteTask).toHaveBeenCalledTimes(0);
 
     // check that the tasks were re-fetched the correct amount of times
     expect(mockDependencies.listTasksCommand).toHaveBeenCalledTimes(1);
@@ -204,8 +206,8 @@ describe("TasksModel", () => {
     const mockDependencies: TasksModelDependencies = {
       tasksService: {
         addTask: vi.fn(),
+        deleteTask: vi.fn(),
       },
-      deleteTaskCommand: vi.fn(),
       listTasksCommand: vi
         .fn<TasksModelDependencies["listTasksCommand"]>()
         .mockResolvedValueOnce(initialMockedTasks),
@@ -255,8 +257,8 @@ describe("TasksModel", () => {
     const mockDependencies: TasksModelDependencies = {
       tasksService: {
         addTask: vi.fn(),
+        deleteTask: vi.fn(),
       },
-      deleteTaskCommand: vi.fn(),
       listTasksCommand: vi.fn(async () => fakeTasks),
     };
 

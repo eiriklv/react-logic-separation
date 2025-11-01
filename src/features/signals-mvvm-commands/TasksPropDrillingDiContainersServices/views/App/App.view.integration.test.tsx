@@ -74,7 +74,6 @@ describe("App Integration (only command layer mocked)", () => {
     // create mock commands
     const commands: CommandsContextInterface = {
       listTasksCommand: async () => mockTasks,
-      deleteTaskCommand: async () => {},
       getUserCommand: async (userId) => {
         return mockUsers.find((user) => user.id === userId);
       },
@@ -180,8 +179,8 @@ describe("App Integration (all dependencies explicit)", () => {
           text: "task",
           ownerId: "user-1",
         }),
+        deleteTask: vi.fn(),
       },
-      deleteTaskCommand: async () => {},
     };
 
     // Create tasks model
