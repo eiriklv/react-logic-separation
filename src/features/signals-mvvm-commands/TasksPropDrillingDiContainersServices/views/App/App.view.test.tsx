@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import { App } from "./App.view";
-import { useAppViewModel } from "./App.view-model";
 import { AppDependencies } from "./App.view.dependencies";
 
 /**
@@ -13,9 +12,6 @@ describe("App", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: AppDependencies = {
-      useAppViewModel: () => ({
-        models: {} as ReturnType<typeof useAppViewModel>["models"],
-      }),
       Actions: () => <div data-testid="Actions" />,
       Filters: () => <div data-testid="Filters" />,
       TaskList: () => <div data-testid="TaskList" />,

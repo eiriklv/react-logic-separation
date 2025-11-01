@@ -27,7 +27,10 @@ import { FiltersDependencies } from "../Filters/Filters.view.dependencies";
 import { AppDependencies } from "./App.view.dependencies";
 import { createQueryClient } from "../../utils/create-query-client";
 import { FiltersViewModelDependencies } from "../Filters/Filters.view-model.dependencies";
-import { ModelsContextInterface } from "../../providers/models.provider";
+import {
+  ModelsContext,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
 import { ActionsViewModelDependencies } from "../Actions/Actions.view-model.dependencies";
 import { TaskListViewModelDependencies } from "../TaskList/TaskList.view-model.dependencies";
 import {
@@ -69,12 +72,20 @@ describe("App Integration (only service layer mocked)", () => {
       },
     };
 
+    // create mock models
+    const models: ModelsContextInterface = {
+      tasksModel: new TasksModel(queryClient, services),
+      usersModel: new UsersModel(queryClient, services),
+      selectedFiltersModel: new SelectedFiltersModel(),
+    };
+
     /**
      * Create provider tree
      */
     const Providers = createProviderTree([
       <QueryClientProvider client={queryClient} />,
       <ServicesContext.Provider value={services} />,
+      <ModelsContext.Provider value={models} />,
     ]);
 
     /**

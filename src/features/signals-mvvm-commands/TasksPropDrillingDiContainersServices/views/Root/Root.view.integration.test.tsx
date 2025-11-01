@@ -12,6 +12,10 @@ import { createQueryClient } from "../../utils/create-query-client";
 
 import rootViewModelDefaultDependencies from "./Root.view-model.dependencies";
 import { ServicesContextInterface } from "../../providers/services.provider";
+import { ModelsContextInterface } from "../../providers/models.provider";
+import { TasksModel } from "../../models/tasks.model";
+import { UsersModel } from "../../models/users.model";
+import { SelectedFiltersModel } from "../../models/selected-filters.model";
 
 describe("Root Integration (view-model layer services)", () => {
   it("should reflect changes when deleting a task in all applicable views", async () => {
@@ -49,8 +53,13 @@ describe("Root Integration (view-model layer services)", () => {
       useRootViewModel: () =>
         defaultDependencies.useRootViewModel({
           dependencies: {
-            createQueryClient:
-              rootViewModelDefaultDependencies.createQueryClient,
+            /**
+             * Use real dependencies
+             */
+            ...rootViewModelDefaultDependencies,
+            /**
+             * ... Except for the services
+             */
             createTasksService: () => tasksService,
             createUsersService: () => usersService,
           },
@@ -260,7 +269,7 @@ describe("Root Integration (view-model layer services)", () => {
   });
 });
 
-describe("Root Integration (view layer services)", () => {
+describe("Root Integration (view layer services and models)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
     const queryClient = createQueryClient();
@@ -279,42 +288,45 @@ describe("Root Integration (view layer services)", () => {
       { id: "user-2", name: "User 2", profileImageUrl: "./src/user-2" },
     ];
 
-    // create mock tasks service
-    const tasksService: ITasksService = {
-      addTask: async (text, ownerId) => {
-        const newTask: Task = {
-          id: "new-task",
-          ownerId,
-          text,
-        };
-
-        mockTasks.push(newTask);
-
-        return newTask;
-      },
-      deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => mockTasks),
-    };
-
-    // create mock users service
-    const usersService: IUsersService = {
-      getUserById: vi.fn(async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
-      }),
-      listUsers: vi.fn(async () => mockUsers),
-    };
-
+    // create mock services
     const services: ServicesContextInterface = {
-      tasksService,
-      usersService,
+      tasksService: {
+        addTask: async (text, ownerId) => {
+          const newTask: Task = {
+            id: "new-task",
+            ownerId,
+            text,
+          };
+
+          mockTasks.push(newTask);
+
+          return newTask;
+        },
+        deleteTask: vi.fn(),
+        listTasks: vi.fn(async () => mockTasks),
+      },
+      usersService: {
+        getUserById: vi.fn(async (userId) => {
+          return mockUsers.find((user) => user.id === userId);
+        }),
+        listUsers: vi.fn(async () => mockUsers),
+      },
+    };
+
+    // create mock models
+    const models: ModelsContextInterface = {
+      tasksModel: new TasksModel(queryClient, services),
+      usersModel: new UsersModel(queryClient, services),
+      selectedFiltersModel: new SelectedFiltersModel(),
     };
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
       App: defaultDependencies.App,
       useRootViewModel: () => ({
-        services,
         queryClient,
+        services,
+        models,
       }),
     };
 

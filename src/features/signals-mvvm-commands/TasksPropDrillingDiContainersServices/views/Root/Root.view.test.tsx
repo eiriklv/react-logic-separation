@@ -17,6 +17,7 @@ describe("Root", () => {
       useRootViewModel: () => ({
         queryClient: new QueryClient(),
         services: {} as ReturnType<typeof useRootViewModel>["services"],
+        models: {} as ReturnType<typeof useRootViewModel>["models"],
       }),
       App: () => <div data-testid="App" />,
     };

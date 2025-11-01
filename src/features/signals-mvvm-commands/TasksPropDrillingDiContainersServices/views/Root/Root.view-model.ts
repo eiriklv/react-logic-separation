@@ -3,6 +3,7 @@ import defaultDependencies, {
   RootViewModelDependencies,
 } from "./Root.view-model.dependencies";
 import { ServicesContextInterface } from "../../providers/services.provider";
+import { ModelsContextInterface } from "../../providers/models.provider";
 
 /**
  * The main purpose of this file is to
@@ -36,8 +37,14 @@ export const useRootViewModel = ({
   dependencies = defaultDependencies,
 }: Props = {}) => {
   // Get dependencies
-  const { createQueryClient, createTasksService, createUsersService } =
-    dependencies;
+  const {
+    createQueryClient,
+    createTasksService,
+    createUsersService,
+    createTasksModel,
+    createUsersModel,
+    createSelectedFiltersModel,
+  } = dependencies;
 
   /**
    * NOTE: Create all the services first, and then let
@@ -80,8 +87,45 @@ export const useRootViewModel = ({
     [tasksService, usersService],
   );
 
+  /**
+   * Create the models
+   */
+  const usersModel = useMemo(
+    () =>
+      createUsersModel(queryClient, {
+        usersService,
+      }),
+    [createUsersModel, queryClient, usersService],
+  );
+
+  const tasksModel = useMemo(
+    () =>
+      createTasksModel(queryClient, {
+        tasksService,
+      }),
+    [createTasksModel, queryClient, tasksService],
+  );
+
+  const selectedFiltersModel = useMemo(
+    () => createSelectedFiltersModel(),
+    [createSelectedFiltersModel],
+  );
+
+  /**
+   * Package the models in an object
+   */
+  const models: ModelsContextInterface = useMemo(
+    () => ({
+      usersModel,
+      tasksModel,
+      selectedFiltersModel,
+    }),
+    [selectedFiltersModel, tasksModel, usersModel],
+  );
+
   return {
     queryClient,
     services,
+    models,
   };
 };

@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { App } from "./App.view";
-import { useAppViewModel } from "./App.view-model";
 
 const meta = {
   component: App,
@@ -15,9 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     dependencies: {
-      useAppViewModel: () => ({
-        models: {} as ReturnType<typeof useAppViewModel>["models"],
-      }),
       Actions: () => <>Actions</>,
       Filters: () => <>Filters</>,
       TaskList: () => <>TaskList</>,

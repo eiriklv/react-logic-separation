@@ -3,6 +3,7 @@ import defaultDependencies, {
   RootDependencies,
 } from "./Root.view.dependencies";
 import { ServicesContext } from "../../providers/services.provider";
+import { ModelsContext } from "../../providers/models.provider";
 
 /**
  * Here's where we wrap all the top level providers
@@ -35,12 +36,14 @@ export function Root({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
   const { useRootViewModel, App } = dependencies;
 
-  const { queryClient, services } = useRootViewModel();
+  const { queryClient, services, models } = useRootViewModel();
 
   return (
     <QueryClientProvider client={queryClient}>
       <ServicesContext.Provider value={services}>
-        <App />
+        <ModelsContext.Provider value={models}>
+          <App />
+        </ModelsContext.Provider>
       </ServicesContext.Provider>
     </QueryClientProvider>
   );

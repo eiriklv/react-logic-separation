@@ -8,6 +8,13 @@ import {
   ServicesContext,
   ServicesContextInterface,
 } from "../../providers/services.provider";
+import {
+  ModelsContext,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
+import { TasksModel } from "../../models/tasks.model";
+import { UsersModel } from "../../models/users.model";
+import { SelectedFiltersModel } from "../../models/selected-filters.model";
 
 const meta = {
   render: (_, { parameters }) => {
@@ -39,12 +46,20 @@ const meta = {
       },
     };
 
+    // create mock models
+    const models: ModelsContextInterface = {
+      tasksModel: new TasksModel(queryClient, services),
+      usersModel: new UsersModel(queryClient, services),
+      selectedFiltersModel: new SelectedFiltersModel(),
+    };
+
     /**
      * Create provider tree
      */
     const Providers = createProviderTree([
       <QueryClientProvider client={queryClient} />,
       <ServicesContext.Provider value={services} />,
+      <ModelsContext.Provider value={models} />,
     ]);
 
     /**

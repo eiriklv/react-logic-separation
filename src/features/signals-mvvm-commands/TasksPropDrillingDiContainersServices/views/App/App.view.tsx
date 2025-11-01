@@ -1,4 +1,3 @@
-import { ModelsContext } from "../../providers/models.provider";
 import defaultDependencies from "./App.view.dependencies";
 import { AppDependencies } from "./App.view.dependencies";
 
@@ -15,22 +14,13 @@ type Props = {
  */
 export function App({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
-  const { useAppViewModel, Actions, Filters, TaskList } = dependencies;
-
-  /**
-   * The app container owns the tasks and users models,
-   * which is then provided via context for consumption
-   * futher down the tree.
-   */
-  const { models } = useAppViewModel();
+  const { Actions, Filters, TaskList } = dependencies;
 
   return (
-    <ModelsContext.Provider value={models}>
-      <div>
-        <Actions />
-        <Filters />
-        <TaskList />
-      </div>
-    </ModelsContext.Provider>
+    <div>
+      <Actions />
+      <Filters />
+      <TaskList />
+    </div>
   );
 }
