@@ -24,9 +24,12 @@ describe("Root Integration (view-model layer services)", () => {
     // create mock tasks service
     const tasksService: ITasksService = {
       addTask: vi.fn(),
-      deleteTask: async (taskId) => {
-        mockTasks.splice(mockTasks.findIndex(({ id }) => taskId === id));
-      },
+      deleteTask: vi.fn(async (taskId) => {
+        mockTasks.splice(
+          mockTasks.findIndex(({ id }) => taskId === id),
+          1,
+        );
+      }),
       listTasks: vi.fn(async () => mockTasks),
     };
 

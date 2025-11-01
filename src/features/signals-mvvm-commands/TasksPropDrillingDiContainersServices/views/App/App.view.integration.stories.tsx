@@ -15,6 +15,7 @@ import {
 import { TasksModel } from "../../models/tasks.model";
 import { UsersModel } from "../../models/users.model";
 import { SelectedFiltersModel } from "../../models/selected-filters.model";
+import { generateId } from "../../../../../lib/utils";
 
 const meta = {
   render: (_, { parameters }) => {
@@ -30,12 +31,23 @@ const meta = {
     // create mock services
     const services: ServicesContextInterface = {
       tasksService: {
-        addTask: async () => ({
-          id: "1",
-          text: "task",
-          ownerId: "user-1",
-        }),
-        deleteTask: async () => {},
+        addTask: async (text, ownerId) => {
+          const newTask = {
+            id: generateId(),
+            text,
+            ownerId,
+          };
+
+          mockTasks.push(newTask);
+
+          return newTask;
+        },
+        deleteTask: async (taskId) => {
+          mockTasks.splice(
+            mockTasks.findIndex(({ id }) => taskId === id),
+            1,
+          );
+        },
         listTasks: async () => mockTasks,
       },
       usersService: {
