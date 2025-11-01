@@ -3,7 +3,6 @@ import { Filters } from "./Filters.view";
 
 const meta = {
   component: Filters,
-  title: "Filters",
   tags: ["autodocs"],
 } satisfies Meta<typeof Filters>;
 

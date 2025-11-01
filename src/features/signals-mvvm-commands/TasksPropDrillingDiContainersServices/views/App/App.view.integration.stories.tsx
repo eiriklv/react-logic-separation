@@ -30,19 +30,19 @@ const meta = {
     // create mock services
     const services: ServicesContextInterface = {
       tasksService: {
-        addTask: vi.fn(async () => ({
+        addTask: async () => ({
           id: "1",
           text: "task",
           ownerId: "user-1",
-        })),
-        deleteTask: vi.fn(),
-        listTasks: vi.fn(async () => mockTasks),
+        }),
+        deleteTask: async () => {},
+        listTasks: async () => mockTasks,
       },
       usersService: {
-        getUserById: vi.fn(async (userId) => {
+        getUserById: async (userId) => {
           return mockUsers.find((user) => user.id === userId);
-        }),
-        listUsers: vi.fn(async () => mockUsers),
+        },
+        listUsers: async () => mockUsers,
       },
     };
 

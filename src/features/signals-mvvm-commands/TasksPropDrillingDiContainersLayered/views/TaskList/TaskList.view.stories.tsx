@@ -3,7 +3,6 @@ import { TaskList } from "./TaskList.view";
 
 const meta = {
   component: TaskList,
-  title: "TaskList",
   tags: ["autodocs"],
 } satisfies Meta<typeof TaskList>;
 

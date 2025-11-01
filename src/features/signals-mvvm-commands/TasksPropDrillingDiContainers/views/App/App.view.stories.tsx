@@ -4,7 +4,6 @@ import { useAppViewModel } from "./App.view-model";
 
 const meta = {
   component: App,
-  title: "App",
   tags: ["autodocs"],
 } satisfies Meta<typeof App>;
 
