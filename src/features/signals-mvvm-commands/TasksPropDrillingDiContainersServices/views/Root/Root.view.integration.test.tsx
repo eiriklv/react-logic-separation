@@ -49,13 +49,8 @@ describe("Root Integration (view-model layer services)", () => {
       useRootViewModel: () =>
         defaultDependencies.useRootViewModel({
           dependencies: {
-            /**
-             * Use the real dependencies
-             */
-            ...rootViewModelDefaultDependencies,
-            /**
-             * ... Except for the services
-             */
+            createQueryClient:
+              rootViewModelDefaultDependencies.createQueryClient,
             createTasksService: () => tasksService,
             createUsersService: () => usersService,
           },
