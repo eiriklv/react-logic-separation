@@ -62,13 +62,19 @@ describe("App Integration (only service layer mocked)", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
-        listTasks: vi.fn(async () => mockTasks),
+        listTasks: vi
+          .fn<ServicesContextInterface["tasksService"]["listTasks"]>()
+          .mockImplementation(async () => mockTasks),
       },
       usersService: {
-        getUserById: vi.fn(async (userId) => {
-          return mockUsers.find((user) => user.id === userId);
-        }),
-        listUsers: vi.fn(async () => mockUsers),
+        getUserById: vi
+          .fn<ServicesContextInterface["usersService"]["getUserById"]>()
+          .mockImplementation(async (userId) => {
+            return mockUsers.find((user) => user.id === userId);
+          }),
+        listUsers: vi
+          .fn<ServicesContextInterface["usersService"]["listUsers"]>()
+          .mockImplementation(async () => mockUsers),
       },
     };
 
@@ -172,13 +178,17 @@ describe("App Integration (all dependencies explicit)", () => {
     // Create tasks model dependencies
     const tasksModelDependencies: TasksModelDependencies = {
       tasksService: {
-        addTask: async () => ({
-          id: "1",
-          text: "task",
-          ownerId: "user-1",
-        }),
+        addTask: vi
+          .fn<TasksModelDependencies["tasksService"]["addTask"]>()
+          .mockImplementation(async () => ({
+            id: "1",
+            text: "task",
+            ownerId: "user-1",
+          })),
         deleteTask: vi.fn(),
-        listTasks: vi.fn(async () => mockTasks),
+        listTasks: vi
+          .fn<TasksModelDependencies["tasksService"]["listTasks"]>()
+          .mockImplementation(async () => mockTasks),
       },
     };
 
@@ -188,7 +198,9 @@ describe("App Integration (all dependencies explicit)", () => {
     // Create users model dependencies
     const usersModelDependencies: UsersModelDependencies = {
       usersService: {
-        listUsers: vi.fn(async () => mockUsers),
+        listUsers: vi
+          .fn<UsersModelDependencies["usersService"]["listUsers"]>()
+          .mockImplementation(async () => mockUsers),
       },
     };
 
@@ -208,9 +220,11 @@ describe("App Integration (all dependencies explicit)", () => {
     // Create dependencies for UserModel
     const userModelDependencies: UserModelDependencies = {
       usersService: {
-        getUserById: vi.fn(async (userId) => {
-          return mockUsers.find((user) => user.id === userId);
-        }),
+        getUserById: vi
+          .fn<UserModelDependencies["usersService"]["getUserById"]>()
+          .mockImplementation(async (userId) =>
+            mockUsers.find((user) => user.id === userId),
+          ),
       },
     };
 
@@ -271,7 +285,6 @@ describe("App Integration (all dependencies explicit)", () => {
 
     // Create dependencies for App
     const appDependencies: AppDependencies = {
-      useAppViewModel: () => ({ models }),
       Actions: () => <Actions dependencies={actionsDependencies} />,
       Filters: () => <Filters dependencies={filtersDependencies} />,
       TaskList: () => <TaskList dependencies={taskListDependencies} />,

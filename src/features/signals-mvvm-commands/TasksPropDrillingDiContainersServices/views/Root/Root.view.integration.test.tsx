@@ -24,13 +24,17 @@ describe("Root Integration (view-model layer services)", () => {
     // create mock tasks service
     const tasksService: ITasksService = {
       addTask: vi.fn(),
-      deleteTask: vi.fn(async (taskId) => {
-        mockTasks.splice(
-          mockTasks.findIndex(({ id }) => taskId === id),
-          1,
-        );
-      }),
-      listTasks: vi.fn(async () => mockTasks),
+      deleteTask: vi
+        .fn<ITasksService["deleteTask"]>()
+        .mockImplementation(async (taskId) => {
+          mockTasks.splice(
+            mockTasks.findIndex(({ id }) => taskId === id),
+            1,
+          );
+        }),
+      listTasks: vi
+        .fn<ITasksService["listTasks"]>()
+        .mockImplementation(async () => mockTasks),
     };
 
     // create mock users
@@ -41,10 +45,14 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create mock users service
     const usersService: IUsersService = {
-      getUserById: vi.fn(async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
-      }),
-      listUsers: vi.fn(async () => mockUsers),
+      getUserById: vi
+        .fn<IUsersService["getUserById"]>()
+        .mockImplementation(async (userId) =>
+          mockUsers.find((user) => user.id === userId),
+        ),
+      listUsers: vi
+        .fn<IUsersService["listUsers"]>()
+        .mockImplementation(async () => mockUsers),
     };
 
     // create root dependencies
@@ -92,19 +100,23 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create mock tasks service
     const tasksService: ITasksService = {
-      addTask: vi.fn(async (text, ownerId) => {
-        const newTask: Task = {
-          id: "new-task",
-          ownerId,
-          text,
-        };
+      addTask: vi
+        .fn<ITasksService["addTask"]>()
+        .mockImplementation(async (text, ownerId) => {
+          const newTask: Task = {
+            id: "new-task",
+            ownerId,
+            text,
+          };
 
-        mockTasks.push(newTask);
+          mockTasks.push(newTask);
 
-        return newTask;
-      }),
+          return newTask;
+        }),
       deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => mockTasks),
+      listTasks: vi
+        .fn<ITasksService["listTasks"]>()
+        .mockImplementation(async () => mockTasks),
     };
 
     // create mock users
@@ -115,10 +127,14 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create mock users service
     const usersService: IUsersService = {
-      getUserById: vi.fn(async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
-      }),
-      listUsers: vi.fn(async () => mockUsers),
+      getUserById: vi
+        .fn<IUsersService["getUserById"]>()
+        .mockImplementation(async (userId) =>
+          mockUsers.find((user) => user.id === userId),
+        ),
+      listUsers: vi
+        .fn<IUsersService["listUsers"]>()
+        .mockImplementation(async () => mockUsers),
     };
 
     // create root dependencies
@@ -178,7 +194,9 @@ describe("Root Integration (view-model layer services)", () => {
     const tasksService: ITasksService = {
       addTask: vi.fn(),
       deleteTask: vi.fn(),
-      listTasks: vi.fn(async () => mockTasks),
+      listTasks: vi
+        .fn<ITasksService["listTasks"]>()
+        .mockImplementation(async () => mockTasks),
     };
 
     // create mock users
@@ -189,10 +207,14 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create mock users service
     const usersService: IUsersService = {
-      getUserById: vi.fn(async (userId) => {
-        return mockUsers.find((user) => user.id === userId);
-      }),
-      listUsers: vi.fn(async () => mockUsers),
+      getUserById: vi
+        .fn<IUsersService["getUserById"]>()
+        .mockImplementation(async (userId) =>
+          mockUsers.find((user) => user.id === userId),
+        ),
+      listUsers: vi
+        .fn<IUsersService["listUsers"]>()
+        .mockImplementation(async () => mockUsers),
     };
 
     // create root dependencies
@@ -291,25 +313,33 @@ describe("Root Integration (view layer services and models)", () => {
     // create mock services
     const services: ServicesContextInterface = {
       tasksService: {
-        addTask: async (text, ownerId) => {
-          const newTask: Task = {
-            id: "new-task",
-            ownerId,
-            text,
-          };
+        addTask: vi
+          .fn<ServicesContextInterface["tasksService"]["addTask"]>()
+          .mockImplementation(async (text, ownerId) => {
+            const newTask: Task = {
+              id: "new-task",
+              ownerId,
+              text,
+            };
 
-          mockTasks.push(newTask);
+            mockTasks.push(newTask);
 
-          return newTask;
-        },
+            return newTask;
+          }),
         deleteTask: vi.fn(),
-        listTasks: vi.fn(async () => mockTasks),
+        listTasks: vi
+          .fn<ServicesContextInterface["tasksService"]["listTasks"]>()
+          .mockImplementation(async () => mockTasks),
       },
       usersService: {
-        getUserById: vi.fn(async (userId) => {
-          return mockUsers.find((user) => user.id === userId);
-        }),
-        listUsers: vi.fn(async () => mockUsers),
+        getUserById: vi
+          .fn<ServicesContextInterface["usersService"]["getUserById"]>()
+          .mockImplementation(async (userId) =>
+            mockUsers.find((user) => user.id === userId),
+          ),
+        listUsers: vi
+          .fn<ServicesContextInterface["usersService"]["listUsers"]>()
+          .mockImplementation(async () => mockUsers),
       },
     };
 
