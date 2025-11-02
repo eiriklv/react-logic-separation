@@ -1,4 +1,4 @@
-import { App } from "../../views/App/App.view";
+import { App } from "../App/App.view";
 import { useRootViewModel } from "./Root.view-model";
 
 /**
