@@ -1,18 +1,16 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { Task, User } from "../../types";
-import userEvent from "@testing-library/user-event";
+import { ServicesContextInterface } from "../../providers/services.provider";
+import { ModelsContextInterface } from "../../providers/models.provider";
 import { Root } from "./Root.view";
 import defaultDependencies, {
   RootDependencies,
 } from "./Root.view.dependencies";
-import { ITasksService } from "../../services/tasks.service";
-import { IUsersService } from "../../services/users.service";
-import { createQueryClient } from "../../utils/create-query-client";
-
-import rootViewModelDefaultDependencies from "./Root.view-model.dependencies";
-import { ServicesContextInterface } from "../../providers/services.provider";
-import { ModelsContextInterface } from "../../providers/models.provider";
+import rootViewModelDefaultDependencies, {
+  RootViewModelDependencies,
+} from "./Root.view-model.dependencies";
 
 describe("Root Integration (view-model layer services)", () => {
   it("should reflect changes when deleting a task in all applicable views", async () => {
@@ -22,7 +20,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock tasks service
-    const tasksService: ITasksService = {
+    const tasksService: ReturnType<
+      RootViewModelDependencies["createTasksService"]
+    > = {
       addTask: vi.fn(),
       deleteTask: async (taskId) => {
         mockTasks.splice(
@@ -40,7 +40,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService: IUsersService = {
+    const usersService: ReturnType<
+      RootViewModelDependencies["createUsersService"]
+    > = {
       getUserById: async (userId) =>
         mockUsers.find((user) => user.id === userId),
       listUsers: async () => mockUsers,
@@ -90,7 +92,9 @@ describe("Root Integration (view-model layer services)", () => {
     const mockTasks: Task[] = [];
 
     // create mock tasks service
-    const tasksService: ITasksService = {
+    const tasksService: ReturnType<
+      RootViewModelDependencies["createTasksService"]
+    > = {
       addTask: async (text, ownerId) => {
         const newTask: Task = {
           id: "new-task",
@@ -113,7 +117,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService: IUsersService = {
+    const usersService: ReturnType<
+      RootViewModelDependencies["createUsersService"]
+    > = {
       getUserById: async (userId) =>
         mockUsers.find((user) => user.id === userId),
       listUsers: async () => mockUsers,
@@ -173,7 +179,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock tasks service
-    const tasksService: ITasksService = {
+    const tasksService: ReturnType<
+      RootViewModelDependencies["createTasksService"]
+    > = {
       addTask: vi.fn(),
       deleteTask: vi.fn(),
       listTasks: async () => mockTasks,
@@ -186,7 +194,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService: IUsersService = {
+    const usersService: ReturnType<
+      RootViewModelDependencies["createUsersService"]
+    > = {
       getUserById: async (userId) =>
         mockUsers.find((user) => user.id === userId),
       listUsers: async () => mockUsers,
@@ -269,7 +279,7 @@ describe("Root Integration (view-model layer services)", () => {
 describe("Root Integration (view layer services and models)", () => {
   it("should reflect changes in filters in all applicable views", async () => {
     // create query client for test
-    const queryClient = createQueryClient();
+    const queryClient = rootViewModelDefaultDependencies.createQueryClient();
 
     // create mock tasks
     const mockTasks: Task[] = [
