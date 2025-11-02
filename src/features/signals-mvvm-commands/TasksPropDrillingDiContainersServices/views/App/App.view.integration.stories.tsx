@@ -23,10 +23,10 @@ const meta = {
     const queryClient = new QueryClient();
 
     // create mock tasks
-    const mockTasks: Task[] = parameters.tasks;
+    const mockTasks: Task[] = parameters.tasks.slice();
 
     // create mock users
-    const mockUsers: User[] = parameters.users;
+    const mockUsers: User[] = parameters.users.slice();
 
     // create mock services
     const services: ServicesContextInterface = {
