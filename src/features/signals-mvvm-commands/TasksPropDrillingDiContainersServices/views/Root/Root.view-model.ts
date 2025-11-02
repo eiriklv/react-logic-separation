@@ -72,6 +72,12 @@ export const useRootViewModel = ({
 
   /**
    * Create service instances
+   *
+   * NOTE: The only way IO can be performed
+   * is via services - no other way is allowed.
+   *
+   * Anything doing IO (network, storage, etc)
+   * must be wrapped in a service and then exposed.
    */
   const tasksService = createTasksService();
   const usersService = createUsersService();
