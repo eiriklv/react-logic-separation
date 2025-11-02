@@ -16,9 +16,15 @@ import {
   createUserModel,
   UserModelDependencies,
 } from "../../models/user.model";
-import { SelectedFiltersModel } from "../../models/selected-filters.model";
-import { UsersModel, UsersModelDependencies } from "../../models/users.model";
-import { TasksModel, TasksModelDependencies } from "../../models/tasks.model";
+import { createSelectedFiltersModel } from "../../models/selected-filters.model";
+import {
+  createUsersModel,
+  UsersModelDependencies,
+} from "../../models/users.model";
+import {
+  createTasksModel,
+  TasksModelDependencies,
+} from "../../models/tasks.model";
 import { ActionsDependencies } from "../Actions/Actions.view.dependencies";
 import { TaskItemViewModelDependencies } from "../TaskItem/TaskItem.view-model.dependencies";
 import { TaskItemDependencies } from "../TaskItem/TaskItem.view.dependencies";
@@ -62,27 +68,20 @@ describe("App Integration (only service layer mocked)", () => {
       tasksService: {
         addTask: vi.fn(),
         deleteTask: vi.fn(),
-        listTasks: vi
-          .fn<ServicesContextInterface["tasksService"]["listTasks"]>()
-          .mockImplementation(async () => mockTasks),
+        listTasks: async () => mockTasks,
       },
       usersService: {
-        getUserById: vi
-          .fn<ServicesContextInterface["usersService"]["getUserById"]>()
-          .mockImplementation(async (userId) => {
-            return mockUsers.find((user) => user.id === userId);
-          }),
-        listUsers: vi
-          .fn<ServicesContextInterface["usersService"]["listUsers"]>()
-          .mockImplementation(async () => mockUsers),
+        getUserById: async (userId) =>
+          mockUsers.find((user) => user.id === userId),
+        listUsers: async () => mockUsers,
       },
     };
 
     // create mock models
     const models: ModelsContextInterface = {
-      tasksModel: new TasksModel(queryClient, services),
-      usersModel: new UsersModel(queryClient, services),
-      selectedFiltersModel: new SelectedFiltersModel(),
+      tasksModel: createTasksModel(queryClient, services),
+      usersModel: createUsersModel(queryClient, services),
+      selectedFiltersModel: createSelectedFiltersModel(),
     };
 
     /**
@@ -178,37 +177,31 @@ describe("App Integration (all dependencies explicit)", () => {
     // Create tasks model dependencies
     const tasksModelDependencies: TasksModelDependencies = {
       tasksService: {
-        addTask: vi
-          .fn<TasksModelDependencies["tasksService"]["addTask"]>()
-          .mockImplementation(async () => ({
-            id: "1",
-            text: "task",
-            ownerId: "user-1",
-          })),
+        addTask: async () => ({
+          id: "1",
+          text: "task",
+          ownerId: "user-1",
+        }),
         deleteTask: vi.fn(),
-        listTasks: vi
-          .fn<TasksModelDependencies["tasksService"]["listTasks"]>()
-          .mockImplementation(async () => mockTasks),
+        listTasks: async () => mockTasks,
       },
     };
 
     // Create tasks model
-    const tasksModel = new TasksModel(queryClient, tasksModelDependencies);
+    const tasksModel = createTasksModel(queryClient, tasksModelDependencies);
 
     // Create users model dependencies
     const usersModelDependencies: UsersModelDependencies = {
       usersService: {
-        listUsers: vi
-          .fn<UsersModelDependencies["usersService"]["listUsers"]>()
-          .mockImplementation(async () => mockUsers),
+        listUsers: async () => mockUsers,
       },
     };
 
     // Create users model
-    const usersModel = new UsersModel(queryClient, usersModelDependencies);
+    const usersModel = createUsersModel(queryClient, usersModelDependencies);
 
     // Create selected filters model
-    const selectedFiltersModel = new SelectedFiltersModel();
+    const selectedFiltersModel = createSelectedFiltersModel();
 
     // Create shared models container
     const models: ModelsContextInterface = {
@@ -220,19 +213,15 @@ describe("App Integration (all dependencies explicit)", () => {
     // Create dependencies for UserModel
     const userModelDependencies: UserModelDependencies = {
       usersService: {
-        getUserById: vi
-          .fn<UserModelDependencies["usersService"]["getUserById"]>()
-          .mockImplementation(async (userId) =>
-            mockUsers.find((user) => user.id === userId),
-          ),
+        getUserById: async (userId) =>
+          mockUsers.find((user) => user.id === userId),
       },
     };
 
     // Create dependencies for TaskItemViewModel
     const taskItemViewModelDependencies: TaskItemViewModelDependencies = {
-      createUserModel: (userId) => {
-        return createUserModel(userId, queryClient, userModelDependencies);
-      },
+      createUserModel: (userId) =>
+        createUserModel(userId, queryClient, userModelDependencies),
       useServices: () => services,
       useModels: () => models,
       useQueryClient: () => queryClient,
