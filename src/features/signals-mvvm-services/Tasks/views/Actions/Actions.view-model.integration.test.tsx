@@ -1,10 +1,14 @@
 import { renderHook } from "@testing-library/react";
 import { signal } from "@preact/signals-core";
 import { useActionsViewModel } from "./Actions.view-model";
-import {
+import defaultDependencies, {
   ActionsViewModelDependencies,
   ModelsDependencies,
 } from "./Actions.view-model.dependencies";
+import {
+  ModelsContext,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
 
 describe("useActionsViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -19,10 +23,16 @@ describe("useActionsViewModel", () => {
     };
 
     const dependencies: ActionsViewModelDependencies = {
-      useModels: () => models,
+      useModels: defaultDependencies.useModels,
     };
 
-    const { result } = renderHook(() => useActionsViewModel({ dependencies }));
+    const { result } = renderHook(() => useActionsViewModel({ dependencies }), {
+      wrapper: ({ children }) => (
+        <ModelsContext.Provider value={models as ModelsContextInterface}>
+          {children}
+        </ModelsContext.Provider>
+      ),
+    });
 
     expect(result.current).toEqual({
       users: [],
