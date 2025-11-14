@@ -18,7 +18,6 @@ export type ModelsDependencies = {
     ITasksModel,
     | "getTasksByOwnerId"
     | "getTasksCountByOwnerId"
-    | "addTask"
     | "isFetching"
     | "isLoading"
     | "isSaving"

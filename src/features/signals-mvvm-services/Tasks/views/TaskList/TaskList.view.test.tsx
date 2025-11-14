@@ -18,7 +18,6 @@ describe("TaskList Component", () => {
         isLoading: true,
         isFetching: false,
         isSaving: false,
-        addTask: vi.fn(),
       })),
       TaskItem: () => <></>,
     };
@@ -38,7 +37,6 @@ describe("TaskList Component", () => {
         isLoading: false,
         isFetching: true,
         isSaving: true,
-        addTask: vi.fn(),
       })),
       TaskItem: () => <></>,
     };
@@ -59,7 +57,6 @@ describe("TaskList Component", () => {
         isLoading: false,
         isFetching: false,
         isSaving: false,
-        addTask: vi.fn(),
       })),
       TaskItem: () => <></>,
     };
@@ -90,7 +87,6 @@ describe("TaskList Component", () => {
         isLoading: false,
         isFetching: false,
         isSaving: false,
-        addTask: vi.fn(),
       })),
       TaskItem: () => <div>TaskItem</div>,
     };

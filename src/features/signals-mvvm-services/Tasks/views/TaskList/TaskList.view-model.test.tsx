@@ -23,7 +23,6 @@ describe("useTaskListViewModel", () => {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        addTask: vi.fn(),
         isFetching: signal(false),
         isLoading: signal(false),
         isSaving: signal(false),
@@ -47,7 +46,6 @@ describe("useTaskListViewModel", () => {
       isLoading: false,
       isFetching: false,
       isSaving: false,
-      addTask: models.tasksModel?.addTask,
     });
   });
 });

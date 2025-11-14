@@ -21,7 +21,6 @@ describe("TaskList Component", () => {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        addTask: vi.fn(),
         isFetching: signal(false),
         isLoading: signal(true),
         isSaving: signal(false),
@@ -37,16 +36,14 @@ describe("TaskList Component", () => {
     };
 
     const taskItemDependencies: TaskItemDependencies = {
-      useTaskItemViewModel: vi.fn<TaskItemDependencies["useTaskItemViewModel"]>(
-        () => ({
-          deleteTask: vi.fn(),
-          user: {
-            id: "user-1",
-            name: "Test",
-            profileImageUrl: "https://image.url",
-          },
-        }),
-      ),
+      useTaskItemViewModel: () => ({
+        deleteTask: vi.fn(),
+        user: {
+          id: "user-1",
+          name: "Test",
+          profileImageUrl: "https://image.url",
+        },
+      }),
     };
 
     const taskListDependencies: TaskListDependencies = {
@@ -80,7 +77,6 @@ describe("TaskList Component", () => {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        addTask: vi.fn(),
         isFetching: signal(true),
         isLoading: signal(false),
         isSaving: signal(true),
@@ -96,16 +92,14 @@ describe("TaskList Component", () => {
     };
 
     const taskItemDependencies: TaskItemDependencies = {
-      useTaskItemViewModel: vi.fn<TaskItemDependencies["useTaskItemViewModel"]>(
-        () => ({
-          deleteTask: vi.fn(),
-          user: {
-            id: "user-1",
-            name: "Test",
-            profileImageUrl: "https://image.url",
-          },
-        }),
-      ),
+      useTaskItemViewModel: () => ({
+        deleteTask: vi.fn(),
+        user: {
+          id: "user-1",
+          name: "Test",
+          profileImageUrl: "https://image.url",
+        },
+      }),
     };
 
     const taskListDependencies: TaskListDependencies = {
@@ -140,7 +134,6 @@ describe("TaskList Component", () => {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        addTask: vi.fn(),
         isFetching: signal(false),
         isLoading: signal(false),
         isSaving: signal(false),
@@ -156,16 +149,14 @@ describe("TaskList Component", () => {
     };
 
     const taskItemDependencies: TaskItemDependencies = {
-      useTaskItemViewModel: vi.fn<TaskItemDependencies["useTaskItemViewModel"]>(
-        () => ({
-          deleteTask: vi.fn(),
-          user: {
-            id: "user-1",
-            name: "Test",
-            profileImageUrl: "https://image.url",
-          },
-        }),
-      ),
+      useTaskItemViewModel: () => ({
+        deleteTask: vi.fn(),
+        user: {
+          id: "user-1",
+          name: "Test",
+          profileImageUrl: "https://image.url",
+        },
+      }),
     };
 
     const taskListDependencies: TaskListDependencies = {
@@ -210,7 +201,6 @@ describe("TaskList Component", () => {
       tasksModel: {
         getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
         getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        addTask: vi.fn(),
         isFetching: signal(false),
         isLoading: signal(false),
         isSaving: signal(false),
@@ -226,16 +216,14 @@ describe("TaskList Component", () => {
     };
 
     const taskItemDependencies: TaskItemDependencies = {
-      useTaskItemViewModel: vi.fn<TaskItemDependencies["useTaskItemViewModel"]>(
-        () => ({
-          deleteTask: vi.fn(),
-          user: {
-            id: "user-1",
-            name: "Test",
-            profileImageUrl: "https://image.url",
-          },
-        }),
-      ),
+      useTaskItemViewModel: () => ({
+        deleteTask: vi.fn(),
+        user: {
+          id: "user-1",
+          name: "Test",
+          profileImageUrl: "https://image.url",
+        },
+      }),
     };
 
     const taskListDependencies: TaskListDependencies = {

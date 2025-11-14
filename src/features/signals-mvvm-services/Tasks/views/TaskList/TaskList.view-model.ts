@@ -45,6 +45,5 @@ export const useTaskListViewModel = ({
     isLoading: useSignalValue(tasksModel.isLoading),
     isFetching: useSignalValue(tasksModel.isFetching),
     isSaving: useSignalValue(tasksModel.isSaving),
-    addTask: tasksModel.addTask,
   };
 };
