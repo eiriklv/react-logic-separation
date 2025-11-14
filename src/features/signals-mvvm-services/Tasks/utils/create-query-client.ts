@@ -1,5 +1,5 @@
-import { QueryClient } from "@tanstack/query-core";
+import { QueryClient, QueryClientConfig } from "@tanstack/query-core";
 
-export function createQueryClient() {
-  return new QueryClient();
+export function createQueryClient(config?: QueryClientConfig) {
+  return new QueryClient(config);
 }
