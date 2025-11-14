@@ -2,16 +2,14 @@ import { renderHook } from "@testing-library/react";
 import { useTaskListViewModel } from "./TaskList.view-model";
 import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
-import {
+import defaultDependencies, {
   ModelsDependencies,
   TaskListViewModelDependencies,
 } from "./TaskList.view-model.dependencies";
-
-/**
- * Remove the default dependencies from the test
- * so that we avoid the unnecessary collect-time
- */
-vi.mock("./TaskList.view-model.dependencies", () => ({ default: {} }));
+import {
+  ModelsContext,
+  ModelsContextInterface,
+} from "../../providers/models.provider";
 
 describe("useTaskListViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -35,10 +33,19 @@ describe("useTaskListViewModel", () => {
     };
 
     const dependencies: TaskListViewModelDependencies = {
-      useModels: () => models,
+      useModels: defaultDependencies.useModels,
     };
 
-    const { result } = renderHook(() => useTaskListViewModel({ dependencies }));
+    const { result } = renderHook(
+      () => useTaskListViewModel({ dependencies }),
+      {
+        wrapper: ({ children }) => (
+          <ModelsContext.Provider value={models as ModelsContextInterface}>
+            {children}
+          </ModelsContext.Provider>
+        ),
+      },
+    );
 
     // assert
     expect(result.current).toEqual({
