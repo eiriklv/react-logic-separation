@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { Task } from "../types";
-import { deleteTask, listTasks, upsertTask } from "./api";
+import { createSdk } from "./sdk";
 
 export const defaultHandlers = [];
 export const server = setupServer(...defaultHandlers);
@@ -18,6 +18,8 @@ describe("API", () => {
   describe("listTasks", () => {
     it("should work as expected", async () => {
       // Arrange
+      const baseUrl = "https://my-service.com";
+
       const mockTasks: Task[] = [
         { id: "1", text: "Task 1", ownerId: "user-1" },
         { id: "2", text: "Task 2", ownerId: "user-1" },
@@ -26,13 +28,15 @@ describe("API", () => {
       ];
 
       server.use(
-        http.get("https://my-service.com/api/tasks", () => {
+        http.get(`${baseUrl}/api/tasks`, () => {
           return HttpResponse.json<Task[]>(mockTasks);
         }),
       );
 
       // Act
-      const tasks = await listTasks();
+
+      const sdk = createSdk(baseUrl);
+      const tasks = await sdk.listTasks();
 
       // Assert
       expect(tasks).toEqual(mockTasks);
@@ -42,6 +46,8 @@ describe("API", () => {
   describe("upsertTask", () => {
     it("should work as expected", async () => {
       // Arrange
+      const baseUrl = "https://my-service.com";
+
       const mockTask: Task = {
         id: "1",
         text: "Task 1",
@@ -49,13 +55,14 @@ describe("API", () => {
       };
 
       server.use(
-        http.post("https://my-service.com/api/tasks", () => {
+        http.post(`${baseUrl}/api/tasks`, () => {
           return HttpResponse.json<Task>(mockTask);
         }),
       );
 
       // Act
-      const task = await upsertTask(mockTask);
+      const sdk = createSdk(baseUrl);
+      const task = await sdk.upsertTask(mockTask);
 
       // Assert
       expect(task).toEqual(mockTask);
@@ -65,6 +72,8 @@ describe("API", () => {
   describe("deleteTask", () => {
     it("should work as expected", async () => {
       // Arrange
+      const baseUrl = "https://my-service.com";
+
       const mockTask: Task = {
         id: "1",
         text: "Task 1",
@@ -72,13 +81,14 @@ describe("API", () => {
       };
 
       server.use(
-        http.delete("/api/tasks/:id", () => {
+        http.delete(`${baseUrl}/api/tasks/:id`, () => {
           return HttpResponse.json({ message: "Deleted" }, { status: 200 });
         }),
       );
 
       // Act
-      const deletedTaskId = await deleteTask(mockTask.id);
+      const sdk = createSdk(baseUrl);
+      const deletedTaskId = await sdk.deleteTask(mockTask.id);
 
       // Assert
       expect(deletedTaskId).toEqual(mockTask.id);
