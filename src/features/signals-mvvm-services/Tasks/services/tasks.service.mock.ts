@@ -20,7 +20,7 @@ export class TasksServiceMock implements ITasksService {
     initialTasks?: Task[],
   ) {
     this._dependencies = dependencies;
-    this._tasks = initialTasks ?? [];
+    this._tasks = initialTasks?.slice() ?? [];
   }
 
   public async listTasks() {

@@ -11,17 +11,11 @@ import { createUsersServiceMock } from "../../services/users.service.mock";
 
 const meta = {
   render: (_, { parameters }) => {
-    // create mock tasks
-    const mockTasks: Task[] = parameters.tasks.slice();
-
-    // create mock users
-    const mockUsers: User[] = parameters.users.slice();
-
     // create mock tasks service
-    const tasksService = createTasksServiceMock(undefined, mockTasks);
+    const tasksService = createTasksServiceMock(undefined, parameters.tasks);
 
     // create mock users service
-    const usersService = createUsersServiceMock(mockUsers);
+    const usersService = createUsersServiceMock(parameters.users);
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
