@@ -24,22 +24,13 @@ export interface ITasksService {
   deleteTask(taskId: string): Promise<void>;
 }
 
-const defaultTasks: Task[] = [
-  { id: "1", text: "Write self reflection", ownerId: "user-1" },
-  { id: "2", text: "Fix that bug", ownerId: "user-2" },
-];
-
 export class TasksService implements ITasksService {
-  private _tasks: Task[];
+  private _tasks: Task[] = [];
 
   private _dependencies: TasksServiceDependencies;
 
-  constructor(
-    dependencies: TasksServiceDependencies = defaultDependencies,
-    initialTasks: Task[] = defaultTasks,
-  ) {
+  constructor(dependencies: TasksServiceDependencies = defaultDependencies) {
     this._dependencies = dependencies;
-    this._tasks = initialTasks;
   }
 
   public async listTasks() {

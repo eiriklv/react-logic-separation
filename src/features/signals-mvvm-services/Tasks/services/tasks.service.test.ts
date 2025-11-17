@@ -1,6 +1,6 @@
-import { Task } from "../types";
 import { createTasksService } from "./tasks.service";
 import { TasksServiceDependencies } from "./tasks.service.dependencies";
+import { createTasksServiceMock } from "./tasks.service.mock";
 
 /**
  * Optional: Remove the default dependencies from the test
@@ -8,88 +8,67 @@ import { TasksServiceDependencies } from "./tasks.service.dependencies";
  */
 vi.mock("./tasks.service.dependencies", () => ({ default: {} }));
 
-describe("Tasks Service", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+describe.each([
+  { id: "Real", createService: createTasksService },
+  { id: "Mock", createService: createTasksServiceMock },
+])("Tasks Service", ({ id, createService }) => {
+  describe(`Tasks Service (${id})`, () => {
+    it("should reflect the initial value", async () => {
+      // arrange
+      const tasksServiceDependencies: TasksServiceDependencies = {
+        generateId: vi.fn(() => "abc"),
+      };
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+      const tasksService = createService(tasksServiceDependencies);
 
-  it("should reflect the initial value", async () => {
-    // arrange
-    const initialTasks: Task[] = [];
+      // act
+      const tasks = await tasksService.listTasks();
 
-    const tasksServiceDependencies: TasksServiceDependencies = {
-      generateId: vi.fn(() => "abc"),
-    };
+      // assert
+      expect(tasks).toEqual([]);
+    });
 
-    const tasksService = createTasksService(
-      tasksServiceDependencies,
-      initialTasks,
-    );
+    it("should reflect added tasks", async () => {
+      // arrange
+      const tasksServiceDependencies: TasksServiceDependencies = {
+        generateId: vi.fn(() => "abc"),
+      };
 
-    // act
-    const tasksPromise = tasksService.listTasks();
-    await vi.runAllTimersAsync();
-    const tasks = await tasksPromise;
+      const tasksService = createService(tasksServiceDependencies);
 
-    // assert
-    expect(tasks).toEqual(initialTasks);
-  });
+      // act
+      await tasksService.addTask("New task", "user-1");
+      const tasks = await tasksService.listTasks();
 
-  it("should reflect added tasks", async () => {
-    // arrange
-    const initialTasks: Task[] = [];
+      // assert
+      expect(tasks).toEqual([
+        { id: "abc", text: "New task", ownerId: "user-1" },
+      ]);
+    });
 
-    const tasksServiceDependencies: TasksServiceDependencies = {
-      generateId: vi.fn(() => "abc"),
-    };
+    it("should reflect deleted tasks", async () => {
+      // arrange
+      const tasksServiceDependencies: TasksServiceDependencies = {
+        generateId: vi.fn(() => "abc"),
+      };
 
-    const tasksService = createTasksService(
-      tasksServiceDependencies,
-      initialTasks,
-    );
+      const tasksService = createService(tasksServiceDependencies);
 
-    // act
-    const addTaskPromise = tasksService.addTask("New task", "user-1");
-    await vi.runAllTimersAsync();
-    await addTaskPromise;
+      // act
+      await tasksService.addTask("New task", "user-1");
+      const tasksAfterAdd = await tasksService.listTasks();
 
-    const tasksPromise = tasksService.listTasks();
-    await vi.runAllTimersAsync();
-    const tasks = await tasksPromise;
+      // assert
+      expect(tasksAfterAdd).toEqual([
+        { id: "abc", text: "New task", ownerId: "user-1" },
+      ]);
 
-    // assert
-    expect(tasks).toEqual([{ id: "abc", text: "New task", ownerId: "user-1" }]);
-  });
+      // act
+      await tasksService.deleteTask("abc");
+      const tasksAfterDelete = await tasksService.listTasks();
 
-  it("should reflect deleted tasks", async () => {
-    // arrange
-    const initialTasks: Task[] = [
-      { id: "abc", text: "New task", ownerId: "user-1" },
-    ];
-
-    const tasksServiceDependencies: TasksServiceDependencies = {
-      generateId: vi.fn(() => "abc"),
-    };
-
-    const tasksService = createTasksService(
-      tasksServiceDependencies,
-      initialTasks,
-    );
-
-    // act
-    const deleteTaskPromise = tasksService.deleteTask("abc");
-    await vi.runAllTimersAsync();
-    await deleteTaskPromise;
-
-    const tasksPromise = tasksService.listTasks();
-    await vi.runAllTimersAsync();
-    const tasks = await tasksPromise;
-
-    // assert
-    expect(tasks).toEqual([]);
+      // assert
+      expect(tasksAfterDelete).toEqual([]);
+    });
   });
 });
