@@ -25,12 +25,13 @@ export interface ITasksService {
 }
 
 export class TasksService implements ITasksService {
-  private _tasks: Task[] = [];
+  private _tasks: Task[];
 
   private _dependencies: TasksServiceDependencies;
 
   constructor(dependencies: TasksServiceDependencies = defaultDependencies) {
     this._dependencies = dependencies;
+    this._tasks = [];
   }
 
   public async listTasks() {

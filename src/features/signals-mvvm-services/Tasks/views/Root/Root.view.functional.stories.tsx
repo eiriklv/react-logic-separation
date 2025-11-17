@@ -5,10 +5,9 @@ import { Root } from "./Root.view";
 import defaultRootDependencies, {
   RootDependencies,
 } from "./Root.view.dependencies";
-import defaultRootViewModelDependencies, {
-  RootViewModelDependencies,
-} from "./Root.view-model.dependencies";
-import { generateId } from "../../../../../lib/utils";
+import defaultRootViewModelDependencies from "./Root.view-model.dependencies";
+import { createTasksServiceMock } from "../../services/tasks.service.mock";
+import { createUsersServiceMock } from "../../services/users.service.mock";
 
 const meta = {
   render: (_, { parameters }) => {
@@ -19,37 +18,10 @@ const meta = {
     const mockUsers: User[] = parameters.users.slice();
 
     // create mock tasks service
-    const tasksService: ReturnType<
-      RootViewModelDependencies["createTasksService"]
-    > = {
-      addTask: async (text, ownerId) => {
-        const newTask = {
-          id: generateId(),
-          text,
-          ownerId,
-        };
-
-        mockTasks.push(newTask);
-
-        return newTask;
-      },
-      deleteTask: async (taskId) => {
-        mockTasks.splice(
-          mockTasks.findIndex(({ id }) => taskId === id),
-          1,
-        );
-      },
-      listTasks: async () => mockTasks,
-    };
+    const tasksService = createTasksServiceMock(undefined, mockTasks);
 
     // create mock users service
-    const usersService: ReturnType<
-      RootViewModelDependencies["createUsersService"]
-    > = {
-      getUserById: async (userId) =>
-        mockUsers.find((user) => user.id === userId),
-      listUsers: async () => mockUsers,
-    };
+    const usersService = createUsersServiceMock(mockUsers);
 
     // create root dependencies
     const rootDependencies: RootDependencies = {

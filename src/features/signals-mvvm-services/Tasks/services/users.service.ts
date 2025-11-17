@@ -28,8 +28,8 @@ const defaultUsers: User[] = [
 export class UsersService implements IUsersService {
   private _users: User[];
 
-  constructor(initialUsers: User[] = defaultUsers) {
-    this._users = initialUsers;
+  constructor() {
+    this._users = defaultUsers.slice();
   }
 
   public async listUsers() {

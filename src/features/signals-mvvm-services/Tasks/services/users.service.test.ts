@@ -1,48 +1,54 @@
 import { User } from "../types";
 import { createUsersService } from "./users.service";
+import { createUsersServiceMock } from "./users.service.mock";
 
-describe("Users Service", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+describe.each([
+  { id: "Real", createService: createUsersService },
+  { id: "Mock", createService: createUsersServiceMock },
+])("Users Service", ({ id, createService }) => {
+  describe(`Users Service ${id}`, () => {
+    it("should list users correctly", async () => {
+      // arrange
+      const initialUsers: User[] = [
+        { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },
+        {
+          id: "user-2",
+          name: "Jane Johnson",
+          profileImageUrl: "/img/user-2.jpg",
+        },
+      ];
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+      const usersService = createService(initialUsers);
 
-  it("should list users correctly", async () => {
-    // arrange
-    const initialUsers: User[] = [];
+      // act
+      const users = await usersService.listUsers();
 
-    const usersService = createUsersService(initialUsers);
+      // assert
+      expect(users).toEqual(initialUsers);
+    });
 
-    // act
-    const usersPromise = usersService.listUsers();
-    await vi.runAllTimersAsync();
-    const users = await usersPromise;
+    it("should get user by id correctly", async () => {
+      // arrange
+      const initialUsers: User[] = [
+        { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },
+        {
+          id: "user-2",
+          name: "Jane Johnson",
+          profileImageUrl: "/img/user-2.jpg",
+        },
+      ];
 
-    // assert
-    expect(users).toEqual(initialUsers);
-  });
+      const usersService = createService(initialUsers);
 
-  it("should get user by id correctly", async () => {
-    // arrange
-    const initialUsers: User[] = [
-      { id: "user-1", name: "User 1", profileImageUrl: "/src/img.png" },
-    ];
+      // act
+      const user = await usersService.getUserById("user-1");
 
-    const usersService = createUsersService(initialUsers);
-
-    // act
-    const userPromise = usersService.getUserById("user-1");
-    await vi.runAllTimersAsync();
-    const user = await userPromise;
-
-    // assert
-    expect(user).toEqual({
-      id: "user-1",
-      name: "User 1",
-      profileImageUrl: "/src/img.png",
+      // assert
+      expect(user).toEqual({
+        id: "user-1",
+        name: "Frank Doe",
+        profileImageUrl: "/img/user-1.jpg",
+      });
     });
   });
 });

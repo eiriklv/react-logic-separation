@@ -8,10 +8,9 @@ import { Root } from "./Root.view";
 import defaultDependencies, {
   RootDependencies,
 } from "./Root.view.dependencies";
-import rootViewModelDefaultDependencies, {
-  RootViewModelDependencies,
-} from "./Root.view-model.dependencies";
+import rootViewModelDefaultDependencies from "./Root.view-model.dependencies";
 import { createTasksServiceMock } from "../../services/tasks.service.mock";
+import { createUsersServiceMock } from "../../services/users.service.mock";
 
 describe("Root Integration (view-model layer services)", () => {
   it("should reflect changes when deleting a task in all applicable views", async () => {
@@ -30,13 +29,7 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService: ReturnType<
-      RootViewModelDependencies["createUsersService"]
-    > = {
-      getUserById: async (userId) =>
-        mockUsers.find((user) => user.id === userId),
-      listUsers: async () => mockUsers,
-    };
+    const usersService = createUsersServiceMock(mockUsers);
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
@@ -91,13 +84,7 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService: ReturnType<
-      RootViewModelDependencies["createUsersService"]
-    > = {
-      getUserById: async (userId) =>
-        mockUsers.find((user) => user.id === userId),
-      listUsers: async () => mockUsers,
-    };
+    const usersService = createUsersServiceMock(mockUsers);
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
@@ -162,13 +149,7 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService: ReturnType<
-      RootViewModelDependencies["createUsersService"]
-    > = {
-      getUserById: async (userId) =>
-        mockUsers.find((user) => user.id === userId),
-      listUsers: async () => mockUsers,
-    };
+    const usersService = createUsersServiceMock(mockUsers);
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
@@ -266,11 +247,7 @@ describe("Root Integration (view layer services and models)", () => {
     // create mock services
     const services: ServicesContextInterface = {
       tasksService: createTasksServiceMock(undefined, mockTasks),
-      usersService: {
-        getUserById: async (userId) =>
-          mockUsers.find((user) => user.id === userId),
-        listUsers: async () => mockUsers,
-      },
+      usersService: createUsersServiceMock(mockUsers),
     };
 
     // create mock models
