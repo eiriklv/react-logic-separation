@@ -4,6 +4,7 @@ import { createUsersService } from "../../services/users.service";
 import { createTasksModel } from "../../models/tasks.model";
 import { createUsersModel } from "../../models/users.model";
 import { createSelectedFiltersModel } from "../../models/selected-filters.model";
+import { createSdk } from "../../sdks/sdk";
 
 /**
  * This file contains the interface of the
@@ -12,6 +13,7 @@ import { createSelectedFiltersModel } from "../../models/selected-filters.model"
  */
 
 export type RootViewModelDependencies = {
+  createSdk: typeof createSdk;
   createQueryClient: typeof createQueryClient;
   createTasksService: typeof createTasksService;
   createUsersService: typeof createUsersService;
@@ -21,6 +23,7 @@ export type RootViewModelDependencies = {
 };
 
 const defaultDependencies: RootViewModelDependencies = {
+  createSdk,
   createQueryClient,
   createTasksService,
   createUsersService,

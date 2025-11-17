@@ -1,4 +1,5 @@
 import { generateId } from "../../../../lib/utils";
+import { Task } from "../types";
 
 /**
  * This file contains the interface of the
@@ -8,6 +9,7 @@ import { generateId } from "../../../../lib/utils";
 
 export type TasksServiceDependencies = {
   generateId: () => string;
+  initialTasks?: Task[];
 };
 
 const defaultDependencies: TasksServiceDependencies = {

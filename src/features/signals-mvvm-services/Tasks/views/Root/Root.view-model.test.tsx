@@ -7,6 +7,7 @@ import type { RootViewModelDependencies } from "./Root.view-model.dependencies";
 import { ISelectedFiltersModel } from "../../models/selected-filters.model";
 import { ITasksModel } from "../../models/tasks.model";
 import { IUsersModel } from "../../models/users.model";
+import { ISdk } from "../../sdks/sdk";
 
 /**
  * Remove the default dependencies from the test
@@ -18,6 +19,7 @@ describe("useRootViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const queryClient = new QueryClient();
+    const sdk = {} as ISdk;
     const tasksService = {} as ITasksService;
     const usersService = {} as IUsersService;
     const selectedFiltersModel = {} as ISelectedFiltersModel;
@@ -25,6 +27,7 @@ describe("useRootViewModel", () => {
     const usersModel = {} as IUsersModel;
 
     const dependencies: RootViewModelDependencies = {
+      createSdk: vi.fn(() => sdk),
       createQueryClient: vi.fn(() => queryClient),
       createTasksService: vi.fn(() => tasksService),
       createUsersService: vi.fn(() => usersService),

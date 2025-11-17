@@ -1,36 +1,30 @@
-import { sleep } from "../../../../lib/utils";
+import { ISdk } from "../sdks/sdk";
 import { Task } from "../types";
 import { ITasksService } from "./tasks.service";
 import defaultDependencies, {
   TasksServiceDependencies,
 } from "./tasks.service.dependencies";
 
-/**
- * Fake delay
- */
-const serviceDelayInMs = 0;
-
 export class TasksServiceMock implements ITasksService {
-  private _tasks: Task[];
-
+  private _tasks: Task[] = [];
   private _dependencies: TasksServiceDependencies;
 
   constructor(
-    dependencies: TasksServiceDependencies = defaultDependencies,
-    initialTasks?: Task[],
+    _sdk: ISdk | undefined,
+    dependencies?: Partial<TasksServiceDependencies>,
   ) {
-    this._dependencies = dependencies;
-    this._tasks = initialTasks?.slice() ?? [];
+    this._dependencies = {
+      ...defaultDependencies,
+      ...dependencies,
+    };
+    this._tasks = dependencies?.initialTasks?.slice() ?? [];
   }
 
   public async listTasks() {
-    await sleep(serviceDelayInMs);
     return this._tasks.slice();
   }
 
   public async addTask(text: string, ownerId: string) {
-    await sleep(serviceDelayInMs);
-
     const newTask = {
       id: this._dependencies.generateId(),
       text,
@@ -43,8 +37,6 @@ export class TasksServiceMock implements ITasksService {
   }
 
   public async deleteTask(taskId: string) {
-    await sleep(serviceDelayInMs);
-
     this._tasks.splice(
       0,
       this._tasks.length,

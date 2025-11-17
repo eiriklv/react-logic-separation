@@ -1,13 +1,8 @@
-import { sleep } from "../../../../lib/utils";
+import { ISdk } from "../sdks/sdk";
 import { Task } from "../types";
 import defaultDependencies, {
   TasksServiceDependencies,
 } from "./tasks.service.dependencies";
-
-/**
- * Fake delay
- */
-const serviceDelayInMs = 1000;
 
 /**
  * Services are typically things like SDKs, APIs or other classes that
@@ -25,42 +20,36 @@ export interface ITasksService {
 }
 
 export class TasksService implements ITasksService {
-  private _tasks: Task[];
-
+  private _sdk: ISdk;
   private _dependencies: TasksServiceDependencies;
 
-  constructor(dependencies: TasksServiceDependencies = defaultDependencies) {
-    this._dependencies = dependencies;
-    this._tasks = [];
+  constructor(sdk: ISdk, dependencies?: TasksServiceDependencies) {
+    this._sdk = sdk;
+
+    this._dependencies = {
+      ...defaultDependencies,
+      ...dependencies,
+    };
   }
 
   public async listTasks() {
-    await sleep(serviceDelayInMs);
-    return this._tasks.slice();
+    return this._sdk.listTasks();
   }
 
   public async addTask(text: string, ownerId: string) {
-    await sleep(serviceDelayInMs);
-
-    const newTask = {
+    const newTask: Task = {
       id: this._dependencies.generateId(),
       text,
       ownerId,
     };
 
-    this._tasks.splice(0, this._tasks.length, ...this._tasks, newTask);
+    await this._sdk.upsertTask(newTask);
 
     return newTask;
   }
 
   public async deleteTask(taskId: string) {
-    await sleep(serviceDelayInMs);
-
-    this._tasks.splice(
-      0,
-      this._tasks.length,
-      ...this._tasks.filter((task) => task.id !== taskId),
-    );
+    await this._sdk.deleteTask(taskId);
   }
 }
 

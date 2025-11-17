@@ -20,7 +20,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock tasks service
-    const tasksService = createTasksServiceMock(undefined, mockTasks);
+    const tasksService = createTasksServiceMock(undefined, {
+      initialTasks: mockTasks,
+    });
 
     // create mock users
     const mockUsers: User[] = [
@@ -75,7 +77,9 @@ describe("Root Integration (view-model layer services)", () => {
     const mockTasks: Task[] = [];
 
     // create mock tasks service
-    const tasksService = createTasksServiceMock(undefined, mockTasks);
+    const tasksService = createTasksServiceMock(undefined, {
+      initialTasks: mockTasks,
+    });
 
     // create mock users
     const mockUsers: User[] = [
@@ -140,7 +144,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock tasks service
-    const tasksService = createTasksServiceMock(undefined, mockTasks);
+    const tasksService = createTasksServiceMock(undefined, {
+      initialTasks: mockTasks,
+    });
 
     // create mock users
     const mockUsers: User[] = [
@@ -246,7 +252,9 @@ describe("Root Integration (view layer services and models)", () => {
 
     // create mock services
     const services: ServicesContextInterface = {
-      tasksService: createTasksServiceMock(undefined, mockTasks),
+      tasksService: createTasksServiceMock(undefined, {
+        initialTasks: mockTasks,
+      }),
       usersService: createUsersServiceMock(mockUsers),
     };
 

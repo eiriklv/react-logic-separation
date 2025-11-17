@@ -38,6 +38,7 @@ export const useRootViewModel = ({
 }: Props = {}) => {
   // Get dependencies
   const {
+    createSdk,
     createQueryClient,
     createTasksService,
     createUsersService,
@@ -66,9 +67,12 @@ export const useRootViewModel = ({
   const queryClient = createQueryClient();
 
   /**
-   * TODO(eirikv): Here is where we would need to initialize
-   * any SDK instances that would be dependencies for the services
+   * Create the SDK client
+   *
+   * TODO(eirikv): Inject the base url somehow
+   * (via environment and dependency injection)
    */
+  const sdk = createSdk("https://real-service.com");
 
   /**
    * Create service instances
@@ -79,7 +83,7 @@ export const useRootViewModel = ({
    * Anything doing IO (network, storage, etc)
    * must be wrapped in a service and then exposed.
    */
-  const tasksService = createTasksService();
+  const tasksService = createTasksService(sdk);
   const usersService = createUsersService();
 
   /**
