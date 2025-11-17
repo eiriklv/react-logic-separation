@@ -5,6 +5,8 @@ import { createTasksModel } from "../../models/tasks.model";
 import { createUsersModel } from "../../models/users.model";
 import { createSelectedFiltersModel } from "../../models/selected-filters.model";
 import { createSdk } from "../../sdks/sdk";
+import { createTasksServiceMock } from "../../services/tasks.service.mock";
+import { createUsersServiceMock } from "../../services/users.service.mock";
 
 /**
  * This file contains the interface of the
@@ -25,8 +27,8 @@ export type RootViewModelDependencies = {
 const defaultDependencies: RootViewModelDependencies = {
   createSdk,
   createQueryClient,
-  createTasksService,
-  createUsersService,
+  createTasksService: createTasksServiceMock,
+  createUsersService: createUsersServiceMock,
   createTasksModel,
   createUsersModel,
   createSelectedFiltersModel,
