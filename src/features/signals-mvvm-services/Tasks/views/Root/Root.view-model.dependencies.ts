@@ -27,11 +27,15 @@ export type RootViewModelDependencies = {
 const defaultDependencies: RootViewModelDependencies = {
   createSdk,
   createQueryClient,
-  createTasksService: createTasksServiceMock,
-  createUsersService: createUsersServiceMock,
   createTasksModel,
   createUsersModel,
   createSelectedFiltersModel,
+  /**
+   * NOTE(eiriklv): Using mock services
+   * by default, since we have no backend yet
+   */
+  createTasksService: createTasksServiceMock,
+  createUsersService: createUsersServiceMock,
 };
 
 export default defaultDependencies;
