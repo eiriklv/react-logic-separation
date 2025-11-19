@@ -5,8 +5,6 @@ import { createTasksModel } from "../../models/tasks.model";
 import { createUsersModel } from "../../models/users.model";
 import { createSelectedFiltersModel } from "../../models/selected-filters.model";
 import { createSdk } from "../../sdks/sdk";
-import { createTasksServiceMock } from "../../services/tasks.service.mock";
-import { createUsersServiceMock } from "../../services/users.service.mock";
 
 /**
  * This file contains the interface of the
@@ -32,12 +30,8 @@ const defaultDependencies: RootViewModelDependencies = {
   createTasksModel,
   createUsersModel,
   createSelectedFiltersModel,
-  /**
-   * NOTE(eiriklv): Using mock services
-   * by default, since we have no backend yet
-   */
-  createTasksService: createTasksServiceMock,
-  createUsersService: createUsersServiceMock,
+  createTasksService,
+  createUsersService,
 };
 
 export default defaultDependencies;
