@@ -1,10 +1,6 @@
-import { sleep } from "../../../../lib/utils";
+import { ISdk } from "../sdks/sdk";
 import { User } from "../types";
-
-/**
- * Fake delay
- */
-const serviceDelayInMs = 1000;
+import { UsersServiceDependencies } from "./users.service.dependencies";
 
 /**
  * Services are typically things like SDKs, APIs or other classes that
@@ -20,26 +16,21 @@ export interface IUsersService {
   getUserById(userId: string): Promise<User | undefined>;
 }
 
-const defaultUsers: User[] = [
-  { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },
-  { id: "user-2", name: "Jane Johnson", profileImageUrl: "/img/user-2.jpg" },
-];
+export type SdkDependencies = Pick<ISdk, "listUsers" | "retrieveUserById">;
 
 export class UsersService implements IUsersService {
-  private _users: User[];
+  private _sdk: SdkDependencies;
 
-  constructor() {
-    this._users = defaultUsers.slice();
+  constructor(sdk: SdkDependencies, _dependencies?: UsersServiceDependencies) {
+    this._sdk = sdk;
   }
 
   public async listUsers() {
-    await sleep(serviceDelayInMs);
-    return this._users.slice();
+    return this._sdk.listUsers();
   }
 
   public async getUserById(userId: string) {
-    await sleep(serviceDelayInMs);
-    return this._users.find((user) => user.id === userId);
+    return this._sdk.retrieveUserById(userId);
   }
 }
 

@@ -1,6 +1,8 @@
-import { Task } from "../types";
+import { Task, User } from "../types";
 
 export interface ISdk {
+  listUsers(): Promise<User[]>;
+  retrieveUserById(userId: string): Promise<User>;
   listTasks(): Promise<Task[]>;
   upsertTask(task: Task): Promise<Task>;
   deleteTask(taskId: string): Promise<string>;
@@ -11,6 +13,18 @@ class Sdk implements ISdk {
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
+  }
+
+  async listUsers(): Promise<User[]> {
+    const response = await fetch(`${this.baseUrl}/api/users`);
+    const users = await response.json();
+    return users;
+  }
+
+  async retrieveUserById(userId: string): Promise<User> {
+    const response = await fetch(`${this.baseUrl}/api/users/${userId}`);
+    const user = await response.json();
+    return user;
   }
 
   async listTasks(): Promise<Task[]> {

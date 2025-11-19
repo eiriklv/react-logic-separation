@@ -31,7 +31,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService = createUsersServiceMock(mockUsers);
+    const usersService = createUsersServiceMock(undefined, {
+      initialUsers: mockUsers,
+    });
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
@@ -88,7 +90,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService = createUsersServiceMock(mockUsers);
+    const usersService = createUsersServiceMock(undefined, {
+      initialUsers: mockUsers,
+    });
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
@@ -155,7 +159,9 @@ describe("Root Integration (view-model layer services)", () => {
     ];
 
     // create mock users service
-    const usersService = createUsersServiceMock(mockUsers);
+    const usersService = createUsersServiceMock(undefined, {
+      initialUsers: mockUsers,
+    });
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
@@ -255,7 +261,9 @@ describe("Root Integration (view layer services and models)", () => {
       tasksService: createTasksServiceMock(undefined, {
         initialTasks: mockTasks,
       }),
-      usersService: createUsersServiceMock(mockUsers),
+      usersService: createUsersServiceMock(undefined, {
+        initialUsers: mockUsers,
+      }),
     };
 
     // create mock models

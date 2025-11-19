@@ -1,4 +1,3 @@
-import { ISdk } from "../sdks/sdk";
 import { Task } from "../types";
 import { ITasksService } from "./tasks.service";
 import defaultDependencies, {
@@ -9,10 +8,7 @@ export class TasksServiceMock implements ITasksService {
   private _tasks: Task[] = [];
   private _dependencies: TasksServiceDependencies;
 
-  constructor(
-    _sdk: ISdk | undefined,
-    dependencies?: Partial<TasksServiceDependencies>,
-  ) {
+  constructor(_sdk: unknown, dependencies?: Partial<TasksServiceDependencies>) {
     this._dependencies = {
       ...defaultDependencies,
       ...dependencies,

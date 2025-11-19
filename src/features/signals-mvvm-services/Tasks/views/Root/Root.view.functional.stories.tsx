@@ -21,7 +21,9 @@ const meta = {
     });
 
     // create mock users service
-    const usersService = createUsersServiceMock(initialUsers);
+    const usersService = createUsersServiceMock(undefined, {
+      initialUsers,
+    });
 
     // create root dependencies
     const rootDependencies: RootDependencies = {

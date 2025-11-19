@@ -19,11 +19,16 @@ export interface ITasksService {
   deleteTask(taskId: string): Promise<void>;
 }
 
+export type SdkDependencies = Pick<
+  ISdk,
+  "listTasks" | "deleteTask" | "upsertTask"
+>;
+
 export class TasksService implements ITasksService {
-  private _sdk: ISdk;
+  private _sdk: SdkDependencies;
   private _dependencies: TasksServiceDependencies;
 
-  constructor(sdk: ISdk, dependencies?: TasksServiceDependencies) {
+  constructor(sdk: SdkDependencies, dependencies?: TasksServiceDependencies) {
     this._sdk = sdk;
 
     this._dependencies = {

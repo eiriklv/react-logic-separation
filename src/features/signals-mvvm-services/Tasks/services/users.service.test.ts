@@ -1,5 +1,6 @@
 import { User } from "../types";
-import { createUsersService } from "./users.service";
+import { createUsersService, SdkDependencies } from "./users.service";
+import { UsersServiceDependencies } from "./users.service.dependencies";
 import { createUsersServiceMock } from "./users.service.mock";
 
 describe.each([
@@ -18,7 +19,18 @@ describe.each([
         },
       ];
 
-      const usersService = createService(initialUsers);
+      const mockSdk: SdkDependencies = {
+        listUsers: vi
+          .fn<SdkDependencies["listUsers"]>()
+          .mockResolvedValueOnce(initialUsers),
+        retrieveUserById: vi.fn(),
+      };
+
+      const usersServiceDependencies: UsersServiceDependencies = {
+        initialUsers,
+      };
+
+      const usersService = createService(mockSdk, usersServiceDependencies);
 
       // act
       const users = await usersService.listUsers();
@@ -38,17 +50,24 @@ describe.each([
         },
       ];
 
-      const usersService = createService(initialUsers);
+      const mockSdk: SdkDependencies = {
+        listUsers: vi.fn(),
+        retrieveUserById: vi
+          .fn<SdkDependencies["retrieveUserById"]>()
+          .mockResolvedValueOnce(initialUsers[0]),
+      };
+
+      const usersServiceDependencies: UsersServiceDependencies = {
+        initialUsers,
+      };
+
+      const usersService = createService(mockSdk, usersServiceDependencies);
 
       // act
-      const user = await usersService.getUserById("user-1");
+      const user = await usersService.getUserById(initialUsers[0].id);
 
       // assert
-      expect(user).toEqual({
-        id: "user-1",
-        name: "Frank Doe",
-        profileImageUrl: "/img/user-1.jpg",
-      });
+      expect(user).toEqual(initialUsers[0]);
     });
   });
 });

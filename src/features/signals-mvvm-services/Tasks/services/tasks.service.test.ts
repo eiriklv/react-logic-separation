@@ -1,6 +1,6 @@
-import { ISdk } from "../sdks/sdk";
+import { SdkDependencies } from "../sdks/sdk";
 import { Task } from "../types";
-import { createTasksService } from "./tasks.service";
+import { createTasksService, SdkDependencies } from "./tasks.service";
 import { TasksServiceDependencies } from "./tasks.service.dependencies";
 import { createTasksServiceMock } from "./tasks.service.mock";
 
@@ -19,14 +19,14 @@ describe.each([
       // arrange
       const initialTasks: Task[] = [];
 
-      const sdkMock: ISdk = {
+      const sdkMock: SdkDependencies = {
         listTasks: vi.fn(async () => initialTasks),
         upsertTask: vi.fn(),
         deleteTask: vi.fn(),
       };
 
       const tasksServiceDependencies: TasksServiceDependencies = {
-        generateId: vi.fn(() => "abc"),
+        generateId: vi.fn(),
         initialTasks,
       };
 
@@ -53,12 +53,14 @@ describe.each([
 
       const initialTasks: Task[] = [];
 
-      const sdkMock: ISdk = {
+      const sdkMock: SdkDependencies = {
         listTasks: vi
-          .fn<ISdk["listTasks"]>()
+          .fn<SdkDependencies["listTasks"]>()
           .mockResolvedValueOnce(initialTasks)
           .mockResolvedValueOnce([...initialTasks, task]),
-        upsertTask: vi.fn<ISdk["upsertTask"]>().mockResolvedValueOnce(task),
+        upsertTask: vi
+          .fn<SdkDependencies["upsertTask"]>()
+          .mockResolvedValueOnce(task),
         deleteTask: vi.fn(),
       };
 
@@ -106,9 +108,9 @@ describe.each([
         },
       ];
 
-      const sdkMock: ISdk = {
+      const sdkMock: SdkDependencies = {
         listTasks: vi
-          .fn<ISdk["listTasks"]>()
+          .fn<SdkDependencies["listTasks"]>()
           .mockResolvedValueOnce(initialTasks)
           .mockResolvedValueOnce([...initialTasks, task])
           .mockResolvedValueOnce(initialTasks),
@@ -117,7 +119,7 @@ describe.each([
       };
 
       const tasksServiceDependencies: TasksServiceDependencies = {
-        generateId: vi.fn(() => "abc"),
+        generateId: vi.fn(() => taskId),
         initialTasks,
       };
 

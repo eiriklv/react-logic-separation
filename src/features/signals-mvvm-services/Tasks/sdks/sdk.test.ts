@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { Task } from "../types";
+import { Task, User } from "../types";
 import { createSdk } from "./sdk";
 
 export const defaultHandlers = [];
@@ -14,6 +14,56 @@ describe("API", () => {
   );
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
+
+  describe("listUsers", () => {
+    it("should work as expected", async () => {
+      // Arrange
+      const baseUrl = "https://my-service.com";
+
+      const mockUsers: User[] = [
+        { id: "user-1", name: "User 1", profileImageUrl: "/src/user-1.jpg" },
+        { id: "user-2", name: "User 2", profileImageUrl: "/src/user-2.jpg" },
+      ];
+
+      server.use(
+        http.get(`${baseUrl}/api/users`, () => {
+          return HttpResponse.json<User[]>(mockUsers);
+        }),
+      );
+
+      // Act
+      const sdk = createSdk(baseUrl);
+      const users = await sdk.listUsers();
+
+      // Assert
+      expect(users).toEqual(mockUsers);
+    });
+  });
+
+  describe("retrieveUserById", () => {
+    it("should work as expected", async () => {
+      // Arrange
+      const baseUrl = "https://my-service.com";
+
+      const mockUsers: User[] = [
+        { id: "user-1", name: "User 1", profileImageUrl: "/src/user-1.jpg" },
+        { id: "user-2", name: "User 2", profileImageUrl: "/src/user-2.jpg" },
+      ];
+
+      server.use(
+        http.get(`${baseUrl}/api/users/${mockUsers[0].id}`, () => {
+          return HttpResponse.json<User>(mockUsers[0]);
+        }),
+      );
+
+      // Act
+      const sdk = createSdk(baseUrl);
+      const user = await sdk.retrieveUserById(mockUsers[0].id);
+
+      // Assert
+      expect(user).toEqual(mockUsers[0]);
+    });
+  });
 
   describe("listTasks", () => {
     it("should work as expected", async () => {
@@ -34,7 +84,6 @@ describe("API", () => {
       );
 
       // Act
-
       const sdk = createSdk(baseUrl);
       const tasks = await sdk.listTasks();
 
