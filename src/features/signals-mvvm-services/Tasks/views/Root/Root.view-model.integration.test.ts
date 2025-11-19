@@ -14,7 +14,7 @@ import { http, HttpResponse } from "msw";
 export const defaultHandlers = [];
 export const server = setupServer(...defaultHandlers);
 
-describe("useRootViewModel (shallow)", () => {
+describe("useRootViewModel (integration level)", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
     const mockUsers: User[] = [];
@@ -110,7 +110,7 @@ describe("useRootViewModel (shallow)", () => {
   });
 });
 
-describe("useRootViewModel (deep)", () => {
+describe("useRootViewModel (network level)", () => {
   beforeAll(() =>
     server.listen({
       onUnhandledRequest: "error",
