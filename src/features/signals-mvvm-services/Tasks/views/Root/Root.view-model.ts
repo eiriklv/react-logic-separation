@@ -38,6 +38,7 @@ export const useRootViewModel = ({
 }: Props = {}) => {
   // Get dependencies
   const {
+    baseUrl,
     createSdk,
     createQueryClient,
     createTasksService,
@@ -72,7 +73,7 @@ export const useRootViewModel = ({
    * TODO(eirikv): Inject the base url somehow
    * (via environment and dependency injection)
    */
-  const sdk = createSdk("https://real-service.com");
+  const sdk = createSdk(baseUrl);
 
   /**
    * Create service instances
@@ -84,7 +85,7 @@ export const useRootViewModel = ({
    * must be wrapped in a service and then exposed.
    */
   const tasksService = createTasksService(sdk);
-  const usersService = createUsersService();
+  const usersService = createUsersService(sdk);
 
   /**
    * Package the services in an object

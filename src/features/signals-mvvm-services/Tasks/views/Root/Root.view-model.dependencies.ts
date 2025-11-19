@@ -15,6 +15,7 @@ import { createUsersServiceMock } from "../../services/users.service.mock";
  */
 
 export type RootViewModelDependencies = {
+  baseUrl: string;
   createSdk: typeof createSdk;
   createQueryClient: typeof createQueryClient;
   createTasksService: typeof createTasksService;
@@ -25,6 +26,7 @@ export type RootViewModelDependencies = {
 };
 
 const defaultDependencies: RootViewModelDependencies = {
+  baseUrl: "https://real-api.test",
   createSdk,
   createQueryClient,
   createTasksModel,

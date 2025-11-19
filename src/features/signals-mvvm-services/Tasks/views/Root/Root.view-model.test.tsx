@@ -18,6 +18,7 @@ vi.mock("./Root.view-model.dependencies", () => ({ default: {} }));
 describe("useRootViewModel", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
+    const baseUrl = "https://test.test";
     const queryClient = new QueryClient();
     const sdk = {} as ISdk;
     const tasksService = {} as ITasksService;
@@ -27,6 +28,7 @@ describe("useRootViewModel", () => {
     const usersModel = {} as IUsersModel;
 
     const dependencies: RootViewModelDependencies = {
+      baseUrl,
       createSdk: vi.fn(() => sdk),
       createQueryClient: vi.fn(() => queryClient),
       createTasksService: vi.fn(() => tasksService),

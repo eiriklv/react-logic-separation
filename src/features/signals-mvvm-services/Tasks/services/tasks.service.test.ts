@@ -1,4 +1,3 @@
-import { SdkDependencies } from "../sdks/sdk";
 import { Task } from "../types";
 import { createTasksService, SdkDependencies } from "./tasks.service";
 import { TasksServiceDependencies } from "./tasks.service.dependencies";
