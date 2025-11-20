@@ -52,11 +52,13 @@ describe.each([
 
       const initialTasks: Task[] = [];
 
+      const updatedTasks: Task[] = [...initialTasks, task];
+
       const sdkMock: SdkDependencies = {
         listTasks: vi
           .fn<SdkDependencies["listTasks"]>()
           .mockResolvedValueOnce(initialTasks)
-          .mockResolvedValueOnce([...initialTasks, task]),
+          .mockResolvedValueOnce(updatedTasks),
         upsertTask: vi
           .fn<SdkDependencies["upsertTask"]>()
           .mockResolvedValueOnce(task),
@@ -81,10 +83,7 @@ describe.each([
       const tasks = await tasksService.listTasks();
 
       // assert
-      expect(tasks).toEqual([
-        ...initialTasks,
-        { id: taskId, text: taskText, ownerId: taskOwnerId },
-      ]);
+      expect(tasks).toEqual(updatedTasks);
     });
 
     it("should reflect deleted tasks", async () => {
@@ -107,11 +106,13 @@ describe.each([
         },
       ];
 
+      const updatedTasks: Task[] = [...initialTasks, task];
+
       const sdkMock: SdkDependencies = {
         listTasks: vi
           .fn<SdkDependencies["listTasks"]>()
           .mockResolvedValueOnce(initialTasks)
-          .mockResolvedValueOnce([...initialTasks, task])
+          .mockResolvedValueOnce(updatedTasks)
           .mockResolvedValueOnce(initialTasks),
         upsertTask: vi.fn(),
         deleteTask: vi.fn().mockResolvedValueOnce(taskId),
@@ -135,7 +136,7 @@ describe.each([
       const tasksAfterAdd = await tasksService.listTasks();
 
       // assert
-      expect(tasksAfterAdd).toEqual([...initialTasks, task]);
+      expect(tasksAfterAdd).toEqual(updatedTasks);
 
       // act
       await tasksService.deleteTask(taskId);

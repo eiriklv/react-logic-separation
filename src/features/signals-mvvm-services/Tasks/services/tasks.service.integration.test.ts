@@ -42,12 +42,13 @@ describe(`Tasks Service Integration`, () => {
     };
 
     const initialTasks: Task[] = [];
+    const updatedTasks: Task[] = [task];
 
     const sdkMock: SdkDependencies = {
       listTasks: vi
         .fn<SdkDependencies["listTasks"]>()
         .mockResolvedValueOnce(initialTasks)
-        .mockResolvedValueOnce([...initialTasks, task]),
+        .mockResolvedValueOnce(updatedTasks),
       upsertTask: vi
         .fn<SdkDependencies["upsertTask"]>()
         .mockResolvedValueOnce(task),
@@ -68,14 +69,17 @@ describe(`Tasks Service Integration`, () => {
     expect(tasksBeforeAdd).toEqual(initialTasks);
 
     // act
-    await tasksService.addTask(taskText, taskOwnerId);
+    const firstAddedTask = await tasksService.addTask(taskText, taskOwnerId);
+    const secondAddedTask = await tasksService.addTask(taskText, taskOwnerId);
+
+    // assert
+    expect(firstAddedTask.id).not.toEqual(secondAddedTask.id);
+
+    // act
     const tasks = await tasksService.listTasks();
 
     // assert
-    expect(tasks).toEqual([
-      ...initialTasks,
-      { id: taskId, text: taskText, ownerId: taskOwnerId },
-    ]);
+    expect(tasks).toEqual(updatedTasks);
   });
 
   it("should reflect deleted tasks", async () => {
@@ -98,11 +102,13 @@ describe(`Tasks Service Integration`, () => {
       },
     ];
 
+    const updatedTasks: Task[] = [...initialTasks, task];
+
     const sdkMock: SdkDependencies = {
       listTasks: vi
         .fn<SdkDependencies["listTasks"]>()
         .mockResolvedValueOnce(initialTasks)
-        .mockResolvedValueOnce([...initialTasks, task])
+        .mockResolvedValueOnce(updatedTasks)
         .mockResolvedValueOnce(initialTasks),
       upsertTask: vi.fn(),
       deleteTask: vi.fn().mockResolvedValueOnce(taskId),
@@ -126,7 +132,7 @@ describe(`Tasks Service Integration`, () => {
     const tasksAfterAdd = await tasksService.listTasks();
 
     // assert
-    expect(tasksAfterAdd).toEqual([...initialTasks, task]);
+    expect(tasksAfterAdd).toEqual(updatedTasks);
 
     // act
     await tasksService.deleteTask(taskId);
