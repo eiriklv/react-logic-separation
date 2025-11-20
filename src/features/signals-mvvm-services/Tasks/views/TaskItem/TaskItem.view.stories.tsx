@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 import { TaskItem } from "./TaskItem.view";
 
 const meta = {
@@ -15,7 +16,7 @@ export const EmptyTask: Story = {
     dependencies: {
       useTaskItemViewModel: () => ({
         user: undefined,
-        deleteTask: async () => {},
+        deleteTask: fn(),
       }),
     },
     task: {
@@ -36,7 +37,7 @@ export const LoadingUser: Story = {
     dependencies: {
       useTaskItemViewModel: () => ({
         user: undefined,
-        deleteTask: async () => {},
+        deleteTask: fn(),
       }),
     },
   },
@@ -56,7 +57,7 @@ export const LoadedUser: Story = {
           name: "John Doe",
           profileImageUrl: "./src/abc.jpg",
         },
-        deleteTask: async () => {},
+        deleteTask: fn(),
       }),
     },
   },

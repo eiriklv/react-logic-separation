@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 import { Filters } from "./Filters.view";
 
 const meta = {
@@ -16,7 +17,7 @@ export const NoFilterOptions: Story = {
       useFiltersViewModel: () => ({
         users: [],
         selectedOwnerId: "",
-        setSelectedOwnerId: async () => {},
+        setSelectedOwnerId: fn(),
       }),
     },
   },
@@ -28,7 +29,7 @@ export const NoFilterSelected: Story = {
       useFiltersViewModel: () => ({
         users: [],
         selectedOwnerId: "",
-        setSelectedOwnerId: async () => {},
+        setSelectedOwnerId: fn(),
       }),
     },
   },
@@ -51,7 +52,7 @@ export const UserFilterSelected: Story = {
           },
         ],
         selectedOwnerId: "user-1",
-        setSelectedOwnerId: async () => {},
+        setSelectedOwnerId: fn(),
       }),
     },
   },

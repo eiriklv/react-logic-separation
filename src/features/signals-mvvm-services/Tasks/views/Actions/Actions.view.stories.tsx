@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 import { Actions } from "./Actions.view";
 
 const meta = {
@@ -15,7 +16,7 @@ export const NoUsersAvailable: Story = {
     dependencies: {
       useActionsViewModel: () => ({
         users: [],
-        addTask: async () => {},
+        addTask: fn(),
       }),
     },
   },
@@ -32,7 +33,7 @@ export const SingleUserAvailable: Story = {
             profileImageUrl: "./src/test.png",
           },
         ],
-        addTask: async () => {},
+        addTask: fn(),
       }),
     },
   },
@@ -54,7 +55,7 @@ export const MultipleUsersAvailable: Story = {
             profileImageUrl: "./src/test.png",
           },
         ],
-        addTask: async () => {},
+        addTask: fn(),
       }),
     },
   },
