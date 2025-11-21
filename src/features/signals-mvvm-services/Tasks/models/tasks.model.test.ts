@@ -184,7 +184,7 @@ describe("TasksModel", () => {
     expect(model.tasksCount.value).toEqual(1);
 
     // add some tasks
-    expect(() => model.deleteTask("")).rejects.toThrowError(
+    await expect(() => model.deleteTask("")).rejects.toThrowError(
       "Task id must be provided",
     );
 
@@ -226,12 +226,12 @@ describe("TasksModel", () => {
     expect(model.tasks.value).toEqual(initialMockedTasks);
 
     // check that adding a task without a category fails
-    expect(() => model.addTask("Thing", "")).rejects.toThrowError(
+    await expect(() => model.addTask("Thing", "")).rejects.toThrowError(
       "Owner id for task is missing",
     );
 
     // check that adding a task without text fails
-    expect(() => model.addTask("", "user-1")).rejects.toThrowError(
+    await expect(() => model.addTask("", "user-1")).rejects.toThrowError(
       "Task text is missing",
     );
 

@@ -2,7 +2,7 @@ import { Task, User } from "../types";
 
 export interface ISdk {
   listUsers(): Promise<User[]>;
-  retrieveUserById(userId: string): Promise<User>;
+  retrieveUserById(userId: string): Promise<User | undefined>;
   listTasks(): Promise<Task[]>;
   upsertTask(task: Task): Promise<Task>;
   deleteTask(taskId: string): Promise<string>;
@@ -21,7 +21,7 @@ class Sdk implements ISdk {
     return users;
   }
 
-  async retrieveUserById(userId: string): Promise<User> {
+  async retrieveUserById(userId: string): Promise<User | undefined> {
     const response = await fetch(`${this.baseUrl}/api/users/${userId}`);
     const user = await response.json();
     return user;
