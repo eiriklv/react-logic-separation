@@ -69,5 +69,36 @@ describe.each([
       // assert
       expect(user).toEqual(initialUsers[0]);
     });
+
+    it("should handle missing user", async () => {
+      // arrange
+      const initialUsers: User[] = [
+        { id: "user-1", name: "Frank Doe", profileImageUrl: "/img/user-1.jpg" },
+        {
+          id: "user-2",
+          name: "Jane Johnson",
+          profileImageUrl: "/img/user-2.jpg",
+        },
+      ];
+
+      const mockSdk: SdkDependencies = {
+        listUsers: vi.fn(),
+        retrieveUserById: vi
+          .fn<SdkDependencies["retrieveUserById"]>()
+          .mockResolvedValueOnce(undefined),
+      };
+
+      const usersServiceDependencies: UsersServiceDependencies = {
+        initialUsers,
+      };
+
+      const usersService = createService(mockSdk, usersServiceDependencies);
+
+      // act
+      const user = await usersService.getUserById("missing");
+
+      // assert
+      expect(user).toEqual(undefined);
+    });
   });
 });
