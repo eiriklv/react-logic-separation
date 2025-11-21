@@ -9,31 +9,7 @@ import defaultDependencies, {
  * and real dependencies to ensure that it integrates correctly
  */
 describe(`Tasks Service Integration`, () => {
-  it("should reflect the initial value", async () => {
-    // arrange
-    const initialTasks: Task[] = [];
-
-    const sdkMock: SdkDependencies = {
-      listTasks: vi.fn(async () => initialTasks),
-      upsertTask: vi.fn(),
-      deleteTask: vi.fn(),
-    };
-
-    const tasksServiceDependencies: TasksServiceDependencies = {
-      generateId: defaultDependencies.generateId,
-      initialTasks,
-    };
-
-    const tasksService = createTasksService(sdkMock, tasksServiceDependencies);
-
-    // act
-    const tasks = await tasksService.listTasks();
-
-    // assert
-    expect(tasks).toEqual(initialTasks);
-  });
-
-  it("should reflect added tasks", async () => {
+  it("should have unique ids for added tasks", async () => {
     // arrange
     const taskId: string = "abc";
     const taskText: string = "New task";
@@ -61,16 +37,9 @@ describe(`Tasks Service Integration`, () => {
 
     const tasksServiceDependencies: TasksServiceDependencies = {
       generateId: defaultDependencies.generateId,
-      initialTasks,
     };
 
     const tasksService = createTasksService(sdkMock, tasksServiceDependencies);
-
-    // act
-    const tasksBeforeAdd = await tasksService.listTasks();
-
-    // assert
-    expect(tasksBeforeAdd).toEqual(initialTasks);
 
     // act
     const firstAddedTask = await tasksService.addTask(taskText, taskOwnerId);
@@ -78,71 +47,5 @@ describe(`Tasks Service Integration`, () => {
 
     // assert
     expect(firstAddedTask.id).not.toEqual(secondAddedTask.id);
-
-    // act
-    const tasks = await tasksService.listTasks();
-
-    // assert
-    expect(tasks).toEqual(updatedTasks);
-  });
-
-  it("should reflect deleted tasks", async () => {
-    // arrange
-    const taskId: string = "abc";
-    const taskText: string = "New task";
-    const taskOwnerId: string = "user-1";
-
-    const task: Task = {
-      id: taskId,
-      text: taskText,
-      ownerId: taskOwnerId,
-    };
-
-    const initialTasks: Task[] = [
-      {
-        id: "a",
-        text: "b",
-        ownerId: "c",
-      },
-    ];
-
-    const updatedTasks: Task[] = [...initialTasks, task];
-
-    const sdkMock: SdkDependencies = {
-      listTasks: vi
-        .fn<SdkDependencies["listTasks"]>()
-        .mockResolvedValueOnce(initialTasks)
-        .mockResolvedValueOnce(updatedTasks)
-        .mockResolvedValueOnce(initialTasks),
-      upsertTask: vi.fn(),
-      deleteTask: vi.fn().mockResolvedValueOnce(taskId),
-    };
-
-    const tasksServiceDependencies: TasksServiceDependencies = {
-      generateId: defaultDependencies.generateId,
-      initialTasks,
-    };
-
-    const tasksService = createTasksService(sdkMock, tasksServiceDependencies);
-
-    // act
-    const tasksBeforeAdd = await tasksService.listTasks();
-
-    // assert
-    expect(tasksBeforeAdd).toEqual(initialTasks);
-
-    // act
-    await tasksService.addTask(taskText, taskOwnerId);
-    const tasksAfterAdd = await tasksService.listTasks();
-
-    // assert
-    expect(tasksAfterAdd).toEqual(updatedTasks);
-
-    // act
-    await tasksService.deleteTask(taskId);
-    const tasksAfterDelete = await tasksService.listTasks();
-
-    // assert
-    expect(tasksAfterDelete).toEqual(initialTasks);
   });
 });

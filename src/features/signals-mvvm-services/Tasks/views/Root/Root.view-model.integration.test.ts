@@ -14,11 +14,20 @@ import { http, HttpResponse } from "msw";
 export const defaultHandlers = [];
 export const server = setupServer(...defaultHandlers);
 
+/**
+ * TODO(eiriklv): Think more about what this test should actually cover
+ */
 describe("useRootViewModel (integration level)", () => {
   it("should map domain models correctly to view model", async () => {
     // arrange
-    const mockUsers: User[] = [];
-    const mockTasks: Task[] = [];
+    const mockUsers: User[] = [
+      { id: "user-1", name: "User 1", profileImageUrl: "/src/user-1.jpg" },
+      { id: "user-2", name: "User 2", profileImageUrl: "/src/user-2.jpg" },
+    ];
+    const mockTasks: Task[] = [
+      { id: "task-1", ownerId: "user-1", text: "Task 1" },
+      { id: "task-2", ownerId: "user-2", text: "Task 2" },
+    ];
 
     const baseUrl = "https://test.test";
 
@@ -34,7 +43,7 @@ describe("useRootViewModel (integration level)", () => {
 
     const usersServiceSdkDependencies: UsersServiceSdkDependencies = {
       listUsers: vi.fn(async () => mockUsers),
-      retrieveUserById: vi.fn(),
+      retrieveUserById: vi.fn(async () => mockUsers[0]),
     };
 
     const tasksModelDependencies: TasksModelDependencies = {
@@ -47,7 +56,7 @@ describe("useRootViewModel (integration level)", () => {
 
     const usersModelDependencies: UsersModelDependencies = {
       usersService: {
-        listUsers: vi.fn(async () => []),
+        listUsers: vi.fn(async () => mockUsers),
       },
     };
 
@@ -107,6 +116,12 @@ describe("useRootViewModel (integration level)", () => {
         mockUsers,
       ),
     );
+
+    await waitFor(async () =>
+      expect(
+        await result.current.services.usersService.getUserById("user-1"),
+      ).toEqual(mockUsers[0]),
+    );
   });
 });
 
@@ -129,6 +144,12 @@ describe("useRootViewModel (network level)", () => {
       { id: "task-1", ownerId: "user-1", text: "Task 1" },
       { id: "task-2", ownerId: "user-2", text: "Task 2" },
     ];
+
+    server.use(
+      http.get(`${defaultDependencies.baseUrl}/api/users/:userId`, () => {
+        return HttpResponse.json<User>(mockUsers[0]);
+      }),
+    );
 
     server.use(
       http.get(`${defaultDependencies.baseUrl}/api/users`, () => {
@@ -180,6 +201,12 @@ describe("useRootViewModel (network level)", () => {
       expect(await result.current.services.usersService.listUsers()).toEqual(
         mockUsers,
       ),
+    );
+
+    await waitFor(async () =>
+      expect(
+        await result.current.services.usersService.getUserById("user-1"),
+      ).toEqual(mockUsers[0]),
     );
   });
 });
