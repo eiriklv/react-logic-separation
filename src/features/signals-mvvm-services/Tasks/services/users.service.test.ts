@@ -3,6 +3,10 @@ import { createUsersService, SdkDependencies } from "./users.service";
 import { UsersServiceDependencies } from "./users.service.dependencies";
 import { createUsersServiceMock } from "./users.service.mock";
 
+/**
+ * TODO(eiriklv): Add integration tests in separate file using real SDK instance
+ * and real dependencies (none in this case) to ensure that it integrates correctly
+ */
 describe.each([
   { id: "Real", createService: createUsersService },
   { id: "Mock", createService: createUsersServiceMock },

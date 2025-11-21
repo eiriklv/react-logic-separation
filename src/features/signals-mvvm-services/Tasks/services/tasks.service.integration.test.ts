@@ -4,6 +4,10 @@ import defaultDependencies, {
   TasksServiceDependencies,
 } from "./tasks.service.dependencies";
 
+/**
+ * TODO(eiriklv): Add tests using real SDK instance
+ * and real dependencies to ensure that it integrates correctly
+ */
 describe(`Tasks Service Integration`, () => {
   it("should reflect the initial value", async () => {
     // arrange
