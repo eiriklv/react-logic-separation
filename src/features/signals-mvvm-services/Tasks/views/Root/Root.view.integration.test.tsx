@@ -12,8 +12,8 @@ import { IUsersModel } from "../../models/users.model";
 import { ITasksService } from "../../services/tasks.service";
 import { IUsersService } from "../../services/users.service";
 
-describe("Root Integration (view-model layer services)", () => {
-  it("should reflect changes when deleting a task in all applicable views", async () => {
+describe("Root", () => {
+  it("Renders correctly", async () => {
     // create root dependencies
     const rootDependencies: RootDependencies = {
       App: () => (
