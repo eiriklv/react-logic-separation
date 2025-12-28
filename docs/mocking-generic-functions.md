@@ -8,3 +8,6 @@ function post<T>(path: string): T {
   //...
 }
 ```
+
+- MSW for network level functions
+- Making the injected dependencies specific for anything else
