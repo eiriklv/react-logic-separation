@@ -2,8 +2,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Task, User } from "../../types";
-import { ServicesContextInterface } from "../../providers/services.provider";
-import { ModelsContextInterface } from "../../providers/models.provider";
 import { Root } from "./Root.view";
 import defaultDependencies, {
   RootDependencies,
@@ -11,6 +9,8 @@ import defaultDependencies, {
 import rootViewModelDefaultDependencies from "./Root.view-model.dependencies";
 import { createTasksServiceMock } from "../../services/tasks.service.mock";
 import { createUsersServiceMock } from "../../services/users.service.mock";
+import { ServicesContextInterface } from "../../providers/services.context";
+import { ModelsContextInterface } from "../../providers/models.context";
 
 describe("Root Integration (view-model layer services)", () => {
   it("should reflect changes when deleting a task in all applicable views", async () => {

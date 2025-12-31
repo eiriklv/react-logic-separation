@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { createContext } from "react";
 import { IUsersModel } from "../models/users.model";
 import { ITasksModel } from "../models/tasks.model";
 import { ISelectedFiltersModel } from "../models/selected-filters.model";
@@ -20,16 +20,6 @@ export interface ModelsContextInterface {
   selectedFiltersModel: ISelectedFiltersModel;
 }
 
-export const ModelsContext = React.createContext<
-  ModelsContextInterface | undefined
->(undefined);
-
-export const useModels = () => {
-  const models = useContext(ModelsContext);
-
-  if (!models) {
-    throw new Error("Models must be provided");
-  }
-
-  return models;
-};
+export const ModelsContext = createContext<ModelsContextInterface | undefined>(
+  undefined,
+);

@@ -2,8 +2,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import defaultDependencies, {
   RootDependencies,
 } from "./Root.view.dependencies";
-import { ServicesContext } from "../../providers/services.provider";
-import { ModelsContext } from "../../providers/models.provider";
+import { ServicesProvider } from "../../providers/services.provider";
+import { ModelsProvider } from "../../providers/models.provider";
 
 /**
  * Here's where we wrap all the top level providers
@@ -40,11 +40,11 @@ export function Root({ dependencies = defaultDependencies }: Props) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ServicesContext.Provider value={services}>
-        <ModelsContext.Provider value={models}>
+      <ServicesProvider services={services}>
+        <ModelsProvider models={models}>
           <App />
-        </ModelsContext.Provider>
-      </ServicesContext.Provider>
+        </ModelsProvider>
+      </ServicesProvider>
     </QueryClientProvider>
   );
 }

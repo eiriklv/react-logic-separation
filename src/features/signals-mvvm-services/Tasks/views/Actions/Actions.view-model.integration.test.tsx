@@ -5,10 +5,8 @@ import defaultDependencies, {
   ActionsViewModelDependencies,
   ModelsDependencies,
 } from "./Actions.view-model.dependencies";
-import {
-  ModelsContext,
-  ModelsContextInterface,
-} from "../../providers/models.provider";
+import { ModelsProvider } from "../../providers/models.provider";
+import { ModelsContextInterface } from "../../providers/models.context";
 
 describe("useActionsViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -28,9 +26,9 @@ describe("useActionsViewModel", () => {
 
     const { result } = renderHook(() => useActionsViewModel({ dependencies }), {
       wrapper: ({ children }) => (
-        <ModelsContext.Provider value={models as ModelsContextInterface}>
+        <ModelsProvider models={models as ModelsContextInterface}>
           {children}
-        </ModelsContext.Provider>
+        </ModelsProvider>
       ),
     });
 

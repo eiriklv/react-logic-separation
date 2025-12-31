@@ -7,15 +7,11 @@ import defaultDependencies, {
   ServicesDependencies,
   TaskItemViewModelDependencies,
 } from "./TaskItem.view-model.dependencies";
-import {
-  ModelsContext,
-  ModelsContextInterface,
-} from "../../providers/models.provider";
-import {
-  ServicesContext,
-  ServicesContextInterface,
-} from "../../providers/services.provider";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { ModelsProvider } from "../../providers/models.provider";
+import { ModelsContextInterface } from "../../providers/models.context";
+import { ServicesProvider } from "../../providers/services.provider";
+import { ServicesContextInterface } from "../../providers/services.context";
 
 describe("useTaskItemViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -59,15 +55,13 @@ describe("useTaskItemViewModel", () => {
       () => useTaskItemViewModel({ dependencies, task }),
       {
         wrapper: ({ children }) => (
-          <ModelsContext.Provider value={models as ModelsContextInterface}>
-            <ServicesContext.Provider
-              value={services as ServicesContextInterface}
-            >
+          <ModelsProvider models={models as ModelsContextInterface}>
+            <ServicesProvider services={services as ServicesContextInterface}>
               <QueryClientProvider client={queryClient}>
                 {children}
               </QueryClientProvider>
-            </ServicesContext.Provider>
-          </ModelsContext.Provider>
+            </ServicesProvider>
+          </ModelsProvider>
         ),
       },
     );

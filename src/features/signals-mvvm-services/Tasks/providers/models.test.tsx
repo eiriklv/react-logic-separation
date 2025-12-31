@@ -1,9 +1,7 @@
 import { renderHook } from "@testing-library/react";
-import {
-  ModelsContext,
-  ModelsContextInterface,
-  useModels,
-} from "./models.provider";
+import { ModelsProvider } from "./models.provider";
+import { ModelsContextInterface } from "./models.context";
+import { useModels } from "./models";
 
 describe("useModels", () => {
   it("should work if models are provided", async () => {
@@ -13,7 +11,7 @@ describe("useModels", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <ModelsContext.Provider value={models}>{children}</ModelsContext.Provider>
+      <ModelsProvider models={models}>{children}</ModelsProvider>
     );
 
     const { result } = renderHook(() => useModels(), { wrapper });

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { createContext } from "react";
 import { ITasksService } from "../services/tasks.service";
 import { IUsersService } from "../services/users.service";
 
@@ -18,16 +18,6 @@ export interface ServicesContextInterface {
   usersService: IUsersService;
 }
 
-export const ServicesContext = React.createContext<
+export const ServicesContext = createContext<
   ServicesContextInterface | undefined
 >(undefined);
-
-export const useServices = () => {
-  const services = useContext(ServicesContext);
-
-  if (!services) {
-    throw new Error("Services must be provided");
-  }
-
-  return services;
-};

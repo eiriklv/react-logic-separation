@@ -54,7 +54,7 @@ describe("Root", () => {
     /**
      * TODO(eiriklv): What more should be checked here to ensure the single depth integration?
      *
-     * - Check that return values from the view model is mapped to the correct
+     * - Check that return values from the view model is mapped to the correct providers
      * - To do this we will have to inject the provider components as dependencies
      * - That means we'll have to update the unit test as well
      */

@@ -26,5 +26,12 @@ describe("Root", () => {
 
     // assert
     expect(screen.getByTestId("App")).toBeInTheDocument();
+
+    /**
+     * TODO(eiriklv): What more should be checked here to ensure full unit coverage?
+     *
+     * - Check that return values from the view model is mapped to the correct providers
+     * - To do this we will have to inject the provider components as dependencies
+     */
   });
 });
