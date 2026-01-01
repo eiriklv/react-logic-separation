@@ -10,6 +10,8 @@ import { UsersModelDependencies } from "../../models/users.model";
 import { Task, User } from "../../types";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
+import { createTasksServiceMock } from "../../services/tasks.service.mock";
+import { createUsersServiceMock } from "../../services/users.service.mock";
 
 export const defaultHandlers = [];
 export const server = setupServer(...defaultHandlers);
@@ -120,6 +122,96 @@ describe("useRootViewModel (integration level)", () => {
     await waitFor(async () =>
       expect(
         await result.current.services.usersService.getUserById("user-1"),
+      ).toEqual(mockUsers[0]),
+    );
+  });
+});
+
+describe("useRootViewModel (fake services)", () => {
+  it("should map domain models correctly to view model", async () => {
+    // arrange
+    const mockUsers: User[] = [
+      { id: "user-1", name: "User 1", profileImageUrl: "/src/user-1.jpg" },
+      { id: "user-2", name: "User 2", profileImageUrl: "/src/user-2.jpg" },
+    ];
+    const mockTasks: Task[] = [
+      { id: "task-1", ownerId: "user-1", text: "Task 1" },
+      { id: "task-2", ownerId: "user-2", text: "Task 2" },
+    ];
+
+    const tasksService = createTasksServiceMock(undefined, {
+      initialTasks: mockTasks,
+    });
+
+    const usersService = createUsersServiceMock(undefined, {
+      initialUsers: mockUsers,
+    });
+
+    const baseUrl = "https://test.test";
+
+    const tasksModelDependencies: TasksModelDependencies = {
+      tasksService,
+    };
+
+    const usersModelDependencies: UsersModelDependencies = {
+      usersService,
+    };
+
+    const queryClient = defaultDependencies.createQueryClient();
+
+    const dependencies: RootViewModelDependencies = {
+      baseUrl,
+      createSdk: defaultDependencies.createSdk,
+      createQueryClient: () => queryClient,
+      createTasksService: () => tasksService,
+      createUsersService: () => usersService,
+      createSelectedFiltersModel:
+        defaultDependencies.createSelectedFiltersModel,
+      createTasksModel: (queryClient) =>
+        defaultDependencies.createTasksModel(
+          queryClient,
+          tasksModelDependencies,
+        ),
+      createUsersModel: (queryClient) =>
+        defaultDependencies.createUsersModel(
+          queryClient,
+          usersModelDependencies,
+        ),
+    };
+
+    const { result } = renderHook(() => useRootViewModel({ dependencies }));
+
+    expect(result.current.queryClient).toEqual(queryClient);
+
+    /**
+     * Perform assertions on the models
+     */
+    await waitFor(() =>
+      expect(result.current.models.tasksModel.tasks.value).toEqual(mockTasks),
+    );
+
+    await waitFor(() =>
+      expect(result.current.models.usersModel.users.value).toEqual(mockUsers),
+    );
+
+    /**
+     * Perform assertions on the services
+     */
+    await waitFor(async () =>
+      expect(await result.current.services.tasksService.listTasks()).toEqual(
+        mockTasks,
+      ),
+    );
+
+    await waitFor(async () =>
+      expect(await result.current.services.usersService.listUsers()).toEqual(
+        mockUsers,
+      ),
+    );
+
+    await waitFor(async () =>
+      expect(
+        await result.current.services.usersService.getUserById(mockUsers[0].id),
       ).toEqual(mockUsers[0]),
     );
   });
