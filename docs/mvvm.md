@@ -78,10 +78,270 @@ Model:
 - Contains the domain/business logic
 - Exposes properties and commands that can be consumed
 
-Code Example:
+Code Example (controller view alternative):
 
-```ts
-// TODO
+```tsx
+/**
+ * Model
+ */
+const useTasksModel = () => {
+  // ...
+}
+
+/**
+ * Controller (has a reference to the view and model)
+ */
+const TasksController = () => {
+  const {
+    tasks,
+    addTask,
+  } = useTasksModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  return (
+    <TasksView
+      tasks={tasks}
+      isLoading={isLoading}
+      onChangeTaskText={handleChangeTaskText}
+      onSubmitTask={handleSubmitTask}
+      taskText={taskText}
+    />
+  );
+}
+
+/**
+ * View
+ */
+const TasksView = ({
+  tasks,
+  isLoading,
+  onChangeTaskText,
+  taskText
+}) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+Code Example (controller factored out to hook alternative):
+
+```tsx
+/**
+ * Model
+ */
+const useTasksModel = () => {
+  // ...
+}
+
+/**
+ * Controller hook (has a reference to the model)
+ */
+const useTasksController = () => {
+  const {
+    tasks,
+    addTask,
+  } = useTasksModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  return {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+  }
+}
+
+/**
+ * Controller (has a reference to the view and controller hook)
+ */
+const TasksController = () => {
+  const {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+  } = useTasksController();
+
+  return (
+    <TasksView
+      tasks={tasks}
+      isLoading={isLoading}
+      onChangeTaskText={handleChangeTaskText}
+      onSubmitTask={handleSubmitTask}
+      taskText={taskText}
+    />
+  );
+}
+
+/**
+ * View
+ */
+const TasksView = ({
+  tasks,
+  isLoading,
+  onChangeTaskText,
+  taskText
+}) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+Code Example (controller hook alternative - here we actually change the ownership):
+
+```tsx
+/**
+ * Model
+ */
+const useTasksModel = () => {
+  // ...
+}
+
+/**
+ * Controller hook (has a reference to the model)
+ */
+const useTasksController = () => {
+  const {
+    tasks,
+    addTask,
+  } = useTasksModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  return {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+  }
+}
+
+/**
+ * View (has a reference to the controller hook - we have in practice merged the controller and the view)
+ */
+const TasksView = () => {
+  const {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+  } = useTasksController();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+Code Example (embedded controller alternative - here we merge the view and the controller hook):
+
+```tsx
+/**
+ * Model
+ */
+const useTasksModel = () => {
+  // ...
+}
+
+/**
+ * View (merged with the controller - has a reference to the model)
+ */
+const TasksView = () => {
+  const {
+    tasks,
+    addTask,
+  } = useTasksModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
 ```
 
 ### MVVM
@@ -142,7 +402,7 @@ Every layer can be tested separately (model, view, view model)
 
 Advantages:
 
-- Opportunity for less brittle and more useful tests, because of the increased separation
+- Opportunity for less brittle tests that break only for useful reasons
 
 Code Examples:
 
