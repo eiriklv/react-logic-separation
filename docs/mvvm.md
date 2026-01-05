@@ -78,13 +78,36 @@ Model:
 - Contains the domain/business logic
 - Exposes properties and commands that can be consumed
 
-Code Example (controller view alternative):
+#### Code Example (alternative 1 - explicit controller view):
+
+In this example we're using an explicit controller component, view component and a hook to represent the domain model.
 
 ```tsx
 /**
- * Model
+ * Domain types
  */
-const useTasksModel = () => {
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
   // ...
 }
 
@@ -95,7 +118,12 @@ const TasksController = () => {
   const {
     tasks,
     addTask,
+    isLoading,
   } = useTasksModel();
+
+  const {
+    statusFilter,
+  } = useStatusFilterModel();
 
   const [taskText, setTaskText] = useState('');
 
@@ -108,9 +136,11 @@ const TasksController = () => {
     setTaskText('');
   }
 
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
   return (
     <TasksView
-      tasks={tasks}
+      tasks={filteredTasks}
       isLoading={isLoading}
       onChangeTaskText={handleChangeTaskText}
       onSubmitTask={handleSubmitTask}
@@ -126,6 +156,7 @@ const TasksView = ({
   tasks,
   isLoading,
   onChangeTaskText,
+  onSubmitTask,
   taskText
 }) => {
   if (isLoading) {
@@ -145,13 +176,36 @@ const TasksView = ({
 }
 ```
 
-Code Example (controller factored out to hook alternative):
+#### Code Example (alternative 2 - controller factored out to hook):
+
+In this example we've factored out the controller logic of the controller view into a separate hook. This makes it easier to see that it is the controller logic that owns the reference to the domain model.
 
 ```tsx
 /**
- * Model
+ * Domain types
  */
-const useTasksModel = () => {
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
   // ...
 }
 
@@ -162,7 +216,12 @@ const useTasksController = () => {
   const {
     tasks,
     addTask,
+    isLoading,
   } = useTasksModel();
+
+  const {
+    statusFilter
+  } = useStatusFilterModel();
 
   const [taskText, setTaskText] = useState('');
 
@@ -175,8 +234,11 @@ const useTasksController = () => {
     setTaskText('');
   }
 
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
   return {
-    tasks,
+    tasks: filteredTasks,
+    isLoading,
     taskText,
     handleChangeTaskText,
     handleSubmitTask,
@@ -189,6 +251,7 @@ const useTasksController = () => {
 const TasksController = () => {
   const {
     tasks,
+    isLoading,
     taskText,
     handleChangeTaskText,
     handleSubmitTask,
@@ -212,6 +275,7 @@ const TasksView = ({
   tasks,
   isLoading,
   onChangeTaskText,
+  onSubmitTask,
   taskText
 }) => {
   if (isLoading) {
@@ -231,13 +295,36 @@ const TasksView = ({
 }
 ```
 
-Code Example (controller hook alternative - here we actually change the ownership):
+#### Code Example (alternative 3 - controller view/hook):
+
+In this example we taken it a step further and
 
 ```tsx
 /**
- * Model
+ * Domain types
  */
-const useTasksModel = () => {
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
   // ...
 }
 
@@ -248,7 +335,12 @@ const useTasksController = () => {
   const {
     tasks,
     addTask,
+    isLoading,
   } = useTasksModel();
+
+  const {
+    statusFilter
+  } = useStatusFilterModel();
 
   const [taskText, setTaskText] = useState('');
 
@@ -261,8 +353,11 @@ const useTasksController = () => {
     setTaskText('');
   }
 
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
   return {
-    tasks,
+    tasks: filteredTasks,
+    isLoading,
     taskText,
     handleChangeTaskText,
     handleSubmitTask,
@@ -275,6 +370,7 @@ const useTasksController = () => {
 const TasksView = () => {
   const {
     tasks,
+    isLoading,
     taskText,
     handleChangeTaskText,
     handleSubmitTask,
@@ -297,13 +393,34 @@ const TasksView = () => {
 }
 ```
 
-Code Example (embedded view/controller alternative - here we merge the view and the controller hook):
+Code Example (alternative 4 - embedded controller/view):
 
 ```tsx
 /**
- * Model
+ * Domain types
  */
-const useTasksModel = () => {
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
   // ...
 }
 
@@ -314,7 +431,12 @@ const TasksView = () => {
   const {
     tasks,
     addTask,
+    isLoading,
   } = useTasksModel();
+
+  const {
+    statusFilter
+  } = useStatusFilterModel();
 
   const [taskText, setTaskText] = useState('');
 
@@ -331,7 +453,9 @@ const TasksView = () => {
     return <div>Loading...</div>;
   }
 
-  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  const taskItems = filteredTasks.map((task) => <TaskItem key={task.id} task={task} />);
 
   return (
     <div>
@@ -370,10 +494,461 @@ Model:
 - Contains the domain/business logic
 - Exposes properties and commands that can be consumed
 
-Code Example:
+#### Code Example (alternative 1 - explicit controller view):
 
-```ts
-// TODO
+In this example we're using an explicit controller component, view component and a hook to represent the domain model.
+
+```tsx
+/**
+ * Domain types
+ */
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
+  // ...
+}
+
+/**
+ * View Model (has references to the domain models)
+ */
+const useTasksViewModel = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksModel();
+
+  const {
+    statusFilter,
+  } = useStatusFilterModel();
+
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  return {
+    tasks: filteredTasks,
+    addTask,
+    isLoading,
+  }
+}
+
+/**
+ * Controller (has a reference to the view model)
+ */
+const TasksController = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading
+  } = useTasksViewModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  return (
+    <TasksView
+      tasks={tasks}
+      isLoading={isLoading}
+      onChangeTaskText={handleChangeTaskText}
+      onSubmitTask={handleSubmitTask}
+      taskText={taskText}
+    />
+  );
+}
+
+/**
+ * View
+ */
+const TasksView = ({
+  tasks,
+  isLoading,
+  onChangeTaskText,
+  taskText
+}) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+#### Code Example (alternative 2 - controller factored out to hook):
+
+In this example we've factored out the controller logic of the controller view into a separate hook. This makes it easier to see that it is the controller logic that owns the reference to the domain model.
+
+```tsx
+/**
+ * Domain types
+ */
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
+  // ...
+}
+
+/**
+ * View Model (has references to the domain models)
+ */
+const useTasksViewModel = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksModel();
+
+  const {
+    statusFilter,
+  } = useStatusFilterModel();
+
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  return {
+    tasks: filteredTasks,
+    addTask,
+    isLoading,
+  }
+}
+
+/**
+ * Controller hook (has a reference to the view model)
+ */
+const useTasksController = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksViewModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  return {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+    isLoading,
+  }
+}
+
+/**
+ * Controller (has a reference to the view and controller hook)
+ */
+const TasksController = () => {
+  const {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+    isLoading,
+  } = useTasksController();
+
+  return (
+    <TasksView
+      tasks={tasks}
+      isLoading={isLoading}
+      onChangeTaskText={handleChangeTaskText}
+      onSubmitTask={handleSubmitTask}
+      taskText={taskText}
+    />
+  );
+}
+
+/**
+ * View
+ */
+const TasksView = ({
+  tasks,
+  isLoading,
+  onChangeTaskText,
+  onSubmitTask,
+  taskText
+}) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+#### Code Example (alternative 3 - controller view/hook):
+
+In this example we taken it a step further and
+
+```tsx
+/**
+ * Domain types
+ */
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
+  // ...
+}
+
+/**
+ * View Model (has references to the domain models)
+ */
+const useTasksViewModel = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksModel();
+
+  const {
+    statusFilter,
+  } = useStatusFilterModel();
+
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  return {
+    tasks: filteredTasks,
+    addTask,
+    isLoading,
+  }
+}
+
+/**
+ * Controller hook (has a reference to the view model)
+ */
+const useTasksController = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksViewModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  return {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+    isLoading,
+  }
+}
+
+/**
+ * View (has a reference to the controller hook - we have in practice merged the controller and the view)
+ */
+const TasksView = () => {
+  const {
+    tasks,
+    taskText,
+    handleChangeTaskText,
+    handleSubmitTask,
+    isLoading,
+  } = useTasksController();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+Code Example (alternative 4 - embedded controller/view):
+
+```tsx
+/**
+ * Domain types
+ */
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
+  // ...
+}
+
+/**
+ * View Model (has references to the domain models)
+ */
+const useTasksViewModel = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksModel();
+
+  const {
+    statusFilter,
+  } = useStatusFilterModel();
+
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  return {
+    tasks: filteredTasks,
+    addTask,
+    isLoading,
+  }
+}
+
+/**
+ * View/Controller (has a reference to the view model)
+ */
+const TasksView = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksViewModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = filteredTasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
 ```
 
 ## References
