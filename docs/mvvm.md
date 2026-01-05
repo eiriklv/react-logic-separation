@@ -210,7 +210,7 @@ const useStatusFilterModel = (): {
 }
 
 /**
- * Controller hook (has a reference to the model)
+ * Controller logic hook (has a reference to the model)
  */
 const useTasksController = () => {
   const {
@@ -246,7 +246,7 @@ const useTasksController = () => {
 }
 
 /**
- * Controller (has a reference to the view and controller hook)
+ * Controller (has a reference to the view and controller logic hook)
  */
 const TasksController = () => {
   const {
@@ -297,7 +297,7 @@ const TasksView = ({
 
 #### Code Example (version 3 - "controller-view" with separate controller logic hook):
 
-From the previous example we see that the `<TasksController>` no longer provides any value - it is simply a relay / wrapper that maps the output from the controller hook into the controller component. Let effectively merge the `<TasksView>` and `<TasksController>` component into one "controller-view" instead, keeping the `<TasksView>` name.
+From the previous example we see that the `<TasksController>` no longer provides any value - it is simply a relay / wrapper that maps the output from the controller logic hook into the controller component. Let effectively merge the `<TasksView>` and `<TasksController>` component into one "controller-view" instead, keeping the `<TasksView>` name.
 
 ```tsx
 /**
@@ -329,7 +329,7 @@ const useStatusFilterModel = (): {
 }
 
 /**
- * Controller hook (has a reference to the model)
+ * Controller logic hook (has a reference to the model)
  */
 const useTasksController = () => {
   const {
@@ -365,7 +365,7 @@ const useTasksController = () => {
 }
 
 /**
- * Controller-View (has a reference to the controller hook - we have in practice merged the controller and the view)
+ * Controller-View (has a reference to the controller logic hook - we have in practice merged the controller and the view)
  */
 const TasksView = () => {
   const {
@@ -395,7 +395,7 @@ const TasksView = () => {
 
 #### Code Example (version 4 - "controller-view" with embedded controller logic):
 
-One of the advantages of React is that we don't actually have to discern between the controller and the view, so if we want we can also merge the controller hook and the controller-view, leaving us with less parts to connect together. This becomes a tradeoff between less parts and of it no longer being as clear which parts of the "controller-view" component are controller logic and which parts are pure view-logic (like mapping the data into renderable elements).
+One of the advantages of React is that we don't actually have to discern between the controller and the view, so if we want we can also merge the controller logic hook and the controller-view, leaving us with less parts to connect together. This becomes a tradeoff between less parts and of it no longer being as clear which parts of the "controller-view" component are controller logic and which parts are pure view-logic (like mapping the data into renderable elements).
 
 ```tsx
 /**
@@ -573,7 +573,7 @@ const useTasksViewModel = () => {
 }
 
 /**
- * Controller hook (has a reference to the view model)
+ * Controller logic hook (has a reference to the view model)
  */
 const useTasksController = () => {
   const {
@@ -603,7 +603,7 @@ const useTasksController = () => {
 }
 
 /**
- * Controller-View (has a reference to the controller hook)
+ * Controller-View (has a reference to the controller logic hook)
  */
 const TasksView = () => {
   const {
