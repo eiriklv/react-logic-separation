@@ -80,7 +80,7 @@ Model:
 
 #### Code Example (alternative 1 - explicit controller view):
 
-In this example we're using an explicit controller component, view component and a hook to represent the domain model.
+In this example we're using an explicit controller component, view component and hooks to represent the domain models.
 
 ```tsx
 /**
@@ -178,7 +178,7 @@ const TasksView = ({
 
 #### Code Example (alternative 2 - controller factored out to hook):
 
-In this example we've factored out the controller logic of the controller view into a separate hook. This makes it easier to see that it is the controller logic that owns the reference to the domain model.
+In this example we've factored out the controller logic of the controller view into a separate hook. This makes it easier to see that it is the controller logic that owns the reference to the domain models.
 
 ```tsx
 /**
@@ -496,7 +496,7 @@ Model:
 
 #### Code Example (alternative 1 - explicit controller view):
 
-In this example we're using an explicit controller component, view component and a hook to represent the domain model.
+In this example we're using an explicit controller component, view component and hooks to represent the domain models.
 
 ```tsx
 /**
@@ -610,7 +610,7 @@ const TasksView = ({
 
 #### Code Example (alternative 2 - controller factored out to hook):
 
-In this example we've factored out the controller logic of the controller view into a separate hook. This makes it easier to see that it is the controller logic that owns the reference to the domain model.
+In this example we've factored out the controller logic of the controller view into a separate hook. This makes it easier to see that it is the controller logic that owns the reference to the domain models.
 
 ```tsx
 /**
