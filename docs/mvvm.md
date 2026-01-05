@@ -297,7 +297,7 @@ const TasksView = () => {
 }
 ```
 
-Code Example (embedded controller alternative - here we merge the view and the controller hook):
+Code Example (embedded view/controller alternative - here we merge the view and the controller hook):
 
 ```tsx
 /**
@@ -308,7 +308,7 @@ const useTasksModel = () => {
 }
 
 /**
- * View (merged with the controller - has a reference to the model)
+ * View/Controller (has a reference to the model)
  */
 const TasksView = () => {
   const {
