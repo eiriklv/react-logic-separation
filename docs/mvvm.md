@@ -4,11 +4,6 @@
   - [MVVM Architectural Pattern](#enterprise-architecture-pattern)
   - [MVVM vs. MVC](#mvvm-vs-mvc)
   - [References](#references)
-- [Why](#why)
-  - [Testability](#testability)
-  - [Maintainability](#maintainability)
-  - [Scalability](#scalability)
-  - [Collaboration](#collaboration)
 - [How](#how)
   - [Pattern](#pattern)
     - [Naming conventions and folder structure](#naming-conventions-and-folder-structure)
@@ -19,6 +14,11 @@
     - [Factor out to shared domain model hooks](#factor-out-to-shared-domain-model-hooks)
   - [Other Considerations](#other-considerations)
     - [Sharing view models](#sharing-view-models)
+- [Why](#why)
+  - [Testability](#testability)
+  - [Maintainability](#maintainability)
+  - [Scalability](#scalability)
+  - [Collaboration](#collaboration)
 - [Tradeoffs](#tradeoffs)
 
 # What
@@ -77,6 +77,388 @@ Model:
 
 - Contains the domain/business logic
 - Exposes properties and commands that can be consumed
+
+#### Code Example
+
+```tsx
+/**
+ * Domain types
+ */
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
+  // ...
+}
+
+/**
+ * Controller
+ */
+const TasksController = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksModel();
+
+  const {
+    statusFilter,
+  } = useStatusFilterModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  return (
+    <TasksView
+      tasks={filteredTasks}
+      isLoading={isLoading}
+      onChangeTaskText={handleChangeTaskText}
+      onSubmitTask={handleSubmitTask}
+      taskText={taskText}
+    />
+  );
+}
+
+/**
+ * View
+ */
+const TasksView = ({
+  tasks,
+  isLoading,
+  onChangeTaskText,
+  onSubmitTask,
+  taskText
+}) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+### MVVM
+
+![MVVM](../assets/mvvm.png)
+
+View:
+
+- Displays properties passed to it
+- Triggers commands passed to it on user interaction
+
+Controller:
+
+- Has a reference to the view
+- Is responsible for rendering the view
+- _\*Has a reference to the view model_
+- _\*Is responsible for forwarding the view model properties and commands into the view_
+
+View model:
+
+- Has references to one or more models
+- Is responsible for mapping properties and commands from those models into something consumed by the view controller
+
+Model:
+
+- Contains the domain/business logic
+- Exposes properties and commands that can be consumed
+
+#### Code Example
+
+```tsx
+/**
+ * Domain types
+ */
+type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+type Task = {
+  text: string;
+  status: STATUS;
+}
+
+/**
+ * Models
+ */
+const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+}
+
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void
+} => {
+  // ...
+}
+
+/**
+ * View Model
+ */
+const useTasksViewModel = () => {
+  /**
+   * Pull in what we need from domain models
+   */
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksModel();
+
+  const {
+    statusFilter,
+  } = useStatusFilterModel();
+
+  /**
+   * Do any processing, combining, mapping, filtering,
+   * etc. necessary to make the domain data directly
+   * consumable by the view
+   */
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  /**
+   * TODO(eiriklv): Add separate commands instead of mapping directly from the domain models,
+   * and show that this is where you would do validation, etc.
+   *
+   * The main point is to make the domains as easy as possible to use for
+   * the consuming view and that it should be insulated from changes in the domain
+   * by terminating it in the view model, not the view itself.
+   */
+
+  return {
+    tasks: filteredTasks,
+    addTask,
+    isLoading,
+  }
+}
+
+/**
+ * Controller
+ */
+const TasksController = () => {
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksViewModel();
+
+  const [taskText, setTaskText] = useState('');
+
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  return (
+    <TasksView
+      tasks={tasks}
+      isLoading={isLoading}
+      onChangeTaskText={handleChangeTaskText}
+      onSubmitTask={handleSubmitTask}
+      taskText={taskText}
+    />
+  );
+}
+
+/**
+ * View
+ */
+const TasksView = ({
+  tasks,
+  isLoading,
+  onChangeTaskText,
+  onSubmitTask,
+  taskText
+}) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
+## References
+
+- https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel
+- https://learn.microsoft.com/en-us/dotnet/architecture/maui/mvvm
+- https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/february/patterns-wpf-apps-with-the-model-view-viewmodel-design-pattern
+- https://learn.microsoft.com/en-us/previous-versions/xamarin/xamarin-forms/enterprise-application-patterns/mvvm
+
+# How
+
+TODO
+
+- Summary about how we want to use this pattern in the Fusion codebase
+
+## Pattern
+
+TODO
+
+- Show the final code pattern that we want in the Fusion codebase
+
+### Separating business logic from the view
+
+TODO
+
+- Show a stepwise process of going from non-MVC to MVC to MVVM
+
+### ViewController vs. ViewModel
+
+TODO
+
+- Show and explain the important distinctions between the view controller and the view model
+
+### Naming conventions and folder structure
+
+TODO
+
+- Show the naming conventions and file structure we want to use in the Fusion codebase
+
+## Incremental Adoption
+
+TODO
+
+- Show how you can incrementally adopt this in an existing codebase
+
+### Factor out to view model hooks
+
+TODO
+
+### Factor out to shared domain model hooks
+
+TODO
+
+# Why
+
+The main reason for introducing a pattern like MVVM is to enable better separation of concerns, making it possible to work much more independently in each layer of the application. By only having to agree on the interfaces between the layers it means that it to a much larger degree than before is possible to develop the layers separately and in parallel. This is mainly achieved by the view model, which acts as a mapping layer between the view layer and the business logic layer.
+
+## Testability
+
+Every layer can be tested separately (model, view, view model)
+
+- Test the view independently of the business logic layer, only having to care about the interface of the view model
+  - Simpler tests, because of less concerns
+  - Tests are unaffected by changes in the view model layer and below, as long as the interface of the view model stays the same
+- Test the view model independent of the view
+  - Test the view logic without the actual view
+- Test business logic independently of the view layer (view/view controller/view model)
+  - Simpler tests, because of less concerns
+  - Tests are unaffected by changes to the view layer, as it has no knowledge of it
+
+Advantages:
+
+- Opportunity for less brittle tests that break only for useful reasons
+
+Code Examples:
+
+```ts
+// TODO (examples for testing each layer; view, view model, model)
+```
+
+## Maintainability
+
+Because of the clear separation of the layers and the introduction of interfaces between them it should ideally increase the maintainability of the application. Each part can be approached separately, both in terms of application code and tests. Each layer can be changed/replaced independently without affecting the other layers. Only interface changes needs coordination between the layers.
+
+Examples:
+
+- Changing the view (how things are displayed and interacted with)
+  - No changes to the view model and below, only the view/view controller
+- Changing the business logic (how things work underneath)
+  - Changes in the model layer
+  - Changes in the view model layer
+- Changes that require interface changes
+  - New requirement in UX that triggers an interface change in the view model, which then propagates down to the model layer
+
+Code Examples:
+
+```ts
+// TODO (one example for each)
+```
+
+## Scalability
+
+Because of the clear separation of concerns when using MVVM it means that your business logic complexity does not affect your view logic complexity, and vice versa, ensuring better scalability of the application.
+
+Example:
+
+- Adding another view on top of existing business logic
+  - New view with new view model interface
+  - New view model with new implementation (different mappings of existing business logic)
+
+Code Examples:
+
+```ts
+// TODO (one example for each)
+```
+
+## Collaboration
+
+Since MVVM creates a much clearer separation between the view layer and business logic layer it increases the possibility to work in parallel. Agreeing on the interface returned by the view models is sufficient for working on both the view and the business logic in parallel. The views can be tested with mocked out view models following the interface, while the view model and business logic underneath can be tested separately according to agreed upon interface/contract.
+
+Code Example:
+
+```ts
+// TODO
+```
+
+# Tradeoffs
+
+TODO
+
+# Code examples / stepwise non-MVC -> MVC -> MVVM
 
 #### Code Example (version 1 - explicit controller view):
 
@@ -477,34 +859,6 @@ const TasksView = () => {
 }
 ```
 
-Going forward we'll show examples using both version 3 and 4 for clarity.
-
-### MVVM
-
-![MVVM](../assets/mvvm.png)
-
-View:
-
-- Displays properties passed to it
-- Triggers commands passed to it on user interaction
-
-Controller:
-
-- Has a reference to the view
-- Is responsible for rendering the view
-- _\*Has a reference to the view model_
-- _\*Is responsible for forwarding the view model properties and commands into the view_
-
-View model:
-
-- Has references to one or more models
-- Is responsible for mapping properties and commands from those models into something consumed by the view controller
-
-Model:
-
-- Contains the domain/business logic
-- Exposes properties and commands that can be consumed
-
 #### Code Example (version 1 - "controller-view" with separate controller logic hook and separate view model hook):
 
 Anything that is related to the domain models is factored out to a view model hook. The distinction between domain logic and controller/view logic matters. It's important that only domain related things are factored out and not to include anything that is related to controller logic - that is view specific and does not belong in the view model. Doing so will only give you headache and trouble down the road, as it mixes together two different layers and very different concerns.
@@ -735,119 +1089,3 @@ const TasksView = () => {
   );
 }
 ```
-
-## References
-
-- https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel
-- https://learn.microsoft.com/en-us/dotnet/architecture/maui/mvvm
-- https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/february/patterns-wpf-apps-with-the-model-view-viewmodel-design-pattern
-- https://learn.microsoft.com/en-us/previous-versions/xamarin/xamarin-forms/enterprise-application-patterns/mvvm
-
-# Why
-
-The main reason for introducing a pattern like MVVM is to enable better separation of concerns, making it possible to work much more independently in each layer of the application. By only having to agree on the interfaces between the layers it means that it to a much larger degree than before is possible to develop the layers separately and in parallel. This is mainly achieved by the view model, which acts as a mapping layer between the view layer and the business logic layer.
-
-## Testability
-
-Every layer can be tested separately (model, view, view model)
-
-- Test the view independently of the business logic layer, only having to care about the interface of the view model
-  - Simpler tests, because of less concerns
-  - Tests are unaffected by changes in the view model layer and below, as long as the interface of the view model stays the same
-- Test the view model independent of the view
-  - Test the view logic without the actual view
-- Test business logic independently of the view layer (view/view controller/view model)
-  - Simpler tests, because of less concerns
-  - Tests are unaffected by changes to the view layer, as it has no knowledge of it
-
-Advantages:
-
-- Opportunity for less brittle tests that break only for useful reasons
-
-Code Examples:
-
-```ts
-// TODO (examples for testing each layer; view, view model, model)
-```
-
-## Maintainability
-
-Because of the clear separation of the layers and the introduction of interfaces between them it should ideally increase the maintainability of the application. Each part can be approached separately, both in terms of application code and tests. Each layer can be changed/replaced independently without affecting the other layers. Only interface changes needs coordination between the layers.
-
-Examples:
-
-- Changing the view (how things are displayed and interacted with)
-  - No changes to the view model and below, only the view/view controller
-- Changing the business logic (how things work underneath)
-  - Changes in the model layer
-  - Changes in the view model layer
-- Changes that require interface changes
-  - New requirement in UX that triggers an interface change in the view model, which then propagates down to the model layer
-
-Code Examples:
-
-```ts
-// TODO (one example for each)
-```
-
-## Scalability
-
-Because of the clear separation of concerns when using MVVM it means that your business logic complexity does not affect your view logic complexity, and vice versa, ensuring better scalability of the application.
-
-Example:
-
-- Adding another view on top of existing business logic
-  - New view with new view model interface
-  - New view model with new implementation (different mappings of existing business logic)
-
-Code Examples:
-
-```ts
-// TODO (one example for each)
-```
-
-## Collaboration
-
-Since MVVM creates a much clearer separation between the view layer and business logic layer it increases the possibility to work in parallel. Agreeing on the interface returned by the view models is sufficient for working on both the view and the business logic in parallel. The views can be tested with mocked out view models following the interface, while the view model and business logic underneath can be tested separately according to agreed upon interface/contract.
-
-Code Example:
-
-```ts
-// TODO
-```
-
-# How
-
-TODO
-
-## Pattern
-
-TODO
-
-### Naming conventions and folder structure
-
-TODO
-
-### Separating business logic from the view
-
-TODO
-
-### ViewController vs. ViewModel
-
-TODO
-
-## Incremental Adoption
-
-TODO
-
-### Factor out to view model hooks
-
-TODO
-
-### Factor out to shared domain model hooks
-
-TODO
-
-# Tradeoffs
-
-TODO
