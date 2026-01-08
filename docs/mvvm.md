@@ -6,9 +6,10 @@
   - [References](#references)
 - [How](#how)
   - [Pattern](#pattern)
-    - [Naming conventions and folder structure](#naming-conventions-and-folder-structure)
     - [Separating business logic from the view](#separating-business-logic-from-the-view)
+    - [Naming conventions and folder structure](#naming-conventions-and-folder-structure)
     - [ViewController vs. ViewModel](#viewcontroller-vs-viewmodel)
+    - [Summary](#summary)
   - [Incremental Adoption](#incremental-adoption)
     - [Factor out to view model hooks](#factor-out-to-view-model-hooks)
     - [Factor out to shared domain model hooks](#factor-out-to-shared-domain-model-hooks)
@@ -339,15 +340,7 @@ const TasksView = ({
 
 # How
 
-TODO
-
-- Summary about how we want to use this pattern in the Fusion codebase
-
 ## Pattern
-
-TODO
-
-- Show the final code pattern that we want in the Fusion codebase
 
 ### Separating business logic from the view
 
@@ -367,11 +360,190 @@ TODO
 
 - Show the naming conventions and file structure we want to use in the Fusion codebase
 
+### Summary
+
+**Folder structure**
+
+```
+/features
+  /tasks
+    /types
+      types.ts
+    /models
+      tasks.model.ts
+      status-filter.model.ts
+    /views
+      tasks.view-model.ts
+      tasks.view.tsx
+```
+
+**Files**
+
+`types.ts`:
+
+```ts
+/**
+ * Domain types
+ */
+export type Status = 'TODO' | 'IN_PROGRESS' : 'DONE';
+
+export type Task = {
+  text: string;
+  status: STATUS;
+}
+```
+
+`tasks.model.ts`:
+
+```ts
+import type { Task } from "../types/types";
+
+/**
+ * Domain model
+ */
+export const useTasksModel = (): {
+  tasks: Task[];
+  addTask: (text: string) => void;
+  isLoading: boolean;
+} => {
+  // ...
+};
+```
+
+`status-filter.model.ts`:
+
+```ts
+import type { Status } from "../types/types";
+
+/**
+ * Domain model
+ */
+const useStatusFilterModel = (): {
+  statusFilter: Status;
+  setStatusFilter: (status: Status) => void;
+} => {
+  // ...
+};
+```
+
+`tasks.view-model.ts`:
+
+```ts
+import { useTasksModel } from "../models/tasks.model";
+import { useStatusFilterModel } from "../models/status-filter.model";
+
+/**
+ * View Model
+ */
+const useTasksViewModel = () => {
+  /**
+   * Pull in what we need from domain models
+   *
+   * NOTE: As there is only one view model per view,
+   * any domain specific data or command must be
+   * provided through the view model hook.
+   *
+   * No other domain/business related hooks should
+   * ever be necessary to include in the view
+   */
+  const { tasks, addTask, isLoading } = useTasksModel();
+
+  const { statusFilter } = useStatusFilterModel();
+
+  /**
+   * Do any processing, combining, mapping, filtering,
+   * etc. necessary to make the domain data directly
+   * consumable by the view
+   */
+  const filteredTasks = tasks.filter((task) => task.status === statusFilter);
+
+  /**
+   * Create commands to expose to the view,
+   * where we can do validation and error handling
+   */
+  const addTaskCommand = (text?: string) => {
+    /**
+     * Validation
+     */
+    if (!text) {
+      return;
+    }
+
+    addTask(text);
+  };
+
+  /**
+   * The main point is to make the domains as easy as possible to use for
+   * the consuming view and that it should be insulated from changes in the domain
+   * by terminating it in the view model, not the view itself.
+   */
+  return {
+    tasks: filteredTasks,
+    addTask: addTaskCommand,
+    isLoading,
+  };
+};
+```
+
+`tasks.view.tsx`
+
+```tsx
+/**
+ * Controller/View
+ */
+const TasksView = () => {
+  /**
+   * Pull out what we need from the view model
+   */
+  const {
+    tasks,
+    addTask,
+    isLoading,
+  } = useTasksViewModel();
+
+  /**
+   * View specific state
+   */
+  const [taskText, setTaskText] = useState('');
+
+  /**
+   * View specific handlers
+   */
+  const handleChangeTaskText = (event) => {
+    setTaskText(event.target.value);
+  }
+
+  const handleSubmitTask = () => {
+    addTask(taskText);
+    setTaskText('');
+  }
+
+  /**
+   * View logic
+   */
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const taskItems = tasks.map((task) => <TaskItem key={task.id} task={task} />);
+
+  return (
+    <div>
+      <h1>Tasks</h1>
+      <ul>{taskItems}</ul>
+      <input type="text" value={taskText} onChange={onChangeTaskText} />
+      <button type="submit" onClick={onSubmitTask}>
+    </div>
+  );
+}
+```
+
 ## Incremental Adoption
 
 TODO
 
 - Show how you can incrementally adopt this in an existing codebase
+- Use some relatable example as a starting point
 
 ### Factor out to view model hooks
 
