@@ -2,8 +2,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ITasksModel } from "../../models/tasks.model";
 import { createUserModel, IUserModel } from "../../models/user.model";
 import { IUsersService } from "../../services/users.service";
-import { useServices } from "../../providers/services";
-import { useModels } from "../../providers/models";
+import { useServices } from "../../providers/services.provider";
+import { useModels } from "../../providers/models.provider";
 
 /**
  * This file contains the interface of the

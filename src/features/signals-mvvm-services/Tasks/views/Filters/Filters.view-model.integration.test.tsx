@@ -5,8 +5,10 @@ import defaultDependencies, {
   FiltersViewModelDependencies,
   ModelsDependencies,
 } from "./Filters.view-model.dependencies";
-import { ModelsProvider } from "../../providers/models.provider";
-import { ModelsContextInterface } from "../../providers/models.context";
+import {
+  ModelsContextInterface,
+  ModelsProvider,
+} from "../../providers/models.provider";
 
 describe("useFiltersViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -29,7 +31,7 @@ describe("useFiltersViewModel", () => {
 
     const { result } = renderHook(() => useFiltersViewModel({ dependencies }), {
       wrapper: ({ children }) => (
-        <ModelsProvider models={models as ModelsContextInterface}>
+        <ModelsProvider value={models as ModelsContextInterface}>
           {children}
         </ModelsProvider>
       ),

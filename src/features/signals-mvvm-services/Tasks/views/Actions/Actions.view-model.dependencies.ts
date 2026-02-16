@@ -1,6 +1,6 @@
 import { ITasksModel } from "../../models/tasks.model";
 import { IUsersModel } from "../../models/users.model";
-import { useModels } from "../../providers/models";
+import { useModels } from "../../providers/models.provider";
 
 /**
  * This file contains the interface of the

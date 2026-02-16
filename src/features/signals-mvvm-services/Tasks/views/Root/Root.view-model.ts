@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import defaultDependencies, {
   RootViewModelDependencies,
 } from "./Root.view-model.dependencies";
-import { ServicesContextInterface } from "../../providers/services.context";
-import { ModelsContextInterface } from "../../providers/models.context";
+import { ServicesContextInterface } from "../../providers/services.provider";
+import { ModelsContextInterface } from "../../providers/models.provider";
 
 /**
  * The main purpose of this file is to

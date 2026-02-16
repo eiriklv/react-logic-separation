@@ -40,8 +40,8 @@ export function Root({ dependencies = defaultDependencies }: Props) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ServicesProvider services={services}>
-        <ModelsProvider models={models}>
+      <ServicesProvider value={services}>
+        <ModelsProvider value={models}>
           <App />
         </ModelsProvider>
       </ServicesProvider>

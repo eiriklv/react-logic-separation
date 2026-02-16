@@ -1,7 +1,7 @@
 import { ITasksModel } from "../../models/tasks.model";
 
 import { ISelectedFiltersModel } from "../../models/selected-filters.model";
-import { useModels } from "../../providers/models";
+import { useModels } from "../../providers/models.provider";
 
 /**
  * This file contains the interface of the

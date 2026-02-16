@@ -1,7 +1,9 @@
 import { renderHook } from "@testing-library/react";
-import { useServices } from "./services";
-import { ServicesContextInterface } from "./services.context";
-import { ServicesProvider } from "./services.provider";
+import {
+  ServicesContextInterface,
+  ServicesProvider,
+  useServices,
+} from "./services.provider";
 
 describe("useServices", () => {
   it("should work if services are provided", async () => {
@@ -18,7 +20,7 @@ describe("useServices", () => {
     const wrapper: React.FC<{
       children?: React.ReactNode;
     }> = ({ children }) => (
-      <ServicesProvider services={services}>{children}</ServicesProvider>
+      <ServicesProvider value={services}>{children}</ServicesProvider>
     );
 
     // act

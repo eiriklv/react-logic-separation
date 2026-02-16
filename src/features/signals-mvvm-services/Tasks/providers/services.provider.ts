@@ -1,5 +1,6 @@
-import { useContext } from "react";
-import { ServicesContext } from "./services.context";
+import { createContext, useContext } from "react";
+import { ITasksService } from "../services/tasks.service";
+import { IUsersService } from "../services/users.service";
 
 /**
  * The purpose of this hook is to be able to
@@ -12,6 +13,17 @@ import { ServicesContext } from "./services.context";
  * The consumer should not have to know that
  * a context exists - that's just an implementation detail
  */
+
+export interface ServicesContextInterface {
+  tasksService: ITasksService;
+  usersService: IUsersService;
+}
+
+const ServicesContext = createContext<ServicesContextInterface | undefined>(
+  undefined,
+);
+
+export const ServicesProvider = ServicesContext.Provider;
 
 export const useServices = () => {
   const services = useContext(ServicesContext);

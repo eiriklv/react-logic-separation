@@ -6,8 +6,11 @@ import defaultDependencies, {
   ModelsDependencies,
   TaskListViewModelDependencies,
 } from "./TaskList.view-model.dependencies";
-import { ModelsProvider } from "../../providers/models.provider";
-import { ModelsContextInterface } from "../../providers/models.context";
+import {
+  ModelsContext,
+  ModelsContextInterface,
+  ModelsProvider,
+} from "../../providers/models.provider";
 
 describe("useTaskListViewModel", () => {
   it("should map domain models correctly to view model", async () => {
@@ -37,7 +40,7 @@ describe("useTaskListViewModel", () => {
       () => useTaskListViewModel({ dependencies }),
       {
         wrapper: ({ children }) => (
-          <ModelsProvider models={models as ModelsContextInterface}>
+          <ModelsProvider value={models as ModelsContextInterface}>
             {children}
           </ModelsProvider>
         ),
