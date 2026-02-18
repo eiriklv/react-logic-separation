@@ -195,7 +195,7 @@ Controller:
 View model:
 
 - Has references to one or more models
-- Is responsible for mapping properties and commands from those models into something consumed by the view controller
+- Is responsible for mapping properties and commands from those models into something consumable by the view controller
 
 Model:
 
