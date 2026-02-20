@@ -6,6 +6,7 @@
     - [Poor type safety by default](#poor-type-safety-by-default)
     - [Brittle tests](#brittle-tests)
     - [Implicitness and boundaries](#implicitness-and-boundaries)
+    - [Dependency narrowing](#dependency-narrowing)
 - [How](#how)
   - [Proposed option 1](#proposed-option-1)
   - [Proposed option 2](#proposed-option-2)
@@ -47,6 +48,7 @@ Okay, sure - but which problems are we actually solving with this?
   - [Poor type safety by default](#poor-type-safety-by-default)
   - [Brittle tests](#brittle-test)
   - [Implicitness and boundaries](#implicitness-and-boundaries)
+  - [Dependency narrowing](#dependency-narrowing)
 
 ## Challenges with module mocking
 
@@ -547,6 +549,16 @@ export const Tasks: React.FC<Props> = ({
     </div>
   );
 };
+```
+
+### Dependency narrowing
+
+TODO: Write a chapter that describes the challenges related to vi.mock and the fact that there is no way to subscribe to only a subset of a dependency (type). This can easily be done with dependency injection, as it is the unit itself that describes which interfaces each dependency needs to fulfill. Anything matching that is a valid implementation, even if it is a much larger interface/implementation. This way you can avoid larger than necessary mocks and the usage of Partial<T> for those mocks.
+
+TODO: Code example
+
+```tsx
+// Code example
 ```
 
 # How
