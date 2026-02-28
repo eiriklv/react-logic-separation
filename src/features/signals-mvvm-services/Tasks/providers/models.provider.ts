@@ -25,6 +25,10 @@ const ModelsContext = createContext<ModelsContextInterface | undefined>(
   undefined,
 );
 
+/**
+ * TODO(eiriklv): Type this explicitly to avoid
+ * the issues related to exotic components
+ */
 export const ModelsProvider = ModelsContext.Provider;
 
 export const useModels = () => {

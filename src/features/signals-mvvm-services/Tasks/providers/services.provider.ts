@@ -23,6 +23,10 @@ const ServicesContext = createContext<ServicesContextInterface | undefined>(
   undefined,
 );
 
+/**
+ * TODO(eiriklv): Type this explicitly to avoid
+ * the issues related to exotic components
+ */
 export const ServicesProvider = ServicesContext.Provider;
 
 export const useServices = () => {

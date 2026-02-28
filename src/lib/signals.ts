@@ -4,7 +4,7 @@ import * as arrayDiff from "fast-array-diff";
 /**
  * TODO: This currently does not support updates to
  * shuffling elements without the instance being
- * cleaned up and the setup again - add this
+ * cleaned up and then setup again - add this
  */
 export function mapSignalArray<T, U>(
   input: Signal<T[]>,
