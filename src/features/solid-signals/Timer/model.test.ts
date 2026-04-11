@@ -13,12 +13,12 @@ describe("startTimer (command)", () => {
   });
 });
 
-describe("Timer auto-increments (effect)", () => {
+describe("elapsedSeconds (relay)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
 
-  it("should only increment the timer while running", async () => {
+  it("should only increment the elapsed seconds while running", async () => {
     // arrange
     const model = new TimerModel();
 
