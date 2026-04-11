@@ -1,11 +1,8 @@
 import { Accessor, createEffect, createRoot, untrack } from "@solidjs/signals";
-import { useSyncExternalStore } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 
-/**
- * Custom hook for connecting solid signals to React
- */
-export const useSignalValue = <T>(signal: Accessor<T>) => {
-  const subscribe = (callback: () => void) => {
+function createSignalSubscriber<T>(signal: Accessor<T>): (callback: () => void) => () => void {
+  return (callback: () => void) => {
     let dispose: () => void = () => {
       console.warn('attempting to disposed before disposer has been assigned');
     };
@@ -17,8 +14,18 @@ export const useSignalValue = <T>(signal: Accessor<T>) => {
 
     return dispose;
   }
+}
 
-  const peek = () => untrack(() => signal())
+function createSignalPeeker <T>(signal: Accessor<T>) {
+  return () => untrack(() => signal());
+}
+
+/**
+ * Custom hook for connecting solid signals to React
+ */
+export const useSignalValue = <T>(signal: Accessor<T>) => {
+  const subscribe = useMemo(() => createSignalSubscriber(signal), [signal]);
+  const peek = useMemo(() => createSignalPeeker(signal), [signal]);
 
   return useSyncExternalStore(
     subscribe,
