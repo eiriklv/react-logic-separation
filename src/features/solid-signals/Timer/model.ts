@@ -1,4 +1,9 @@
-import { Accessor, createEffect, createRoot, createSignal } from "@solidjs/signals";
+import {
+  Accessor,
+  createEffect,
+  createRoot,
+  createSignal,
+} from "@solidjs/signals";
 
 // Model
 export class TimerModel {
@@ -21,7 +26,7 @@ export class TimerModel {
   };
 
   // Effect disposal
-  private _disposeEffects: () => void = () => { }
+  private _disposeEffects: () => void = () => {};
 
   // Constructor
   constructor() {
@@ -32,7 +37,10 @@ export class TimerModel {
       // Effects
       createEffect(
         // Dependencies
-        () => this._isRunning[0](),
+        () => {
+          const [isRunning] = this._isRunning;
+          return isRunning();
+        },
         // Effect
         (isRunning) => {
           if (!isRunning) {
@@ -46,16 +54,19 @@ export class TimerModel {
           return () => {
             clearInterval(interval);
           };
-        });
+        },
+      );
     });
   }
 
   // Readonly signals
   public get elapsedSeconds(): Accessor<number> {
-    return this._elapsedSeconds[0];
+    const [elapsedSeconds] = this._elapsedSeconds;
+    return elapsedSeconds;
   }
   public get isRunning(): Accessor<boolean> {
-    return this._isRunning[0];
+    const [isRunning] = this._isRunning;
+    return isRunning;
   }
 
   // Commands

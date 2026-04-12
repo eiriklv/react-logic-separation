@@ -1,5 +1,5 @@
+import { useSignalValue } from "../../../lib/use-signal-value-solid";
 import { model } from "./model";
-import { useSignalValue } from "./solid-signals-utils";
 
 /**
  * The main purpose of this file is to
