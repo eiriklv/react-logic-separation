@@ -2,7 +2,7 @@ import { signal } from "@preact/signals-core";
 import { useSignalValue } from "./use-signal-value";
 import { act, renderHook, waitFor } from "@testing-library/react";
 
-describe(useSignalValue.name, () => {
+describe(useSignalValue, () => {
   it("should reflect value from provided signal and handle updates", async () => {
     const mySignal = signal("initial value");
 

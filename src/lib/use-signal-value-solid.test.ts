@@ -2,7 +2,7 @@ import { useSignalValue } from "./use-signal-value-solid";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { createSignal } from "@solidjs/signals";
 
-describe(useSignalValue.name, () => {
+describe(useSignalValue, () => {
   it("should reflect value from provided signal and handle updates", async () => {
     const [mySignal, setMySignal] = createSignal("initial value");
 
