@@ -17,18 +17,11 @@ import { model } from "./model";
  * the custom hooks into it
  */
 
-export const useElapsedSeconds = () => {
-  return useSignalValue(model.elapsedSeconds);
-};
-
-export const useIsRunning = () => {
-  return useSignalValue(model.isRunning);
-};
-
-export const useStartTimer = () => {
-  return model.startTimer;
-};
-
-export const useStopTimer = () => {
-  return model.stopTimer;
+export const useTimerViewModel = () => {
+  return {
+    elapsedSeconds: useSignalValue(model.elapsedSeconds),
+    isRunning: useSignalValue(model.isRunning),
+    startTimer: model.startTimer,
+    stopTimer: model.stopTimer,
+  };
 };
