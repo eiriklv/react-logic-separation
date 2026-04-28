@@ -1,5 +1,6 @@
 import { Timer } from "./Timer";
 
-export function TimerFeature() {
-  return <Timer />;
-}
+/**
+ * Entry point to the feature
+ */
+export default Timer;
