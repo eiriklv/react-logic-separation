@@ -83,7 +83,7 @@ export class ConditionalTimerModel {
   public get elapsedSeconds(): Accessor<number> {
     return this._elapsedSeconds[0];
   }
-  public get isRunning() {
+  public get isRunning(): Accessor<boolean> {
     return this._isRunning;
   }
 
