@@ -29,7 +29,9 @@ function createSignalSubscriber<T>(
     let isInitial = true;
 
     let dispose: () => void = () => {
-      console.warn("attempting to disposed before disposer has been assigned");
+      console.warn(
+        "attempting to dispose subscriber before disposer has been assigned",
+      );
     };
 
     createRoot((disposer) => {
@@ -85,7 +87,11 @@ export function effect<T>(
   dependencies: () => T,
   effectFn: (deps: T) => (() => void) | void,
 ): () => void {
-  let disposeEffect: () => void = () => {};
+  let disposeEffect: () => void = () => {
+    console.warn(
+      "attempting to dispose effect before disposer has been assigned",
+    );
+  };
   createRoot((disposer) => {
     disposeEffect = disposer;
     createEffect(dependencies, effectFn);
