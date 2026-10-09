@@ -29,4 +29,4 @@ View models
 
 Views
 
-- consumer a single view model
+- consumes a single view model
