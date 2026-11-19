@@ -18,13 +18,13 @@ export interface ITasksModel {
 }
 
 // Types and interfaces
-export type TasksModelDependencies = {
+export type TasksModelServicesDependencies = {
   tasksService: Pick<ITasksService, "addTask" | "deleteTask" | "listTasks">;
 };
 
 export function useTasksModel(): ITasksModel {
   // Get dependencies
-  const dependencies: TasksModelDependencies = useServices();
+  const dependencies: TasksModelServicesDependencies = useServices();
 
   // Get query client
   const queryClient = useQueryClient();
