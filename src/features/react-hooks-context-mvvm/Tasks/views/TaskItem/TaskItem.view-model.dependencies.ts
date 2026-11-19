@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { ITasksModel } from "../../models/tasks.model";
-import { createUserModel, IUserModel } from "../../models/user.model";
+import { IUserModel, useUserModel } from "../../models/user.model";
 import { IUsersService } from "../../services/users.service";
 import { useServices } from "../../providers/services.provider";
 import { useModels } from "../../providers/models.provider";
@@ -28,8 +28,8 @@ export type ServicesDependencies = {
 };
 
 export type TaskItemViewModelDependencies = {
-  createUserModel: (
-    ...args: Parameters<typeof createUserModel>
+  useUserModel: (
+    ...args: Parameters<typeof useUserModel>
   ) => Pick<IUserModel, "user">;
   useModels: () => ModelsDependencies;
   useServices: () => ServicesDependencies;
@@ -37,7 +37,7 @@ export type TaskItemViewModelDependencies = {
 };
 
 const defaultDependencies: TaskItemViewModelDependencies = {
-  createUserModel,
+  useUserModel,
   useModels,
   useServices,
   useQueryClient,

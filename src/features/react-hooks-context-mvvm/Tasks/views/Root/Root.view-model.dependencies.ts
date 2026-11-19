@@ -1,9 +1,9 @@
 import { createQueryClient } from "../../utils/create-query-client";
 import { createTasksService } from "../../services/tasks.service";
 import { createUsersService } from "../../services/users.service";
-import { createTasksModel } from "../../models/tasks.model";
-import { createUsersModel } from "../../models/users.model";
-import { createSelectedFiltersModel } from "../../models/selected-filters.model";
+import { useTasksModel } from "../../models/tasks.model";
+import { useUsersModel } from "../../models/users.model";
+import { useSelectedFiltersModel } from "../../models/selected-filters.model";
 import { createSdk } from "../../sdks/sdk";
 
 /**
@@ -18,18 +18,18 @@ export type RootViewModelDependencies = {
   createQueryClient: typeof createQueryClient;
   createTasksService: typeof createTasksService;
   createUsersService: typeof createUsersService;
-  createTasksModel: typeof createTasksModel;
-  createUsersModel: typeof createUsersModel;
-  createSelectedFiltersModel: typeof createSelectedFiltersModel;
+  useTasksModel: typeof useTasksModel;
+  useUsersModel: typeof useUsersModel;
+  useSelectedFiltersModel: typeof useSelectedFiltersModel;
 };
 
 const defaultDependencies: RootViewModelDependencies = {
   baseUrl: "https://real-api.test",
   createSdk,
   createQueryClient,
-  createTasksModel,
-  createUsersModel,
-  createSelectedFiltersModel,
+  useTasksModel,
+  useUsersModel,
+  useSelectedFiltersModel,
   createTasksService,
   createUsersService,
 };

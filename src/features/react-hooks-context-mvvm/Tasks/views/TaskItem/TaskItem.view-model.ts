@@ -1,5 +1,4 @@
-import { useCallback, useMemo } from "react";
-import { useSignalValue } from "../../../../../lib/use-signal-value";
+import { useCallback } from "react";
 import { Task } from "../../types";
 import defaultDependencies, {
   TaskItemViewModelDependencies,
@@ -31,7 +30,7 @@ export const useTaskItemViewModel = ({
   task,
 }: TaskItemViewModelProps) => {
   // Get dependencies
-  const { createUserModel, useServices, useModels, useQueryClient } =
+  const { useUserModel, useServices, useModels, useQueryClient } =
     dependencies;
 
   // Get services from the shared services provider
@@ -49,17 +48,14 @@ export const useTaskItemViewModel = ({
   // Pull out the stuff we need from the shared services
   const { usersService } = services;
 
-  const userModel = useMemo(
-    () => createUserModel(task.ownerId, queryClient, { usersService }),
-    [createUserModel, usersService, queryClient, task.ownerId],
-  );
+  const userModel = useUserModel(task.ownerId, { usersService });
 
   const deleteTask = useCallback(() => {
     return tasksModel.deleteTask(task.id);
   }, [task.id, tasksModel]);
 
   return {
-    user: useSignalValue(userModel.user),
+    user: userModel.user,
     deleteTask,
   };
 };

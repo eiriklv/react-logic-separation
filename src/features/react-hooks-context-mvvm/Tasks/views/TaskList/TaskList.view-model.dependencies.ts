@@ -17,8 +17,8 @@ export type ModelsDependencies = {
   selectedFiltersModel: ISelectedFiltersModel;
   tasksModel: Pick<
     ITasksModel,
-    | "getTasksByOwnerId"
-    | "getTasksCountByOwnerId"
+    | "useTasksByOwnerId"
+    | "useTasksCountByOwnerId"
     | "isFetching"
     | "isLoading"
     | "isSaving"

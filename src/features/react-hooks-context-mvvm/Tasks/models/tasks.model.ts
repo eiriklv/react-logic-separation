@@ -1,7 +1,6 @@
 import { Task } from "../types";
 import { ITasksService } from "../services/tasks.service";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServices } from "../providers/services.provider";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 
 export interface ITasksModel {
   tasks: Task[] | undefined;
@@ -18,17 +17,11 @@ export interface ITasksModel {
 }
 
 // Types and interfaces
-export type TasksModelServicesDependencies = {
+export type TasksModelDependencies = {
   tasksService: Pick<ITasksService, "addTask" | "deleteTask" | "listTasks">;
 };
 
-export function useTasksModel(): ITasksModel {
-  // Get dependencies
-  const dependencies: TasksModelServicesDependencies = useServices();
-
-  // Get query client
-  const queryClient = useQueryClient();
-
+export function useTasksModel(queryClient: QueryClient, dependencies: TasksModelDependencies): ITasksModel {
   // Queries
   const tasksQuery = useQuery<Task[]>({
     queryKey: ["tasks"],

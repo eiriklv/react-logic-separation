@@ -1,4 +1,3 @@
-import { useSignalValue } from "../../../../../lib/use-signal-value";
 import { ActionsViewModelDependencies } from "./Actions.view-model.dependencies";
 import defaultDependencies from "./Actions.view-model.dependencies";
 
@@ -35,7 +34,7 @@ export const useActionsViewModel = ({
   const { usersModel, tasksModel } = models;
 
   return {
-    users: useSignalValue(usersModel.users),
+    users: usersModel.users,
     addTask: tasksModel.addTask,
   };
 };

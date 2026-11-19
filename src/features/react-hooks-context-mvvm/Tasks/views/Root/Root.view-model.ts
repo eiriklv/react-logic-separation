@@ -43,9 +43,9 @@ export const useRootViewModel = ({
     createQueryClient,
     createTasksService,
     createUsersService,
-    createTasksModel,
-    createUsersModel,
-    createSelectedFiltersModel,
+    useTasksModel,
+    useUsersModel,
+    useSelectedFiltersModel,
   } = dependencies;
 
   /**
@@ -101,26 +101,9 @@ export const useRootViewModel = ({
   /**
    * Create the models
    */
-  const usersModel = useMemo(
-    () =>
-      createUsersModel(queryClient, {
-        usersService,
-      }),
-    [createUsersModel, queryClient, usersService],
-  );
-
-  const tasksModel = useMemo(
-    () =>
-      createTasksModel(queryClient, {
-        tasksService,
-      }),
-    [createTasksModel, queryClient, tasksService],
-  );
-
-  const selectedFiltersModel = useMemo(
-    () => createSelectedFiltersModel(),
-    [createSelectedFiltersModel],
-  );
+  const usersModel = useUsersModel(services);
+  const tasksModel = useTasksModel(queryClient, services);
+  const selectedFiltersModel = useSelectedFiltersModel();
 
   /**
    * Package the models in an object

@@ -1,4 +1,3 @@
-import { useSignalValue } from "../../../../../lib/use-signal-value";
 import defaultDependencies, {
   FiltersViewModelDependencies,
 } from "./Filters.view-model.dependencies";
@@ -36,8 +35,8 @@ export const useFiltersViewModel = ({
   const { usersModel, selectedFiltersModel } = models;
 
   return {
-    users: useSignalValue(usersModel.users),
-    selectedOwnerId: useSignalValue(selectedFiltersModel.selectedOwnerId),
+    users: usersModel.users,
+    selectedOwnerId: selectedFiltersModel.selectedOwnerId,
     setSelectedOwnerId: selectedFiltersModel.setSelectedOwnerId,
   };
 };

@@ -1,4 +1,3 @@
-import { useSignalValue } from "../../../../../lib/use-signal-value";
 import defaultDependencies, {
   TaskListViewModelDependencies,
 } from "./TaskList.view-model.dependencies";
@@ -36,14 +35,11 @@ export const useTaskListViewModel = ({
   const { tasksModel, selectedFiltersModel } = models;
 
   return {
-    tasks: useSignalValue(
-      tasksModel.getTasksByOwnerId(selectedFiltersModel.selectedOwnerId),
-    ),
-    tasksCount: useSignalValue(
-      tasksModel.getTasksCountByOwnerId(selectedFiltersModel.selectedOwnerId),
-    ),
-    isLoading: useSignalValue(tasksModel.isLoading),
-    isFetching: useSignalValue(tasksModel.isFetching),
-    isSaving: useSignalValue(tasksModel.isSaving),
+    tasks: 
+      tasksModel.useTasksByOwnerId(selectedFiltersModel.selectedOwnerId),
+    tasksCount: tasksModel.useTasksCountByOwnerId(selectedFiltersModel.selectedOwnerId),
+    isLoading: tasksModel.isLoading,
+    isFetching: tasksModel.isFetching,
+    isSaving: tasksModel.isSaving,
   };
 };
