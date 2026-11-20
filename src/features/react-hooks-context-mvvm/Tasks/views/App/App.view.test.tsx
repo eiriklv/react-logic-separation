@@ -12,15 +12,13 @@ describe("App", () => {
   it("Renders correctly", () => {
     // arrange
     const dependencies: AppDependencies = {
-      Actions: () => <div data-testid="Actions" />,
-      Filters: () => <div data-testid="Filters" />,
-      TaskList: () => <div data-testid="TaskList" />,
+      HomePage: () => <div data-testid="HomePage" />,
     };
 
     render(<App dependencies={dependencies} />);
 
     // assert
-    expect(screen.getByTestId("Actions")).toBeInTheDocument();
+    expect(screen.getByTestId("HomePage")).toBeInTheDocument();
     expect(screen.getByTestId("Filters")).toBeInTheDocument();
     expect(screen.getByTestId("TaskList")).toBeInTheDocument();
   });

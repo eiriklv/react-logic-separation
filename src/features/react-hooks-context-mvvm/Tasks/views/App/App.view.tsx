@@ -1,3 +1,4 @@
+import { BrowserRouter, Route, Routes } from "react-router";
 import defaultDependencies from "./App.view.dependencies";
 import { AppDependencies } from "./App.view.dependencies";
 
@@ -6,18 +7,21 @@ type Props = {
 };
 
 /**
- * This is the outer application view where your routes would reside.
- * Nested routes can of course live anywhere in the tree downstream to this view.
+ * TODO: Move this into the containers folder,
+ * and let the Root component live in the root folder instead
+ * (and also give it a view model)
+ *
+ * index.tsx should render the root only
  */
 export function App({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
-  const { Actions, Filters, TaskList } = dependencies;
+  const { HomePage } = dependencies;
 
   return (
-    <div>
-      <Actions />
-      <Filters />
-      <TaskList />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

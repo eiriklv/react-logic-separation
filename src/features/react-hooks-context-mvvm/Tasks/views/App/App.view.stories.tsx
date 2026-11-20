@@ -13,9 +13,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     dependencies: {
-      Actions: () => <>Actions</>,
-      Filters: () => <>Filters</>,
-      TaskList: () => <>TaskList</>,
+      HomePage: () => <>Home</>,
     },
   },
 };

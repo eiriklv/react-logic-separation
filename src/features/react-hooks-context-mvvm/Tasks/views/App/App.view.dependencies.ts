@@ -1,6 +1,4 @@
-import { Actions } from "../Actions/Actions.view";
-import { Filters } from "../Filters/Filters.view";
-import { TaskList } from "../TaskList/TaskList.view";
+import { HomePage } from "../HomePage/HomePage.view";
 
 /**
  * This file contains the interface of the
@@ -9,15 +7,11 @@ import { TaskList } from "../TaskList/TaskList.view";
  */
 
 export type AppDependencies = {
-  Actions: typeof Actions;
-  Filters: typeof Filters;
-  TaskList: typeof TaskList;
+  HomePage: typeof HomePage;
 };
 
 const defaultDependencies: AppDependencies = {
-  Actions,
-  Filters,
-  TaskList,
+  HomePage,
 };
 
 export default defaultDependencies;
