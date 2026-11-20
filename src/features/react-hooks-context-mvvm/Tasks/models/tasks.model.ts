@@ -1,6 +1,7 @@
 import { Task } from "../types";
 import { ITasksService } from "../services/tasks.service";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 export interface ITasksModel {
   tasks: Task[] | undefined;
@@ -58,22 +59,29 @@ export function useTasksModel(
   );
 
   // Getters
-  const useTasksByOwnerId = (selectedOwnerId: string) => {
-    const selectedOwnerIdValue = selectedOwnerId;
-    return tasksQuery.data?.filter(
-      (task) => !selectedOwnerIdValue || task.ownerId === selectedOwnerIdValue,
-    );
-  };
-
-  const useTasksCountByOwnerId = (selectedOwnerId: string) => {
-    const selectedOwnerIdValue = selectedOwnerId;
-    return (
-      tasksQuery.data?.filter(
+  const useTasksByOwnerId = useCallback(
+    (selectedOwnerId: string) => {
+      const selectedOwnerIdValue = selectedOwnerId;
+      return tasksQuery.data?.filter(
         (task) =>
           !selectedOwnerIdValue || task.ownerId === selectedOwnerIdValue,
-      ).length || 0
-    );
-  };
+      );
+    },
+    [tasksQuery.data],
+  );
+
+  const useTasksCountByOwnerId = useCallback(
+    (selectedOwnerId: string) => {
+      const selectedOwnerIdValue = selectedOwnerId;
+      return (
+        tasksQuery.data?.filter(
+          (task) =>
+            !selectedOwnerIdValue || task.ownerId === selectedOwnerIdValue,
+        ).length || 0
+      );
+    },
+    [tasksQuery.data],
+  );
 
   // Computed values
   const tasks = tasksQuery.data;
