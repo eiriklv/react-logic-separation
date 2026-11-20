@@ -6,11 +6,8 @@ type Props = {
 };
 
 /**
- * TODO: Move this into the containers folder,
- * and let the Root component live in the root folder instead
- * (and also give it a view model)
- *
- * index.tsx should render the root only
+ * This is the outer application view where your routes would reside.
+ * Nested routes can of course live anywhere in the tree downstream to this view.
  */
 export function App({ dependencies = defaultDependencies }: Props) {
   // Get dependencies

@@ -31,6 +31,17 @@ type Props = {
  * In this case the Root is the owner of the services,
  * which makes it responsible for both constructing them
  * and providing them to the rest of the tree below
+ *
+ * The same goes for any shared domain models - they're
+ * constructed and owned by the root view / view model
+ * and provided to the rest of the application tree.
+ *
+ * If we had routing this is where the <Router>
+ * provider would live as well. Any view could
+ * be used as a page in the routing tree, so
+ * there is no diffentiation between different
+ * types of views, other than naming it something
+ * like TaskPage or AdminPage.
  */
 export function Root({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
