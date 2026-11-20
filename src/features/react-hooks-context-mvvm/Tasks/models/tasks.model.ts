@@ -40,9 +40,7 @@ export function useTasksModel(
       mutationFn: ({ text, ownerId }: { text: string; ownerId: string }) =>
         dependencies.tasksService.addTask(text, ownerId),
       onSuccess: () => {
-        console.log("yay");
-        tasksQuery.refetch();
-        // queryClient.invalidateQueries({ queryKey: ["tasks"] });
+        queryClient.invalidateQueries({ queryKey: ["tasks"] });
       },
     },
     queryClient,
