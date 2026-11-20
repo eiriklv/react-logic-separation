@@ -7,7 +7,6 @@ import {
   ModelsDependencies,
   TaskListViewModelDependencies,
 } from "./TaskList.view-model.dependencies";
-import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
 import { TaskItemDependencies } from "../TaskItem/TaskItem.view.dependencies";
 
@@ -19,14 +18,14 @@ describe("TaskList Component", () => {
 
     const models: ModelsDependencies = {
       tasksModel: {
-        getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
-        getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        isFetching: signal(false),
-        isLoading: signal(true),
-        isSaving: signal(false),
+        useTasksByOwnerId: vi.fn(() => mockTaskList),
+        useTasksCountByOwnerId: vi.fn(() => mockTaskListCount),
+        isFetching: false,
+        isLoading: true,
+        isSaving: false,
       },
       selectedFiltersModel: {
-        selectedOwnerId: signal(""),
+        selectedOwnerId: "",
         setSelectedOwnerId: vi.fn(),
       },
     };
@@ -75,14 +74,14 @@ describe("TaskList Component", () => {
 
     const models: ModelsDependencies = {
       tasksModel: {
-        getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
-        getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        isFetching: signal(true),
-        isLoading: signal(false),
-        isSaving: signal(true),
+        useTasksByOwnerId: vi.fn(() => mockTaskList),
+        useTasksCountByOwnerId: vi.fn(() => mockTaskListCount),
+        isFetching: true,
+        isLoading: false,
+        isSaving: true,
       },
       selectedFiltersModel: {
-        selectedOwnerId: signal(""),
+        selectedOwnerId: "",
         setSelectedOwnerId: vi.fn(),
       },
     };
@@ -132,14 +131,14 @@ describe("TaskList Component", () => {
 
     const models: ModelsDependencies = {
       tasksModel: {
-        getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
-        getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        isFetching: signal(false),
-        isLoading: signal(false),
-        isSaving: signal(false),
+        useTasksByOwnerId: vi.fn(() => mockTaskList),
+        useTasksCountByOwnerId: vi.fn(() => mockTaskListCount),
+        isFetching: false,
+        isLoading: false,
+        isSaving: false,
       },
       selectedFiltersModel: {
-        selectedOwnerId: signal(""),
+        selectedOwnerId: "",
         setSelectedOwnerId: vi.fn(),
       },
     };
@@ -199,14 +198,14 @@ describe("TaskList Component", () => {
 
     const models: ModelsDependencies = {
       tasksModel: {
-        getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
-        getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        isFetching: signal(false),
-        isLoading: signal(false),
-        isSaving: signal(false),
+        useTasksByOwnerId: vi.fn(() => mockTaskList),
+        useTasksCountByOwnerId: vi.fn(() => mockTaskListCount),
+        isFetching: false,
+        isLoading: false,
+        isSaving: false,
       },
       selectedFiltersModel: {
-        selectedOwnerId: signal(""),
+        selectedOwnerId: "",
         setSelectedOwnerId: vi.fn(),
       },
     };
