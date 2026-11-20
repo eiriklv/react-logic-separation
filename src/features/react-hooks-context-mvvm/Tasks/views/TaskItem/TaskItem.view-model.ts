@@ -30,8 +30,7 @@ export const useTaskItemViewModel = ({
   task,
 }: TaskItemViewModelProps) => {
   // Get dependencies
-  const { useUserModel, useServices, useModels, useQueryClient } =
-    dependencies;
+  const { useUserModel, useServices, useModels, useQueryClient } = dependencies;
 
   // Get services from the shared services provider
   const services = useServices();
@@ -48,7 +47,7 @@ export const useTaskItemViewModel = ({
   // Pull out the stuff we need from the shared services
   const { usersService } = services;
 
-  const userModel = useUserModel(task.ownerId, { usersService });
+  const userModel = useUserModel(task.ownerId, queryClient, { usersService });
 
   const deleteTask = useCallback(() => {
     return tasksModel.deleteTask(task.id);

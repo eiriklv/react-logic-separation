@@ -86,6 +86,75 @@ describe.each([
       expect(tasks).toEqual(updatedTasks);
     });
 
+    it("should reflect multiple added tasks", async () => {
+      // arrange
+      const taskOwnerId: string = "user-1";
+
+      const firstTask: Task = {
+        id: "task-1",
+        text: "Task 1",
+        ownerId: taskOwnerId,
+      };
+
+      const secondTask: Task = {
+        id: "task-2",
+        text: "Task 2",
+        ownerId: taskOwnerId,
+      };
+
+      const initialTasks: Task[] = [];
+
+      const firstUpdatedTasks: Task[] = [...initialTasks, firstTask];
+      const secondUpdatedTasks: Task[] = [
+        ...initialTasks,
+        firstTask,
+        secondTask,
+      ];
+
+      const sdkMock: SdkDependencies = {
+        listTasks: vi
+          .fn<SdkDependencies["listTasks"]>()
+          .mockResolvedValueOnce(initialTasks)
+          .mockResolvedValueOnce(firstUpdatedTasks)
+          .mockResolvedValueOnce(secondUpdatedTasks),
+        upsertTask: vi
+          .fn<SdkDependencies["upsertTask"]>()
+          .mockResolvedValueOnce(firstTask)
+          .mockResolvedValueOnce(secondTask),
+        deleteTask: vi.fn(),
+      };
+
+      const tasksServiceDependencies: TasksServiceDependencies = {
+        generateId: vi
+          .fn<TasksServiceDependencies["generateId"]>()
+          .mockReturnValueOnce(firstTask.id)
+          .mockReturnValueOnce(secondTask.id),
+        initialTasks,
+      };
+
+      const tasksService = createService(sdkMock, tasksServiceDependencies);
+
+      // act
+      const tasksBeforeAdd = await tasksService.listTasks();
+
+      // assert
+      expect(tasksBeforeAdd).toEqual(initialTasks);
+
+      // act
+      await tasksService.addTask(firstTask.text, taskOwnerId);
+      const tasksAfterFirstUpdate = await tasksService.listTasks();
+
+      // assert
+      expect(tasksAfterFirstUpdate).toEqual(firstUpdatedTasks);
+
+      // act
+      await tasksService.addTask(secondTask.text, taskOwnerId);
+      const tasks = await tasksService.listTasks();
+
+      // assert
+      expect(tasks).toEqual(secondUpdatedTasks);
+    });
+
     it("should reflect deleted tasks", async () => {
       // arrange
       const taskId: string = "abc";

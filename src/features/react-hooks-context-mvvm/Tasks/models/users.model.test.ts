@@ -1,6 +1,7 @@
 import { User } from "../types";
-import { createUsersModel, UsersModelDependencies } from "./users.model";
+import { useUsersModel, UsersModelDependencies } from "./users.model";
 import { createQueryClient } from "../utils/create-query-client";
+import { renderHook } from "@testing-library/react";
 
 describe("UsersModel", () => {
   it("should initialize correctly", async () => {
@@ -26,15 +27,14 @@ describe("UsersModel", () => {
 
     const mockQueryClient = createQueryClient();
 
-    const usersModel = createUsersModel(
-      mockQueryClient,
-      mockUsersModelDependencies,
+    const { result } = renderHook(() =>
+      useUsersModel(mockQueryClient, mockUsersModelDependencies),
     );
 
-    expect(usersModel.users.value).toBeUndefined();
-    await vi.waitFor(() => expect(usersModel.isLoading.value).toBe(true));
-    await vi.waitFor(() => expect(usersModel.isLoading.value).toBe(false));
-    expect(usersModel.users.value).toEqual(mockUsers);
+    expect(result.current.users).toBeUndefined();
+    await vi.waitFor(() => expect(result.current.isLoading).toBe(true));
+    await vi.waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.users).toEqual(mockUsers);
   });
 
   it("should expose error if initialization fails", async () => {
@@ -47,14 +47,13 @@ describe("UsersModel", () => {
 
     const mockQueryClient = createQueryClient();
 
-    const usersModel = createUsersModel(
-      mockQueryClient,
-      mockUsersModelDependencies,
+    const { result } = renderHook(() =>
+      useUsersModel(mockQueryClient, mockUsersModelDependencies),
     );
 
-    expect(usersModel.users.value).toBeUndefined();
-    await vi.waitFor(() => expect(usersModel.isLoading.value).toBe(true));
-    await vi.waitFor(() => expect(usersModel.error.value).not.toBe(null));
-    expect(usersModel.error.value).toEqual(new Error("Failed"));
+    expect(result.current.users).toBeUndefined();
+    await vi.waitFor(() => expect(result.current.isLoading).toBe(true));
+    await vi.waitFor(() => expect(result.current.error).not.toBe(null));
+    expect(result.current.error).toEqual(new Error("Failed"));
   });
 });

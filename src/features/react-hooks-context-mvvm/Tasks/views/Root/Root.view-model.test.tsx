@@ -33,9 +33,9 @@ describe("useRootViewModel", () => {
       createQueryClient: vi.fn(() => queryClient),
       createTasksService: vi.fn(() => tasksService),
       createUsersService: vi.fn(() => usersService),
-      createSelectedFiltersModel: vi.fn(() => selectedFiltersModel),
-      createTasksModel: vi.fn(() => tasksModel),
-      createUsersModel: vi.fn(() => usersModel),
+      useSelectedFiltersModel: vi.fn(() => selectedFiltersModel),
+      useTasksModel: vi.fn(() => tasksModel),
+      useUsersModel: vi.fn(() => usersModel),
     };
 
     const { result } = renderHook(() => useRootViewModel({ dependencies }));

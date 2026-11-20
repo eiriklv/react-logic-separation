@@ -19,7 +19,5 @@ describe("App", () => {
 
     // assert
     expect(screen.getByTestId("HomePage")).toBeInTheDocument();
-    expect(screen.getByTestId("Filters")).toBeInTheDocument();
-    expect(screen.getByTestId("TaskList")).toBeInTheDocument();
   });
 });

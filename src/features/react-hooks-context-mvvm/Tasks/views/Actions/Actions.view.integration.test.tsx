@@ -5,7 +5,6 @@ import defaultDependencies, {
   ActionsDependencies,
 } from "./Actions.view.dependencies";
 import { ActionsViewModelDependencies } from "./Actions.view-model.dependencies";
-import { signal } from "@preact/signals-core";
 
 describe("Actions Component", () => {
   it("Calls the correct handler when adding a task", async () => {
@@ -18,13 +17,13 @@ describe("Actions Component", () => {
           addTask,
         },
         usersModel: {
-          users: signal([
+          users: [
             {
               id: "user-1",
               name: "John Doe",
               profileImageUrl: "./src/test.png",
             },
-          ]),
+          ],
         },
       })),
     };

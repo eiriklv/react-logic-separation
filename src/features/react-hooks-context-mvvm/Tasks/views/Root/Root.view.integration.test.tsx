@@ -19,9 +19,7 @@ describe("Root", () => {
       App: () => (
         <defaultDependencies.App
           dependencies={{
-            Actions: () => <div data-testid="Actions" />,
-            Filters: () => <div data-testid="Filters" />,
-            TaskList: () => <div data-testid="TaskList" />,
+            HomePage: () => <div data-testid="HomePage" />,
           }}
         />
       ),
@@ -31,9 +29,9 @@ describe("Root", () => {
             baseUrl: "fake",
             createQueryClient: () => createQueryClient(),
             createSdk: () => ({}) as ISdk,
-            createSelectedFiltersModel: () => ({}) as ISelectedFiltersModel,
-            createTasksModel: () => ({}) as ITasksModel,
-            createUsersModel: () => ({}) as IUsersModel,
+            useSelectedFiltersModel: () => ({}) as ISelectedFiltersModel,
+            useTasksModel: () => ({}) as ITasksModel,
+            useUsersModel: () => ({}) as IUsersModel,
             createTasksService: () => ({}) as ITasksService,
             createUsersService: () => ({}) as IUsersService,
           },
@@ -47,9 +45,7 @@ describe("Root", () => {
     render(<Root dependencies={rootDependencies} />);
 
     // Check that app renders correctly
-    expect(screen.getByTestId("Actions")).toBeInTheDocument();
-    expect(screen.getByTestId("Filters")).toBeInTheDocument();
-    expect(screen.getByTestId("TaskList")).toBeInTheDocument();
+    expect(screen.getByTestId("HomePage")).toBeInTheDocument();
 
     /**
      * TODO(eiriklv): What more should be checked here to ensure the single depth integration?

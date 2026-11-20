@@ -1,13 +1,11 @@
 import { renderHook } from "@testing-library/react";
 import { useTaskListViewModel } from "./TaskList.view-model";
-import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
 import defaultDependencies, {
   ModelsDependencies,
   TaskListViewModelDependencies,
 } from "./TaskList.view-model.dependencies";
 import {
-  ModelsContext,
   ModelsContextInterface,
   ModelsProvider,
 } from "../../providers/models.provider";
@@ -20,14 +18,14 @@ describe("useTaskListViewModel", () => {
     // arrange
     const models: ModelsDependencies = {
       tasksModel: {
-        getTasksByOwnerId: vi.fn(() => signal(mockTaskList)),
-        getTasksCountByOwnerId: vi.fn(() => signal(mockTaskListCount)),
-        isFetching: signal(false),
-        isLoading: signal(false),
-        isSaving: signal(false),
+        useTasksByOwnerId: vi.fn(() => mockTaskList),
+        useTasksCountByOwnerId: vi.fn(() => mockTaskListCount),
+        isFetching: false,
+        isLoading: false,
+        isSaving: false,
       },
       selectedFiltersModel: {
-        selectedOwnerId: signal(""),
+        selectedOwnerId: "",
         setSelectedOwnerId: vi.fn(),
       },
     };

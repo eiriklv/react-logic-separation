@@ -19,17 +19,19 @@ describe("TasksModel", () => {
 
     const queryClient = createQueryClient();
 
-    const { result: { current: model } } = renderHook(() => useTasksModel(queryClient, mockDependencies));
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
-    await model.addTask("Solve some hard bug", "user-1");
+    await result.current.addTask("Solve some hard bug", "user-1");
 
     // check that the list of tasks is correct
     await vi.waitFor(() =>
-      expect(model.tasks).toEqual([
+      expect(result.current.tasks).toEqual([
         {
           id: expect.any(String),
           ownerId: "user-1",
@@ -52,19 +54,21 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const { result: { current: model } } = renderHook(() => useTasksModel(queryClient, mockDependencies));
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
-    await model.addTask("Paint house", "user-1");
-    await model.addTask("Buy milk", "user-1");
-    await model.addTask("Wash car", "user-1");
+    await result.current.addTask("Paint house", "user-1");
+    await result.current.addTask("Buy milk", "user-1");
+    await result.current.addTask("Wash car", "user-1");
 
     // check that the list of tasks is correct
     await vi.waitFor(() =>
-      expect(model.tasks).toEqual([
+      expect(result.current.tasks).toEqual([
         {
           id: expect.any(String),
           text: "Paint house",
@@ -99,16 +103,18 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const { result: { current: model } } = renderHook(() => useTasksModel(queryClient, mockDependencies));
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
-    await model.deleteTask("1");
+    await result.current.deleteTask("1");
 
     // check that the list of tasks is correct
-    await vi.waitFor(() => expect(model.tasks).toEqual([]));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual([]));
   });
 
   it("should not perform deletion if no task id is provided", async () => {
@@ -126,18 +132,20 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const { result: { current: model } } = renderHook(() => useTasksModel(queryClient, mockDependencies));
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
-    await expect(() => model.deleteTask("")).rejects.toThrowError(
+    await expect(() => result.current.deleteTask("")).rejects.toThrowError(
       "Task id must be provided",
     );
 
     // check that the list of tasks is correct
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
   });
 
   it("should fail validation when adding empty task", async () => {
@@ -153,23 +161,25 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const { result: { current: model } } = renderHook(() => useTasksModel(queryClient, mockDependencies));
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // check that adding a task without a category fails
-    await expect(() => model.addTask("Thing", "")).rejects.toThrowError(
-      "Owner id for task is missing",
-    );
+    await expect(() =>
+      result.current.addTask("Thing", ""),
+    ).rejects.toThrowError("Owner id for task is missing");
 
     // check that adding a task without text fails
-    await expect(() => model.addTask("", "user-1")).rejects.toThrowError(
-      "Task text is missing",
-    );
+    await expect(() =>
+      result.current.addTask("", "user-1"),
+    ).rejects.toThrowError("Task text is missing");
 
     // check that the list of tasks is still the same as before
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
   });
 
   it("should provide tasks and counts filtered by category correctly", async () => {
@@ -190,22 +200,23 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const { result: { current: model } } = renderHook(
-      () => useTasksModel(queryClient, mockDependencies)
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
     );
     let selectedOwnerId = "user-1";
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(model.tasks).toEqual(initialTasks));
+    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // create a reference to tasks filtered by category
-    const { result: { current: tasksBySelectedOwnerId }, rerender: rerenderuseTasksByOwnerId } = renderHook(
-      () => model.useTasksByOwnerId(selectedOwnerId)
-    );
+    const {
+      result: useTasksByOwnerIdResult,
+      rerender: rerenderuseTasksByOwnerId,
+    } = renderHook(() => result.current.useTasksByOwnerId(selectedOwnerId));
 
     // check that correct filtered tasks are provided
     await vi.waitFor(() =>
-      expect(tasksBySelectedOwnerId).toEqual([
+      expect(useTasksByOwnerIdResult.current).toEqual([
         { id: "1", text: "Task 1", ownerId: "user-1" },
         { id: "2", text: "Task 2", ownerId: "user-1" },
       ]),
@@ -217,7 +228,7 @@ describe("TasksModel", () => {
 
     // check that correct filtered tasks are provided
     await vi.waitFor(() =>
-      expect(tasksBySelectedOwnerId).toEqual([
+      expect(useTasksByOwnerIdResult.current).toEqual([
         { id: "3", text: "Task 3", ownerId: "user-2" },
         { id: "4", text: "Task 4", ownerId: "user-2" },
       ]),

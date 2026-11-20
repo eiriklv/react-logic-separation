@@ -65,7 +65,7 @@ export const useRootViewModel = ({
   /**
    * Create the query client
    */
-  const queryClient = createQueryClient();
+  const queryClient = useMemo(() => createQueryClient(), [createQueryClient]);
 
   /**
    * Create the SDK client
@@ -73,7 +73,7 @@ export const useRootViewModel = ({
    * TODO(eirikv): Inject the base url somehow
    * (via environment and dependency injection)
    */
-  const sdk = createSdk(baseUrl);
+  const sdk = useMemo(() => createSdk(baseUrl), [createSdk, baseUrl]);
 
   /**
    * Create service instances
@@ -84,8 +84,14 @@ export const useRootViewModel = ({
    * Anything doing IO (network, storage, etc)
    * must be wrapped in a service and then exposed.
    */
-  const tasksService = createTasksService(sdk);
-  const usersService = createUsersService(sdk);
+  const tasksService = useMemo(
+    () => createTasksService(sdk),
+    [createTasksService, sdk],
+  );
+  const usersService = useMemo(
+    () => createUsersService(sdk),
+    [createUsersService, sdk],
+  );
 
   /**
    * Package the services in an object

@@ -18,7 +18,7 @@ describe("useActionsViewModel", () => {
         addTask: vi.fn(),
       },
       usersModel: {
-        users: signal([]),
+        users: [],
       },
     };
 

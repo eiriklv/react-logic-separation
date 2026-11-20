@@ -49,7 +49,7 @@ describe("useTaskItemViewModel", () => {
     };
 
     const dependencies: TaskItemViewModelDependencies = {
-      createUserModel: defaultDependencies.createUserModel,
+      useUserModel: defaultDependencies.useUserModel,
       useServices: defaultDependencies.useServices,
       useModels: defaultDependencies.useModels,
       useQueryClient: defaultDependencies.useQueryClient,

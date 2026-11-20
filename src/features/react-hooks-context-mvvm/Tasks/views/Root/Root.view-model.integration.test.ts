@@ -75,18 +75,11 @@ describe("useRootViewModel (integration level)", () => {
         ),
       createUsersService: () =>
         defaultDependencies.createUsersService(usersServiceSdkDependencies),
-      createSelectedFiltersModel:
-        defaultDependencies.createSelectedFiltersModel,
-      createTasksModel: (queryClient) =>
-        defaultDependencies.createTasksModel(
-          queryClient,
-          tasksModelDependencies,
-        ),
-      createUsersModel: (queryClient) =>
-        defaultDependencies.createUsersModel(
-          queryClient,
-          usersModelDependencies,
-        ),
+      useSelectedFiltersModel: defaultDependencies.useSelectedFiltersModel,
+      useTasksModel: (queryClient) =>
+        defaultDependencies.useTasksModel(queryClient, tasksModelDependencies),
+      useUsersModel: (queryClient) =>
+        defaultDependencies.useUsersModel(queryClient, usersModelDependencies),
     };
 
     const { result } = renderHook(() => useRootViewModel({ dependencies }));
@@ -97,11 +90,11 @@ describe("useRootViewModel (integration level)", () => {
      * Perform assertions on the models
      */
     await waitFor(() =>
-      expect(result.current.models.tasksModel.tasks.value).toEqual(mockTasks),
+      expect(result.current.models.tasksModel.tasks).toEqual(mockTasks),
     );
 
     await waitFor(() =>
-      expect(result.current.models.usersModel.users.value).toEqual(mockUsers),
+      expect(result.current.models.usersModel.users).toEqual(mockUsers),
     );
 
     /**
@@ -165,18 +158,11 @@ describe("useRootViewModel (fake services)", () => {
       createQueryClient: () => queryClient,
       createTasksService: () => tasksService,
       createUsersService: () => usersService,
-      createSelectedFiltersModel:
-        defaultDependencies.createSelectedFiltersModel,
-      createTasksModel: (queryClient) =>
-        defaultDependencies.createTasksModel(
-          queryClient,
-          tasksModelDependencies,
-        ),
-      createUsersModel: (queryClient) =>
-        defaultDependencies.createUsersModel(
-          queryClient,
-          usersModelDependencies,
-        ),
+      useSelectedFiltersModel: defaultDependencies.useSelectedFiltersModel,
+      useTasksModel: (queryClient) =>
+        defaultDependencies.useTasksModel(queryClient, tasksModelDependencies),
+      useUsersModel: (queryClient) =>
+        defaultDependencies.useUsersModel(queryClient, usersModelDependencies),
     };
 
     const { result } = renderHook(() => useRootViewModel({ dependencies }));
@@ -187,11 +173,11 @@ describe("useRootViewModel (fake services)", () => {
      * Perform assertions on the models
      */
     await waitFor(() =>
-      expect(result.current.models.tasksModel.tasks.value).toEqual(mockTasks),
+      expect(result.current.models.tasksModel.tasks).toEqual(mockTasks),
     );
 
     await waitFor(() =>
-      expect(result.current.models.usersModel.users.value).toEqual(mockUsers),
+      expect(result.current.models.usersModel.users).toEqual(mockUsers),
     );
 
     /**
@@ -261,10 +247,9 @@ describe("useRootViewModel (network level)", () => {
       createQueryClient: defaultDependencies.createQueryClient,
       createTasksService: defaultDependencies.createTasksService,
       createUsersService: defaultDependencies.createUsersService,
-      createSelectedFiltersModel:
-        defaultDependencies.createSelectedFiltersModel,
-      createTasksModel: defaultDependencies.createTasksModel,
-      createUsersModel: defaultDependencies.createUsersModel,
+      useSelectedFiltersModel: defaultDependencies.useSelectedFiltersModel,
+      useTasksModel: defaultDependencies.useTasksModel,
+      useUsersModel: defaultDependencies.useUsersModel,
     };
 
     const { result } = renderHook(() => useRootViewModel({ dependencies }));
@@ -273,11 +258,11 @@ describe("useRootViewModel (network level)", () => {
      * Perform assertions on the models
      */
     await waitFor(() =>
-      expect(result.current.models.tasksModel.tasks.value).toEqual(mockTasks),
+      expect(result.current.models.tasksModel.tasks).toEqual(mockTasks),
     );
 
     await waitFor(() =>
-      expect(result.current.models.usersModel.users.value).toEqual(mockUsers),
+      expect(result.current.models.usersModel.users).toEqual(mockUsers),
     );
 
     /**

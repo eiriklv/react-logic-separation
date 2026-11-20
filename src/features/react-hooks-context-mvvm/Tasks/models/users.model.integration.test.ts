@@ -1,7 +1,8 @@
 import { User } from "../types";
-import { createUsersModel, UsersModelDependencies } from "./users.model";
+import { useUsersModel, UsersModelDependencies } from "./users.model";
 import { createQueryClient } from "../utils/create-query-client";
 import { createUsersServiceMock } from "../services/users.service.mock";
+import { renderHook } from "@testing-library/react";
 
 describe("UsersModel", () => {
   it("should initialize correctly", async () => {
@@ -29,13 +30,10 @@ describe("UsersModel", () => {
 
     const mockQueryClient = createQueryClient();
 
-    const usersModel = createUsersModel(
-      mockQueryClient,
-      mockUsersModelDependencies,
+    const { result } = renderHook(() =>
+      useUsersModel(mockQueryClient, mockUsersModelDependencies),
     );
 
-    await vi.waitFor(() =>
-      expect(usersModel.users.value).toEqual(initialUsers),
-    );
+    await vi.waitFor(() => expect(result.current.users).toEqual(initialUsers));
   });
 });

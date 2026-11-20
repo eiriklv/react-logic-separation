@@ -22,13 +22,13 @@ describe("TaskItem", () => {
         Parameters<
           TaskItemDependencies["useTaskItemViewModel"]
         >[0]["dependencies"]
-      >["createUserModel"]
+      >["useUserModel"]
     > = {
-      user: signal({
+      user: {
         id: "user-1",
         name: "John Doe",
         profileImageUrl: "./src/profile.png",
-      }),
+      },
     };
 
     const models: ReturnType<
@@ -68,7 +68,7 @@ describe("TaskItem", () => {
         defaultDependencies.useTaskItemViewModel({
           ...props,
           dependencies: {
-            createUserModel: () => userModel,
+            useUserModel: () => userModel,
             useModels: () => models,
             useQueryClient: () => queryClient,
             useServices: () => services,
@@ -96,9 +96,9 @@ describe("TaskItem", () => {
         Parameters<
           TaskItemDependencies["useTaskItemViewModel"]
         >[0]["dependencies"]
-      >["createUserModel"]
+      >["useUserModel"]
     > = {
-      user: signal(undefined),
+      user: undefined,
     };
 
     const models: ReturnType<
@@ -138,7 +138,7 @@ describe("TaskItem", () => {
         defaultDependencies.useTaskItemViewModel({
           ...props,
           dependencies: {
-            createUserModel: () => userModel,
+            useUserModel: () => userModel,
             useModels: () => models,
             useQueryClient: () => queryClient,
             useServices: () => services,

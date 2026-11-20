@@ -1,7 +1,7 @@
-import { signal } from "@preact/signals-core";
 import { Task } from "../types";
-import { TasksModelDependencies, createTasksModel } from "./tasks.model";
+import { TasksModelDependencies, useTasksModel } from "./tasks.model";
 import { createQueryClient } from "../utils/create-query-client";
+import { renderHook, waitFor } from "@testing-library/react";
 
 describe("TasksModel", () => {
   it("should work as expected when adding a single task", async () => {
@@ -23,20 +23,22 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const model = createTasksModel(queryClient, mockDependencies);
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks load initially
-    expect(model.isLoading.value).toEqual(true);
+    expect(result.current.isLoading).toEqual(true);
 
     // wait for the loading to finish
-    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(initialMockedTasks);
-    expect(model.tasksCount.value).toEqual(0);
+    expect(result.current.tasks).toEqual(initialMockedTasks);
+    expect(result.current.tasksCount).toEqual(0);
 
     // add some tasks
-    await model.addTask("Solve some hard bug", "user-1");
+    await result.current.addTask("Solve some hard bug", "user-1");
 
     // check that the tasks were added the correct amount of times
     expect(mockDependencies.tasksService.addTask).toHaveBeenCalledOnce();
@@ -45,8 +47,10 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(mockedTasksAfterAdd);
-    expect(model.tasksCount.value).toEqual(1);
+    await waitFor(() =>
+      expect(result.current.tasks).toEqual(mockedTasksAfterAdd),
+    );
+    expect(result.current.tasksCount).toEqual(1);
   });
 
   it("should work as expected when adding multiple tasks", async () => {
@@ -82,21 +86,23 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const model = createTasksModel(queryClient, mockDependencies);
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks load initially
-    expect(model.isLoading.value).toEqual(true);
+    expect(result.current.isLoading).toEqual(true);
 
     // wait for the loading to finish
-    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(initialMockedTasks);
+    expect(result.current.tasks).toEqual(initialMockedTasks);
 
     // add some tasks
-    await model.addTask("Paint house", "user-1");
-    await model.addTask("Buy milk", "user-1");
-    await model.addTask("Wash car", "user-1");
+    await result.current.addTask("Paint house", "user-1");
+    await result.current.addTask("Buy milk", "user-1");
+    await result.current.addTask("Wash car", "user-1");
 
     // check that the tasks were added the correct amount of times
     expect(mockDependencies.tasksService.addTask).toHaveBeenCalledTimes(3);
@@ -105,8 +111,10 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(4);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(mockedTasksAfterThirdAdd);
-    expect(model.tasksCount.value).toEqual(3);
+    await waitFor(() =>
+      expect(result.current.tasks).toEqual(mockedTasksAfterThirdAdd),
+    );
+    expect(result.current.tasksCount).toEqual(3);
   });
 
   it("should work as expected when deleting a task", async () => {
@@ -128,20 +136,22 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const model = createTasksModel(queryClient, mockDependencies);
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks load initially
-    expect(model.isLoading.value).toEqual(true);
+    expect(result.current.isLoading).toEqual(true);
 
     // wait for the loading to finish
-    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(initialMockedTasks);
-    expect(model.tasksCount.value).toEqual(1);
+    expect(result.current.tasks).toEqual(initialMockedTasks);
+    expect(result.current.tasksCount).toEqual(1);
 
     // add some tasks
-    await model.deleteTask("1");
+    await result.current.deleteTask("1");
 
     // check that the tasks were added the correct amount of times
     expect(mockDependencies.tasksService.deleteTask).toHaveBeenCalledTimes(1);
@@ -150,8 +160,10 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(2);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(mockedTasksAfterDelete);
-    expect(model.tasksCount.value).toEqual(0);
+    await waitFor(() =>
+      expect(result.current.tasks).toEqual(mockedTasksAfterDelete),
+    );
+    expect(result.current.tasksCount).toEqual(0);
   });
 
   it("should not perform deletion if no task id is provided", async () => {
@@ -171,20 +183,22 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const model = createTasksModel(queryClient, mockDependencies);
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks load initially
-    expect(model.isLoading.value).toEqual(true);
+    expect(result.current.isLoading).toEqual(true);
 
     // wait for the loading to finish
-    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(initialMockedTasks);
-    expect(model.tasksCount.value).toEqual(1);
+    expect(result.current.tasks).toEqual(initialMockedTasks);
+    expect(result.current.tasksCount).toEqual(1);
 
     // add some tasks
-    await expect(() => model.deleteTask("")).rejects.toThrowError(
+    await expect(() => result.current.deleteTask("")).rejects.toThrowError(
       "Task id must be provided",
     );
 
@@ -195,8 +209,8 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledTimes(1);
 
     // check that the list of tasks is correct
-    expect(model.tasks.value).toEqual(initialMockedTasks);
-    expect(model.tasksCount.value).toEqual(1);
+    expect(result.current.tasks).toEqual(initialMockedTasks);
+    expect(result.current.tasksCount).toEqual(1);
   });
 
   it("should fail validation when adding empty task", async () => {
@@ -214,26 +228,28 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const model = createTasksModel(queryClient, mockDependencies);
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
 
     // check that the tasks load initially
-    expect(model.isLoading.value).toEqual(true);
+    expect(result.current.isLoading).toEqual(true);
 
     // wait for the loading to finish
-    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(initialMockedTasks);
+    expect(result.current.tasks).toEqual(initialMockedTasks);
 
     // check that adding a task without a category fails
-    await expect(() => model.addTask("Thing", "")).rejects.toThrowError(
-      "Owner id for task is missing",
-    );
+    await expect(() =>
+      result.current.addTask("Thing", ""),
+    ).rejects.toThrowError("Owner id for task is missing");
 
     // check that adding a task without text fails
-    await expect(() => model.addTask("", "user-1")).rejects.toThrowError(
-      "Task text is missing",
-    );
+    await expect(() =>
+      result.current.addTask("", "user-1"),
+    ).rejects.toThrowError("Task text is missing");
 
     // check that it never added a task
     expect(mockDependencies.tasksService.addTask).not.toHaveBeenCalled();
@@ -242,7 +258,7 @@ describe("TasksModel", () => {
     expect(mockDependencies.tasksService.listTasks).toHaveBeenCalledOnce();
 
     // check that the list of tasks is still the same as before
-    expect(model.tasks.value).toEqual(initialMockedTasks);
+    expect(result.current.tasks).toEqual(initialMockedTasks);
   });
 
   it("should provide tasks and counts filtered by category correctly", async () => {
@@ -263,44 +279,55 @@ describe("TasksModel", () => {
     };
 
     const queryClient = createQueryClient();
-    const model = createTasksModel(queryClient, mockDependencies);
-    const selectedOwnerId = signal("user-1");
+    const { result } = renderHook(() =>
+      useTasksModel(queryClient, mockDependencies),
+    );
+    let selectedOwnerId = "user-1";
 
     // check that the tasks load initially
-    expect(model.isLoading.value).toEqual(true);
+    expect(result.current.isLoading).toEqual(true);
 
     // wait for the loading to finish
-    await vi.waitFor(() => expect(model.isLoading.value).toEqual(false));
+    await waitFor(() => expect(result.current.isLoading).toEqual(false));
 
     // check that the tasks were loaded
-    expect(model.tasks.value).toEqual(fakeTasks);
+    expect(result.current.tasks).toEqual(fakeTasks);
 
     // create a reference to tasks filtered by category
-    const tasksBySelectedOwnerId = model.getTasksByOwnerId(selectedOwnerId);
+    const {
+      result: tasksBySelectedOwnerIdResult,
+      rerender: rerenderTasksBySelectedOwnerId,
+    } = renderHook(() => result.current.useTasksByOwnerId(selectedOwnerId));
 
     // create a reference to tasks count filtered by category
-    const tasksCountBySelectedOwnerId =
-      model.getTasksCountByOwnerId(selectedOwnerId);
+    const {
+      result: tasksCountBySelectedOwnerIdResult,
+      rerender: rerenderTasksCountBySelectedOwnerId,
+    } = renderHook(() =>
+      result.current.useTasksCountByOwnerId(selectedOwnerId),
+    );
 
     // check that correct filtered tasks are provided
-    expect(tasksBySelectedOwnerId.value).toEqual([
+    expect(tasksBySelectedOwnerIdResult.current).toEqual([
       { id: "1", text: "Task 1", ownerId: "user-1" },
       { id: "2", text: "Task 2", ownerId: "user-1" },
     ]);
 
     // check that correct filtered tasks count is provided
-    expect(tasksCountBySelectedOwnerId.value).toEqual(2);
+    expect(tasksCountBySelectedOwnerIdResult.current).toEqual(2);
 
     // change the selected category
-    selectedOwnerId.value = "user-2";
+    selectedOwnerId = "user-2";
+    rerenderTasksBySelectedOwnerId(selectedOwnerId);
+    rerenderTasksCountBySelectedOwnerId(selectedOwnerId);
 
     // check that correct filtered tasks are provided
-    expect(tasksBySelectedOwnerId.value).toEqual([
+    expect(tasksBySelectedOwnerIdResult.current).toEqual([
       { id: "3", text: "Task 3", ownerId: "user-2" },
       { id: "4", text: "Task 4", ownerId: "user-2" },
     ]);
 
     // check that correct filtered tasks count is provided
-    expect(tasksCountBySelectedOwnerId.value).toEqual(2);
+    expect(tasksCountBySelectedOwnerIdResult.current).toEqual(2);
   });
 });

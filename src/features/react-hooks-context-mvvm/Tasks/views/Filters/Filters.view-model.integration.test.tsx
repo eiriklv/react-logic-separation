@@ -1,6 +1,5 @@
 import { renderHook } from "@testing-library/react";
 import { useFiltersViewModel } from "./Filters.view-model";
-import { signal } from "@preact/signals-core";
 import defaultDependencies, {
   FiltersViewModelDependencies,
   ModelsDependencies,
@@ -17,10 +16,10 @@ describe("useFiltersViewModel", () => {
 
     const models: ModelsDependencies = {
       usersModel: {
-        users: signal([]),
+        users: [],
       },
       selectedFiltersModel: {
-        selectedOwnerId: signal(""),
+        selectedOwnerId: "",
         setSelectedOwnerId,
       },
     };

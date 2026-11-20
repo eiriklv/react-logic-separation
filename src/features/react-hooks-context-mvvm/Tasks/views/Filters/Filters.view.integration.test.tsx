@@ -5,18 +5,17 @@ import defaultDependencies, {
   FiltersDependencies,
 } from "./Filters.view.dependencies";
 import { ModelsDependencies } from "./Filters.view-model.dependencies";
-import { signal } from "@preact/signals-core";
 
 describe("Filters Component", () => {
   it("Renders correctly", () => {
     // arrange
     const models: ModelsDependencies = {
       selectedFiltersModel: {
-        selectedOwnerId: signal("user-1"),
+        selectedOwnerId: "user-1",
         setSelectedOwnerId: vi.fn(),
       },
       usersModel: {
-        users: signal([
+        users: [
           {
             id: "user-1",
             name: "John Doe",
@@ -27,7 +26,7 @@ describe("Filters Component", () => {
             name: "Jane Doe",
             profileImageUrl: "./src/test-2.png",
           },
-        ]),
+        ],
       },
     };
 
@@ -53,11 +52,11 @@ describe("Filters Component", () => {
     // arrange
     const models: ModelsDependencies = {
       selectedFiltersModel: {
-        selectedOwnerId: signal("user-1"),
+        selectedOwnerId: "user-1",
         setSelectedOwnerId: vi.fn(),
       },
       usersModel: {
-        users: signal([
+        users: [
           {
             id: "user-1",
             name: "John Doe",
@@ -68,7 +67,7 @@ describe("Filters Component", () => {
             name: "Jane Doe",
             profileImageUrl: "./src/test-2.png",
           },
-        ]),
+        ],
       },
     };
 

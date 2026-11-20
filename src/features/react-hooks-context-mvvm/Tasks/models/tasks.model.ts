@@ -21,29 +21,43 @@ export type TasksModelDependencies = {
   tasksService: Pick<ITasksService, "addTask" | "deleteTask" | "listTasks">;
 };
 
-export function useTasksModel(queryClient: QueryClient, dependencies: TasksModelDependencies): ITasksModel {
+export function useTasksModel(
+  queryClient: QueryClient,
+  dependencies: TasksModelDependencies,
+): ITasksModel {
   // Queries
-  const tasksQuery = useQuery<Task[]>({
-    queryKey: ["tasks"],
-    queryFn: () => dependencies.tasksService.listTasks(),
-  });
+  const tasksQuery = useQuery<Task[]>(
+    {
+      queryKey: ["tasks"],
+      queryFn: () => dependencies.tasksService.listTasks(),
+    },
+    queryClient,
+  );
 
   // Mutations
-  const addTaskMutation = useMutation({
-    mutationFn: ({ text, ownerId }: { text: string; ownerId: string }) =>
-      dependencies.tasksService.addTask(text, ownerId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+  const addTaskMutation = useMutation(
+    {
+      mutationFn: ({ text, ownerId }: { text: string; ownerId: string }) =>
+        dependencies.tasksService.addTask(text, ownerId),
+      onSuccess: () => {
+        console.log("yay");
+        tasksQuery.refetch();
+        // queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      },
     },
-  });
+    queryClient,
+  );
 
-  const deleteTaskMutation = useMutation({
-    mutationFn: ({ taskId }: { taskId: string }) =>
-      dependencies.tasksService.deleteTask(taskId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+  const deleteTaskMutation = useMutation(
+    {
+      mutationFn: ({ taskId }: { taskId: string }) =>
+        dependencies.tasksService.deleteTask(taskId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      },
     },
-  });
+    queryClient,
+  );
 
   // Getters
   const useTasksByOwnerId = (selectedOwnerId: string) => {

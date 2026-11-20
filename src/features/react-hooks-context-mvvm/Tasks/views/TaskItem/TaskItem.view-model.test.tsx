@@ -1,6 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
 import { useTaskItemViewModel } from "./TaskItem.view-model";
-import { signal } from "@preact/signals-core";
 import { Task } from "../../types";
 import { QueryClient } from "@tanstack/query-core";
 import {
@@ -35,12 +34,12 @@ describe("useTaskItemViewModel", () => {
     };
 
     const dependencies: TaskItemViewModelDependencies = {
-      createUserModel: () => ({
-        user: signal({
+      useUserModel: () => ({
+        user: {
           id: "user-1",
           name: "John Doe",
           profileImageUrl: "./src/image.png",
-        }),
+        },
       }),
       useServices: () => services,
       useModels: () => models,

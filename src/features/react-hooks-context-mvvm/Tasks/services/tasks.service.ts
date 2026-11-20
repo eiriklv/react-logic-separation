@@ -48,6 +48,8 @@ export class TasksService implements ITasksService {
       ownerId,
     };
 
+    console.log({ newTask });
+
     await this._sdk.upsertTask(newTask);
 
     return newTask;
