@@ -2,7 +2,7 @@ import { Task } from "../types";
 import { TasksModelDependencies, useTasksModel } from "./tasks.model";
 import { createQueryClient } from "../utils/create-query-client";
 import { createTasksServiceMock } from "../services/tasks.service.mock";
-import { renderHook } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 
 describe("TasksModel", () => {
   it("should work as expected when adding a single task", async () => {
@@ -24,13 +24,13 @@ describe("TasksModel", () => {
     );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
     await result.current.addTask("Solve some hard bug", "user-1");
 
     // check that the list of tasks is correct
-    await vi.waitFor(() =>
+    await waitFor(() =>
       expect(result.current.tasks).toEqual([
         {
           id: expect.any(String),
@@ -59,7 +59,7 @@ describe("TasksModel", () => {
     );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
     await result.current.addTask("Paint house", "user-1");
@@ -67,7 +67,7 @@ describe("TasksModel", () => {
     await result.current.addTask("Wash car", "user-1");
 
     // check that the list of tasks is correct
-    await vi.waitFor(() =>
+    await waitFor(() =>
       expect(result.current.tasks).toEqual([
         {
           id: expect.any(String),
@@ -108,13 +108,13 @@ describe("TasksModel", () => {
     );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
     await result.current.deleteTask("1");
 
     // check that the list of tasks is correct
-    await vi.waitFor(() => expect(result.current.tasks).toEqual([]));
+    await waitFor(() => expect(result.current.tasks).toEqual([]));
   });
 
   it("should not perform deletion if no task id is provided", async () => {
@@ -137,7 +137,7 @@ describe("TasksModel", () => {
     );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // add some tasks
     await expect(() => result.current.deleteTask("")).rejects.toThrowError(
@@ -145,7 +145,7 @@ describe("TasksModel", () => {
     );
 
     // check that the list of tasks is correct
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
   });
 
   it("should fail validation when adding empty task", async () => {
@@ -166,7 +166,7 @@ describe("TasksModel", () => {
     );
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // check that adding a task without a category fails
     await expect(() =>
@@ -179,7 +179,7 @@ describe("TasksModel", () => {
     ).rejects.toThrowError("Task text is missing");
 
     // check that the list of tasks is still the same as before
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
   });
 
   it("should provide tasks and counts filtered by category correctly", async () => {
@@ -206,7 +206,7 @@ describe("TasksModel", () => {
     let selectedOwnerId = "user-1";
 
     // check that the tasks were loaded
-    await vi.waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
+    await waitFor(() => expect(result.current.tasks).toEqual(initialTasks));
 
     // create a reference to tasks filtered by category
     const {
@@ -215,7 +215,7 @@ describe("TasksModel", () => {
     } = renderHook(() => result.current.useTasksByOwnerId(selectedOwnerId));
 
     // check that correct filtered tasks are provided
-    await vi.waitFor(() =>
+    await waitFor(() =>
       expect(useTasksByOwnerIdResult.current).toEqual([
         { id: "1", text: "Task 1", ownerId: "user-1" },
         { id: "2", text: "Task 2", ownerId: "user-1" },
@@ -227,7 +227,7 @@ describe("TasksModel", () => {
     rerenderuseTasksByOwnerId(selectedOwnerId);
 
     // check that correct filtered tasks are provided
-    await vi.waitFor(() =>
+    await waitFor(() =>
       expect(useTasksByOwnerIdResult.current).toEqual([
         { id: "3", text: "Task 3", ownerId: "user-2" },
         { id: "4", text: "Task 4", ownerId: "user-2" },
