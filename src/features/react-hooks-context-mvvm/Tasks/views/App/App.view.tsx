@@ -7,11 +7,12 @@ type Props = {
 };
 
 /**
- * TODO: Move this into the containers folder,
- * and let the Root component live in the root folder instead
- * (and also give it a view model)
- *
- * index.tsx should render the root only
+ * If we had routing this is where the <Router>
+ * provider would live as well. Any view could
+ * be used as a page in the routing tree, so
+ * there is no diffentiation between different
+ * types of views, other than naming it something
+ * like TaskPage or AdminPage.
  */
 export function App({ dependencies = defaultDependencies }: Props) {
   // Get dependencies

@@ -39,12 +39,7 @@ type Props = {
  * constructed and owned by the root view / view model
  * and provided to the rest of the application tree.
  *
- * If we had routing this is where the <Router>
- * provider would live as well. Any view could
- * be used as a page in the routing tree, so
- * there is no diffentiation between different
- * types of views, other than naming it something
- * like TaskPage or AdminPage.
+ * Any routing or similar would happen in the <App> component and below
  */
 export function Root({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
