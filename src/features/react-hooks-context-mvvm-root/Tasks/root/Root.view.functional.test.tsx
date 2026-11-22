@@ -9,7 +9,7 @@ import defaultDependencies, {
 import { createTasksServiceMock } from "../services/tasks.service.mock";
 import { createUsersServiceMock } from "../services/users.service.mock";
 
-describe("Root Integration (view-model layer services)", () => {
+describe("Root Functional (only fake services services)", () => {
   it("should reflect changes when deleting a task in all applicable views", async () => {
     // create mock tasks
     const mockTasks: Task[] = [
