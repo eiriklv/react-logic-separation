@@ -35,7 +35,7 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
-      App: defaultDependencies.App,
+      ...defaultDependencies,
       useRootViewModel: () =>
         defaultDependencies.useRootViewModel({
           dependencies: {
@@ -94,7 +94,7 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
-      App: defaultDependencies.App,
+      ...defaultDependencies,
       useRootViewModel: () =>
         defaultDependencies.useRootViewModel({
           dependencies: {
@@ -163,7 +163,7 @@ describe("Root Integration (view-model layer services)", () => {
 
     // create root dependencies
     const rootDependencies: RootDependencies = {
-      App: defaultDependencies.App,
+      ...defaultDependencies,
       useRootViewModel: () =>
         defaultDependencies.useRootViewModel({
           dependencies: {
