@@ -2,6 +2,7 @@ import { User } from "../types";
 import { IUsersService } from "../services/users.service";
 import { useQuery } from "@tanstack/react-query";
 import { QueryClient } from "@tanstack/query-core";
+import { useStableEnvelope } from "../../../../lib/use-stable-envelope";
 
 export interface IUsersModel {
   users: User[] | undefined;
@@ -33,9 +34,9 @@ export function useUsersModel(
   const isLoading = usersQuery.isLoading;
   const error = usersQuery.error;
 
-  return {
+  return useStableEnvelope({
     users,
     isLoading,
     error,
-  };
+  });
 }

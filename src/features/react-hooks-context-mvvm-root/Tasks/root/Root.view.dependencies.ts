@@ -6,6 +6,7 @@ import { createSdk } from "../sdks/sdk";
 import { createTasksService } from "../services/tasks.service";
 import { createUsersService } from "../services/users.service";
 import { createQueryClient } from "../utils/create-query-client";
+import { BrowserRouter } from "react-router";
 
 /**
  * This file contains the interface of the
@@ -15,6 +16,7 @@ import { createQueryClient } from "../utils/create-query-client";
 
 export type RootDependencies = {
   App: typeof App;
+  Router: typeof BrowserRouter
   baseUrl: string;
   createSdk: typeof createSdk;
   createQueryClient: typeof createQueryClient;
@@ -27,6 +29,7 @@ export type RootDependencies = {
 
 const defaultDependencies: RootDependencies = {
   App,
+  Router: BrowserRouter,
   baseUrl: "https://real-api.test",
   createSdk,
   createQueryClient,

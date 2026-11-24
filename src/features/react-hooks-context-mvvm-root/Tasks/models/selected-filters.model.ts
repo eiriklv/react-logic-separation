@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { useStableEnvelope } from "../../../../lib/use-stable-envelope";
 
 export interface ISelectedFiltersModel {
   selectedOwnerId: string;
@@ -14,8 +15,8 @@ export function useSelectedFiltersModel(): ISelectedFiltersModel {
     _setSelectedOwnerId(newSelectedOwner);
   }, []);
 
-  return {
+  return useStableEnvelope({
     selectedOwnerId,
     setSelectedOwnerId,
-  };
+  });
 }

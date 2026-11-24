@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import defaultDependencies from "./App.view.dependencies";
 import { AppDependencies } from "./App.view.dependencies";
 
@@ -19,10 +19,8 @@ export function App({ dependencies = defaultDependencies }: Props) {
   const { HomePage } = dependencies;
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+    </Routes>
   );
 }

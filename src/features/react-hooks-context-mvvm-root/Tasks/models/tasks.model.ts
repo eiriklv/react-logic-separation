@@ -2,6 +2,7 @@ import { Task } from "../types";
 import { ITasksService } from "../services/tasks.service";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
+import { useStableEnvelope } from "../../../../lib/use-stable-envelope";
 
 export interface ITasksModel {
   tasks: Task[] | undefined;
@@ -113,7 +114,7 @@ export function useTasksModel(
     await deleteTaskMutation.mutateAsync({ taskId });
   };
 
-  return {
+  return useStableEnvelope({
     tasks,
     tasksCount,
     isLoading,
@@ -123,5 +124,5 @@ export function useTasksModel(
     useTasksCountByOwnerId,
     addTask,
     deleteTask,
-  };
+  });
 }

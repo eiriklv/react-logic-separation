@@ -45,6 +45,7 @@ export function Root({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
   const {
     App,
+    Router,
     baseUrl,
     createSdk,
     createQueryClient,
@@ -134,9 +135,12 @@ export function Root({ dependencies = defaultDependencies }: Props) {
     <QueryClientProvider client={queryClient}>
       <ServicesProvider value={services}>
         <ModelsProvider value={models}>
-          <App />
+          <Router>
+            <App />
+          </Router>
         </ModelsProvider>
       </ServicesProvider>
     </QueryClientProvider>
   );
 }
+
