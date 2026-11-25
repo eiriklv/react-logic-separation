@@ -45,7 +45,7 @@ export function Root({ dependencies = defaultDependencies }: Props) {
   // Get dependencies
   const {
     App,
-    Router,
+    Router, // TODO: Move routing to app view
     baseUrl,
     createSdk,
     createQueryClient,
@@ -143,4 +143,3 @@ export function Root({ dependencies = defaultDependencies }: Props) {
     </QueryClientProvider>
   );
 }
-

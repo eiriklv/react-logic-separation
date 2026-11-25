@@ -20,6 +20,7 @@ describe("Root", () => {
     // arrange
     const dependencies: RootDependencies = {
       App: () => <div data-testid="App" />,
+      Router: ({ children }) => <>{children}</>,
       baseUrl: "test",
       createQueryClient: () => createQueryClient(),
       createSdk: () => ({}) as ISdk,

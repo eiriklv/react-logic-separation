@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { App } from "./App.view";
 import { AppDependencies } from "./App.view.dependencies";
+import { MemoryRouter } from "react-router";
 
 /**
  * Remove the default dependencies from the test
@@ -15,7 +16,11 @@ describe("App", () => {
       HomePage: () => <div data-testid="HomePage" />,
     };
 
-    render(<App dependencies={dependencies} />);
+    render(<App dependencies={dependencies} />, {
+      wrapper: ({ children }) => (
+        <MemoryRouter initialEntries={["/"]}>{children}</MemoryRouter>
+      ),
+    });
 
     // assert
     expect(screen.getByTestId("HomePage")).toBeInTheDocument();
